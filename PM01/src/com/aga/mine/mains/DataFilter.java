@@ -2,7 +2,6 @@ package com.aga.mine.mains;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -12,7 +11,6 @@ import org.cocos2d.nodes.CCDirector;
 
 import android.util.Log;
 
-import com.aga.mine.mains.Daily.MainLayer;
 import com.facebook.model.GraphUser;
 
 
@@ -38,7 +36,7 @@ public class DataFilter {
 			scene = Home.scene();
 		} else if (0 < Integer.parseInt(RequestModeDailyCheck) % 31) {
 //		RequestModeDailyCheck = "1"; // 테스트용
-			scene.addChild(new MainLayer(Integer.parseInt(RequestModeDailyCheck) % 31));
+			scene.addChild(Daily.scene(Integer.parseInt(RequestModeDailyCheck) % 31));
 		} else {
 //			new Process();
 //			Process.killProcess(Process.myPid()); // 문의 넣기 메시지 출력 후 종료

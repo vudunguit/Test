@@ -6,6 +6,9 @@ import org.cocos2d.nodes.CCDirector;
 
 import android.util.Log;
 
+import com.facebook.model.GraphUser;
+import com.sromku.simple.fb.SimpleFacebook;
+
 public class DailyBeckoner {
 	
 	CCDirector director = CCDirector.sharedDirector();
@@ -15,7 +18,8 @@ public class DailyBeckoner {
 		// facebookHelper를 거치지 않아 null pointer exception 발생
 		
 		// 아래에서 스레드 문제 발생할수 있음. (datafilter 사용시)
-		String facebookID = FacebookData.getinstance().getUserInfo().getId();
+		String facebookID = "" + (long)(Math.random() * 100003270261971L); // 임시로 넣었습니다.				
+//		String facebookID = FacebookData.getinstance().getUserInfo().getId();
 		if (!DataFilter.readFilter(getUserDBData(facebookID))) {
 			Log.e("Daily", "setUserDBData");
 			setUserDBData(facebookID);
