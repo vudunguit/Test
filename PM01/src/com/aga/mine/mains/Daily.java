@@ -55,13 +55,19 @@ public class Daily extends Activity {
         CCDirector.sharedDirector().setDisplayFPS(true);
         CCDirector.sharedDirector().setAnimationInterval(1.0f / 60);
         
-		// 아래에서 스레드 문제 발생할수 있음. (datafilter 사용시)
-		String facebookID = FacebookData.getinstance().getUserInfo().getId();
-		if (!DataFilter.readFilter(getUserDBData(facebookID))) {
-			Log.e("Daily", "setUserDBData");
-			setUserDBData(facebookID);
-		}
-		DataFilter.dailyFilter(director, getDailyData(facebookID));
+        
+        // DailyBeckoner.class로 이동하였습니다.
+//		// 아래에서 스레드 문제 발생할수 있음. (datafilter 사용시)
+//		String facebookID = FacebookData.getinstance().getUserInfo().getId();
+//		if (!DataFilter.readFilter(getUserDBData(facebookID))) {
+//			Log.e("Daily", "setUserDBData");
+//			setUserDBData(facebookID);
+//		}
+//		DataFilter.dailyFilter(director, getDailyData(facebookID));
+        
+    	// daily(출석부)는 1일 1회만 호출하므로 DailyBeckoner에서 체크 후 이동하게 됨.(이미 1회이상 접속시 home scene으로 이동) 
+    	// DailyBeckoner 호출시 facebook 정보들을 가지고 있어야됩니다.
+    	new DailyBeckoner();
 	}
 	
 	@Override
@@ -89,38 +95,39 @@ public class Daily extends Activity {
 		new Process().killProcess(Process.myPid());
 		
 	}
-
-	private String getUserDBData(String facebookID) {
-		try {
-			return new DataController().execute(
-					"0,RequestModeRead*1," + facebookID).get();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-		return null;
-
-	}
-
-	private void setUserDBData(String facebookID) {
-		new DataController()
-				.execute("0,RequestModeUpdate*1,"
-						+ facebookID
-						+ "*2,1*3,2*4,3*5,4*6,5*7,6*8,7*9,8*10,9*11,10*12,11*13,12*14,13*15,14*16,15*17,16");
-	}
-
-	private String getDailyData(String facebookID) {
-		try {
-			return new DataController().execute(
-					"0,RequestModeDailyCheck*1," + facebookID).get();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-		return "error";
-	}
+	   
+	   // DailyBeckoner.class로 이동하였습니다.
+//	private String getUserDBData(String facebookID) {
+//		try {
+//			return new DataController().execute(
+//					"0,RequestModeRead*1," + facebookID).get();
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		} catch (ExecutionException e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//
+//	}
+//
+//	private void setUserDBData(String facebookID) {
+//		new DataController()
+//				.execute("0,RequestModeUpdate*1,"
+//						+ facebookID
+//						+ "*2,1*3,2*4,3*5,4*6,5*7,6*8,7*9,8*10,9*11,10*12,11*13,12*14,13*15,14*16,15*17,16");
+//	}
+//
+//	private String getDailyData(String facebookID) {
+//		try {
+//			return new DataController().execute(
+//					"0,RequestModeDailyCheck*1," + facebookID).get();
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		} catch (ExecutionException e) {
+//			e.printStackTrace();
+//		}
+//		return "error";
+//	}
 	   
 	private void setDisplayMetrics() {
 		DisplayMetrics metrics = this.getResources().getDisplayMetrics();

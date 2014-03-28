@@ -105,6 +105,10 @@ public class Login extends CCLayer{
 //		Intent task1 = new Intent(CCDirector.sharedDirector().getActivity(), FacebookHelper.class);
 //    	CCDirector.sharedDirector().getActivity().startActivity(task1);
 		MainApplication.getInstance().getActivity().loginFaceBook();
+		
+    	// daily(출석부)는 1일 1회만 호출하므로 DailyBeckoner에서 체크 후 이동하게 됨.(이미 1회이상 접속시 home scene으로 이동) 
+    	// DailyBeckoner 호출시 facebook 정보들을 가지고 있어야됩니다.
+    	new DailyBeckoner();
 	}
 
 	public void guestCallback(Object sender) {
