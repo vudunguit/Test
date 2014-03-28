@@ -9,6 +9,8 @@ import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
+import com.sromku.simple.fb.SimpleFacebook;
+
 import android.content.Intent;
 import android.net.Uri;
 
@@ -41,8 +43,16 @@ public class Logo extends CCLayer {
 			Uri uri = Uri.parse("https://play.google.com/store/apps");
 			Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 			CCDirector.sharedDirector().getActivity().startActivity(intent);
+		} else {
+		    //schedule("nextSceneCallback", 2.2f);
+		    MainApplication.getInstance().mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    nextSceneCallback();
+                }
+            }, 2200);
 		}
-		schedule("nextSceneCallback", 2.2f);
+		
 	}
 	
 	private String getVersionData() {
@@ -57,9 +67,18 @@ public class Logo extends CCLayer {
 		return webversion;
 	}
 	
-	public void nextSceneCallback(float dt) {
-		CCScene scene = Login.scene();
-		CCDirector.sharedDirector().replaceScene(scene);
+	public void nextSceneCallback() {
+	    SimpleFacebook simpleFB = MainApplication.getInstance().getActivity().mSimpleFacebook;
+	    
+	    if(simpleFB.isLogin()) {
+	        //go to daily scene
+//    	    CCScene scene = Daily.scene();
+//    	    CCDirector.sharedDirector().replaceScene(scene);
+	    } else {
+    	    CCScene scene = Login.scene();
+    	    CCDirector.sharedDirector().replaceScene(scene);
+	    }
+
 	}
 	
 }
