@@ -14,7 +14,7 @@ import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 
 public class FacebookHelper extends Activity {
-
+//
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
