@@ -19,6 +19,7 @@ import android.util.Log;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.pages.UserData;
 import com.facebook.model.GraphUser;
+import com.sromku.simple.fb.entities.Profile;
 
 public class InvitationReceiver extends CCLayer{
 
@@ -105,7 +106,7 @@ public class InvitationReceiver extends CCLayer{
 	
 	public void setUserName(final int diffculty, final String matchedOppenentID) {
 		
-		for (GraphUser friend : userData.facebookFriendsInfo) {
+		for (Profile friend : userData.facebookFriendsInfo) {
 			if (matchedOppenentID.equals(friend.getId())) {
 				Log.e("invite", "friend.getId() : " + friend.getId());
 				oppenentPlayer = friend.getName();

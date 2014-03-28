@@ -13,7 +13,7 @@ import org.cocos2d.nodes.CCDirector;
 import android.util.Log;
 
 import com.aga.mine.mains.Daily.MainLayer;
-import com.facebook.model.GraphUser;
+import com.sromku.simple.fb.entities.Profile;
 
 
 public class DataFilter {
@@ -233,16 +233,16 @@ public class DataFilter {
 	}
 	
 	public static String[][] getRanking() {
-		GraphUser user = FacebookData.getinstance().getUserInfo();		
-		List<GraphUser> friends = FacebookData.getinstance().getFriendsInfo();
+		Profile user = FacebookData.getinstance().getUserInfo();		
+		List<Profile> friends = FacebookData.getinstance().getFriendsInfo();
 		String[][] score2Array = getRanking(user, friends);
 		return score2Array;
 	}
 	
-	public static String[][] getRanking(GraphUser user, List<GraphUser> friends) {
+	public static String[][] getRanking(Profile user, List<Profile> friends) {
 		String facebookIDs = "(" + user.getId();		
-		for (GraphUser graphUser : friends) {
-			facebookIDs += "," + graphUser.getId();
+		for (Profile profile : friends) {
+			facebookIDs += "," + profile.getId();
 		}
 		facebookIDs += ")";
 		String[][] score2Array = getRanking(facebookIDs);

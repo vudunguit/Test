@@ -1,6 +1,7 @@
 package com.aga.mine.mains;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
@@ -22,9 +23,12 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.sromku.simple.fb.Permission;
-import com.sromku.simple.fb.Permission.Type;
 import com.sromku.simple.fb.SimpleFacebook;
+import com.sromku.simple.fb.entities.Profile;
+import com.sromku.simple.fb.listeners.OnFriendsListener;
+import com.sromku.simple.fb.listeners.OnInviteListener;
 import com.sromku.simple.fb.listeners.OnLoginListener;
+import com.sromku.simple.fb.listeners.OnProfileListener;
 
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
@@ -178,6 +182,14 @@ public class MainActivity extends Activity {
         mSimpleFacebook.login(mOnLoginListener);
     }
     
+    public void getMyProfile() {
+        mSimpleFacebook.getProfile(mOnProfileListener);
+    }
+    
+    public void getFriendsInfo() {
+        mSimpleFacebook.getFriends(mOnFriendsListener);
+    }
+    
     // Login listener
     private OnLoginListener mOnLoginListener = new OnLoginListener() {
 
@@ -205,8 +217,8 @@ public class MainActivity extends Activity {
             //hideDialog();
             
             //go to Daily scene
-//            CCScene scene = Daily.scene();
-//            director.replaceScene(scene);
+            getMyProfile();
+            getFriendsInfo();
         }
 
         @Override
@@ -214,5 +226,104 @@ public class MainActivity extends Activity {
             //hideDialog();
         }
     };
+    
+    // listener for profile request
+    final OnProfileListener mOnProfileListener = new OnProfileListener() {
+
+        @Override
+        public void onFail(String reason) {
+            // insure that you are logged in before getting the profile
+            Log.d(TAG, reason);
+        }
+
+        @Override
+        public void onException(Throwable throwable) {
+            Log.e(TAG, "Bad thing happened", throwable);
+        }
+
+        @Override
+        public void onThinking() {
+            // show progress bar or something to the user while fetching
+            // profile
+            Log.i(TAG, "Login...");
+        }
+
+        @Override
+        public void onComplete(Profile profile) {
+            //save my profile
+            FacebookData.getinstance().setUserInfo(profile);
+            Log.e("FacebookHelper", "setUserInfo");
+            nextCallback(FacebookData.getinstance().facebookReady(1));
+        }
+    };
+    
+    // get friends listener
+    private OnFriendsListener mOnFriendsListener = new OnFriendsListener() {
+
+        @Override
+        public void onFail(String reason) {
+            hideDialog();
+            Log.w(TAG, reason);
+        }
+
+        @Override
+        public void onException(Throwable throwable) {
+            hideDialog();
+            Log.e(TAG, "Bad thing happened", throwable);
+        }
+
+        @Override
+        public void onThinking() {
+            showDialog();
+            Log.i(TAG, "Thinking...");
+        }
+
+        @Override
+        public void onComplete(List<Profile> friends) {
+            hideDialog();
+            FacebookData.getinstance().setFriendsInfo(friends);
+            Log.e("FacebookHelper", "setFriendsInfo");
+            nextCallback(FacebookData.getinstance().facebookReady(100));
+            
+            //ToDo: go to Daily Scene
+//          CCScene scene = Daily.scene();
+//          director.replaceScene(scene);
+        }
+    };
+    
+    OnInviteListener mOnInviteListener = new OnInviteListener() {
+
+        @Override
+        public void onFail(String reason) {
+            // insure that you are logged in before inviting
+            Log.w(TAG, reason);
+        }
+
+        @Override
+        public void onException(Throwable throwable) {
+            Log.e(TAG, "Bad thing happened", throwable);
+        }
+
+        @Override
+        public void onComplete(List<String> invitedFriends, String requestId) {
+            //String msg = "Invitation was sent to " + invitedFriends.size() + " users, invite request=" + requestId;
+            //ToDo:
+        }
+
+        @Override
+        public void onCancel() {
+            Log.w(TAG, "cancled dialog");
+        }
+
+    };
+    
+    private void nextCallback(boolean facebookReady) {
+        Log.e("FacebookHelper", "nextCallback");
+        if (facebookReady) {
+            HomeScroll.getInstance().setData(
+                    DataFilter.getRanking(FacebookData.getinstance().getUserInfo(),FacebookData.getinstance().getFriendsInfo())
+            );
+        }
+    }
 
 }

@@ -68,12 +68,12 @@ public class Logo extends CCLayer {
 	}
 	
 	public void nextSceneCallback() {
-	    SimpleFacebook simpleFB = MainApplication.getInstance().getActivity().mSimpleFacebook;
+	    MainActivity mMainActivity = MainApplication.getInstance().getActivity();
 	    
-	    if(simpleFB.isLogin()) {
-	        //go to daily scene
-//    	    CCScene scene = Daily.scene();
-//    	    CCDirector.sharedDirector().replaceScene(scene);
+	    if(mMainActivity.mSimpleFacebook.isLogin()) {
+	        //get myProfile and get Friends info
+	        mMainActivity.getMyProfile();
+	        mMainActivity.getFriendsInfo();
 	    } else {
     	    CCScene scene = Login.scene();
     	    CCDirector.sharedDirector().replaceScene(scene);

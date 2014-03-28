@@ -17,7 +17,7 @@ import java.util.Set;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.types.CGPoint;
 
-import com.facebook.model.GraphUser;
+import com.sromku.simple.fb.entities.Profile;
 
 import android.content.Context;
 import android.util.Log;
@@ -27,11 +27,11 @@ public class UserData{
 
 	public static String userID = "";
 	public static String userName = "Guest";
-	public static  GraphUser facebookUserInfo = null;
+	public static  Profile facebookUserInfo = null;
 	public static String accessToken = "";
 	
 //	public static ArrayList<String> facebookFriends = new ArrayList<String>();
-	public static  List<GraphUser> facebookFriendsInfo = new ArrayList<GraphUser>();
+	public static  List<Profile> facebookFriendsInfo = new ArrayList<Profile>();
 	private int kResultWin = 1;
 	private int kResultLose = 0;
 	

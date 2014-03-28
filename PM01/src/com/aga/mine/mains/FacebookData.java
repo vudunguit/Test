@@ -20,6 +20,7 @@ import android.graphics.BitmapFactory;
 
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.sromku.simple.fb.entities.Profile;
 
 
 public class FacebookData {
@@ -27,9 +28,9 @@ public class FacebookData {
 	private boolean login = false;
 	private Session faceSession = null;
 	private String accessToken = "";
-	private GraphUser userInfo = null;
+	private Profile userInfo = null;
 	private Bitmap userPhoto = null;
-	private List<GraphUser> friendsInfo = new ArrayList<GraphUser>();
+	private List<Profile> friendsInfo = new ArrayList<Profile>();
 	Map<String, String> data = new HashMap<String, String>();
 	int ranking = 0;
 	
@@ -115,12 +116,12 @@ public class FacebookData {
 		this.accessToken = accessToken;
 	}
 
-	public GraphUser getUserInfo() {
+	public Profile getUserInfo() {
 		return userInfo;
 	}
 	
 	BufferedInputStream buf;
-	public void setUserInfo(GraphUser userInfo) {
+	public void setUserInfo(Profile userInfo) {
 		this.userInfo = userInfo;
 		userPhoto = getBitmapFromURL("https://graph.facebook.com/" + userInfo.getUsername() +"/picture");
 		setDBData(DataFilter.getUserDBData(userInfo.getId()));		
@@ -137,11 +138,11 @@ public class FacebookData {
 	
 
 
-	public List<GraphUser> getFriendsInfo() {
+	public List<Profile> getFriendsInfo() {
 		return friendsInfo;
 	}
 
-	public void setFriendsInfo(List<GraphUser> friendsInfo) {
+	public void setFriendsInfo(List<Profile> friendsInfo) {
 		this.friendsInfo = friendsInfo;
 	}
 

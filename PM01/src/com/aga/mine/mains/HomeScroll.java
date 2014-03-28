@@ -18,15 +18,13 @@ import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 import org.cocos2d.types.ccColor4B;
-import org.json.JSONObject;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.facebook.android.Util;
-import com.facebook.model.GraphUser;
+import com.sromku.simple.fb.entities.Profile;
 
 public class HomeScroll extends CCColorLayer{
 	
@@ -64,7 +62,7 @@ public class HomeScroll extends CCColorLayer{
 //		Log.e("HomeScroll", "getFriendsInfo : " + FacebookData.getinstance().getFriendsInfo());
 		mContext = CCDirector.sharedDirector().getActivity();
 		
-		List<GraphUser> friends = FacebookData.getinstance().getFriendsInfo();
+		List<Profile> friends = FacebookData.getinstance().getFriendsInfo();
 //		List<GraphUser> friends = UserData.share(mContext).facebookFriendsInfo;
 //		Log.e("HomeScroll", "HomeScroll : " + friends.size());
 //		createScroll(friends);
@@ -72,7 +70,7 @@ public class HomeScroll extends CCColorLayer{
 		createScroll(DataFilter.getRanking());
 	}
 	
-	private void createScroll(List<GraphUser> friends) {
+	private void createScroll(List<Profile> friends) {
 		if (friends.size() > 3) {
 			max_items = friends.size();	
 		}
@@ -83,7 +81,7 @@ public class HomeScroll extends CCColorLayer{
 		this.setContentSize(contentSize);
 		
 		int count = 0;
-		for (GraphUser friend : friends) {
+		for (Profile friend : friends) {
 			CCSprite friendBackBoard = CCSprite.sprite(folder + "homefriendbb2.png");
 			this.addChild(friendBackBoard);
 			friendBackBoard.setPosition(

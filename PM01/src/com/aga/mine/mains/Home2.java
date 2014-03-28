@@ -29,6 +29,7 @@ import android.view.MotionEvent;
 
 import com.aga.mine.pages.UserData;
 import com.facebook.model.GraphUser;
+import com.sromku.simple.fb.entities.Profile;
 
 public class Home2 extends CCLayer {
 		
@@ -171,9 +172,9 @@ public class Home2 extends CCLayer {
 	
 	private String getFriendsScore() {
 		String id = "(" + FacebookData.getinstance().getUserInfo().getId();		
-		List<GraphUser> friends = FacebookData.getinstance().getFriendsInfo();
-		for (GraphUser graphUser : friends) {
-			id += "," + graphUser.getId();
+		List<Profile> friends = FacebookData.getinstance().getFriendsInfo();
+		for (Profile profile : friends) {
+			id += "," + profile.getId();
 		}
 		id += ")";
 		try {
