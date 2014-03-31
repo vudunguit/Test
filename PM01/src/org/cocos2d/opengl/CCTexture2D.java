@@ -52,7 +52,7 @@ import android.opengl.GLUtils;
 public class CCTexture2D implements Resource {
     // private static final String LOG_TAG = CCTexture2D.class.getSimpleName();
 	
-	public static final int kMaxTextureSize = 1024;
+	public static final int kMaxTextureSize = 2048;
 
 	/** pixel format of the texture */
 	public Bitmap.Config pixelFormat() {

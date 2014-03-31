@@ -243,6 +243,7 @@ public class DataFilter {
 			facebookIDs += "," + profile.getId();
 		}
 		facebookIDs += ")";
+		Log.e("DataFilter","facebookIDs : " + facebookIDs );
 		String[][] score2Array = getRanking(facebookIDs);
 		return score2Array;
 	}

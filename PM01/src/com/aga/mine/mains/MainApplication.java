@@ -11,8 +11,10 @@ import android.os.Handler;
 
 public class MainApplication extends Application {
     //private static final String APP_ID = "625994234086470";
-    private static final String APP_ID = "1387999011424838";
-    private static final String APP_NAMESPACE = "sromkuapp";
+//    private static final String APP_ID = "1387999011424838";
+//    private static final String APP_NAMESPACE = "sromkuapp";
+    private static final String APP_ID = "247575538743755";
+    private static final String APP_NAMESPACE = "pumpkinapp";
     
     private Context mContext;
     private MainActivity mActivity;

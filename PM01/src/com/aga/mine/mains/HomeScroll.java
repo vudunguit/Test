@@ -3,6 +3,7 @@ package com.aga.mine.mains;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.cocos2d.layers.CCColorLayer;
 import org.cocos2d.layers.CCLayer;
@@ -22,6 +23,7 @@ import org.cocos2d.types.ccColor4B;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.sromku.simple.fb.entities.Profile;
@@ -70,6 +72,7 @@ public class HomeScroll extends CCColorLayer{
 		createScroll(DataFilter.getRanking());
 	}
 	
+	// 기존에 사용하던 것
 	private void createScroll(List<Profile> friends) {
 		if (friends.size() > 3) {
 			max_items = friends.size();	
@@ -102,6 +105,7 @@ public class HomeScroll extends CCColorLayer{
 		}
 	}
 	
+	// MainActivity의 nextCallback에서 사용
 	private void createScroll(String[][] score2Array) {
 		Log.e("HomeScroll", "createScroll - length : " + score2Array.length);
 		if (score2Array.length > 3) {
@@ -189,17 +193,29 @@ public class HomeScroll extends CCColorLayer{
 ////		Log.e("HomeScroll", "facebookFriendsInfo : " + imageUrl);
 //		CCSprite userImage= CCSprite.sprite(getBitmapFromURL(imageUrl)); // 프로필 사진
 		
-		Bitmap userPhoto = getBitmapFromURL("https://graph.facebook.com/" + friendID +"/picture");  // 이사님 친구용 임시 주석
+//    	Bitmap myBitmap = BitmapFactory.decodeStream(new URL(src).openStream());
+    	
+		String imageUrl = "https://graph.facebook.com/" + friendID +"/picture";
+		Log.e("HomeScroll", "ranker imageUrl : " + imageUrl);
+//		Bitmap userPhoto = getBitmapFromURL(imageUrl);  // 이사님 친구용 임시 주석
 //		Log.e("HomeScroll","userPhoto_Bytes : " + userPhoto.getRowBytes()); // 이사님 친구용 임시 주석
 		//
-		CCSprite userImage= CCSprite.sprite("00common/noPicture.png"); // 프로필 사진
-		if (userPhoto.getRowBytes() > 100) {
-			userImage= CCSprite.sprite(userPhoto); // 프로필 사진
+		CCSprite userImage = null;
+//		userImage = CCSprite.sprite("00common/noPicture.png"); // 프로필 사진
+//		if (userPhoto.getRowBytes() > 100) {
+//			userImage= CCSprite.sprite(userPhoto); // 프로필 사진
+//		}
+		try {
+			userImage = CCSprite.sprite(new DownloadImageTask().execute(imageUrl).get());
+			profilePicture.addChild(userImage);
+			userImage.setAnchorPoint(0.5f, 0.5f);
+			userImage.setPosition(profilePicture.getContentSize().width / 2, profilePicture.getContentSize().height / 2);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
 		}
-		
-		profilePicture.addChild(userImage);
-		userImage.setAnchorPoint(0.5f, 0.5f);
-		userImage.setPosition(profilePicture.getContentSize().width / 2, profilePicture.getContentSize().height / 2);
+
 		
 		// facebook friend에서 받아올것
 		CCLabel  rankersName = CCLabel.makeLabel(friendName + " ", "Arial", 30); // 랭커 이름
