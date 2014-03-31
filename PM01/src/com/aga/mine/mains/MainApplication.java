@@ -1,10 +1,19 @@
 package com.aga.mine.mains;
 
+import com.facebook.SessionDefaultAudience;
+import com.sromku.simple.fb.Permission;
+import com.sromku.simple.fb.SimpleFacebook;
+import com.sromku.simple.fb.SimpleFacebookConfiguration;
+
 import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 
 public class MainApplication extends Application {
+    //private static final String APP_ID = "625994234086470";
+    private static final String APP_ID = "1387999011424838";
+    private static final String APP_NAMESPACE = "sromkuapp";
+    
     private Context mContext;
     private MainActivity mActivity;
     
@@ -19,6 +28,28 @@ public class MainApplication extends Application {
         super.onCreate();
         mApplication = this;
         mContext = this.getApplicationContext();
+        
+        // initialize facebook configuration
+        Permission[] permissions = new Permission[] { Permission.BASIC_INFO,
+                                                     Permission.USER_CHECKINS,
+                                                     Permission.USER_EVENTS,
+                                                     Permission.USER_GROUPS,
+                                                     Permission.USER_LIKES,
+                                                     Permission.USER_PHOTOS,
+                                                     Permission.USER_VIDEOS,
+                                                     Permission.FRIENDS_EVENTS,
+                                                     Permission.FRIENDS_PHOTOS,
+                                                     Permission.FRIENDS_ABOUT_ME,
+                                                     Permission.PUBLISH_STREAM };
+
+        SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder().setAppId(APP_ID)
+                    .setNamespace(APP_NAMESPACE)
+                    .setPermissions(permissions)
+                    .setDefaultAudience(SessionDefaultAudience.FRIENDS)
+                    .setAskForAllPermissionsAtOnce(false)
+                    .build();
+
+        SimpleFacebook.setConfiguration(configuration);
     }
 
     @Override

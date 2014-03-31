@@ -18,8 +18,8 @@ public class DailyBeckoner {
 		// facebookHelper를 거치지 않아 null pointer exception 발생
 		
 		// 아래에서 스레드 문제 발생할수 있음. (datafilter 사용시)
-		String facebookID = "" + (long)(Math.random() * 100003270261971L); // 임시로 넣었습니다.				
-//		String facebookID = FacebookData.getinstance().getUserInfo().getId();
+		//String facebookID = "" + (long)(Math.random() * 100003270261971L); // 임시로 넣었습니다.				
+		String facebookID = FacebookData.getinstance().getUserInfo().getId();
 		if (!DataFilter.readFilter(getUserDBData(facebookID))) {
 			Log.e("Daily", "setUserDBData");
 			setUserDBData(facebookID);

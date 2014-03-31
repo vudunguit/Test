@@ -123,7 +123,8 @@ public class FacebookData {
 	BufferedInputStream buf;
 	public void setUserInfo(Profile userInfo) {
 		this.userInfo = userInfo;
-		userPhoto = getBitmapFromURL("https://graph.facebook.com/" + userInfo.getUsername() +"/picture");
+		//userPhoto = getBitmapFromURL("https://graph.facebook.com/" + userInfo.getUsername() +"/picture");
+		userPhoto = BitmapFactory.decodeResource(MainApplication.getInstance().getActivity().getResources(), R.drawable.ic_launcher);
 		setDBData(DataFilter.getUserDBData(userInfo.getId()));		
 		if (userPhoto != null && userPhoto.getRowBytes() < 100) {
 			try {	
