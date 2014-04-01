@@ -84,14 +84,13 @@ public class HomeMiddle {
 		
 		
 		int levelValue = Integer.parseInt(FacebookData.getinstance().getDBData("LevelCharacter"));
-		int expValue = Integer.parseInt(FacebookData.getinstance().getDBData("Exp"));
+		float expValue = Float.parseFloat(FacebookData.getinstance().getDBData("Exp"));
 		int levelLimit = userData.expPerLevel.length;
 		int expLimit = 999999999;
-		Log.e("HomeMiddle",	"levelValue : " + levelValue + ", levelLimit : " + levelLimit) ;
 		String expStr ;
 		if (levelValue < levelLimit) {
 			expLimit = userData.expPerLevel[levelValue - 1];
-			expStr = expValue + " / " + expLimit;
+			expStr = (int)expValue + " / " + expLimit;
 		} else {
 			expStr = "MAX";
 		}
@@ -107,9 +106,7 @@ public class HomeMiddle {
 		levelProgressBar.addChild(exp);
 //		exp.setColor(ccColor3B.ccc3(194, 216, 233));
 //		exp.setColor(ccColor3B.ccc3(0, 35, 102));
-//		exp.setColor(ccColor3B.ccc3(28 * 16, 28 * 16, (120 + 13) * 16));
-//		exp.setColor(ccColor3B.ccc3(0, 0, (80 + 12) * 16));
-		exp.setColor(ccColor3B.ccc3(50, 50, (80 + 12) * 16));
+		exp.setColor(ccColor3B.ccc3(50, 50, 0x8c));
 		exp.setPosition(
 				levelProgressBar.getContentSize().width/2,
 				levelProgressBar.getContentSize().height/2);
