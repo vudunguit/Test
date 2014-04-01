@@ -7,7 +7,7 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
-import com.aga.mine.pages.Game;
+import com.aga.mine.pages2.Game;
 
 public class GameLoading extends CCLayer {
 	
