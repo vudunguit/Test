@@ -2,6 +2,7 @@ package com.aga.mine.mains;
 
 import java.util.Locale;
 
+import org.cocos2d.events.CCTouchDispatcher;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
@@ -22,6 +23,9 @@ public class HomeMiddle {
 	final String fileExtension = ".png";
 	final CCNode nodeThis;
 
+	final int mailButton = 1007;
+	final int mailcloseButton = 1008;
+	
 	Context mContext;
 	UserData userData;
 	
@@ -49,8 +53,8 @@ public class HomeMiddle {
 		CCMenuItem post = CCMenuItemImage.item(  // ¿ìÆí
 				imageFolder + "home-mail-hd" + fileExtension, 
 				imageFolder + "home-mail-hd" + fileExtension, 				 
-				nodeThis,"clicked");
-		post.setUserData("mailopen");
+				nodeThis,"clicked2");
+		post.setTag(mailButton);
 		post.setAnchorPoint(1.0f, 0.5f);
 		
 		//
@@ -221,5 +225,4 @@ public class HomeMiddle {
 ////		this.removeChildByTag(999, true);
 //		nodeThis.removeChildByTag(999, true);
 //	}
-	
 }

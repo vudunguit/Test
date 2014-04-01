@@ -21,6 +21,9 @@ public class MailBox {
 
 	final String commonfolder = "00common/";
 	final String fileExtension = ".png";
+
+	final int mailcloseButton = 1008;
+	final int mailReceiveAllButton = 1009;
 	
 	public static boolean buttonActive = true;
 	
@@ -136,8 +139,8 @@ public class MailBox {
 			CCMenuItem close = CCMenuItemImage.item(
 					imageFolder + "postboxCloseNormal" + fileExtension,
 					imageFolder + "postboxClosePress" + fileExtension,
-					nodeThis, "clicked");
-			close.setUserData("mailclose");
+					nodeThis, "clicked2");
+			close.setTag(mailcloseButton);
 			
 			CCMenuItem[] menu = {broomstickMenu, giftMenu, close};
 			CCMenu postMenu = CCMenu.menu(menu);
@@ -186,16 +189,17 @@ public class MailBox {
 
 			
 			// Receive All
-			CCMenuItem receiveAllButton = CCMenuItemImage.item(
-					imageFolder + "receiveAllButtonNormal" + fileExtension,
-					imageFolder + "receiveAllButtonPress" + fileExtension,
-					nodeThis, "clicked");
-			
 			String BroomstickAll = ""; 
 			for (String[] str : BroomstickList) {
 				BroomstickAll += "," + str[0];
 			}
-			receiveAllButton.setUserData("mailReceiveAll" + BroomstickAll);
+			
+			CCMenuItem receiveAllButton = CCMenuItemImage.item(
+					imageFolder + "receiveAllButtonNormal" + fileExtension,
+					imageFolder + "receiveAllButtonPress" + fileExtension,
+					nodeThis, "clicked2");
+			receiveAllButton.setTag(mailReceiveAllButton);
+			receiveAllButton.setUserData(BroomstickAll);
 			
 			CCSprite receiveAllText = CCSprite.sprite(
 					Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "receiveAllButton" + fileExtension));

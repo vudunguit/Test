@@ -2,6 +2,7 @@ package com.aga.mine.mains;
 
 import java.util.Calendar;
 
+import org.cocos2d.events.CCTouchDispatcher;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
@@ -17,6 +18,13 @@ public class HomeTop extends CCLayer{
 
 	final String commonfolder = "00common/";
 	final String fileExtension = ".png";
+	
+	final int broomstickButton = 1001;
+	final int goldButton = 1002;
+	final int shopButton = 1003;
+	final int enterButton = 1004;
+	final int optionButton = 1005;
+	final int inviteButton = 1006;
 	
 	private CGSize winsize() {
 		return CCDirector.sharedDirector().winSize();
@@ -35,15 +43,15 @@ public class HomeTop extends CCLayer{
 		CCMenuItem broomstickBg = CCMenuItemImage.item(imageFolder
 				+ "home-broomstickBg-hd" + fileExtension, imageFolder
 				+ "home-broomstickBg-hd" + fileExtension, 
-				nodeThis, "clicked");
-		broomstickBg.setUserData("broomstick");
+				nodeThis, "clicked2");
+		broomstickBg.setTag(broomstickButton);
 		
 		// 골드 상점 바로가기 배경(버튼)
 		CCMenuItem goldBg = CCMenuItemImage.item(
 				imageFolder + "home-goldBg-hd" + fileExtension,
 				imageFolder + "home-goldBg-hd" + fileExtension, 
-				nodeThis, "clicked");
-		goldBg.setUserData("gold");
+				nodeThis, "clicked2");
+		goldBg.setTag(goldButton);
 		
 		CCMenu topMenu = CCMenu.menu(broomstickBg, goldBg);
 		parentSprite.addChild(topMenu);
@@ -64,6 +72,7 @@ public class HomeTop extends CCLayer{
 		broomstickImg.setPosition(
 				broomstickImg.getContentSize().width / 2 + 10.0f,
 				broomstickBg.getContentSize().height / 2);
+		
 
 		// 지팡이 수량
 		CCLabel broomstickEA = CCLabel.makeLabel("+" + FacebookData.getinstance().getDBData("ReceivedBroomstick"), "Arial", 24.0f); // 지팡이 수량
@@ -148,29 +157,36 @@ public class HomeTop extends CCLayer{
 		return deadlineText;
 	}
 	
+	
 	// 하단 메뉴
 	private void setBottomMenu(CCSprite parentSprite, String imageFolder, CCNode nodeThis) {
 		
 		// 좌측 버튼(상점)
-		CCMenuItem button1 = CCMenuItemImage.item(
+		CCMenuItem button1 = SpriteSummery.menuItemBuilder(
 						imageFolder + "home-shopbutton1" + fileExtension,
+						Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "home-shoptext1" + fileExtension),
 						imageFolder + "home-shopbutton2" + fileExtension,
-						nodeThis, "clicked");
-		button1.setUserData("shop");
+						Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "home-shoptext2" + fileExtension),
+						nodeThis, "clicked2");
+		button1.setTag(shopButton);
 		
 		//중앙 버튼(입장)
-		CCMenuItem button2 = CCMenuItemImage.item(
-						imageFolder + "home-enterbutton1" + fileExtension,
-						imageFolder + "home-enterbutton2" + fileExtension,
-						nodeThis, "clicked");
-		button2.setUserData("enter");
+		CCMenuItem button2 = SpriteSummery.menuItemBuilder(
+				imageFolder + "home-enterbutton1" + fileExtension,
+				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "home-entertext1" + fileExtension),
+				imageFolder + "home-enterbutton2" + fileExtension,
+				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "home-entertext2" + fileExtension),
+				nodeThis, "clicked2");
+		button2.setTag(enterButton);
 		
 		// 우측 버튼(설정)
-		CCMenuItem button3 = CCMenuItemImage.item(
-						imageFolder + "home-optionbutton1" + fileExtension,
-						imageFolder + "home-optionbutton2" + fileExtension,
-						nodeThis, "clicked");
-		button3.setUserData("option");
+		CCMenuItem button3 = SpriteSummery.menuItemBuilder(
+				imageFolder + "home-optionbutton1" + fileExtension,
+				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "home-optiontext1" + fileExtension),
+				imageFolder + "home-optionbutton2" + fileExtension,
+				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "home-optiontext2" + fileExtension),
+				nodeThis, "clicked2");
+		button3.setTag(optionButton);
 		
 		CCMenu bottomMenu = CCMenu.menu(button1, button2, button3);
 		nodeThis.addChild(bottomMenu);
@@ -185,11 +201,13 @@ public class HomeTop extends CCLayer{
 		button3.setAnchorPoint(1, 0);
 		
 		// 친구 초대 버튼
-		CCMenuItem friendsInvite = CCMenuItemImage.item(
-						imageFolder + "home-invitebutton1" + fileExtension,
-						imageFolder + "home-invitebutton2" + fileExtension,
-						nodeThis, "clicked");
-		friendsInvite.setUserData("invite");
+		CCMenuItem friendsInvite = SpriteSummery.menuItemBuilder(
+				imageFolder + "home-invitebutton1" + fileExtension,
+				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "home-invitetext1" + fileExtension),
+				imageFolder + "home-invitebutton2" + fileExtension,
+				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "home-invitetext2" + fileExtension),
+				nodeThis, "clicked2");
+		friendsInvite.setTag(inviteButton);
 		
 		CCMenu inviteMenu = CCMenu.menu(friendsInvite);
 		parentSprite.addChild(inviteMenu);
@@ -201,5 +219,4 @@ public class HomeTop extends CCLayer{
 		inviteMenu.getContentSize().height - 710);
 		friendsInvite.setAnchorPoint(1, 1);
 	}
-	
 }

@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import org.cocos2d.events.CCTouchDispatcher;
 import org.cocos2d.layers.CCColorLayer;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -34,6 +35,9 @@ public class HomeScroll extends CCColorLayer{
 	final String commonfolder = "00common/";
 	final String folder = "10home/";
 	final String fileExtension = ".png";
+	
+	final int presentGoldButton = 1010;
+	final int presentBroomstickButton = 1011;
 	
 	private static HomeScroll homeScroll;
 	
@@ -245,16 +249,18 @@ public class HomeScroll extends CCColorLayer{
 		CCMenuItem boxCallback = CCMenuItemImage.item(  // ¼±¹° »óÀÚ ÆË¾÷
 				folder + "home-giftboxOn-hd" + fileExtension,  
 				folder + "home-giftboxOff-hd" + fileExtension,
-//				nodeThis,"clicked");
-				this,"boxCallback");
-		boxCallback.setUserData("presentGold," + friendID);
+				nodeThis,"clicked2");
+//				this,"boxCallback");
+		boxCallback.setTag(presentGoldButton);
+		boxCallback.setUserData(friendID);
 		
 		CCMenuItem broomCallback = CCMenuItemImage.item(  // ºøÀÚ·ç ÆË¾÷
 				folder + "home-broomstickBigOn-hd" + fileExtension,
 				folder + "home-broomstickBigOff-hd" + fileExtension, 				 
-//				nodeThis,"clicked");
-				this,"broomstickCallback");
-		broomCallback.setUserData("presentBroomstick," + friendID);
+				nodeThis,"clicked2");
+//				this,"broomstickCallback");
+		broomCallback.setTag(presentBroomstickButton);
+		broomCallback.setUserData(friendID);
 		
 		CCMenu giftMenu = CCMenu.menu(boxCallback, broomCallback);
 		parentSprite.addChild(giftMenu);
@@ -488,5 +494,4 @@ public class HomeScroll extends CCColorLayer{
 			}
 		}
 	}
-    
 }

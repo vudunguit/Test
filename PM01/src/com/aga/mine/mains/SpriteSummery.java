@@ -1,5 +1,8 @@
 package com.aga.mine.mains;
 
+import org.cocos2d.menus.CCMenuItemImage;
+import org.cocos2d.menus.CCMenuItemSprite;
+import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 
 public class SpriteSummery {
@@ -23,6 +26,12 @@ public class SpriteSummery {
 		return baseSprite;
 	}
 	
-	
+	public static CCMenuItemSprite menuItemBuilder(String normalBaseImageStr, String normalChildImageStr, 
+			String selectBaseImageStr, String selectChildImageStr, CCNode nodeThis, String actionMethod) {
+		CCMenuItemSprite menuItem = CCMenuItemImage.item(
+				imageSummary(normalBaseImageStr, normalChildImageStr), 
+				imageSummary(selectBaseImageStr, selectChildImageStr), nodeThis, actionMethod);
+		return menuItem;
+	}
 	
 }

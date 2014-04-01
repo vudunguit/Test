@@ -2,6 +2,7 @@ package com.aga.mine.mains;
 
 import java.util.List;
 
+import org.cocos2d.events.CCTouchDispatcher;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
@@ -13,6 +14,7 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
+import android.R.bool;
 import android.util.Log;
 
 public class Home extends CCLayer{
@@ -20,12 +22,33 @@ public class Home extends CCLayer{
 	final String commonfolder = "00common/";
 	final String folder = "10home/";
 	final String fileExtension = ".png";
+	
+	final static int scrollLayerTag = 1;
+	final static int homeLayerTag = 2;
+	final static int mailBoxLayerTag = 3;
+	
+	// 나중에 다른 클래스에서 정의한 것과 하나로 합치기
+	final int broomstickButton = 1001;
+	final int goldButton = 1002;
+	final int shopButton = 1003;
+	final int enterButton = 1004;
+	final int optionButton = 1005;
+	final int inviteButton = 1006;
+	final int mailButton = 1007;
+	final int mailcloseButton = 1008;
+	final int mailReceiveAllButton = 1009;
+	final int presentGoldButton = 1010;
+	final int presentBroomstickButton = 1011;
+	
+//	final int inviteButton = 1006;
+	
 	static CCLayer scroll = CCLayer.node();
+	
 	public static CCScene scene() {
 		Log.e("Home", "scene");
 		CCScene scene = CCScene.node();
-		CCLayer homeLayer = new Home();
-		scene.addChild(homeLayer, 2, 2);
+		CCLayer home = new Home();
+		scene.addChild(home, homeLayerTag, homeLayerTag);
 //		layer.setIsTouchEnabled(true);
 //		setScrollView(scene);
 		
@@ -35,10 +58,10 @@ public class Home extends CCLayer{
 //		scroll.setPosition(
 //				CCDirector.sharedDirector().winSize().width / 2 - scroll.getContentSize().width / 2,
 //				CCDirector.sharedDirector().winSize().height / 2 - scroll.getContentSize().height + 110);
-		scene.addChild(scroll, 1, 1);
+		scene.addChild(scroll, scrollLayerTag, scrollLayerTag);
 		
 		CCLayer mailBox = CCLayer.node();
-		scene.addChild(mailBox,3,3);
+		scene.addChild(mailBox,mailBoxLayerTag,mailBoxLayerTag);
         return scene;
 	}
 
@@ -62,7 +85,8 @@ public class Home extends CCLayer{
 		CCSprite boardFrame = setBoardFrameMenu(backGround, commonfolder + "frameGeneral-hd" + fileExtension);
 
 //		scroll = HomeScroll.getInstance(this).getLayer();
-		scroll = HomeScroll.getInstance().getLayer();
+//		scroll = HomeScroll.getInstance().getLayer();
+		scroll = HomeScroll.getInstance().getLayer(this);
 		scroll.setAnchorPoint(0.5f, 1);
 		scroll.setPosition(
 				CCDirector.sharedDirector().winSize().width / 2 - scroll.getContentSize().width / 2,
@@ -75,8 +99,7 @@ public class Home extends CCLayer{
 //		scroll.setPosition(
 //        		winsize().width / 2 - scroll.getContentSize().width / 2,
 //        		pb.y - (profileBg.getAnchorPoint().y * profileBg.getContentSize().height) - (94 * friendsSize) - 5);
-//		this.setIsTouchEnabled(true);
-		
+//		CCTouchDispatcher.sharedDispatcher().setDispatchEvents(false);
 		this.setIsTouchEnabled(true);
 	}
 	
@@ -123,7 +146,6 @@ public class Home extends CCLayer{
 		final int presentBroomstick = 11;
 		
 		int value = 99;
-		CCScene scene;
 		
 		String data = (String) ((CCMenuItemImage)sender).getUserData();
 		String[] callback = {"broomstick","gold","shop","enter","option",
@@ -137,39 +159,6 @@ public class Home extends CCLayer{
 			}
 		}
 		Log.e("Home", "CallBack2 : " + value);
-		
-		switch (value) {
-		case broomstick :
-			Log.e("Home", "CallBack3 : broomstick" + data);
-			FacebookData.getinstance().setRecipientID(FacebookData.getinstance().getUserInfo().getId());
-			scene = ShopBroomstick2.scene();
-			break;
-		case gold :
-			Log.e("Home", "CallBack3 : gold" + data);
-			FacebookData.getinstance().setRecipientID(FacebookData.getinstance().getUserInfo().getId());
-			scene = ShopGold2.scene();
-			break;
-			case shop :
-				Log.e("Home", "CallBack3 : shop" + data);
-			scene = Shop.scene();
-			break;
-		case enter :
-			Log.e("Home", "CallBack3 : enter" + data);
-			scene = GameMode.scene();
-			break;
-		case option :
-			Log.e("Home", "CallBack3 : option" + data);
-			scene = Option.scene();
-			break;
-		case invite :
-			Log.e("Home", "CallBack3 : invite" + data);
-			scene = Invite.scene();
-			break;
-		default:
-			Log.e("Home", "CallBack3 : Home" + data);
-			scene = Home.scene();
-			break;
-		}
 		
 		CCScene homeScene = (CCScene) this.getParent();
 		CCLayer mailBoxLayer = (CCLayer) homeScene.getChildByTag(3);
@@ -230,7 +219,7 @@ public class Home extends CCLayer{
 			for (String item : items) {
 				if (!item.equals("presentGold")) {
 					FacebookData.getinstance().setRecipientID(item);
-					scene = ShopGold2.scene();
+					CCScene scene = ShopGold2.scene();
 					CCDirector.sharedDirector().replaceScene(scene);
 				}
 			}
@@ -246,10 +235,124 @@ public class Home extends CCLayer{
 					FacebookData.getinstance().sendMail(sendMailData);
 				}
 			}
-		} else {
-			CCDirector.sharedDirector().replaceScene(scene);
 		}
 
 	}
 	
+
+
+	public void clicked2(Object sender) {
+		int value = ((CCNode) sender).getTag();
+		CCScene scene;
+		
+		switch (value) {
+		case broomstickButton :
+			Log.e("Home", "CallBack3 : broomstick" + value);
+			FacebookData.getinstance().setRecipientID(FacebookData.getinstance().getUserInfo().getId());
+			scene = ShopBroomstick2.scene();
+			break;
+		case goldButton :
+			Log.e("Home", "CallBack3 : gold" + value);
+			FacebookData.getinstance().setRecipientID(FacebookData.getinstance().getUserInfo().getId());
+			scene = ShopGold2.scene();
+			break;
+		case shopButton :
+				Log.e("Home", "CallBack3 : shop" + value);
+			scene = Shop.scene();
+			break;
+		case enterButton :
+			Log.e("Home", "CallBack3 : enter" + value);
+			scene = GameMode.scene();
+			break;
+		case optionButton :
+			Log.e("Home", "CallBack3 : option" + value);
+			scene = Option.scene();
+			break;
+		case inviteButton :
+			Log.e("Home", "CallBack3 : invite" + value);
+			scene = Invite.scene();
+			break;
+		default:
+			Log.e("Home", "CallBack3 : Home" + value);
+			scene = Home.scene();
+			break;
+		}
+		
+		if (value <= inviteButton) {
+			CCDirector.sharedDirector().replaceScene(scene);
+			return;
+		}
+		
+		CCScene homeScene = (CCScene) this.getParent();
+		CCLayer mailBoxLayer = (CCLayer) homeScene.getChildByTag(mailBoxLayerTag);
+		String data = (String) ((CCMenuItemImage)sender).getUserData();
+		
+		if (value == mailButton) {
+			// 안드로이드 스크롤뷰로 교체해야됩니다.
+			new MailBox(mailBoxLayer, "11mailbox/", this);
+			
+			List<CCNode> layers = homeScene.getChildren();
+			for (CCNode ccNode : layers) { // home scene에 붙은 layer
+				CCLayer tempLayer = (CCLayer) ccNode;
+				if (tempLayer != mailBoxLayer) {  // layer중에 mailboxlayer만 제외
+					tempLayer.setIsTouchEnabled(false);
+					
+//					List<CCNode> sprites = tempLayer.getChildren();
+//					for (CCNode ccNode2 : sprites) {
+//						Log.e("Home", "CCNode " + ccNode2);
+//						if (ccNode2 instanceof CCMenu) { // layer중에 menu만 고르고
+//							Log.e("Home", "ccNode2 " + ccNode2);
+//							List<CCNode> tempMenuItems = ccNode2.getChildren(); // menu에서 버튼을 골라서
+//							for (CCNode ccNode3 : tempMenuItems) {
+//								((CCMenuItem)ccNode3).setIsEnabled(false); // 터치 잠금
+//							}
+//						} else if (ccNode2 instanceof CCMenuItem) {
+//							((CCMenuItem)ccNode2).setIsEnabled(false); // 바로 menuitem이 나오면 터치 잠금
+//
+						}
+					}
+				} else if (value == mailcloseButton) {
+					mailBoxLayer.removeChildByTag(999, true);
+					List<CCNode> layers = homeScene.getChildren();
+					for (CCNode ccNode : layers) { // home scene에 붙은 layer
+						CCLayer tempLayer = (CCLayer) ccNode;
+							tempLayer.setIsTouchEnabled(true);
+					}
+				} else if (value == mailReceiveAllButton) {
+					String[] items = data.split(",");
+					for (String item : items) {
+						Log.e("Home", "mailReceiveAll : " + item);
+						if (!item.equals("")) {
+							DataFilter.itemEraser(item);	
+						}
+					}
+					// child sprite 제거 방식으로 수정 요함.
+					mailBoxLayer.removeChildByTag(999, true);
+					new MailBox(mailBoxLayer, "11mailbox/", this);
+				} else if (value == presentGoldButton) {
+					Log.e("Home", "presentGold : " + value);
+					String[] items = data.split(",");
+					for (String item : items) {
+							FacebookData.getinstance().setRecipientID(item);
+							scene = ShopGold2.scene();
+							CCDirector.sharedDirector().replaceScene(scene);
+					}
+				} else if (value == presentBroomstickButton) {
+					Log.e("Home", "presentBroomstick : " + value);
+					String[] items = data.split(",");
+					for (String item : items) {
+							String senderID = FacebookData.getinstance().getUserInfo().getId();
+							String sendMailData = 
+									"0,RequestModeMailBoxAdd*22," + FacebookData.getinstance().getRequestID() + 
+									"*1," + item + "*19," + senderID + "*20,Broomstick*21," + 1;
+							FacebookData.getinstance().sendMail(sendMailData);
+					}
+				}
+	}
+	
+	private void modifyMenu(CCMenu menu, boolean enabled) {
+		for (CCNode menuItem : menu.getChildren()) {
+			((CCMenuItem) menuItem).setIsEnabled(enabled);
+		}
+	}
 }
