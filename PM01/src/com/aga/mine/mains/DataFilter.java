@@ -22,8 +22,12 @@ public class DataFilter {
 	}
 	
 	public static boolean readFilter(String RequestModeRead) {
-		if (RequestModeRead == null || RequestModeRead.equals("") || RequestModeRead.indexOf("query error") >= 0 )
+		Log.e("DataFilter", "RequestModeRead response [" + RequestModeRead +"]");
+		if (RequestModeRead == null || RequestModeRead.equals("") || RequestModeRead.indexOf("query error") >= 0) {
+			Log.e("DataFilter", "false");
 			return false;
+		}
+		Log.e("DataFilter", "true");
 		return true;
 	}
 	
@@ -93,8 +97,16 @@ public class DataFilter {
 	
 	public static String getUserDBData(String facebookID) {
 		try {
-			return new DataController().execute(
-					"0,RequestModeRead*1," + facebookID).get();
+			String getData = new DataController().execute("0,RequestModeRead*1," + facebookID).get();
+			if (!DataFilter.readFilter(getData)) { // 맞는것
+//			if (DataFilter.readFilter(getData)) { // 강제로 생성 test용
+				Log.e("DataFilter", "getUserDBData() 새로운 아이디 생성");
+				DailyBeckoner.setUserDBData(facebookID);
+				getData = new DataController().execute("0,RequestModeRead*1," + facebookID).get();
+			}
+
+			Log.e("DataFilter", "getUserDBData : " + getData);
+			return getData;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {

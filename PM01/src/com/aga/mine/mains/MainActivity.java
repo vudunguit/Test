@@ -28,6 +28,7 @@ import com.sromku.simple.fb.entities.Profile;
 import com.sromku.simple.fb.listeners.OnFriendsListener;
 import com.sromku.simple.fb.listeners.OnInviteListener;
 import com.sromku.simple.fb.listeners.OnLoginListener;
+import com.sromku.simple.fb.listeners.OnLogoutListener;
 import com.sromku.simple.fb.listeners.OnProfileListener;
 
 public class MainActivity extends Activity {
@@ -182,6 +183,10 @@ public class MainActivity extends Activity {
         mSimpleFacebook.login(mOnLoginListener);
     }
     
+    public void logoutFaceBook() {
+    	mSimpleFacebook.logout(mLogoutListener);
+    }
+    
     public void getMyProfile() {
         mSimpleFacebook.getProfile(mOnProfileListener);
     }
@@ -226,6 +231,35 @@ public class MainActivity extends Activity {
             //hideDialog();
         }
     };
+    
+
+    private OnLogoutListener mLogoutListener = new OnLogoutListener() {
+		
+		@Override
+		public void onFail(String reason) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onException(Throwable throwable) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onThinking() {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onLogout() {
+			// TODO Auto-generated method stub
+			
+		}
+	};
+	
     
     // listener for profile request
     final OnProfileListener mOnProfileListener = new OnProfileListener() {

@@ -218,9 +218,12 @@ public class Option extends CCLayer {
 	}
 
 	public void facebookCallback(Object sender) {
-//		GameData.share().isGuestMode = true;
-//		CCScene scene = Option2.scene();
-//		CCDirector.sharedDirector().replaceScene(scene);	
+		MainActivity mMainActivity = MainApplication.getInstance().getActivity();
+		if(mMainActivity.mSimpleFacebook.isLogin()) {
+	    	mMainActivity.logoutFaceBook(); //test¿ë
+	    	mMainActivity.finish(); //test¿ë
+	    } else 
+    		mMainActivity.loginFaceBook();
 		}
 
 	public void provisionCallback(Object sender) {
