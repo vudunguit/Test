@@ -1,8 +1,8 @@
 package com.aga.mine.mains;
 
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
-import org.cocos2d.events.CCTouchDispatcher;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
@@ -13,6 +13,7 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.ccColor3B;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.aga.mine.pages.UserData;
@@ -58,12 +59,24 @@ public class HomeMiddle {
 		post.setAnchorPoint(1.0f, 0.5f);
 		
 		//
-		CCSprite userImage= CCSprite.sprite(commonfolder + "noPicture" + fileExtension); // 프로필 사진
-
-		profilePicture.addChild(userImage);
-		userImage.setAnchorPoint(0.5f, 0.5f);
-		userImage.setPosition(profilePicture.getContentSize().width / 2, profilePicture.getContentSize().height / 2);
-
+		
+		CCSprite userImage = null;
+		
+//		Bitmap userBMP =null;
+		String imageUrl = "https://graph.facebook.com/" + FacebookData.getinstance().getUserInfo().getUsername() +"/picture";
+		try {
+			Bitmap userBMP = new DownloadImageTask().execute(imageUrl).get();
+			userImage = CCSprite.sprite(userBMP); // 프로필 사진
+			profilePicture.addChild(userImage);
+			userImage.setAnchorPoint(0.5f, 0.5f);
+			userImage.setPosition(profilePicture.getContentSize().width / 2, profilePicture.getContentSize().height / 2);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		} catch (ExecutionException e1) {
+			e1.printStackTrace();
+		}
+		
+//		CCSprite userImage = CCSprite.sprite(commonfolder + "noPicture" + fileExtension); // 프로필 사진
 		
 		CCSprite newIcon = CCSprite.sprite(imageFolder + "home-mailNew-hd01" + fileExtension); // 새로운 우편
 		newIcon.setPosition(
@@ -92,19 +105,21 @@ public class HomeMiddle {
 		int levelLimit = userData.expPerLevel.length;
 		int expLimit = 999999999;
 		String expStr ;
+		float scale;
 		if (levelValue < levelLimit) {
 			expLimit = userData.expPerLevel[levelValue - 1];
 			expStr = (int)expValue + " / " + expLimit;
+			scale = (levelProgressBar.getContentSize().width - 4) * (expValue / expLimit);
 		} else {
 			expStr = "MAX";
+			scale = levelProgressBar.getContentSize().width - 4;
 		}
 		
 		CCSprite gaugeBar = CCSprite.sprite(imageFolder + "Home-gaugeBar-hd" + fileExtension); // 레벨 게이지 바
 		levelProgressBar.addChild(gaugeBar);
 		gaugeBar.setAnchorPoint(0, 0.5f);
 		gaugeBar.setPosition(2, levelProgressBar.getContentSize().height / 2);
-		gaugeBar.setScaleX(
-				 (levelProgressBar.getContentSize().width - 4) * (expValue / expLimit) / gaugeBar.getContentSize().width);
+		gaugeBar.setScaleX(scale / gaugeBar.getContentSize().width);
 		
 		CCLabel exp = CCLabel.makeLabel(expStr, "Arial", 11); // 경험치 (게이지로 변경필요)
 		levelProgressBar.addChild(exp);

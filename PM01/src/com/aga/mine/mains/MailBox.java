@@ -55,19 +55,22 @@ public class MailBox {
 		ArrayList<String[]> goldList = new ArrayList<String[]>();
 		ArrayList<String[]> BroomstickList = new ArrayList<String[]>();
 		
+		Log.e("MailBox", "mailSize [" + mail.length + "]");
 		for (String string : mail) {
-			Log.e("MailBox", "mailOpen : " + string);
-			
-			String[] mailArray = string.split("\\*");
-//			for (String string2 : mailArray) {
-//				Log.e("MailBox", "mailOpen2 : " + string2);
-//			}		
-			
-			if (mailArray[2].equals("Gold")) {
-				goldList.add(mailArray);
-			} else {
-				BroomstickList.add(mailArray);
+			Log.e("MailBox", "mailOpen [" + string + "]");
+			if (string != null && !string.equals("")) {
+				String[] mailArray = string.split("\\*");
+//				for (String string2 : mailArray) {
+//					Log.e("MailBox", "mailOpen2 : " + string2);
+//				}		
+				
+				if (mailArray[2].equals("Gold")) {
+					goldList.add(mailArray);
+				} else {
+					BroomstickList.add(mailArray);
+				}
 			}
+
 		}
 
 		for (String[] strings : BroomstickList) {

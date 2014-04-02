@@ -57,7 +57,7 @@ public class HomeScroll extends CCColorLayer{
 	
 	final int width = 470; // 원본 사이즈 460
 	final int height = 94; // 원본사이즈 94
-	int max_items = 0;
+	int max_items = 4;
 	final int base_tag = 100;
 	int seperatorWeight = 3;
 	Context mContext;
@@ -78,7 +78,7 @@ public class HomeScroll extends CCColorLayer{
 	
 	// 기존에 사용하던 것
 	private void createScroll(List<Profile> friends) {
-		if (friends.size() > 3) {
+		if (friends.size() > max_items) {
 			max_items = friends.size();	
 		}
 		

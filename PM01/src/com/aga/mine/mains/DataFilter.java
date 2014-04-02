@@ -1,5 +1,7 @@
 package com.aga.mine.mains;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -57,15 +59,32 @@ public class DataFilter {
 	public static String[][] scoreFilter(String source) {
 		String[] array = headerEraser(source, "***").split("\\&");
 		
+		ArrayList<String[]> sourceList = new ArrayList<String[]>(); 
+		for (String strings : array) {
+			sourceList.add(strings.split("-"));
+		}
+		
+		Collections.sort(sourceList, new ClothesComparator());
+		
+		for (String[] strings : sourceList) {
+			Log.e("DataFilter", "ArrayList 0 : " + strings[0] + ", 1 : " + strings[1] + ", 2: " + strings[2]);
+		}
+		
 		String[][] stringArray = new String[array.length][];
 		int count = 0;
-		for (String strings : array) {
-			stringArray[count] = strings.split("-");
+		
+		for (String[] strings : sourceList) {
+			stringArray[count] = strings;
 			count++;
 		}
 		
+//		for (String strings : array) {
+//			stringArray[count] = strings.split("-");
+//			count++;
+//		}
+
 		for (String[] strings : stringArray) {
-			Log.e("DataFilter", "0 : " + strings[0] + ", 1 : " + strings[1] + ", 2: " + strings[2]);
+			Log.e("DataFilter", "arrayMulti 0 : " + strings[0] + ", 1 : " + strings[1] + ", 2: " + strings[2]);
 		}
 		
 		return stringArray;
