@@ -23,6 +23,8 @@ import org.cocos2d.utils.BufferProvider;
 import org.cocos2d.utils.BufferUtils;
 
 import android.graphics.Bitmap;
+import android.util.Log;
+import android.view.TextureView;
 
 /** CCSprite is a 2d image ( http://en.wikipedia.org/wiki/Sprite_(computer_graphics) )
  *
@@ -367,12 +369,20 @@ public class CCSprite extends CCNode implements CCRGBAProtocol, CCTextureProtoco
         assert filepath!=null:"Invalid filename for sprite";
 
         CCTexture2D texture = CCTextureCache.sharedTextureCache().addImage(filepath);
+//        Log.e("CCSprite", "texture.getContentSize1 : " + texture.getContentSize());
+        if (texture.getContentSize() == null) {
+			CCLabel nonePicture = CCLabel.makeLabel(
+					"wrong:" + filepath.substring(filepath.lastIndexOf("/")+1,filepath.lastIndexOf(".")), "Arial", 15);
+			texture = nonePicture.getTexture();
+		}
+//        Log.e("CCSprite", "texture.getContentSize2 : " + texture.getContentSize());
+        
         if( texture != null) {
             CGRect rect = CGRect.make(0, 0, 0, 0);
             rect.size = texture.getContentSize();
             init(texture, rect);
         } else {
-		ccMacros.CCLOGERROR("CCSprite", "Unable to load texture from file: " + filepath);
+        	ccMacros.CCLOGERROR("CCSprite", "Unable to load texture from file: " + filepath);
         }
     }
 

@@ -12,6 +12,7 @@ import org.cocos2d.types.CGPoint;
 import com.aga.mine.pages.UserData;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
@@ -21,6 +22,10 @@ public class GameDifficulty extends CCLayer {
 	final String folder = "51difficulty/";
 	final String fileExtension = ".png";
 
+	final int singleMode = 1;
+	final int randomMode = 2;
+	final int inviteMode = 3;
+	
 	CCSprite bg;
 	
 	public static int mode;
@@ -134,21 +139,23 @@ public class GameDifficulty extends CCLayer {
 
 	public void nextCallback(Object sender) {
 		CCScene scene = null;
-		GameData.share().setGameDifficulty((Integer)((CCNode)sender).getUserData());
+//		GameData.share().setGameDifficulty((Integer)((CCNode)sender).getUserData());
+//		switch (GameData.share().getGameMode()) {  // gameData로 옮겨야됨. (기존에 있음.)
+		Log.e("GameDifficulty", "tagNumber  : " + userData.getGameMode());
 		
-		switch (GameData.share().getGameMode()) {
-		case 1:
+		switch (userData.getGameMode()) {  // gameData로 옮겨야됨. (기존에 있음.)
+		case singleMode:
 			scene = GameLoading.scene();
 			single(scene);
 			break;
 			
-//		case 2:
-//			scene = GameRandom.scene();
-//			break;
-//			
-//		case 3:
-//			scene = GameInvite.scene();
-//			break;
+		case randomMode:
+			scene = GameRandom.scene();
+			break;
+			
+		case inviteMode:
+			scene = GameInvite.scene();
+			break;
 		}
 		CCDirector.sharedDirector().replaceScene(scene);
 	}

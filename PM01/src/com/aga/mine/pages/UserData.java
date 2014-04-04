@@ -534,6 +534,7 @@ public class UserData{
 	}
 
 	long nextLevelExp = 5000; // temporary
+	public int gameMode;
 
 	public void addExp(long number) {
 		// 할일 : 레벨업경험치에 따른 레벨업
@@ -708,6 +709,14 @@ public class UserData{
 
 	public void setDailyCount(int dailyCount) {
 		this.setByKey("daily", dailyCount);
+	}
+
+	public int getGameMode() {
+		return gameMode;
+	}
+
+	public void setGameMode(int gameMode) {
+		this.gameMode = gameMode;
 	}
 	
 	

@@ -72,7 +72,7 @@ public class HomeScroll extends CCColorLayer{
 //		List<GraphUser> friends = UserData.share(mContext).facebookFriendsInfo;
 //		Log.e("HomeScroll", "HomeScroll : " + friends.size());
 //		createScroll(friends);
-		this.nodeThis = nodeThis;
+//		this.nodeThis = nodeThis;
 		createScroll(DataFilter.getRanking());
 	}
 	
@@ -210,7 +210,11 @@ public class HomeScroll extends CCColorLayer{
 //			userImage= CCSprite.sprite(userPhoto); // 프로필 사진
 //		}
 		try {
-			userImage = CCSprite.sprite(new DownloadImageTask().execute(imageUrl).get());
+			Bitmap downloadimage = new DownloadImageTask().execute(imageUrl).get();
+//			if (downloadimage.getWidth() > 0 && downloadimage.getHeight() > 0) // 이미지 사이즈 체크 
+//				userImage = CCSprite.sprite(downloadimage); // 다운로드 받은 이미지로 등록 (일단 주석 처리)
+//			else
+				userImage = CCSprite.sprite(commonfolder + "noPicture.png"); // 이미지 없을시 임시용 파일로 등록
 			profilePicture.addChild(userImage);
 			userImage.setAnchorPoint(0.5f, 0.5f);
 			userImage.setPosition(profilePicture.getContentSize().width / 2, profilePicture.getContentSize().height / 2);

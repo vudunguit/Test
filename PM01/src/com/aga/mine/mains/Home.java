@@ -40,8 +40,6 @@ public class Home extends CCLayer{
 	final int presentGoldButton = 1010;
 	final int presentBroomstickButton = 1011;
 	
-//	final int inviteButton = 1006;
-	
 	static CCLayer scroll = CCLayer.node();
 	
 	public static CCScene scene() {
@@ -80,7 +78,7 @@ public class Home extends CCLayer{
 	
 	public Home() {
 //		FacebookData.getinstance().setUserInfo(FacebookData.getinstance().getUserInfo());
-		CCSprite backGround = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg2" + fileExtension);
+		CCSprite backGround = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg-open" + fileExtension);
 		CCSprite backBoard = setBackBoardMenu(backGround, folder + "home-backboard" + fileExtension);
 		CCSprite boardFrame = setBoardFrameMenu(backGround, commonfolder + "frameGeneral-hd" + fileExtension);
 
