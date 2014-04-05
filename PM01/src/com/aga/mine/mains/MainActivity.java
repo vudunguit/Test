@@ -15,6 +15,8 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Process;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -39,6 +41,16 @@ public class MainActivity extends Activity {
 
     private CCGLSurfaceView mGLSurfaceView;
     CCDirector director = CCDirector.sharedDirector();
+    
+    public Handler mHandler = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+			switch(msg.what) {
+			}
+		}
+    	
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,8 +181,8 @@ public class MainActivity extends Activity {
     }
     
     //facebook setting--------------------------------------------------------------------------
-    private void showDialog() {
-        mProgress = ProgressDialog.show(this, "Login", "Waiting for Facebook", true);
+    private void showDialog(String title, String message) {
+        mProgress = ProgressDialog.show(this, title, message, true);
     }
     
     private void hideDialog() {
@@ -249,14 +261,17 @@ public class MainActivity extends Activity {
 		
 		@Override
 		public void onThinking() {
-			// TODO Auto-generated method stub
+			showDialog("LogOut", "Please wait for logging out");
 			
 		}
 		
 		@Override
 		public void onLogout() {
-			// TODO Auto-generated method stub
-			
+			hideDialog();
+			// clear facebook data and value and go to login scene
+			FacebookData.initialize();
+			CCScene scene = Login.scene();
+			director.replaceScene(scene);
 		}
 	};
 	
@@ -308,7 +323,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void onThinking() {
-            showDialog();
+            showDialog("Loading", "Please wait for getting friends infomation");
             Log.i(TAG, "Thinking...");
         }
 
@@ -354,6 +369,12 @@ public class MainActivity extends Activity {
     private void nextCallback(boolean facebookReady) {
         Log.e("FacebookHelper", "nextCallback");
         if (facebookReady) {
+        	//ToDo: 성능개선: 화면을 멈추지 않고 데이터 로딩후 출석부로 이동
+        	//1) 로딩바 표시
+        	//2) 핸들러 send message
+        	//3) 데이터 로딩 후 로딩바 해제
+        	//4) 화면 이동
+        	
             HomeScroll.getInstance().setData(
                     DataFilter.getRanking(FacebookData.getinstance().getUserInfo(),FacebookData.getinstance().getFriendsInfo())
             );

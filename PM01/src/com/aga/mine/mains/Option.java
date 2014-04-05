@@ -86,6 +86,8 @@ public class Option extends CCLayer {
 
 	// 메인 메뉴
 	private void setMainMenu(CCSprite parentSprite){
+		MainActivity mMainActivity = MainApplication.getInstance().getActivity();
+		
 		CCMenuItem guide = CCMenuItemImage.item(
 				SpriteSummery.imageSummary(
 						folder + "guide-bg" + fileExtension,
@@ -103,7 +105,9 @@ public class Option extends CCLayer {
 				SpriteSummery.imageSummary(
 						folder + "facebook-bg" + fileExtension,
 						Utility.getInstance().getNameWithIsoCodeSuffix(
-						folder + "facebook_out" + fileExtension)),
+						folder + 
+						(mMainActivity.mSimpleFacebook.isLogin() ? "facebook_out" : "facebook_in") +
+						fileExtension)),
 				SpriteSummery.imageSummary(
 					SpriteSummery.imageSummary(
 							folder + "facebook-bg" + fileExtension,
@@ -220,8 +224,7 @@ public class Option extends CCLayer {
 	public void facebookCallback(Object sender) {
 		MainActivity mMainActivity = MainApplication.getInstance().getActivity();
 		if(mMainActivity.mSimpleFacebook.isLogin()) {
-	    	mMainActivity.logoutFaceBook(); //test용
-	    	mMainActivity.finish(); //test용
+	    	mMainActivity.logoutFaceBook(); 
 	    } else 
     		mMainActivity.loginFaceBook();
 		}

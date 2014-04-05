@@ -46,7 +46,9 @@ public class FacebookData {
 		return facebookData;
 	}
 	
-	
+	public static void initialize() {
+		facebookData = null;
+	}
 
 	
 	public boolean sendMail(String data) {
