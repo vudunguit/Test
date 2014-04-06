@@ -16,6 +16,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.util.DisplayMetrics;
@@ -23,7 +24,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 
+import com.aga.mine.view.FriendListAapter;
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.entities.Profile;
@@ -42,14 +47,28 @@ public class MainActivity extends Activity {
     private CCGLSurfaceView mGLSurfaceView;
     CCDirector director = CCDirector.sharedDirector();
     
-    public Handler mHandler = new Handler() {
-
+    private RelativeLayout main;
+    private ListView mListView;
+    
+    public Handler mHandler = new Handler(Looper.getMainLooper()) {
 		@Override
 		public void handleMessage(Message msg) {
 			switch(msg.what) {
+			case Constant.MSG_DISPLAY_FRIENDLIST:
+				//API 콜 : 
+				FriendListAapter adapter = new FriendListAapter(MainActivity.this);
+				mListView.setAdapter(adapter);
+				RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+				params.setMargins(120, 500, 120, 400); //adjust position
+				//MainActivity.this.addContentView(listview, params);
+				main.addView(mListView, params);
+				break;
+				
+			case Constant.MSG_HIDE_SCROLLVIEW:
+				main.removeView(mListView);
+				break;
 			}
 		}
-    	
     };
 
     @Override
@@ -66,7 +85,11 @@ public class MainActivity extends Activity {
         mGLSurfaceView = new CCGLSurfaceView(this);
         mGLSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         mGLSurfaceView.getHolder().setFormat(PixelFormat.RGBA_8888);
-        setContentView(mGLSurfaceView);
+        //setContentView(mGLSurfaceView);
+        setContentView(R.layout.activity_main);
+        main = (RelativeLayout) findViewById(R.id.main);
+        main.addView(mGLSurfaceView);
+        mListView = new ListView(this);
 
         director.attachInView(mGLSurfaceView);
 
@@ -261,7 +284,7 @@ public class MainActivity extends Activity {
 		
 		@Override
 		public void onThinking() {
-			showDialog("LogOut", "Please wait for logging out");
+			showDialog("Please wait", "Logging out...");
 			
 		}
 		
@@ -323,7 +346,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void onThinking() {
-            showDialog("Loading", "Please wait for getting friends infomation");
+            showDialog("Please Wait", "Loading friends infomation...");
             Log.i(TAG, "Thinking...");
         }
 
@@ -375,9 +398,10 @@ public class MainActivity extends Activity {
         	//3) 데이터 로딩 후 로딩바 해제
         	//4) 화면 이동
         	
-            HomeScroll.getInstance().setData(
+        	//안드로이드 뷰로 대체
+/*            HomeScroll.getInstance().setData(
                     DataFilter.getRanking(FacebookData.getinstance().getUserInfo(),FacebookData.getinstance().getFriendsInfo())
-            );
+            );*/
             
             // daily(출석부)는 1일 1회만 호출하므로 DailyBeckoner에서 체크 후 이동하게 됨.(이미 1회이상 접속시 home scene으로 이동) 
             // DailyBeckoner 호출시 facebook 정보들을 가지고 있어야됩니다.

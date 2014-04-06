@@ -2,7 +2,6 @@ package com.aga.mine.mains;
 
 import java.util.List;
 
-import org.cocos2d.events.CCTouchDispatcher;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
@@ -14,7 +13,6 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
-import android.R.bool;
 import android.util.Log;
 
 public class Home extends CCLayer{
@@ -99,6 +97,9 @@ public class Home extends CCLayer{
 //        		pb.y - (profileBg.getAnchorPoint().y * profileBg.getContentSize().height) - (94 * friendsSize) - 5);
 //		CCTouchDispatcher.sharedDispatcher().setDispatchEvents(false);
 		this.setIsTouchEnabled(true);
+		
+		//display scroll view
+		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_FRIENDLIST);
 	}
 	
 	private CGSize winsize() {
@@ -277,6 +278,9 @@ public class Home extends CCLayer{
 		}
 		
 		if (value <= inviteButton) {
+			//hide scroll view
+			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+			
 			CCDirector.sharedDirector().replaceScene(scene);
 			return;
 		}
