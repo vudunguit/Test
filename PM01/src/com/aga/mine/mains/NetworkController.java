@@ -63,6 +63,8 @@ public class NetworkController extends Activity {
 	final static int kMessageRequestInvite = 18; // 초대 매치용 요청 메시지
 	final static int kMessageResponseMatchInvite = 19; // 초대 대전 응답
 	final static int kMessageResponseInvite = 20; // 초대 매치용 응답 메시지
+	final static int kMessageWillYouAcceptInvite = 21; // 초대 매치 요청 메시지
+	final static int kMessageWillYouAcceptInviteOK = 22; // 초대 매치 응답 메시지
 	/*******************************************/
 	// 플레이 데이타 (플레이 중 발생되는 매치 데이타) 분류 코드
 	final static int kPlayDataCellOpen = 0;
@@ -425,6 +427,13 @@ public class NetworkController extends Activity {
 			result = 0;
 			break;
 			
+		case kMessageWillYouAcceptInvite:
+			Log.e("NetworkController", "kMessageWillYouAcceptInvite");
+			result = reader.readByte();
+			matchedOppenentFacebookId = reader.readString();			
+			Log.e("NetworkController", "초대 요청 난이도 & ID /" + result + " : " + matchedOppenentFacebookId);
+			break;
+			
 		default:
 			Log.e("NetworkController", "정의되지 않은 메시지가 수신되었습니다. : " + messageType);
 			break;
@@ -634,6 +643,16 @@ public class NetworkController extends Activity {
 		Log.e("NetworkController", "sendRoomOwner");
 	}
 	
+//	public static void sendRequestMatchInvite(int difficulty, String facebookID) {
+//		Log.e("NetworkController", "send Request Match Invite ......");
+//		MessageWriter message = new MessageWriter();
+//		message.writeByte((byte) kMessageRequestMatch);
+//		message.writeByte((byte) difficulty);
+//		message.writeString(facebookID);
+//		sendData(message.data_);
+//		Log.e("NetworkController", "sendRequestMatch");
+//	}
+	
 	public static void sendRequestMatch(int difficulty) throws IOException {
 		Log.e("NetworkController", "sending request match ......");
 		MessageWriter message = new MessageWriter();
@@ -659,15 +678,12 @@ public class NetworkController extends Activity {
 	 // 해당 페이스북아이디의 플레이어와 매치를 이루어 달라는 요청을 보낸다.
 	public void sendRequestMatchInvite(int Difficulty, String facebookID) throws IOException {
 		MessageWriter message = new MessageWriter();
-		
 		message.writeByte((byte) kMessageRequestMatchInvite);
 		message.writeByte((byte) Difficulty);
 		message. writeString(facebookID);
-		
 		this.sendData(message.data_);
 		this.setMessage(kMessageRequestMatchInvite, kModeSent);
-		Log.e("NetworkController", "sendRequestMatchInvite");
-
+		Log.e("NetworkController", "send Request Match Invite");
 	}
 	
 

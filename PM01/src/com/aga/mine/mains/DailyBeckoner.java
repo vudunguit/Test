@@ -9,11 +9,11 @@ import android.util.Log;
 public class DailyBeckoner {
 	
 	
-	final static int level = 100;
+	final static int level = 1;
 	final static int sphere = 2;
 	final static int exp = 0;
 	final static int gold = 0;
-	final static int gameScore = 1;
+	final static int gameScore = 0;
 	final static int win = 0;
 	final static int lose = 0;
 	final static int broomstick = 10;

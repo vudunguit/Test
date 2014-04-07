@@ -49,6 +49,14 @@ public class MainActivity extends Activity {
     
     private RelativeLayout main;
     private ListView mListView;
+    private float frameGeneralWidth = 640;
+    private float frameGeneralHeight = 889;
+    private float homeListFrameLeftPosition = 90;
+    private float homeListFrameTopPosition = 368;
+    private float homeListFrameRightPosition = 100;
+    private float homeListFrameBottomPosition = 186;
+    private float frameCenterPosition = 0.525f;
+    private int nMargin = 2;
     
     public Handler mHandler = new Handler(Looper.getMainLooper()) {
 		@Override
@@ -59,7 +67,19 @@ public class MainActivity extends Activity {
 				FriendListAapter adapter = new FriendListAapter(MainActivity.this);
 				mListView.setAdapter(adapter);
 				RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-				params.setMargins(120, 500, 120, 400); //adjust position
+				
+				// assets의 frameGeneral-hd.png, frameMatching-hd.png파일의 width, height을 받아와서 작업을 해야되는데
+				// inputstream을 해야되고 핸들러에서 작업 하기에는 문제가 있어 이미지 크기를 상수로 정의하여 작업했습니다.
+				
+				// 랭킹에 들어가는 페이스북 이미지 크기 및 리스트뷰 오른쪽 2번째 이미지(선물상자)의 rightMargin이 해상도 별로 변경됩니다.
+				// 해상도에 맞게 이미지는 커지고 마진은 작아져야 됩니다.(scale값 적용) 
+				float scale = main.getWidth() / frameGeneralWidth ;
+				float height = main.getHeight();
+				params.setMargins(
+						(int) (homeListFrameLeftPosition * scale) + nMargin, 
+						(int) (height * (1 - frameCenterPosition) + (homeListFrameTopPosition - frameGeneralHeight * 0.5) * scale) + nMargin, 
+						(int) (homeListFrameRightPosition * scale) + nMargin, 
+						(int) (height * frameCenterPosition + (homeListFrameBottomPosition - frameGeneralHeight * 0.5) * scale) + nMargin); //adjust position
 				//MainActivity.this.addContentView(listview, params);
 				main.addView(mListView, params);
 				break;
@@ -402,7 +422,9 @@ public class MainActivity extends Activity {
 /*            HomeScroll.getInstance().setData(
                     DataFilter.getRanking(FacebookData.getinstance().getUserInfo(),FacebookData.getinstance().getFriendsInfo())
             );*/
-            
+        	// 게임스코어 받아오기
+    		FacebookData.getinstance().setGameScore(DataFilter.getRanking());
+        	
             // daily(출석부)는 1일 1회만 호출하므로 DailyBeckoner에서 체크 후 이동하게 됨.(이미 1회이상 접속시 home scene으로 이동) 
             // DailyBeckoner 호출시 facebook 정보들을 가지고 있어야됩니다.
             new DailyBeckoner();

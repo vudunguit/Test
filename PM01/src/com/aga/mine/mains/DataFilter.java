@@ -56,41 +56,7 @@ public class DataFilter {
 		return headerEraser(source, "***").split("-");
 	}
 	
-	public static String[][] scoreFilter(String source) {
-		String[] array = headerEraser(source, "***").split("\\&");
-		
-		ArrayList<String[]> sourceList = new ArrayList<String[]>(); 
-		for (String strings : array) {
-			sourceList.add(strings.split("-"));
-		}
-		
-		Collections.sort(sourceList, new ClothesComparator());
-		
-		for (String[] strings : sourceList) {
-			Log.e("DataFilter", "ArrayList 0 : " + strings[0] + ", 1 : " + strings[1] + ", 2: " + strings[2]);
-		}
-		
-		String[][] stringArray = new String[array.length][];
-		int count = 0;
-		
-		for (String[] strings : sourceList) {
-			stringArray[count] = strings;
-			count++;
-		}
-		
-//		for (String strings : array) {
-//			stringArray[count] = strings.split("-");
-//			count++;
-//		}
-
-		for (String[] strings : stringArray) {
-			Log.e("DataFilter", "arrayMulti 0 : " + strings[0] + ", 1 : " + strings[1] + ", 2: " + strings[2]);
-		}
-		
-		return stringArray;
-	}
-	
-//	private ArrayList<String> scoreFilter(String[][] source) {
+	//	private ArrayList<String> scoreFilter(String[][] source) {
 //		String[][] strArray1 = source;
 //		String[][] temp = new String[strArray1.length][];
 //		Arrays.sort(strArray1);
@@ -160,35 +126,69 @@ public class DataFilter {
 		return null;
 	}
 	
-	public static String[][] getRanking() {
+	public static ArrayList<GameScore> getRanking() {
+		// 페이스북 아이디 받기
 		Profile user = FacebookData.getinstance().getUserInfo();		
 		List<Profile> friends = FacebookData.getinstance().getFriendsInfo();
-		String[][] score2Array = getRanking(user, friends);
-		return score2Array;
-	}
 	
-	public static String[][] getRanking(Profile user, List<Profile> friends) {
+		//DB조회를 위해 아이디들 합치기 (나, 친구들)
 		String facebookIDs = "(" + user.getId();		
 		for (Profile profile : friends) {
 			facebookIDs += "," + profile.getId();
 		}
 		facebookIDs += ")";
 		Log.e("DataFilter","facebookIDs : " + facebookIDs );
-		String[][] score2Array = getRanking(facebookIDs);
-		return score2Array;
-	}
 	
-	public static String[][] getRanking(String facebookIDs) {
 		try {
+			// DB에서 게임 스코어 조회
 			String rank = new DataController().execute("0,RequestModeGetInDBUserList*23," + facebookIDs).get();
 			Log.e("DataFilter", "getRanking : " + rank);
-			return scoreFilter(rank);
+
+			// 결과값 유저별 데이터 자르기
+			String[] array = headerEraser(rank, "***").split("\\&");
+			
+			ArrayList<GameScore> sourceList = new ArrayList<GameScore>(); 
+			
+			GameScore gameScoreModel;
+			
+			// 각 유저별 데이터 상세 자르기
+			int count = 1;
+			for (String strings : array) {
+				String[] userScoreData = strings.split("-");
+				gameScoreModel = new GameScore();
+				gameScoreModel.id = userScoreData[0];
+
+				if (user.getId().equals(gameScoreModel.id))
+					gameScoreModel.name = user.getName();
+				else
+					for (Profile facebook : friends) {
+						if (facebook.getId().equals(gameScoreModel.id)) {
+							gameScoreModel.name = facebook.getName();
+							break;
+						}
+					}
+				
+				gameScoreModel.level = Integer.parseInt(userScoreData[1]);
+				gameScoreModel.score = Integer.parseInt(userScoreData[2]);
+				sourceList.add(gameScoreModel);
+				count ++;
+			}
+			
+			// 스코어 내림차순 정렬
+			Collections.sort(sourceList, new ClothesComparator());
+			
+			// 데이터 확인
+			for (GameScore strings : sourceList) {
+				Log.e("DataFilter", "score : " + strings.name + "," + strings.id + "," + strings.level + "," + strings.score);
+			}
+
+			return sourceList;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
 		return null;
-	}
+		}
 	
 }

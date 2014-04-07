@@ -649,8 +649,14 @@ public class InviteScroll extends CCColorLayer{
 	
 	
 	public void matchCallback(Object sender) {
-		CCNode a= (CCNode)sender;
-		String facebookId = (String)a.getUserData();
+		CCMenuItemImage a= (CCMenuItemImage)sender;
+		String facebookID = (String)a.getUserData();
+		Log.e("inviteScroll", "a : " + a.toString() + ", facebookId : " + facebookID);
+//		a.setIsEnabled(false);
+		
+		
+//		NetworkController.getInstance().sendRequestMatchInvite(GameData.share().getGameDifficulty(), facebookID);
+		
 //		a.getParent().addChild(timerBack);
 //		a.removeFromParentAndCleanup(true);
 //		userData.addBroomstick(1);
@@ -659,9 +665,10 @@ public class InviteScroll extends CCColorLayer{
 //		a.setVisible(false);
 //		int idTag = (int)(Long.parseLong(facebookId));
 //		a.getParent().getChildByTag(idTag).setVisible(true);
+		
+		// 난이도는 1(쉬움), 2(보통), 3(어려움)
 		try {
-		NetworkController.getInstance().sendRequestMatchInvite(
-				userData.difficulty, facebookId);
+		NetworkController.getInstance().sendRequestMatchInvite(GameData.share().getGameDifficulty(), facebookID);
 	} catch (IOException e) {
 		e.printStackTrace();
 	}
@@ -674,8 +681,6 @@ public class InviteScroll extends CCColorLayer{
 		
 		//inviteButton.removeFromParentAndCleanup(true);
 		//menu111.removeChild((CCNode) sender, true);
-		
-		Log.e("inviteScroll", "timerCallback : " + a.getUserData());
 	}
 
 	CCNode nodeThis = CCNode.node(); 

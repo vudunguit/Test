@@ -259,7 +259,7 @@ public class GameData {
 	// 난이도
 	public int getGameDifficulty(){
 		//Log.e("get", ""+getGameData("GameDifficulty"));  // log로 확인
-		return 0; // 임시로 expert
+		return 1; // 임시로 expert
 		//return getGameData("GameDifficulty");
 	}
 	

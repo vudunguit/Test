@@ -73,7 +73,7 @@ public class HomeScroll extends CCColorLayer{
 //		Log.e("HomeScroll", "HomeScroll : " + friends.size());
 //		createScroll(friends);
 //		this.nodeThis = nodeThis;
-		createScroll(DataFilter.getRanking());
+//		createScroll(DataFilter.getRanking());
 	}
 	
 	// 기존에 사용하던 것

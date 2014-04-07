@@ -31,6 +31,7 @@ public class FacebookData {
 	private Profile userInfo = null;
 	private Bitmap userPhoto = null;
 	private List<Profile> friendsInfo = new ArrayList<Profile>();
+	private List<GameScore> gameScore = new ArrayList<GameScore>();
 	Map<String, String> data = new HashMap<String, String>();
 	int ranking = 0;
 	
@@ -206,6 +207,14 @@ public class FacebookData {
 	public long getRequestID() {
 		long requestID = (long) (Math.random() * 99L);  //test¿ë
 		return requestID;
+	}
+
+	public List<GameScore> getGameScore() {
+		return gameScore;
+	}
+
+	public void setGameScore(List<GameScore> gameScore) {
+		this.gameScore = gameScore;
 	}
 
 	

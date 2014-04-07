@@ -157,13 +157,13 @@ public class Home2 extends CCLayer {
 		}
 		
 		String[] idLvScore = {"ID : ","Lv ","Score "};
-		for (String[] str : DataFilter.scoreFilter(getFriendsScore())) {
-			int count =0;
-			for (String string : str) {
-				Log.e("Home", idLvScore[count] + string);	
-				count ++;
-			}
-		}
+//		for (String[] str : DataFilter.scoreFilter(getFriendsScore())) {
+//			int count =0;
+//			for (String string : str) {
+//				Log.e("Home", idLvScore[count] + string);	
+//				count ++;
+//			}
+//		}
 		
 		Log.e("Home", "setUserScore : " + DataFilter.userScoreFilter(setUserScore(123)));
 		

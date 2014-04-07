@@ -38,7 +38,7 @@ public class Home extends CCLayer{
 	final int presentGoldButton = 1010;
 	final int presentBroomstickButton = 1011;
 	
-	static CCLayer scroll = CCLayer.node();
+//	static CCLayer scroll = CCLayer.node(); // 안드로이드 뷰로 인하여 제거됨.
 	
 	public static CCScene scene() {
 		Log.e("Home", "scene");
@@ -54,7 +54,7 @@ public class Home extends CCLayer{
 //		scroll.setPosition(
 //				CCDirector.sharedDirector().winSize().width / 2 - scroll.getContentSize().width / 2,
 //				CCDirector.sharedDirector().winSize().height / 2 - scroll.getContentSize().height + 110);
-		scene.addChild(scroll, scrollLayerTag, scrollLayerTag);
+//		scene.addChild(scroll, scrollLayerTag, scrollLayerTag); // 안드로이드 뷰로 인하여 제거됨.
 		
 		CCLayer mailBox = CCLayer.node();
 		scene.addChild(mailBox,mailBoxLayerTag,mailBoxLayerTag);
@@ -82,11 +82,11 @@ public class Home extends CCLayer{
 
 //		scroll = HomeScroll.getInstance(this).getLayer();
 //		scroll = HomeScroll.getInstance().getLayer();
-		scroll = HomeScroll.getInstance().getLayer(this);
+/*		scroll = HomeScroll.getInstance().getLayer(this); // 안드로이드 뷰로 인하여 제거됨.
 		scroll.setAnchorPoint(0.5f, 1);
 		scroll.setPosition(
 				CCDirector.sharedDirector().winSize().width / 2 - scroll.getContentSize().width / 2,
-				CCDirector.sharedDirector().winSize().height / 2 - scroll.getContentSize().height + 110);
+				CCDirector.sharedDirector().winSize().height / 2 - scroll.getContentSize().height + 110);*/
 		
 //		CCSprite profileBg = (CCSprite) backBoard.getChildByTag(10);
 //		CGPoint pb = backBoard.convertToWorldSpace(profileBg.getPosition().x,profileBg.getPosition().y);
