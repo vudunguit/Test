@@ -31,8 +31,9 @@
 
     <ImageView
         android:id="@+id/imgProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="fitCenter"
         android:src="@drawable/com_facebook_profile_default_icon" />
 
     <LinearLayout
@@ -67,7 +68,7 @@
         android:id="@+id/imgGift"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
+        android:layout_marginRight="5dp"
         android:src="@drawable/home_giftboxon_hd" />
 
     <ImageView
