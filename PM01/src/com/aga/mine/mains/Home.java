@@ -241,6 +241,9 @@ public class Home extends CCLayer{
 
 
 	public void clicked2(Object sender) {
+		//hide scroll view
+		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+		
 		int value = ((CCNode) sender).getTag();
 		CCScene scene;
 		
@@ -278,9 +281,6 @@ public class Home extends CCLayer{
 		}
 		
 		if (value <= inviteButton) {
-			//hide scroll view
-			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
-			
 			CCDirector.sharedDirector().replaceScene(scene);
 			return;
 		}
