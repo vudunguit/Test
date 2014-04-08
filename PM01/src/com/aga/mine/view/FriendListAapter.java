@@ -2,6 +2,9 @@
 
 import java.util.List;
 
+import org.cocos2d.layers.CCScene;
+import org.cocos2d.nodes.CCDirector;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -11,9 +14,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aga.mine.mains.Constant;
 import com.aga.mine.mains.FacebookData;
 import com.aga.mine.mains.GameScore;
+import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.R;
+import com.aga.mine.mains.ShopBroomstick2;
+import com.aga.mine.mains.ShopGold2;
 import com.androidquery.AQuery;
 import com.sromku.simple.fb.entities.Profile;
 
@@ -49,7 +56,7 @@ public class FriendListAapter extends BaseAdapter {
 	}
 	
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		Viewholder holder;
 		if(convertView == null) {
 			holder = new Viewholder();
@@ -115,7 +122,12 @@ public class FriendListAapter extends BaseAdapter {
 		holder.imgGift.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//To Do
+				//hide scroll view
+				MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+				
+				FacebookData.getinstance().setRecipientID(gameScore.get(position).id);
+				CCScene scene = ShopGold2.scene();
+				CCDirector.sharedDirector().replaceScene(scene);
 			}
 		});
 		
@@ -123,7 +135,12 @@ public class FriendListAapter extends BaseAdapter {
 		holder.imgBroomstick.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//To Do
+				//hide scroll view
+				MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+				
+				FacebookData.getinstance().setRecipientID(gameScore.get(position).id);
+				CCScene scene = ShopBroomstick2.scene();
+				CCDirector.sharedDirector().replaceScene(scene);
 			}
 		});
 		

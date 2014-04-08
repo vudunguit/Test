@@ -39,7 +39,7 @@ public class ShopGold2 extends CCLayer {
 	private Context mContext;
 	UserData userData;
 	
-	static CCScene scene() {
+	public static CCScene scene() {
 		CCScene scene = CCScene.node();
 		CCLayer layer = new ShopGold2();
 		scene.addChild(layer);

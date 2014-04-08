@@ -37,7 +37,7 @@ public class ShopBroomstick2 extends CCLayer {
 	private Context mContext;
 	UserData userData;
 	
-	static CCScene scene() {
+	public static CCScene scene() {
 		CCScene scene = CCScene.node();
 		CCLayer layer = new ShopBroomstick2();
 		scene.addChild(layer);
