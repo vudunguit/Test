@@ -39,15 +39,15 @@ public class FriendListAapter extends BaseAdapter {
 	}
 
 	@Override
-	public Object getItem(int position) {
-		return null;
+	public String getItem(int position) {
+		return gameScore.get(position).id;
 	}
-
+	
 	@Override
 	public long getItemId(int position) {
-		return 0;
+		return position;
 	}
-
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		Viewholder holder;
@@ -62,38 +62,51 @@ public class FriendListAapter extends BaseAdapter {
 			holder.tvFBId = (TextView) convertView.findViewById(R.id.tvFBId);
 			holder.tvScore = (TextView) convertView.findViewById(R.id.tvScore);
 			
-			Log.e("FriendListAapter", "size : " + gameScore.size());
-			Log.e("FriendListAapter", "position : " + position + ", rankingID : " +gameScore.get(position).id + ", userID : " + user.getId());
-			//1-3등: 금은동 아이콘, 4등~ : no image 처리
-			switch(position) {
-			case 0: 
-				holder.imgNumber.setImageResource(R.drawable.home_circlegold_hd);
-				break;
-			case 1:
-				holder.imgNumber.setImageResource(R.drawable.home_circlesilver_hd);
-				break;
-			case 2:
-				holder.imgNumber.setImageResource(R.drawable.home_circlebronze_hd);
-				holder.tvRanking.setTextColor(Color.WHITE);
-				break;
-			default:
-				holder.imgNumber.setVisibility(View.INVISIBLE);
-				holder.tvRanking.setTextColor(Color.WHITE);
-				break;
-			}
-			
-			if (gameScore.get(position).id.equals(user.getId())) {
-				holder.imgGift.setVisibility(View.INVISIBLE);
-				holder.imgBroomstick.setVisibility(View.INVISIBLE);
-			}
+//			Log.e("FriendListAapter", "size : " + gameScore.size());
+//			Log.e("FriendListAapter", "position : " + position + ", rankingID : " +gameScore.get(position).id + ", userID : " + user.getId());
 			
 			convertView.setTag(holder);
 		} else {
 			holder = (Viewholder) convertView.getTag();
 		}
 		
-
+		//1-3등: 금은동 아이콘, 4등~ : no image 처리
+		switch(position) {
+		case 0: 
+//			Log.e("FriendListAapter", "Gold : " + position);
+			holder.imgNumber.setImageResource(R.drawable.home_circlegold_hd);
+			holder.imgNumber.setVisibility(View.VISIBLE);
+			holder.tvRanking.setTextColor(Color.BLACK);
+			break;
+		case 1:
+//			Log.e("FriendListAapter", "Silver : " + position);
+			holder.imgNumber.setImageResource(R.drawable.home_circlesilver_hd);
+			holder.imgNumber.setVisibility(View.VISIBLE);
+			holder.tvRanking.setTextColor(Color.BLACK);
+			break;
+		case 2:
+//			Log.e("FriendListAapter", "Bronze : " + position);
+			holder.imgNumber.setImageResource(R.drawable.home_circlebronze_hd);
+			holder.imgNumber.setVisibility(View.VISIBLE);
+			holder.tvRanking.setTextColor(Color.WHITE);
+			break;
+		default:
+//			Log.e("FriendListAapter", "noMedal : " + position);
+			holder.imgNumber.setVisibility(View.INVISIBLE);
+			holder.tvRanking.setTextColor(Color.WHITE);
+			break;
+		}
 		
+		if (gameScore.get(position).id.equals(user.getId())) {
+//			Log.e("FriendListAapter", "INVISIBLE : " + position);
+			holder.imgGift.setVisibility(View.INVISIBLE);
+			holder.imgBroomstick.setVisibility(View.INVISIBLE);
+		} else {
+//			Log.e("FriendListAapter", "VISIBLE : " + position);
+			holder.imgGift.setVisibility(View.VISIBLE);
+			holder.imgBroomstick.setVisibility(View.VISIBLE);
+		}
+		//
 		holder.tvRanking.setText(String.valueOf(position+1));
 		holder.tvFBId.setText(gameScore.get(position).name);
 		holder.tvScore.setText(String.valueOf(gameScore.get(position).score));
@@ -117,7 +130,8 @@ public class FriendListAapter extends BaseAdapter {
 		AQuery aq = mAq.recycle(convertView);
 		
 		String url = "https://graph.facebook.com/" + gameScore.get(position).id +"/picture";
-
+//		Log.e("FriendListAapter", "position : " + position + ", url : " + url);
+		
 		if(aq.shouldDelay(position, convertView, parent, url)){
 			//aq.id(holder.imgProfile).image(placeholder);
 		}else{

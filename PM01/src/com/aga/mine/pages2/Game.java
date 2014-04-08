@@ -40,6 +40,9 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.aga.mine.mains.Config;
+import com.aga.mine.pages2.GameData;
+import com.aga.mine.mains.Home;
+import com.aga.mine.mains.Home2;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.R;
 import com.aga.mine.mains.Utility;
@@ -2324,8 +2327,12 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		public static void gameOver() {
 			Log.e("Game / HudLayer / gameOver", "gameEnding - gogo");
 			Config.getInstance().setDisableButton(true);
-
-			if (GameData.share().isMultiGame) {
+			
+			// 나중에 GameData 전부 합치기
+			if (com.aga.mine.mains.GameData.share().isGuestMode) {
+				CCScene scene = Home2.scene();
+				CCDirector.sharedDirector().replaceScene(scene);
+			} else if (GameData.share().isMultiGame) {
 				// 게임 종료 메시지를 서버로 무한 보내는것을 방지함.
 				if (!isGameOver) {
 					try {
@@ -2337,7 +2344,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 					}
 				}
 			}
-
+			
 			Game.ending.setVisible(true);
 			GameData.share().isMultiGame = true;
 			// GameEnding ending = GameEnding.share(this.mContext);

@@ -127,7 +127,7 @@ public class Option extends CCLayer {
 							Utility.getInstance().getNameWithIsoCodeSuffix(
 							folder + "provision" + fileExtension)),
 						folder + "option-buttonSelect" + fileExtension),
-				this, "provisionCallback");
+				this, "policyCallback");
 		
 		CCMenuItem more_apps = CCMenuItemImage.item(
 				SpriteSummery.imageSummary(
@@ -207,12 +207,22 @@ public class Option extends CCLayer {
 	
 
 	public void previousCallback(Object sender) {
-		CCScene scene = Home.scene();
+		CCScene scene = null;
+		if (GameData.share().isGuestMode) {
+			scene = Home2.scene();
+		} else {
+			scene = Home.scene();
+		}
 		CCDirector.sharedDirector().replaceScene(scene);
 	}
 
 	public void homeCallback(Object sender) {
-		CCScene scene = Home.scene();
+		CCScene scene = null;
+		if (GameData.share().isGuestMode) {
+			scene = Home2.scene();
+		} else {
+			scene = Home.scene();
+		}
 		CCDirector.sharedDirector().replaceScene(scene);
 	}
 
@@ -229,7 +239,7 @@ public class Option extends CCLayer {
     		mMainActivity.loginFaceBook();
 		}
 
-	public void provisionCallback(Object sender) {
+	public void policyCallback(Object sender) {
 		String address = "http://agatong.co.kr/policy/policy_eng.html";
 		if (Locale.getDefault().getLanguage().toString().equals("ko"))
 			address = "http://agatong.co.kr/policy/policy_kor.html";

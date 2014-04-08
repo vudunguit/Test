@@ -53,7 +53,7 @@ public class GameMode extends CCLayer {
 		BottomImage.setBottomImage(this);
 		
 		this.setIsTouchEnabled(true);
-//		String score = "" + ((int) ((Math.random() - 0.5f) * 1024));
+/*//		String score = "" + ((int) ((Math.random() - 0.5f) * 1024));
 		
 		int scoreValue = (int) (Math.random() * 200);
 		if (scoreValue < 0) {
@@ -62,7 +62,7 @@ public class GameMode extends CCLayer {
 //		String scoreStr = "" + ((int) (Math.random() * 200));
 		
 		Log.e("GameMode", "score[" + scoreValue + "]");
-		Log.e("GameMode", "score : " + DataFilter.addGameScore("" + scoreValue));
+		Log.e("GameMode", "score : " + DataFilter.addGameScore("" + scoreValue));*/
 	}
 	
 	// 백 보드 설정
@@ -129,21 +129,41 @@ public class GameMode extends CCLayer {
 		button1.setPosition(0f, -button1.getContentSize().height*0.5f); // 싱글
 		button2.setPosition(0f, -button1.getContentSize().height*1.5f); // 대전
 		button3.setPosition(0f, -button1.getContentSize().height*2.5f); // 초대
+		
+		if (GameData.share().isGuestMode) {
+			//x표시 2
+			CCSprite lock2 = CCSprite.sprite("90guest/" + "modeLock" + fileExtension);
+			button2.addChild(lock2);
+			lock2.setPosition(button2.getContentSize().width / 2, button2.getContentSize().height / 2);
+			
+			//x표시 3
+			CCSprite lock3 = CCSprite.sprite("90guest/" + "modeLock" + fileExtension);
+			button3.addChild(lock3);
+			lock3.setPosition(button3.getContentSize().width / 2, button3.getContentSize().height / 2);
+			
+//			button1.setIsEnabled(false);
+			button2.setIsEnabled(false);
+			button3.setIsEnabled(false);
+		}
 	}
-
-	@Override
-	public boolean ccTouchesEnded(MotionEvent event) {
-		return super.ccTouchesEnded(event);
-	}
-	
 	
 	public void previousCallback(Object sender) {
-		CCScene scene = Home.scene();
+		CCScene scene = null;
+		if (GameData.share().isGuestMode) {
+			scene = Home2.scene();
+		} else {
+			scene = Home.scene();
+		}
 		CCDirector.sharedDirector().replaceScene(scene);
 	}
 
 	public void homeCallback(Object sender) {
-		CCScene scene = Home.scene();
+		CCScene scene = null;
+		if (GameData.share().isGuestMode) {
+			scene = Home2.scene();
+		} else {
+			scene = Home.scene();
+		}
 		CCDirector.sharedDirector().replaceScene(scene);
 	}
 

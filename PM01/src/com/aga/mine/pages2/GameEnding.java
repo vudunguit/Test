@@ -11,7 +11,9 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
+import com.aga.mine.mains.GameData;
 import com.aga.mine.mains.Home;
+import com.aga.mine.mains.Home2;
 import com.aga.mine.mains.Utility;
 
 public class GameEnding extends CCLayer {
@@ -205,7 +207,12 @@ public class GameEnding extends CCLayer {
 		int value = (Integer) ((CCMenuItemImage)sender).getUserData(); 
 		
 		if (value == 0) {
-			CCScene scene = Home.scene();
+			CCScene scene = null;
+			if (GameData.share().isGuestMode) {
+				scene = Home2.scene();
+			} else {
+				scene = Home.scene();
+			}
 			CCDirector.sharedDirector().replaceScene(scene);
 		} else {
 			if (buttonActive) {

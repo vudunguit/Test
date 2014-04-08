@@ -313,6 +313,7 @@ public class MainActivity extends Activity {
 			hideDialog();
 			// clear facebook data and value and go to login scene
 			FacebookData.initialize();
+			GameData.share().isGuestMode = true;
 			CCScene scene = Login.scene();
 			director.replaceScene(scene);
 		}
@@ -422,6 +423,12 @@ public class MainActivity extends Activity {
 /*            HomeScroll.getInstance().setData(
                     DataFilter.getRanking(FacebookData.getinstance().getUserInfo(),FacebookData.getinstance().getFriendsInfo())
             );*/
+        	
+        	// 게임 모드 설정
+        	Log.e("Main", "isGuestMode_B : " + GameData.share().isGuestMode);
+			GameData.share().isGuestMode = false;
+        	Log.e("Main", "isGuestMode_A : " + GameData.share().isGuestMode);
+        	
         	// 게임스코어 받아오기
     		FacebookData.getinstance().setGameScore(DataFilter.getRanking());
         	

@@ -101,7 +101,6 @@ public class Login extends CCLayer{
 	}
 	
 	public void facebookCallback(Object sender){
-		GameData.share().isGuestMode = false;
 //		Intent task1 = new Intent(CCDirector.sharedDirector().getActivity(), FacebookHelper.class);
 //    	CCDirector.sharedDirector().getActivity().startActivity(task1);
 		MainApplication.getInstance().getActivity().loginFaceBook();

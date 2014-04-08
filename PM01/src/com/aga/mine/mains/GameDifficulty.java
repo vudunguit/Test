@@ -133,7 +133,12 @@ public class GameDifficulty extends CCLayer {
 	}
 
 	public void homeCallback(Object sender) {
-		CCScene scene = Home.scene();
+		CCScene scene = null;
+		if (GameData.share().isGuestMode) {
+			scene = Home2.scene();
+		} else {
+			scene = Home.scene();
+		}
 		CCDirector.sharedDirector().replaceScene(scene);
 	}
 

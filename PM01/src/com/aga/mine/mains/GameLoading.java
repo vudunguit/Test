@@ -69,7 +69,7 @@ public class GameLoading extends CCLayer {
 	}
 	
 	public void nextSceneCallback(float dt) {
-		GameData.share().isGuestMode = true;
+//		GameData.share().isGuestMode = true;
 		CCScene scene = Game.scene();
 		CCDirector.sharedDirector().replaceScene(scene);
 	}
