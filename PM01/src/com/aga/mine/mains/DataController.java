@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -20,7 +20,7 @@ import org.apache.http.params.HttpParams;
 import android.os.AsyncTask;
 import android.util.Log;
 
-// requestID´Â facebook ¾Ë¸²±Û ¹øÈ£·Î ³ÖÀ» °Í.
+// requestIDëŠ” facebook ì•Œë¦¼ê¸€ ë²ˆí˜¸ë¡œ ë„£ì„ ê²ƒ.
 public class DataController extends AsyncTask<String, Void, String>{
 	
 	String[] commands = {
@@ -43,7 +43,7 @@ public class DataController extends AsyncTask<String, Void, String>{
 			"SphereNumber", // 2 
 			"Exp", // 3
 			"Gold", // 4
-			"Point", // 5 »ç¿ë ¾ÈÇÔ
+			"Point", // 5 ì‚¬ìš© ì•ˆí•¨
 			"HistoryWin", // 6 
 			"HistoryLose", // 7
 			"ReceivedBroomstick", // 8
@@ -59,7 +59,7 @@ public class DataController extends AsyncTask<String, Void, String>{
 			"SenderFacebookId",
 			"Category",
 			"Amount",
-			"RequestId", // facebook ¾Ë¸² ±Û ¹øÈ£·Î ¹Ş¾Æ¿À´Â °Í °°´Ù.
+			"RequestId", // facebook ì•Œë¦¼ ê¸€ ë²ˆí˜¸ë¡œ ë°›ì•„ì˜¤ëŠ” ê²ƒ ê°™ë‹¤.
 			"FacebookIdList",
 			"DeviceType"
 	};

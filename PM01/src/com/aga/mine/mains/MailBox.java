@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -87,52 +87,52 @@ public class MailBox {
 		
 			buttonActive = false;
 
-			// ºÒÅõ¸í ¹è°æ
+			// ë¶ˆíˆ¬ëª… ë°°ê²½
 			CCSprite child = CCSprite.sprite(commonfolder + "opacitybg" + fileExtension);
 			child.setPosition(winsize().width/2, winsize().height/2);
 			
-			// ±âº» ¹è°æ
+			// ê¸°ë³¸ ë°°ê²½
 			CCSprite board = CCSprite.sprite(imageFolder + "postboxbg" + fileExtension);
 			board.setPosition(child.getContentSize().width/2, child.getContentSize().height/2);
 			
-			// ºøÀÚ·ç ¹è°æ (È°¼º)
+			// ë¹—ìë£¨ ë°°ê²½ (í™œì„±)
 			broomstickBackground1 = CCSprite.sprite(imageFolder + "broomstickBackgroundActive" + fileExtension);
 			broomstickBackground1.setPosition(board.getContentSize().width/2, board.getContentSize().height/2+18.0f);
 			
-			// ºøÀÚ·ç ¹è°æ (ºñÈ°¼º)
+			// ë¹—ìë£¨ ë°°ê²½ (ë¹„í™œì„±)
 			broomstickBackground2 = CCSprite.sprite(imageFolder + "broomstickBackgroundInactive" + fileExtension);
 			broomstickBackground2.setPosition(board.getContentSize().width/2, board.getContentSize().height/2+18.0f);
 			
-			// ¼±¹° ¹è°æ (È°¼º)
+			// ì„ ë¬¼ ë°°ê²½ (í™œì„±)
 			presentBackground1 = CCSprite.sprite(imageFolder + "giftBackgroundActive" + fileExtension);
 			presentBackground1.setPosition(board.getContentSize().width/2, board.getContentSize().height/2+18.0f);
 			
-			// ¼±¹° ¹è°æ (ºñÈ°¼º)
+			// ì„ ë¬¼ ë°°ê²½ (ë¹„í™œì„±)
 			presentBackground2 = CCSprite.sprite(imageFolder + "giftBackgroundInactive" + fileExtension);
 			presentBackground2.setPosition(board.getContentSize().width/2, board.getContentSize().height/2+18.0f);
 			
 			//
-			// ºøÀÚ·ç ¸Ş´º
+			// ë¹—ìë£¨ ë©”ë‰´
 			CCMenuItem broomstickMenu = CCMenuItemImage.item(
 					imageFolder + "postboxBlankButton" + fileExtension,
 					imageFolder + "postboxBlankButton" + fileExtension,
 					nodeThis, "pesterCallback");
 
 			
-			// ºøÀÚ·ç ¸Ş´º ÀÌ¸§
+			// ë¹—ìë£¨ ë©”ë‰´ ì´ë¦„
 			CCSprite broomstickMenuTitle = CCSprite.sprite(
 					Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "postboxBroomstickTitle" + fileExtension));
 			broomstickMenuTitle.setPosition(broomstickMenu.getContentSize().width/2, broomstickMenu.getContentSize().height/2);
 			broomstickMenu.addChild(broomstickMenuTitle);
 			
 			//
-			// ¼±¹° ¸Ş´º
+			// ì„ ë¬¼ ë©”ë‰´
 			CCMenuItem giftMenu = CCMenuItemImage.item(
 					imageFolder + "postboxBlankButton" + fileExtension,
 					imageFolder + "postboxBlankButton" + fileExtension,
 					nodeThis, "presentCallback");
 
-			// ¼±¹° ¸Ş´º ÀÌ¸§
+			// ì„ ë¬¼ ë©”ë‰´ ì´ë¦„
 			CCSprite giftMenuTitle = CCSprite.sprite(
 					Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "postboxGiftTitle" + fileExtension));
 			giftMenuTitle.setPosition(giftMenu.getContentSize().width/2, giftMenu.getContentSize().height/2);
@@ -165,7 +165,7 @@ public class MailBox {
 					postMenu.getContentSize().width - close.getContentSize().width * 0.8f,
 					postMenu.getContentSize().height - close.getContentSize().height * 0.5f);
 			
-			// ¿ìÆí ¼ö·®
+			// ìš°í¸ ìˆ˜ëŸ‰
 			CCSprite postCountBack = CCSprite.sprite(imageFolder + "broomstickCount" + fileExtension);
 			postCountBack.setPosition(
 					postCountBack.getContentSize().width / 2 + 10.0f,
@@ -180,8 +180,8 @@ public class MailBox {
 					postCountBack.getContentSize().height / 2);
 			postCountBack.addChild(postCountNumber);
 		
-//			CCLabel postCountText = CCLabel.makeLabel("ÃÖ´ë 50°³±îÁö ¼ö½Å °¡´É", "Arial", 15.0f);
-			CCLabel postCountText = CCLabel.makeLabel("ÃÖ´ë 7ÀÏ°£ º¸°ü", "Arial", 15.0f);
+//			CCLabel postCountText = CCLabel.makeLabel("ìµœëŒ€ 50ê°œê¹Œì§€ ìˆ˜ì‹  ê°€ëŠ¥", "Arial", 15.0f);
+			CCLabel postCountText = CCLabel.makeLabel("ìµœëŒ€ 7ì¼ê°„ ë³´ê´€", "Arial", 15.0f);
 			postCountText.setColor(ccColor3B.ccc3(64, 46, 1));
 			postCountText.setAnchorPoint(0.0f, 0.5f);
 			postCountText.setPosition(
@@ -227,7 +227,7 @@ public class MailBox {
 
 			if (BroomstickList.size() > 0) {
 			
-				// ¿ìÆíÇÔ ºøÀÚ·ç ¸®½ºÆ®
+				// ìš°í¸í•¨ ë¹—ìë£¨ ë¦¬ìŠ¤íŠ¸
 				CCSprite postList = CCSprite.sprite(imageFolder + "postboxList" + fileExtension);
 				postList.setPosition(
 						10.0f + postList.getContentSize().width / 2 +3.0f,
@@ -241,16 +241,16 @@ public class MailBox {
 				String nameStr = "";
 				String senderName = BroomstickList.get(0)[1];
 				if (senderName.equals("0")) {
-					nameStr = "ÀÌº¥Æ® º¸»ó";
+					nameStr = "ì´ë²¤íŠ¸ ë³´ìƒ";
 				} else if (senderName.equals("1")) {
 					nameStr = "PumpkinMines";
 				} else if (senderName.equals(FacebookData.getinstance().getUserInfo().getId())) {
-					nameStr = "  ±¸ ¸Å";
+					nameStr = "  êµ¬ ë§¤";
 				} else {
 					nameStr = senderName;	
 				}
 				
-				// ¼öÁ¤ ÇÊ¿ä
+				// ìˆ˜ì • í•„ìš”
 				CCLabel  name = CCLabel.makeLabel(nameStr, "Arial", 16);
 				name.setPosition(
 						name.getContentSize().width/2 + 15.0f, 
@@ -263,8 +263,8 @@ public class MailBox {
 						postList.getContentSize().width - postPictrue.getContentSize().width / 2 - 82, 
 						postList.getContentSize().height - 25 /2f);
 				
-				CCLabel  itemQuantity = CCLabel.makeLabel("ºøÀÚ·ç " +BroomstickList.get(0)[3] + "°³¸¦ ¼±¹° ¹Ş¾Ò½À´Ï´Ù.", "Arial", 18);
-	//			CCLabel  itemQuantity = CCLabel.makeLabel(Broomstick.get(0)[3] + "°³ ºøÀÚ·ç(°ñµå)¸¦ ¼±¹° ¹Ş¾Ò½À´Ï´Ù.", "Arial", 15.0f);
+				CCLabel  itemQuantity = CCLabel.makeLabel("ë¹—ìë£¨ " +BroomstickList.get(0)[3] + "ê°œë¥¼ ì„ ë¬¼ ë°›ì•˜ìŠµë‹ˆë‹¤.", "Arial", 18);
+	//			CCLabel  itemQuantity = CCLabel.makeLabel(Broomstick.get(0)[3] + "ê°œ ë¹—ìë£¨(ê³¨ë“œ)ë¥¼ ì„ ë¬¼ ë°›ì•˜ìŠµë‹ˆë‹¤.", "Arial", 15.0f);
 				itemQuantity.setAnchorPoint(0, 0.5f);
 				itemQuantity.setPosition(
 						postPictrue.getPosition().x + (postPictrue.getContentSize().width * (1.15f - postPictrue.getAnchorPoint().x)) +5, 
@@ -296,8 +296,8 @@ public class MailBox {
 			}
 			
 			
-			//broomstickBackground1¿¡ Ãß°¡ÇÑ ¸Ş´º¹öÆ°°ú Ãæµ¹·Î visible ¼³Á¤½Ã Ãæµ¹ ¹®Á¦·Î ¼öÁ¤ ¿äÇÔ.
-			//presentBackground1.addChild(postMenu2); // ¹®Á¦ ÁöÁ¡
+			//broomstickBackground1ì— ì¶”ê°€í•œ ë©”ë‰´ë²„íŠ¼ê³¼ ì¶©ëŒë¡œ visible ì„¤ì •ì‹œ ì¶©ëŒ ë¬¸ì œë¡œ ìˆ˜ì • ìš”í•¨.
+			//presentBackground1.addChild(postMenu2); // ë¬¸ì œ ì§€ì 
 			broomstickBackground1.addChild(postMenu);
 
 			

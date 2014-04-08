@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
@@ -21,10 +21,10 @@ public class BottomMenu2 {
 		return CCDirector.sharedDirector().winSize();
 	}
 	
-	// ÇÏ´Ü ¸Þ´º
+	// í•˜ë‹¨ ë©”ë‰´
 	public static void setBottomMenu(CCSprite parentSprite, String imageFolder, CCNode nodeThis) {
 		
-		//Áß¾Ó ¹öÆ°(ÀÔÀå)
+		//ì¤‘ì•™ ë²„íŠ¼(ìž…ìž¥)
 		CCMenuItem button2 = CCMenuItemImage.item(
 				SpriteSummery.imageSummary(
 						imageFolder + "random-buttonReady-normal-hd" + fileExtension,

@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -39,19 +39,19 @@ public class HomeMiddle {
 	}
 	
 	private void userInfo(CCSprite parentSprite, String imageFolder, CCNode nodeThis) {
-		CCSprite profileBg = CCSprite.sprite(imageFolder + "home-profileBg-hd" + fileExtension); // ÇÁ·ÎÇÊ ¹é±×
+		CCSprite profileBg = CCSprite.sprite(imageFolder + "home-profileBg-hd" + fileExtension); // í”„ë¡œí•„ ë°±ê·¸
 		parentSprite.addChild(profileBg, 10, 10);
 		profileBg.setPosition(
 				parentSprite.getContentSize().width / 2, 
 				parentSprite.getContentSize().height - profileBg.getContentSize().height / 2 - 40.0f);
 		
 		
-		CCSprite profilePicture= CCSprite.sprite(commonfolder + "frame-pictureFrame-hd" + fileExtension); // ÇÁ·ÎÇÊ »çÁø Æ²
+		CCSprite profilePicture= CCSprite.sprite(commonfolder + "frame-pictureFrame-hd" + fileExtension); // í”„ë¡œí•„ ì‚¬ì§„ í‹€
 		profilePicture.setPosition(
 				profilePicture.getContentSize().width / 2 + 85, 
 				profileBg.getContentSize().height-60.0f);
 		
-		CCMenuItem post = CCMenuItemImage.item(  // ¿ìÆí
+		CCMenuItem post = CCMenuItemImage.item(  // ìš°í¸
 				imageFolder + "home-mail-hd" + fileExtension, 
 				imageFolder + "home-mail-hd" + fileExtension, 				 
 				nodeThis,"clicked2");
@@ -66,7 +66,7 @@ public class HomeMiddle {
 		String imageUrl = "https://graph.facebook.com/" + FacebookData.getinstance().getUserInfo().getUsername() +"/picture";
 		try {
 			Bitmap userBMP = new DownloadImageTask().execute(imageUrl).get();
-			userImage = CCSprite.sprite(userBMP); // ÇÁ·ÎÇÊ »çÁø
+			userImage = CCSprite.sprite(userBMP); // í”„ë¡œí•„ ì‚¬ì§„
 			profilePicture.addChild(userImage);
 			userImage.setAnchorPoint(0.5f, 0.5f);
 			userImage.setPosition(profilePicture.getContentSize().width / 2, profilePicture.getContentSize().height / 2);
@@ -76,9 +76,9 @@ public class HomeMiddle {
 			e1.printStackTrace();
 		}
 		
-//		CCSprite userImage = CCSprite.sprite(commonfolder + "noPicture" + fileExtension); // ÇÁ·ÎÇÊ »çÁø
+//		CCSprite userImage = CCSprite.sprite(commonfolder + "noPicture" + fileExtension); // í”„ë¡œí•„ ì‚¬ì§„
 		
-		CCSprite newIcon = CCSprite.sprite(imageFolder + "home-mailNew-hd01" + fileExtension); // »õ·Î¿î ¿ìÆí
+		CCSprite newIcon = CCSprite.sprite(imageFolder + "home-mailNew-hd01" + fileExtension); // ìƒˆë¡œìš´ ìš°í¸
 		newIcon.setPosition(
 				post.getContentSize().width/2, 
 				post.getContentSize().height);
@@ -93,7 +93,7 @@ public class HomeMiddle {
 			profileBg.getContentSize().height/2);
 		profileBg.addChild(postMenu);
 		
-		CCSprite levelProgressBar = CCSprite.sprite(imageFolder + "home-progressBar-hd" + fileExtension); // ·¹º§ ÇÁ·Î±×·¹½º ¹Ù
+		CCSprite levelProgressBar = CCSprite.sprite(imageFolder + "home-progressBar-hd" + fileExtension); // ë ˆë²¨ í”„ë¡œê·¸ë ˆìŠ¤ ë°”
 		levelProgressBar.setPosition(
 				profileBg.getContentSize().width/2+10f,
 				levelProgressBar.getContentSize().height/2+25.0f);
@@ -115,13 +115,13 @@ public class HomeMiddle {
 			scale = levelProgressBar.getContentSize().width - 4;
 		}
 		
-		CCSprite gaugeBar = CCSprite.sprite(imageFolder + "Home-gaugeBar-hd" + fileExtension); // ·¹º§ °ÔÀÌÁö ¹Ù
+		CCSprite gaugeBar = CCSprite.sprite(imageFolder + "Home-gaugeBar-hd" + fileExtension); // ë ˆë²¨ ê²Œì´ì§€ ë°”
 		levelProgressBar.addChild(gaugeBar);
 		gaugeBar.setAnchorPoint(0, 0.5f);
 		gaugeBar.setPosition(2, levelProgressBar.getContentSize().height / 2);
 		gaugeBar.setScaleX(scale / gaugeBar.getContentSize().width);
 		
-		CCLabel exp = CCLabel.makeLabel(expStr, "Arial", 11); // °æÇèÄ¡ (°ÔÀÌÁö·Î º¯°æÇÊ¿ä)
+		CCLabel exp = CCLabel.makeLabel(expStr, "Arial", 11); // ê²½í—˜ì¹˜ (ê²Œì´ì§€ë¡œ ë³€ê²½í•„ìš”)
 		levelProgressBar.addChild(exp);
 //		exp.setColor(ccColor3B.ccc3(194, 216, 233));
 //		exp.setColor(ccColor3B.ccc3(0, 35, 102));
@@ -141,7 +141,7 @@ public class HomeMiddle {
 //			}
 //		}
 
-		CCLabel  ranking = CCLabel.makeLabel(rankingStr, "Arial", 30); // ¼øÀ§
+		CCLabel  ranking = CCLabel.makeLabel(rankingStr, "Arial", 30); // ìˆœìœ„
 		ranking.setPosition(
 				ranking.getContentSize().width/2+55.0f, 
 				profileBg.getContentSize().height-60.0f);
@@ -149,9 +149,9 @@ public class HomeMiddle {
 		CCLabel userName;
 		
 		if (FacebookData.getinstance().getUserInfo() != null) {
-			userName = CCLabel.makeLabel(FacebookData.getinstance().getUserInfo().getName(), "Arial", 30); // ÀÌ¸§
+			userName = CCLabel.makeLabel(FacebookData.getinstance().getUserInfo().getName(), "Arial", 30); // ì´ë¦„
 		} else {
-			userName = CCLabel.makeLabel("ÀÌ¸§ ºÒ·¯¿ÀÁö ¸øÇÔ.", "Arial", 30); // ÀÌ¸§
+			userName = CCLabel.makeLabel("ì´ë¦„ ë¶ˆëŸ¬ì˜¤ì§€ ëª»í•¨.", "Arial", 30); // ì´ë¦„
 		}
 		userName.setPosition(
 				profilePicture.getPosition().x + ((1 - profilePicture.getAnchorPoint().x) * profilePicture.getContentSize().width) + 12, 
@@ -160,13 +160,13 @@ public class HomeMiddle {
 
 		CCLabel  score = CCLabel.makeLabel(
 				new NumberComma().numberComma(FacebookData.getinstance().getDBData("Point")),
-				"Arial", 30); // ÃÖ°í Á¡¼ö
+				"Arial", 30); // ìµœê³  ì ìˆ˜
 		score.setPosition(
 				userName.getPosition().x, 
 				profileBg.getContentSize().height- score.getContentSize().height / 2 - 60.0f);
 				score.setAnchorPoint(0.0f, 0.5f);
 
-				String[] Ko = {"Àü : ","½Â / ","ÆĞ"," 18"};
+				String[] Ko = {"ì „ : ","ìŠ¹ / ","íŒ¨"," 18"};
 				String[] En = {"Played "," : W","/L "," 16"};
 							
 				String record = null;
@@ -187,7 +187,7 @@ public class HomeMiddle {
 					recordSize = Float.parseFloat(Ko[3]);
 				}
 			
-		CCLabel  recordData = CCLabel.makeLabel(record, "Arial", recordSize); // ÀüÀû °ª
+		CCLabel  recordData = CCLabel.makeLabel(record, "Arial", recordSize); // ì „ì  ê°’
 		recordData.setPosition(
 				userName.getPosition().x,
 				profilePicture.getPosition().y - (profilePicture.getAnchorPoint().y * profilePicture.getContentSize().height)
@@ -195,7 +195,7 @@ public class HomeMiddle {
 		recordData.setAnchorPoint(0, 1);
 
 		
-		CCLabel  level = CCLabel.makeLabel("Lv "+ FacebookData.getinstance().getDBData("LevelCharacter"), "Arial", 40.0f); // ·¹º§
+		CCLabel  level = CCLabel.makeLabel("Lv "+ FacebookData.getinstance().getDBData("LevelCharacter"), "Arial", 40.0f); // ë ˆë²¨
 		level.setPosition(
 				level.getContentSize().width/2+115.0f, 
 				profileBg.getContentSize().height- level.getContentSize().height/2-110.0f);

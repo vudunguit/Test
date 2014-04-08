@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+Ôªøpackage com.aga.mine.mains;
 
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
@@ -15,7 +15,7 @@ public class FrameTitle6 {
 	
 	public static CCLabel setTitle(CCSprite parentSprite, String imageFolder) {
 		
-		// ≈∏¿Ã∆≤ ∆«≥⁄
+		// ÌÉÄÏù¥ÌãÄ ÌåêÎÑ¨
 		CCSprite titlePanel = CCSprite.sprite(commonfolder + "frame-titlePanel" + fileExtension);
 		parentSprite.addChild(titlePanel);
 		titlePanel.setAnchorPoint(0.5f, 0.5f);
@@ -23,7 +23,7 @@ public class FrameTitle6 {
 			parentSprite.getContentSize().width / 2,
 			parentSprite.getContentSize().height - 98);
 		
-		// ≈∏¿Ã∆≤
+		// ÌÉÄÏù¥ÌãÄ
 		CCSprite frameTitle = CCSprite.sprite(
 				Utility.getInstance().getNameWithIsoCodeSuffix(
 						imageFolder + imageFolder.substring(2, imageFolder.length()-1) + "-title" + fileExtension));
@@ -31,13 +31,13 @@ public class FrameTitle6 {
 //		frameTitle.setAnchorPoint(0.5f, 0.5f);
 		frameTitle.setPosition(titlePanel.getContentSize().width / 2, titlePanel.getContentSize().height / 2);
 			
-		// ∞Ê±‚ ±‚∞£ πË∞Ê
+		// Í≤ΩÍ∏∞ Í∏∞Í∞Ñ Î∞∞Í≤Ω
 		CCSprite banner = CCSprite.sprite(commonfolder + "titlebanner" + fileExtension);
 		titlePanel.addChild(banner);
 		banner.setAnchorPoint(0.5f, 1);
 		banner.setPosition(titlePanel.getContentSize().width / 2, 10);
 		
-		// ∞ÒµÂ ≈ÿΩ∫∆Æ
+		// Í≥®Îìú ÌÖçÏä§Ìä∏
 		CCLabel goldText = CCLabel.makeLabel("Gold", "Arial", 24);
 		banner.addChild(goldText);
 		goldText.setColor(ccColor3B.ccYELLOW);
@@ -45,7 +45,7 @@ public class FrameTitle6 {
 		goldText.setPosition(15, banner.getContentSize().height / 2);
 		
 		
-		// ∞ÒµÂ ∞™
+		// Í≥®Îìú Í∞í
 		String gold = new NumberComma().numberComma(FacebookData.getinstance().getDBData("Gold"));
 		CCLabel goldValue = CCLabel.makeLabel(gold, "Arial", 24);
 		banner.addChild(goldValue);

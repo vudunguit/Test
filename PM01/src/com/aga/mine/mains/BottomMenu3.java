@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
@@ -21,10 +21,10 @@ public class BottomMenu3 {
 		return CCDirector.sharedDirector().winSize();
 	}
 	
-	// ÇÏ´Ü ¸Ş´º
+	// í•˜ë‹¨ ë©”ë‰´
 	public static void setBottomMenu(CCSprite parentSprite, String imageFolder, CCNode nodeThis) {
 		
-		// ÁÂÃø ¹öÆ°(·£´ı¸ÅÄª)
+		// ì¢Œì¸¡ ë²„íŠ¼(ëœë¤ë§¤ì¹­)
 		CCMenuItem button1 = SpriteSummery.menuItemBuilder(
 				imageFolder + "random-button1" + fileExtension, 
 				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "random-buttonText1" + fileExtension), 
@@ -37,8 +37,8 @@ public class BottomMenu3 {
 //						Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "random-buttonText2" + fileExtension), 
 //						nodeThis, "randomMatching");
 		
-		// »èÁ¦µÊ.
-//		// ¿ìÃø ¹öÆ°(°ÔÀÓ ½ºÅ¸Æ®)
+		// ì‚­ì œë¨.
+//		// ìš°ì¸¡ ë²„íŠ¼(ê²Œì„ ìŠ¤íƒ€íŠ¸)
 //		CCMenuItem button3 = CCMenuItemImage.item(
 //				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "matching-buttonPlay" + fileExtension),
 //				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "matching-buttonPlay-select" + fileExtension),

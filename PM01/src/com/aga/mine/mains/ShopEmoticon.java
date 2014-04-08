@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import org.cocos2d.actions.grid.CCLens3D;
 import org.cocos2d.events.CCTouchDispatcher;
@@ -24,7 +24,7 @@ public class ShopEmoticon extends CCLayer {
 	CCSprite bg;
 	
 	int mode = 0;
-	// config ÆÄÀÏ¿¡ ³ªÁß¿¡ ¿Å±æ°Í
+	// config íŒŒì¼ì— ë‚˜ì¤‘ì— ì˜®ê¸¸ê²ƒ
 	public static boolean buttonActive = true;
 
 	

@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,12 +38,12 @@ public class DataFilter {
 		if (RequestModeDailyCheck.equals("not once a day")) {
 			scene = Home.scene();
 		} else if (0 < Integer.parseInt(RequestModeDailyCheck) % 31) {
-//		RequestModeDailyCheck = "1"; // Å×½ºÆ®¿ë
+//		RequestModeDailyCheck = "1"; // í…ŒìŠ¤íŠ¸ìš©
 			scene.addChild(Daily.scene(Integer.parseInt(RequestModeDailyCheck) % 31));
 		} else {
 //			new Process();
-//			Process.killProcess(Process.myPid()); // ¹®ÀÇ ³Ö±â ¸Ş½ÃÁö Ãâ·Â ÈÄ Á¾·á
-			director.getActivity().finish(); // ¹®ÀÇ ³Ö±â ¸Ş½ÃÁö Ãâ·Â ÈÄ Á¾·á
+//			Process.killProcess(Process.myPid()); // ë¬¸ì˜ ë„£ê¸° ë©”ì‹œì§€ ì¶œë ¥ í›„ ì¢…ë£Œ
+			director.getActivity().finish(); // ë¬¸ì˜ ë„£ê¸° ë©”ì‹œì§€ ì¶œë ¥ í›„ ì¢…ë£Œ
 		}
 		director.runWithScene(scene);
 	}
@@ -83,9 +83,9 @@ public class DataFilter {
 	public static String getUserDBData(String facebookID) {
 		try {
 			String getData = new DataController().execute("0,RequestModeRead*1," + facebookID).get();
-			if (!DataFilter.readFilter(getData)) { // ¸Â´Â°Í
-//			if (DataFilter.readFilter(getData)) { // °­Á¦·Î »ı¼º test¿ë
-				Log.e("DataFilter", "getUserDBData() »õ·Î¿î ¾ÆÀÌµğ »ı¼º");
+			if (!DataFilter.readFilter(getData)) { // ë§ëŠ”ê²ƒ
+//			if (DataFilter.readFilter(getData)) { // ê°•ì œë¡œ ìƒì„± testìš©
+				Log.e("DataFilter", "getUserDBData() ìƒˆë¡œìš´ ì•„ì´ë”” ìƒì„±");
 				DailyBeckoner.setUserDBData(facebookID);
 				getData = new DataController().execute("0,RequestModeRead*1," + facebookID).get();
 			}
@@ -127,11 +127,11 @@ public class DataFilter {
 	}
 	
 	public static ArrayList<GameScore> getRanking() {
-		// ÆäÀÌ½ººÏ ¾ÆÀÌµğ ¹Ş±â
+		// í˜ì´ìŠ¤ë¶ ì•„ì´ë”” ë°›ê¸°
 		Profile user = FacebookData.getinstance().getUserInfo();		
 		List<Profile> friends = FacebookData.getinstance().getFriendsInfo();
 	
-		//DBÁ¶È¸¸¦ À§ÇØ ¾ÆÀÌµğµé ÇÕÄ¡±â (³ª, Ä£±¸µé)
+		//DBì¡°íšŒë¥¼ ìœ„í•´ ì•„ì´ë””ë“¤ í•©ì¹˜ê¸° (ë‚˜, ì¹œêµ¬ë“¤)
 		String facebookIDs = "(" + user.getId();		
 		for (Profile profile : friends) {
 			facebookIDs += "," + profile.getId();
@@ -140,18 +140,18 @@ public class DataFilter {
 		Log.e("DataFilter","facebookIDs : " + facebookIDs );
 	
 		try {
-			// DB¿¡¼­ °ÔÀÓ ½ºÄÚ¾î Á¶È¸
+			// DBì—ì„œ ê²Œì„ ìŠ¤ì½”ì–´ ì¡°íšŒ
 			String rank = new DataController().execute("0,RequestModeGetInDBUserList*23," + facebookIDs).get();
 			Log.e("DataFilter", "getRanking : " + rank);
 
-			// °á°ú°ª À¯Àúº° µ¥ÀÌÅÍ ÀÚ¸£±â
+			// ê²°ê³¼ê°’ ìœ ì €ë³„ ë°ì´í„° ìë¥´ê¸°
 			String[] array = headerEraser(rank, "***").split("\\&");
 			
 			ArrayList<GameScore> sourceList = new ArrayList<GameScore>(); 
 			
 			GameScore gameScoreModel;
 			
-			// °¢ À¯Àúº° µ¥ÀÌÅÍ »ó¼¼ ÀÚ¸£±â
+			// ê° ìœ ì €ë³„ ë°ì´í„° ìƒì„¸ ìë¥´ê¸°
 			int count = 1;
 			for (String strings : array) {
 				String[] userScoreData = strings.split("-");
@@ -174,10 +174,10 @@ public class DataFilter {
 				count ++;
 			}
 			
-			// ½ºÄÚ¾î ³»¸²Â÷¼ø Á¤·Ä
+			// ìŠ¤ì½”ì–´ ë‚´ë¦¼ì°¨ìˆœ ì •ë ¬
 			Collections.sort(sourceList, new ClothesComparator());
 			
-			// µ¥ÀÌÅÍ È®ÀÎ
+			// ë°ì´í„° í™•ì¸
 			for (GameScore strings : sourceList) {
 				Log.e("DataFilter", "score : " + strings.name + "," + strings.id + "," + strings.level + "," + strings.score);
 			}

@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.util.Timer;
 
@@ -30,11 +30,11 @@ public class Config {
 	boolean notificateDisableButton;
 	boolean daily ;
 	
-	// È­¸é ÀüÈ¯
+	// í™”ë©´ ì „í™˜
 	final int kTagPrevious = 501;
 	final int kTagHome = 502;
 
-	// final int kMaxTime = 40; <-- °ÔÀÓ½Ã°£Àº ·¹º§º°·Î ´Ù¸£°Ô µ¥ÀÌÅÍÆÄÀÏ¿¡¼­ ÀĞ¾î¿À´Â°ÍÀ¸·Î º¯°æµÇ¾ú´Ù.
+	// final int kMaxTime = 40; <-- ê²Œì„ì‹œê°„ì€ ë ˆë²¨ë³„ë¡œ ë‹¤ë¥´ê²Œ ë°ì´í„°íŒŒì¼ì—ì„œ ì½ì–´ì˜¤ëŠ”ê²ƒìœ¼ë¡œ ë³€ê²½ë˜ì—ˆë‹¤.
 	final int kMaxLevel = 50;
 	final int kMaxItemLevel = 20;
 	final float kUtilityDimScreenOpacity = 0.7f;
@@ -48,7 +48,7 @@ public class Config {
 	final int kTagGoldLabel = 995;
 
 	//
-	// ±Û²Ã¼³Á¤
+	// ê¸€ê¼´ì„¤ì •
 	final String kFontNameDefault = "Futura-Medium";
 	final String kFontNameMultiline = "Arial";
 	final String kFontNameNumber = "ChalkboardSE-Bold";
@@ -71,11 +71,11 @@ public class Config {
 	//
 	// Game Center
 	final String kGameCenterLeaderboard = "com.pixtation.OXFlag.Leaderboard";
-	final int kFlagRefillTime = 1; // ÀÓ½Ã
-	final int kBroomstickRefillTime = (5*60); // ±ê¹ß Ã¤¿öÁö´Â ½Ã°£
+	final int kFlagRefillTime = 1; // ì„ì‹œ
+	final int kBroomstickRefillTime = (5*60); // ê¹ƒë°œ ì±„ì›Œì§€ëŠ” ì‹œê°„
 	final String kLastSavedDate = "kLastSavedDate";
 	final String kTimeLeft = "kTimeLeft";
-	final float kMinimumTouchTimeInterval = 0.5f; // ÃÖ¼Ò ÅÍÄ¡ °£°İ ½Ã°£
+	final float kMinimumTouchTimeInterval = 0.5f; // ìµœì†Œ í„°ì¹˜ ê°„ê²© ì‹œê°„
 
 	//
 	// BGM
@@ -84,7 +84,7 @@ public class Config {
 
 	//
 	// SFX	
-	final int kTagOptionSFX = 1; // MineGame È¿°úÀ½ ¼³Á¤
+	final int kTagOptionSFX = 1; // MineGame íš¨ê³¼ìŒ ì„¤ì •
 	final String kSfxTouch = "buttonselect.wav";
 	final String kSfxTouchBuy = "storebuy.wav";
 	final String kSfxGameStartBase = "gamestart.wav";
@@ -151,7 +151,7 @@ public class Config {
 	// ModeChoise modeChoise;
 	// ItemAttck itemAttck;
 
-	// ÀÓ½Ã·Î ³ÖÀº °ª(Å¸ÀÔ)
+	// ì„ì‹œë¡œ ë„£ì€ ê°’(íƒ€ì…)
 	final int kAnswerInvalid = 0;
 	final int kModeSingle = 0;
 	final int ItemAttackFire = 0;
@@ -164,7 +164,7 @@ public class Config {
 	}
 	
 	/***************************************************/
-	// self init ³»¿ëµé ³Ö¾îÁÖ´Â°÷
+	// self init ë‚´ìš©ë“¤ ë„£ì–´ì£¼ëŠ”ê³³
 	public Config() {
 		
 		setDisableButton(false);
@@ -175,7 +175,7 @@ public class Config {
 
 		// read file and calculate
 		userAnswer =  arraySearch(userAnswerArray, "kAnswerInvalid");
-		//this.answerArray = new ArrayList<Game>();  //  ¹«½¼¿ëµµ???
+		//this.answerArray = new ArrayList<Game>();  //  ë¬´ìŠ¨ìš©ë„???
 		// self.flagTimeCountdown = kFlagRefillTime;
 
 		// MineGame
@@ -364,7 +364,7 @@ public class Config {
 	
 	
 	/***************************************************/
-	/**************************** º¯°æ ****************************/
+	/**************************** ë³€ê²½ ****************************/
 	boolean guest = false;
 	public boolean isGuest() {
 		return this.guest;

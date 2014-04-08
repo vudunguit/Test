@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,7 +43,7 @@ public class Home2 extends CCLayer {
 	CCLabel deadline;
 	
 	public static int mode = 0;
-	// config ÆÄÀÏ¿¡ ³ªÁß¿¡ ¿Å±æ°Í
+	// config íŒŒì¼ì— ë‚˜ì¤‘ì— ì˜®ê¸¸ê²ƒ
 	public static boolean buttonActive = true;
 	int count = 0;
 	
@@ -134,21 +134,21 @@ public class Home2 extends CCLayer {
 			scrollLock = true;
 		} 
 				
-		//¹è°æ ±×¸² ¼³Á¤
+		//ë°°ê²½ ê·¸ë¦¼ ì„¤ì •
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg2" + fileExtension);
 
 		setBackBoardMenu(folder + "home-backboard-hd2" + fileExtension);
 		setBoardFrameMenu(commonfolder + "frameGeneral-hd" + fileExtension);
 		
-//		// ÇÏ´Ü ¸Ş´º
+//		// í•˜ë‹¨ ë©”ë‰´
 //		BottomMenu1.setBottomMenu(boardFrame, folder, this);
 //		
-//		// »ó´Ü ¸Ş´º
+//		// ìƒë‹¨ ë©”ë‰´
 //		aa = topMenu1.setTopMenu(boardFrame, folder, this);
 		
 		
-		// ÀÏ1, ¿ù2, È­3, ¼ö4, ¸ñ5, ±İ6, Åä7
-		// ¸ñ¿äÀÏ ÀÚÁ¤À¸·Î ¼ÂÆÃ
+		// ì¼1, ì›”2, í™”3, ìˆ˜4, ëª©5, ê¸ˆ6, í† 7
+		// ëª©ìš”ì¼ ìì •ìœ¼ë¡œ ì…‹íŒ…
 		calendar2 = nextDayOfWeek(5);
 		schedule("broomstickMaker", 0.99f);
 		
@@ -260,7 +260,7 @@ public class Home2 extends CCLayer {
 //	}
 	
 	
-	// ¹é º¸µå ¼³Á¤
+	// ë°± ë³´ë“œ ì„¤ì •
 	private void setBackBoardMenu(String imageFullPath) {
 		bb = CCSprite.sprite(imageFullPath);
 		bg.addChild(bb);
@@ -287,7 +287,7 @@ public class Home2 extends CCLayer {
 	}
 	
 	long deadLineTime = 0;
-	// °Ô½ÃÆÇ ¼³Á¤
+	// ê²Œì‹œíŒ ì„¤ì •
 	private void setBoardFrameMenu(String imageFullPath) {
 		boardFrame = CCSprite.sprite(imageFullPath);
 		bg.addChild(boardFrame);
@@ -321,7 +321,7 @@ public class Home2 extends CCLayer {
 //		imageStr=in.readString();
 //	}
 	
-	// »ç¿ëÀÚ ÀÌ¹ÌÁö URL
+	// ì‚¬ìš©ì ì´ë¯¸ì§€ URL
 	String imageUrl = ""; 
 
 	
@@ -342,7 +342,7 @@ public class Home2 extends CCLayer {
 	
 	static CCSprite profileBg;
 	private void userInfo(CCSprite baseSprite) {
-		profileBg = CCSprite.sprite(folder + "home-profileBg-hd" + fileExtension); // ÇÁ·ÎÇÊ ¹é±×
+		profileBg = CCSprite.sprite(folder + "home-profileBg-hd" + fileExtension); // í”„ë¡œí•„ ë°±ê·¸
 		baseSprite.addChild(profileBg);
 		profileBg.setPosition(
 				baseSprite.getContentSize().width / 2, 
@@ -350,12 +350,12 @@ public class Home2 extends CCLayer {
 		
 //		Log.e("Home", "userInfo : " + imageUrl);
 		
-		CCSprite profilePicture= CCSprite.sprite(commonfolder + "frame-pictureFrame-hd" + fileExtension); // ÇÁ·ÎÇÊ »çÁø Æ²
+		CCSprite profilePicture= CCSprite.sprite(commonfolder + "frame-pictureFrame-hd" + fileExtension); // í”„ë¡œí•„ ì‚¬ì§„ í‹€
 		profilePicture.setPosition(
 				profilePicture.getContentSize().width / 2 + 85, 
 				profileBg.getContentSize().height-60.0f);
 		
-		CCMenuItem post = CCMenuItemImage.item(  // ¿ìÆí
+		CCMenuItem post = CCMenuItemImage.item(  // ìš°í¸
 				folder + "home-mail-hd" + fileExtension, 
 				folder + "home-mail-hd" + fileExtension, 				 
 				this,"mailCallback");
@@ -365,23 +365,23 @@ public class Home2 extends CCLayer {
 //		Bitmap userPhoto = getBitmapFromURL("https://graph.facebook.com/" + userData.facebookUserInfo.getUsername() +"/picture");
 		CCSprite userImage;
 //		if (userPhoto == null) {
-			userImage= CCSprite.sprite(commonfolder + "noPicture" + fileExtension); // ÇÁ·ÎÇÊ »çÁø
+			userImage= CCSprite.sprite(commonfolder + "noPicture" + fileExtension); // í”„ë¡œí•„ ì‚¬ì§„
 //		} else {
-//			userImage= CCSprite.sprite(userPhoto); // ÇÁ·ÎÇÊ »çÁø
+//			userImage= CCSprite.sprite(userPhoto); // í”„ë¡œí•„ ì‚¬ì§„
 //		}
-//		userImage = CCSprite.sprite(FacebookData.getinstance().getUserPhoto()); // ÇÁ·ÎÇÊ »çÁø
+//		userImage = CCSprite.sprite(FacebookData.getinstance().getUserPhoto()); // í”„ë¡œí•„ ì‚¬ì§„
 		
 		
 //		if (userData.facebookUserInfo != null) {
 //			imageUrl = "https://graph.facebook.com/" + userData.facebookUserInfo.getUsername() +"/picture";
 //			
-//			CCSprite userImage= CCSprite.sprite(getBitmapFromURL(imageUrl)); // ÇÁ·ÎÇÊ »çÁø
+//			CCSprite userImage= CCSprite.sprite(getBitmapFromURL(imageUrl)); // í”„ë¡œí•„ ì‚¬ì§„
 			profilePicture.addChild(userImage);
 			userImage.setAnchorPoint(0.5f, 0.5f);
 			userImage.setPosition(profilePicture.getContentSize().width / 2, profilePicture.getContentSize().height / 2);
 //		}
 		
-		CCSprite newIcon = CCSprite.sprite(folder + "home-mailNew-hd01" + fileExtension); // »õ·Î¿î ¿ìÆí
+		CCSprite newIcon = CCSprite.sprite(folder + "home-mailNew-hd01" + fileExtension); // ìƒˆë¡œìš´ ìš°í¸
 		newIcon.setPosition(
 				post.getContentSize().width/2, 
 				post.getContentSize().height);
@@ -396,21 +396,21 @@ public class Home2 extends CCLayer {
 			profileBg.getContentSize().height/2);
 		profileBg.addChild(postMenu);
 		
-		CCSprite levelProgressBar = CCSprite.sprite(folder + "home-progressBar-hd" + fileExtension); // ·¹º§ ÇÁ·Î±×·¹½º ¹Ù
+		CCSprite levelProgressBar = CCSprite.sprite(folder + "home-progressBar-hd" + fileExtension); // ë ˆë²¨ í”„ë¡œê·¸ë ˆìŠ¤ ë°”
 		levelProgressBar.setPosition(
 				profileBg.getContentSize().width/2+10f,
 				levelProgressBar.getContentSize().height/2+25.0f);
 		
-		CCLabel  ranking = CCLabel.makeLabel("7", "Arial", 30.0f); // ¼øÀ§
+		CCLabel  ranking = CCLabel.makeLabel("7", "Arial", 30.0f); // ìˆœìœ„
 		ranking.setPosition(
 				ranking.getContentSize().width/2+55.0f, 
 				profileBg.getContentSize().height-60.0f);
 		
 		CCLabel  userName;
 		if (userData.facebookUserInfo != null) {
-			userName = CCLabel.makeLabel(userData.facebookUserInfo.getName(), "Arial", 30); // ÀÌ¸§
+			userName = CCLabel.makeLabel(userData.facebookUserInfo.getName(), "Arial", 30); // ì´ë¦„
 		} else {
-			userName = CCLabel.makeLabel(userData.userName, "Arial", 30); // ÀÌ¸§
+			userName = CCLabel.makeLabel(userData.userName, "Arial", 30); // ì´ë¦„
 		}
 		userName.setPosition(
 				profilePicture.getPosition().x + ((1 - profilePicture.getAnchorPoint().x) * profilePicture.getContentSize().width) + 12, 
@@ -419,7 +419,7 @@ public class Home2 extends CCLayer {
 
 		CCLabel  score = CCLabel.makeLabel(
 				new NumberComma().numberComma(userData.getPoint()),
-				"Arial", 30); // ÃÖ°í Á¡¼ö
+				"Arial", 30); // ìµœê³  ì ìˆ˜
 		score.setPosition(
 //				levelProgressBar.getPosition().x + ((1 - levelProgressBar.getAnchorPoint().x) * levelProgressBar.getContentSize().width),
 //				profileBg.getContentSize().height- score.getContentSize().height / 2 - 20.0f);
@@ -428,21 +428,21 @@ public class Home2 extends CCLayer {
 				profileBg.getContentSize().height- score.getContentSize().height / 2 - 60.0f);
 				score.setAnchorPoint(0.0f, 0.5f);
 
-//		CCLabel  record = CCLabel.makeLabel("¿ª´ë ÀüÀû", "Arial", 20.0f); // ÀüÀû
+//		CCLabel  record = CCLabel.makeLabel("ì—­ëŒ€ ì „ì ", "Arial", 20.0f); // ì „ì 
 //		record.setPosition(
 //				userName.getPosition().x, 
 //				profileBg.getContentSize().height- record.getContentSize().height/2-60.0f);
 //		record.setAnchorPoint(0.0f, 0.5f);
 		
-				String Ko = "Àü,½Â,ÆĞ";
-				String Ch = "îú,ã­,ø¨";
+				String Ko = "ì „,ìŠ¹,íŒ¨";
+				String Ch = "æˆ°,å‹,æ•—";
 				String En = "Played,Won,Lost";
 				
 		CCLabel  recordData = CCLabel.makeLabel(
 				"Played " + (userData.getHistory(0) +  userData.getHistory(1)) +
 				" : W" + userData.getHistory(1) + 
 				"/L" + userData.getHistory(0)
-				,"Arial", 20.0f); // ÀüÀû °ª
+				,"Arial", 20.0f); // ì „ì  ê°’
 		recordData.setPosition(
 				userName.getPosition().x,
 //				profileBg.getContentSize().height - recordData.getContentSize().height / 2 - 85
@@ -450,19 +450,19 @@ public class Home2 extends CCLayer {
 				);
 		recordData.setAnchorPoint(0, 1);
 		
-//		CCLabel  winningRate = CCLabel.makeLabel("½Â ·ü", "Arial", 20.0f); // ½Â·ü
+//		CCLabel  winningRate = CCLabel.makeLabel("ìŠ¹ ë¥ ", "Arial", 20.0f); // ìŠ¹ë¥ 
 //		winningRate.setPosition(
 //				winningRate.getContentSize().width/2+330.0f, 
 //				profileBg.getContentSize().height- winningRate.getContentSize().height/2-60.0f);
 //		score.setAnchorPoint(1.0f, 0.5f);
 		
-//		CCLabel  winningRateData = CCLabel.makeLabel((int)(100 * userData.getHistory(1) / (userData.getHistory(1) + userData.getHistory(0)))+"%", "Arial", 20.0f); // ½Â·ü °ª
+//		CCLabel  winningRateData = CCLabel.makeLabel((int)(100 * userData.getHistory(1) / (userData.getHistory(1) + userData.getHistory(0)))+"%", "Arial", 20.0f); // ìŠ¹ë¥  ê°’
 //		winningRateData.setPosition(
 //				winningRateData.getContentSize().width/2+330.0f, 
 //				profileBg.getContentSize().height- winningRateData.getContentSize().height/2-85.0f);
 //		score.setAnchorPoint(1.0f, 0.5f);
 		
-		CCLabel  level = CCLabel.makeLabel("Lv"+""+" 1", "Arial", 40.0f); // ·¹º§
+		CCLabel  level = CCLabel.makeLabel("Lv"+""+" 1", "Arial", 40.0f); // ë ˆë²¨
 		level.setPosition(
 				level.getContentSize().width/2+115.0f, 
 				profileBg.getContentSize().height- level.getContentSize().height/2-110.0f);
@@ -494,12 +494,12 @@ public class Home2 extends CCLayer {
 	}
 	
 	
-	// ÀÔ·Â¹ŞÀº ¿äÀÏÀÇ ÇöÀç ¼­¹ö½Ã°£ÀÇ ´ÙÀ½ÁÖ ¿äÀÏÀ» »Ì¾Æ³»´Â ÇÔ¼ö
+	// ì…ë ¥ë°›ì€ ìš”ì¼ì˜ í˜„ì¬ ì„œë²„ì‹œê°„ì˜ ë‹¤ìŒì£¼ ìš”ì¼ì„ ë½‘ì•„ë‚´ëŠ” í•¨ìˆ˜
 	public static long nextDayOfWeek(int selectWeek) {
 //	public static Calendar nextDayOfWeek(int selectWeek) {
 		Calendar _calendar = Calendar.getInstance();
 		
-//		int difference = selectWeek - _calendar.get(Calendar.DAY_OF_WEEK); // ¿Ï¼ºµÈ ½Ã°è
+//		int difference = selectWeek - _calendar.get(Calendar.DAY_OF_WEEK); // ì™„ì„±ëœ ì‹œê³„
 //		if (!(difference > 0)) { 
 //		   difference += 7; 
 //		  }
@@ -518,7 +518,7 @@ public class Home2 extends CCLayer {
 //		int hour = _calendar.get(Calendar.HOUR);
 //		int min = _calendar.get(Calendar.MINUTE);
 //		int sec = _calendar.get(Calendar.SECOND);
-//		Log.e("nextDayOfWeek", "before : " + year + "³â " + month + "¿ù " + date + "ÀÏ " + week + "ÁÖÂ÷ " + hour + "½Ã " + min + "ºĞ " + sec + "ÃÊ");
+//		Log.e("nextDayOfWeek", "before : " + year + "ë…„ " + month + "ì›” " + date + "ì¼ " + week + "ì£¼ì°¨ " + hour + "ì‹œ " + min + "ë¶„ " + sec + "ì´ˆ");
 		
 		return _calendar.getTimeInMillis();
 	}
@@ -552,18 +552,18 @@ public class Home2 extends CCLayer {
 		String deadlineText = "";
 
 		if (day3 > 0) {
-			deadlineText = day3 + "ÀÏ ";
+			deadlineText = day3 + "ì¼ ";
 		}
 
 		if (hour3 > 0) {
-			deadlineText += hour3 + "½Ã ";
+			deadlineText += hour3 + "ì‹œ ";
 		}
 
 		if (min3 > 0) {
-			deadlineText += min3 + "ºĞ ";
+			deadlineText += min3 + "ë¶„ ";
 		}
 
-		deadlineText += sec3 + "ÃÊ ÈÄ ¸¶°¨";
+		deadlineText += sec3 + "ì´ˆ í›„ ë§ˆê°";
 		deadline.setString(deadlineText);
 	}
 	
@@ -574,25 +574,25 @@ public class Home2 extends CCLayer {
 		
 		switch (day_week) {
 		case Calendar.SUNDAY:
-			result = "ÀÏ¿äÀÏ";
+			result = "ì¼ìš”ì¼";
 			break;
 		case Calendar.MONDAY:
-			result = "¿ù¿äÀÏ";
+			result = "ì›”ìš”ì¼";
 			break;
 		case Calendar.TUESDAY:
-			result = "È­¿äÀÏ";
+			result = "í™”ìš”ì¼";
 			break;
 		case Calendar.WEDNESDAY:
-			result = "¼ö¿äÀÏ";
+			result = "ìˆ˜ìš”ì¼";
 			break;
 		case Calendar.THURSDAY:
-			result = "¸ñ¿äÀÏ";
+			result = "ëª©ìš”ì¼";
 			break;
 		case Calendar.FRIDAY:
-			result = "±İ¿äÀÏ";
+			result = "ê¸ˆìš”ì¼";
 			break;
 		case Calendar.SATURDAY:
-			result = "Åä¿äÀÏ";
+			result = "í† ìš”ì¼";
 			break;
 		}
 		return result;

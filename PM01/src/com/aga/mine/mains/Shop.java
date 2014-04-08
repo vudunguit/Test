@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -85,10 +85,10 @@ public class Shop extends CCLayer {
 		gameMenu.setPosition(parentSprite.getContentSize().width / 2 - 5, parentSprite.getContentSize().height - 58f);
 		parentSprite.addChild(gameMenu);
 		
-		button1.setPosition(0, -button1.getContentSize().height * 0.5f); // °ñµå
-		button2.setPosition(0, -button1.getContentSize().height * 1.5f); // ¾ÆÀÌÅÛ
-		button3.setPosition(0, -button1.getContentSize().height * 2.5f); // ºøÀÚ·ç
-		button4.setPosition(0, -button1.getContentSize().height * 3.5f); // ÀÌ¸ğÆ¼ÄÜ
+		button1.setPosition(0, -button1.getContentSize().height * 0.5f); // ê³¨ë“œ
+		button2.setPosition(0, -button1.getContentSize().height * 1.5f); // ì•„ì´í…œ
+		button3.setPosition(0, -button1.getContentSize().height * 2.5f); // ë¹—ìë£¨
+		button4.setPosition(0, -button1.getContentSize().height * 3.5f); // ì´ëª¨í‹°ì½˜
 	}
 	
 	@Override

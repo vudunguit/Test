@@ -1,4 +1,4 @@
-package com.aga.mine.pages2;
+ï»¿package com.aga.mine.pages2;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.menus.CCMenu;
@@ -113,7 +113,7 @@ public class GoldCheck {
 
 				Log.e("gold end", "gold end4");
 
-				Toast.makeText(mContext, "Ä£±¸¿¡°Ô Á¶¸£±â µµÀü!!", Toast.LENGTH_SHORT)
+				Toast.makeText(mContext, "ì¹œêµ¬ì—ê²Œ ì¡°ë¥´ê¸° ë„ì „!!", Toast.LENGTH_SHORT)
 						.show();
 
 

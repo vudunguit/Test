@@ -1,4 +1,4 @@
-package com.aga.mine.pages2;
+ï»¿package com.aga.mine.pages2;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCDirector;
@@ -13,7 +13,7 @@ import android.util.Log;
 import com.aga.mine.mains.Config;
 import com.aga.mine.pages.Game.HudLayer;
 
-//ÀÏ´Ü ¿Ï·á(Áß°£¿¡ gameover game.release »©°í)
+//ì¼ë‹¨ ì™„ë£Œ(ì¤‘ê°„ì— gameover game.release ë¹¼ê³ )
 public class GameProgressBar extends CCLayer {
 	/************** inner class *****************/
 	public interface GameProgressBarDelegate{
@@ -58,8 +58,8 @@ public class GameProgressBar extends CCLayer {
 		this.progress(5.f, kTagIndicatorOther);
 
 		/*****************************************************/
-		/** ¹®Á¦ÁöÁ¡ 
-		 * °ÔÀÓ ½Ã°è
+		/** ë¬¸ì œì§€ì  
+		 * ê²Œì„ ì‹œê³„
 		 * 
 		 * @return
 		 */
@@ -87,13 +87,13 @@ public class GameProgressBar extends CCLayer {
 	
 	
 	/***********************************************************/
-	/** ¹®Á¦ÁöÁ¡ 
+	/** ë¬¸ì œì§€ì  
 	 * 
 	 * Thread
 	 * 
-	 * °ÔÀÓ ½Ã°è
+	 * ê²Œì„ ì‹œê³„
 	 * 
-	 * ´ëÀü Áß ±â±âº° ¿ÀÂ÷ ¹ß»ı
+	 * ëŒ€ì „ ì¤‘ ê¸°ê¸°ë³„ ì˜¤ì°¨ ë°œìƒ
 	 * 
 	 * @return
 	 */
@@ -117,7 +117,7 @@ public class GameProgressBar extends CCLayer {
 		//Log.e("progressBar / tick", "progressBar in");
 		int seconds = GameData.share().getSeconds();
 		seconds --;
-		seconds = seconds < 0 ? 0 : seconds; // À½¼ö°ª ¹æÁö
+		seconds = seconds < 0 ? 0 : seconds; // ìŒìˆ˜ê°’ ë°©ì§€
 		GameData.share().setSeconds(seconds);
 		String[] time = {"" + (seconds / 60), "" + (seconds % 60)};
 		//int min = seconds / 60;
@@ -134,7 +134,7 @@ public class GameProgressBar extends CCLayer {
 		progressedTime.setString(timerString);
 
 		//
-		// °ÔÀÓ½Ã°£ÀÌ Á¾·áÇÏ¸é Å¸ÀÌ¸Ó¸¦ ¸ØÃß°í °ÔÀÓÁ¾·á ¸Ş¼­µå È£ÃâÇÑ´Ù.
+		// ê²Œì„ì‹œê°„ì´ ì¢…ë£Œí•˜ë©´ íƒ€ì´ë¨¸ë¥¼ ë©ˆì¶”ê³  ê²Œì„ì¢…ë£Œ ë©”ì„œë“œ í˜¸ì¶œí•œë‹¤.
 		if (seconds < 1) {
 			this.stopTime();
 			gameover();
@@ -153,8 +153,8 @@ public class GameProgressBar extends CCLayer {
 			//this.delegate.displayMineNumber(1, CGPoint.ccp(10, 20), 3);
 			
 			delegate.gameOver2();
-			//this.delegate.gameOver2();  //¹¹·¡
-			//game = null; // ÀÌ°Ô ¹¹´õ¶ó??? alloc initÇÏ°í °°Àº°Å¶ó°í Çß´ø°¡?? <-- ±×³É Áö¿ì´Â°Å
+			//this.delegate.gameOver2();  //ë­ë˜
+			//game = null; // ì´ê²Œ ë­ë”ë¼??? alloc inití•˜ê³  ê°™ì€ê±°ë¼ê³  í–ˆë˜ê°€?? <-- ê·¸ëƒ¥ ì§€ìš°ëŠ”ê±°
 			*/
 			
 		}
@@ -179,7 +179,7 @@ public class GameProgressBar extends CCLayer {
 	}
 	
 	
-	// CGFloat ¾ø¾î¼­ float ´ëÃ¼
+	// CGFloat ì—†ì–´ì„œ float ëŒ€ì²´
 	void progress(float value, int tag) {
 		value = CGPoint.clampf(value, 0, 1);
 		float height = base.getContentSize().height * 0.3f;

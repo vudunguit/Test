@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -29,18 +29,18 @@ import org.cocos2d.types.CGSize;
 import android.util.Log;
 
 
-//½Ì±ÛÅæ °°Àºµ¥ ¹º°¡ »ìÂ¦ ´Ù¸£´Ù???
+//ì‹±ê¸€í†¤ ê°™ì€ë° ë­”ê°€ ì‚´ì§ ë‹¤ë¥´ë‹¤???
 // winSizeInPixels;
 // alloc]		// initWithFile:@]		// autorelease];
-//= floor(256 * opacity); ¹¹Áö?
-//CCanimation  String ¸ğ¸§
-// RemoveNode.start() ¸ÂÀ»¶û°¡ ¸ô¶ó.
+//= floor(256 * opacity); ë­ì§€?
+//CCanimation  String ëª¨ë¦„
+// RemoveNode.start() ë§ì„ë‘ê°€ ëª°ë¼.
 public class Utility extends CCLayer {
 	
 	/*************** Utility.m ***************/
 	/** Remove the node from parent and cleanup **/
     public class RemoveNode extends CCAction{
-    	// ¸ÂÀ»¶û°¡ ¸ô¶ó.
+    	// ë§ì„ë‘ê°€ ëª°ë¼.
     	public void start(Object aTarget) {
     		super.setOriginalTarget((CCNode)aTarget);
     		super.setTarget((CCNode)aTarget);
@@ -70,19 +70,19 @@ public class Utility extends CCLayer {
 	CCParticleSystem emitter;
 
 	//------------------------------ Singleton ---------------------------------//
-    //¿ÜºÎ¿¡¼­ Á¢±ÙÇÏÁö ¸øÇÏµµ·Ï private, ÇÑÇÁ·Î±×·¥¿¡¼­ ¸ğµÎ »ç¿ëÇÒ¼öÀÖµµ·Ï static	
+    //ì™¸ë¶€ì—ì„œ ì ‘ê·¼í•˜ì§€ ëª»í•˜ë„ë¡ private, í•œí”„ë¡œê·¸ë¨ì—ì„œ ëª¨ë‘ ì‚¬ìš©í• ìˆ˜ìˆë„ë¡ static	
     private static Utility singleton = new Utility();
 
 	ArrayList<CCSpriteFrame> frames = null;
 	CCTexture2D t2d = null;
 	CCSprite sprite = null;
 	
-    //¿ÜºÎ¿¡¼­ »ı¼ºÇÏÁö ¸øÇÏ°Ô »ı¼ºÀÚÀÇ Á¢±ÙÁ¦ÇÑÀÚ¸¦ privateÀ¸·Î ¼±¾ğ
+    //ì™¸ë¶€ì—ì„œ ìƒì„±í•˜ì§€ ëª»í•˜ê²Œ ìƒì„±ìì˜ ì ‘ê·¼ì œí•œìë¥¼ privateìœ¼ë¡œ ì„ ì–¸
     private Utility(){ 
-        System.out.println("Utility ÀÎ½ºÅÏ½º°¡ »ı¼ºµÇ¾ú½À´Ï´Ù.");
+        System.out.println("Utility ì¸ìŠ¤í„´ìŠ¤ê°€ ìƒì„±ë˜ì—ˆìŠµë‹ˆë‹¤.");
     }
     
-    //»ı¼ºµÈ SingletonÀÎ½ºÅÏ½º¸¦ ¹İÈ¯.
+    //ìƒì„±ëœ Singletonì¸ìŠ¤í„´ìŠ¤ë¥¼ ë°˜í™˜.
     public static Utility getInstance(){
         return singleton;
     }
@@ -167,7 +167,7 @@ public class Utility extends CCLayer {
 	
 	int kTagDimLayer = 555;
 	/*
-	private static Utility utility; // c´Â staticÀÌ Áö¿ªº¯¼öÀÎµí
+	private static Utility utility; // cëŠ” staticì´ ì§€ì—­ë³€ìˆ˜ì¸ë“¯
 		
 	public static synchronized Utility initUtility(){
 	if (utility == null) {
@@ -176,7 +176,7 @@ public class Utility extends CCLayer {
 	}
 	return utility;
 }
-//½Ì±ÛÅæ °°Àºµ¥ ¹º°¡ »ìÂ¦ ´Ù¸£´Ù???	
+//ì‹±ê¸€í†¤ ê°™ì€ë° ë­”ê°€ ì‚´ì§ ë‹¤ë¥´ë‹¤???	
 	private Object initUtility(){
 		//return this;
 		return null;
@@ -196,7 +196,7 @@ public class Utility extends CCLayer {
 		dim.setScaleY(wins.height);
 		dim.setAnchorPoint(0, 0);
 		dim.setPosition(0, 0);
-		// = floor(256 * opacity); ¹¹Áö?
+		// = floor(256 * opacity); ë­ì§€?
 		dim.setOpacity((int)(256 * opacity));
 		parentNode.addChild(dim);
 		dim.setTag(kTagDimLayer);
@@ -269,12 +269,12 @@ public class Utility extends CCLayer {
 */
 	public void flashOut(CCSprite sprite, float startDelay, float delay) {
 		//
-		// ÀÏÁ¤½Ã°£(delay)ÀÌÈÄ »ç¶óÁø´Ù.
+		// ì¼ì •ì‹œê°„(delay)ì´í›„ ì‚¬ë¼ì§„ë‹¤.
 		CCFadeIn fadeIn = CCFadeIn.action(0);
 		CCFadeOut fadeOut = CCFadeOut.action(0);
 		CCDelayTime startHold = CCDelayTime.action(startDelay); 
 		CCDelayTime hold = CCDelayTime.action(delay); 
-		// ¾ÈµÊ ¤Ğ¤Ğ
+		// ì•ˆë¨ ã… ã… 
 		//CCSequence sequence = CCSequence.actions(startHold, fadeIn, hold,fadeOut, RemoveNode.action());
 //		Log.e("Utility / flashOut", "sequence");
 		CCSequence sequence = CCSequence.actions(startHold, fadeIn, hold,fadeOut
@@ -410,7 +410,7 @@ public class Utility extends CCLayer {
 	  private void animationComboCharacter(CCSprite sprite ,ccTime delayTime,	int numberOfCombo)	{
 		  String frameName = null;
 	  
-	  // // µÑ Áß ÇÏ³ªÀÇ Ä³¸¯ÅÍ¸¦ ±¸¸Å ÇÑ °æ¿ì
+	  // // ë‘˜ ì¤‘ í•˜ë‚˜ì˜ ìºë¦­í„°ë¥¼ êµ¬ë§¤ í•œ ê²½ìš°
 		  if (UserDataHelper.initUserDataHelper().isPurchased(kSkillItemHint) == true) {
 			  frameName = "o_c_"; 
 			  } else if  (UserDataHelper.initUserDataHelper().isPurchased(kSkillItemGold) == true) {
@@ -419,7 +419,7 @@ public class Utility extends CCLayer {
 					  frameName = @"d_c_";
 					  }
 	  
-	  // // µÎ°³ ¸ğµÎ ±¸¸Å ÇÑ °æ¿ì¿¡´Â µÎ Ä³¸¯ÅÍ°¡ ¹ø°¥¾Æ ³ª¿Â´Ù. 130529 @±è»óÅÂ, ÇÈ½ºÅ×ÀÌ¼Ç
+	  // // ë‘ê°œ ëª¨ë‘ êµ¬ë§¤ í•œ ê²½ìš°ì—ëŠ” ë‘ ìºë¦­í„°ê°€ ë²ˆê°ˆì•„ ë‚˜ì˜¨ë‹¤. 130529 @ê¹€ìƒíƒœ, í”½ìŠ¤í…Œì´ì…˜
 		  if (UserDataHelper initUserDataHelper.isPurchased(kSkillItemHint) == true
 				  && UserDataHelper initUserDataHelper.isPurchased(kSkillItemGold) ==	  true) { 
 			  frameName = arc4random_uniform(2) == 0 ? @"o_c_" : @"r_c_";
@@ -664,70 +664,70 @@ CCNode papa;
 //  - kIsoCodeZh 		: simplified chinese 
 //  - -1 							: none
 	
-	// ÆÄÀÏ¸í µÚ¿¡ ¾ğ¾îº° ÄÚµå¸í ºÙ¿© ÁÖ±â. ¿¹) 123.png --> 123Ko.png ¶Ç´Â 123En.png 
-		// ** 2±ÛÀÚ ºÙÀÌ±â
+	// íŒŒì¼ëª… ë’¤ì— ì–¸ì–´ë³„ ì½”ë“œëª… ë¶™ì—¬ ì£¼ê¸°. ì˜ˆ) 123.png --> 123Ko.png ë˜ëŠ” 123En.png 
+		// ** 2ê¸€ì ë¶™ì´ê¸°
 		public String getNameWithIsoCodeSuffix(String filename) {
 	
 	//		Log.e("Utility / getNameWithIsoCodeSuffix", "in Utility");
-	//		Log.e("Utility / getNameWithIsoCodeSuffix", "ÀÔ·Â¹ŞÀº ÆÄÀÏ¸í : " + filename);
+	//		Log.e("Utility / getNameWithIsoCodeSuffix", "ì…ë ¥ë°›ì€ íŒŒì¼ëª… : " + filename);
 	
 			String suffix = Locale.getDefault().getLanguage().toString();
-	//		Log.e("Utility / getNameWithIsoCodeSuffix", "Áö¿ª¸í1 : " + suffix);
+	//		Log.e("Utility / getNameWithIsoCodeSuffix", "ì§€ì—­ëª…1 : " + suffix);
 	
 			if (!suffix.equals("ko") && !suffix.equals("en") && !suffix.equals("zh"))
 				suffix = "en";
-	//		Log.e("Utility / getNameWithIsoCodeSuffix", "Áö¿ª¸í2 : " + suffix);
+	//		Log.e("Utility / getNameWithIsoCodeSuffix", "ì§€ì—­ëª…2 : " + suffix);
 	
 			suffix = suffix.substring(0, 1).toUpperCase() + suffix.substring(1).toLowerCase();
-	//		Log.e("Utility / getNameWithIsoCodeSuffix", "Áö¿ª¸í3: " + suffix);
+	//		Log.e("Utility / getNameWithIsoCodeSuffix", "ì§€ì—­ëª…3: " + suffix);
 	
 			// return filename.substring(0,(filename.lastIndexOf("."))) + suffix + filename.substring(filename.lastIndexOf("."));
 			
-			// Å×½ºÆ®·Î ÀÎÇØ ÁÖ¼®Ã³¸®
-			// Å×½ºÆ®ÈÄ ¾Æ·¡´Â Áö¿ì°í ÁÖ¼®Ã³¸®µÈ°ÍÀ¸·Î »ç¿ë
+			// í…ŒìŠ¤íŠ¸ë¡œ ì¸í•´ ì£¼ì„ì²˜ë¦¬
+			// í…ŒìŠ¤íŠ¸í›„ ì•„ë˜ëŠ” ì§€ìš°ê³  ì£¼ì„ì²˜ë¦¬ëœê²ƒìœ¼ë¡œ ì‚¬ìš©
 			 String value = filename.substring(0,(filename.lastIndexOf("."))) + suffix + filename.substring(filename.lastIndexOf("."));
 			return value;
 		}
 
-//	// ÆÄÀÏ¸í µÚ¿¡ ¾ğ¾îº° ÄÚµå¸í ºÙ¿© ÁÖ±â. ¿¹) 123.png --> 123Ko.png ¶Ç´Â 123En.png  -->  ÃÖÁ¾ 123En-hd.png 
-//			// ** 2±ÛÀÚ ºÙÀÌ±â
+//	// íŒŒì¼ëª… ë’¤ì— ì–¸ì–´ë³„ ì½”ë“œëª… ë¶™ì—¬ ì£¼ê¸°. ì˜ˆ) 123.png --> 123Ko.png ë˜ëŠ” 123En.png  -->  ìµœì¢… 123En-hd.png 
+//			// ** 2ê¸€ì ë¶™ì´ê¸°
 //			public String getNameWithIsoCodeSuffixHD(String filename) {
 //		
 //		//		Log.e("Utility / getNameWithIsoCodeSuffix", "in Utility");
-//		//		Log.e("Utility / getNameWithIsoCodeSuffix", "ÀÔ·Â¹ŞÀº ÆÄÀÏ¸í : " + filename);
+//		//		Log.e("Utility / getNameWithIsoCodeSuffix", "ì…ë ¥ë°›ì€ íŒŒì¼ëª… : " + filename);
 //		
 //				String suffix = Locale.getDefault().getLanguage().toString();
-//		//		Log.e("Utility / getNameWithIsoCodeSuffix", "Áö¿ª¸í1 : " + suffix);
+//		//		Log.e("Utility / getNameWithIsoCodeSuffix", "ì§€ì—­ëª…1 : " + suffix);
 //		
 //				if (!suffix.equals("ko") && !suffix.equals("en") && !suffix.equals("zh"))
 //					suffix = "en";
-//		//		Log.e("Utility / getNameWithIsoCodeSuffix", "Áö¿ª¸í2 : " + suffix);
+//		//		Log.e("Utility / getNameWithIsoCodeSuffix", "ì§€ì—­ëª…2 : " + suffix);
 //		
 //				suffix = suffix.substring(0, 1).toUpperCase() + suffix.substring(1).toLowerCase();
-//		//		Log.e("Utility / getNameWithIsoCodeSuffix", "Áö¿ª¸í3: " + suffix);
+//		//		Log.e("Utility / getNameWithIsoCodeSuffix", "ì§€ì—­ëª…3: " + suffix);
 //		
 //				// return filename.substring(0,(filename.lastIndexOf("."))) + suffix + filename.substring(filename.lastIndexOf("."));
 //				
-//				// Å×½ºÆ®·Î ÀÎÇØ ÁÖ¼®Ã³¸®
-//				// Å×½ºÆ®ÈÄ ¾Æ·¡´Â Áö¿ì°í ÁÖ¼®Ã³¸®µÈ°ÍÀ¸·Î »ç¿ë
+//				// í…ŒìŠ¤íŠ¸ë¡œ ì¸í•´ ì£¼ì„ì²˜ë¦¬
+//				// í…ŒìŠ¤íŠ¸í›„ ì•„ë˜ëŠ” ì§€ìš°ê³  ì£¼ì„ì²˜ë¦¬ëœê²ƒìœ¼ë¡œ ì‚¬ìš©
 //				// String value = filename.substring(0,(filename.lastIndexOf("."))) + suffix + filename.substring(filename.lastIndexOf("."));
 //				String value = filename.substring(0, (filename.lastIndexOf(".")))
 //						+ suffix + "-hd"
 //						+ filename.substring(filename.lastIndexOf("."));
-//		//		Log.e("Utility / getNameWithIsoCodeSuffix", "ÃÖÁ¾ ÆÄÀÏ¸í : " + value);
+//		//		Log.e("Utility / getNameWithIsoCodeSuffix", "ìµœì¢… íŒŒì¼ëª… : " + value);
 //				return value;
 //			}
 
-	// Àü·¡µ¿È­¿ë
-	// ** 3±ÛÀÚ¿ëÀº ³ªÁß¿¡ µû·Î ¼öÁ¤ÇÏ±â
+	// ì „ë˜ë™í™”ìš©
+	// ** 3ê¸€ììš©ì€ ë‚˜ì¤‘ì— ë”°ë¡œ ìˆ˜ì •í•˜ê¸°
 	public String getNameWithIsoCodeSuffix2(String filename) {
-//		Log.e("Utility : ", "getNameWithIsoCodeSuffix2 ½ÇÇà");
-		// °ª ¹Ş¾Æ¼­ ´Ù½Ã if¹®À¸·Î µ¹¸±°Í(-kor) getNameWithIsoCodeSuffix(filename);
+//		Log.e("Utility : ", "getNameWithIsoCodeSuffix2 ì‹¤í–‰");
+		// ê°’ ë°›ì•„ì„œ ë‹¤ì‹œ ifë¬¸ìœ¼ë¡œ ëŒë¦´ê²ƒ(-kor) getNameWithIsoCodeSuffix(filename);
 		return getNameWithIsoCodeSuffix(filename);
 	}
 	
-	// ÆÄÀÏ¸í µÚ¿¡ ¾ğ¾îº° ÄÚµå¸í ºÙ¿© ÁÖ±â. ¿¹) 123 --> 123ko ¶Ç´Â 123en 
-	// ** 2±ÛÀÚ ºÙÀÌ±â
+	// íŒŒì¼ëª… ë’¤ì— ì–¸ì–´ë³„ ì½”ë“œëª… ë¶™ì—¬ ì£¼ê¸°. ì˜ˆ) 123 --> 123ko ë˜ëŠ” 123en 
+	// ** 2ê¸€ì ë¶™ì´ê¸°
 	public String getNameWithIsoCodeSuffix3(String filename) {
 
 		String suffix = Locale.getDefault().getLanguage().toString();
@@ -739,8 +739,8 @@ CCNode papa;
 
 		// return filename.substring(0,(filename.lastIndexOf("."))) + suffix + filename.substring(filename.lastIndexOf("."));
 		
-		// Å×½ºÆ®·Î ÀÎÇØ ÁÖ¼®Ã³¸®
-		// Å×½ºÆ®ÈÄ ¾Æ·¡´Â Áö¿ì°í ÁÖ¼®Ã³¸®µÈ°ÍÀ¸·Î »ç¿ë
+		// í…ŒìŠ¤íŠ¸ë¡œ ì¸í•´ ì£¼ì„ì²˜ë¦¬
+		// í…ŒìŠ¤íŠ¸í›„ ì•„ë˜ëŠ” ì§€ìš°ê³  ì£¼ì„ì²˜ë¦¬ëœê²ƒìœ¼ë¡œ ì‚¬ìš©
 		 String value = filename + suffix;
 		return value;
 	}

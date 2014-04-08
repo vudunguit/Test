@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.util.concurrent.ExecutionException;
 
@@ -80,8 +80,8 @@ public class Logo extends CCLayer {
 //    	    CCScene scene = Daily.scene();
 //    	    CCDirector.sharedDirector().replaceScene(scene);
 	    	
-	    	// daily(Ãâ¼®ºÎ)´Â 1ÀÏ 1È¸¸¸ È£ÃâÇÏ¹Ç·Î DailyBeckoner¿¡¼­ Ã¼Å© ÈÄ ÀÌµ¿ÇÏ°Ô µÊ.(ÀÌ¹Ì 1È¸ÀÌ»ó Á¢¼Ó½Ã home sceneÀ¸·Î ÀÌµ¿) 
-	    	// DailyBeckoner È£Ãâ½Ã facebook Á¤º¸µéÀ» °¡Áö°í ÀÖ¾î¾ßµË´Ï´Ù.
+	    	// daily(ì¶œì„ë¶€)ëŠ” 1ì¼ 1íšŒë§Œ í˜¸ì¶œí•˜ë¯€ë¡œ DailyBeckonerì—ì„œ ì²´í¬ í›„ ì´ë™í•˜ê²Œ ë¨.(ì´ë¯¸ 1íšŒì´ìƒ ì ‘ì†ì‹œ home sceneìœ¼ë¡œ ì´ë™) 
+	    	// DailyBeckoner í˜¸ì¶œì‹œ facebook ì •ë³´ë“¤ì„ ê°€ì§€ê³  ìˆì–´ì•¼ë©ë‹ˆë‹¤.
 //	    	new DailyBeckoner();
 	    } else {
     	    CCScene scene = Login.scene();

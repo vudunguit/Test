@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import org.cocos2d.layers.CCColorLayer;
 import org.cocos2d.layers.CCLayer;
@@ -30,7 +30,7 @@ public class GameGuide4 extends CCLayer {
 		CCSprite bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), 
 				Utility.getInstance().getNameWithIsoCodeSuffix3(folder + "guide-tutorial4-i4-") + fileExtension);
 
-		// ÇÏ´Ü ¸Þ´º
+		// í•˜ë‹¨ ë©”ë‰´
 		BottomMenu5.setBottomMenu(bg, folder, this, 2);
 		
 //		this.setIsTouchEnabled(true);

@@ -1,4 +1,4 @@
-package com.aga.mine.pages;
+ï»¿package com.aga.mine.pages;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -121,9 +121,9 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 //	}
 //	
 	
-	// gamedata¿¡¼­ ¼öÁ¤ÇÏ¿´À½.
-	// Áö·Ú¼ö ¼öÁ¤ÇÏ¿© Å×½ºÆ®Áß ÇöÀç 3°³·Î ¼öÁ¤
-	// ¼öÁ¤±¸ 1°³·Î ¼öÁ¤
+	// gamedataì—ì„œ ìˆ˜ì •í•˜ì˜€ìŒ.
+	// ì§€ë¢°ìˆ˜ ìˆ˜ì •í•˜ì—¬ í…ŒìŠ¤íŠ¸ì¤‘ í˜„ì¬ 3ê°œë¡œ ìˆ˜ì •
+	// ìˆ˜ì •êµ¬ 1ê°œë¡œ ìˆ˜ì •
 	/** Game
 	 * @param context
 	 */
@@ -132,7 +132,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		GameMinimap.getInstance().dealloc();
 		 hud.isGameOver = false;
 		unopenedTile = 0;
-		// ±âº» ÃÊ±âÈ­
+		// ê¸°ë³¸ ì´ˆê¸°í™”
 		mContext = CCDirector.sharedDirector().getActivity().getApplicationContext();
 //		winSize = CCDirector.sharedDirector().winSize();
 		winSize = CCDirector.sharedDirector().winSize();
@@ -144,25 +144,25 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			Config.getInstance().setDisableButton(false);
 		}
 
-		//³­ÀÌµµ ( 0~2 ÃÊ,Áß,»ó±Ş)
+		//ë‚œì´ë„ ( 0~2 ì´ˆ,ì¤‘,ìƒê¸‰)
 		GameData.share().setGameDifficulty(1);
-		// µ¥ÀÌÅÍ¸¦ µé¾îÀÖ´Â ¼ıÀÚ ±ê¹ß ÃÊ±âÈ­
+		// ë°ì´í„°ë¥¼ ë“¤ì–´ìˆëŠ” ìˆ«ì ê¹ƒë°œ ì´ˆê¸°í™”
 		GameData.share().resetMineNumber();
-		// È£¹Ú¿¡ ³ªÅ¸³ªÀÖ´Â ¼ıÀÚ ±ê¹ß ÃÊ±âÈ­
+		// í˜¸ë°•ì— ë‚˜íƒ€ë‚˜ìˆëŠ” ìˆ«ì ê¹ƒë°œ ì´ˆê¸°í™”
 		GameData.share().setMineNumber(GameData.share().maxMineNumber);
 		//GameData.share().setMineNumber(GameData.share().getGameDifficulty());
-		Log.e("Game / game ", "³­ÀÌµµ : " + GameData.share().getGameDifficulty());
-		// »ı¸í¼ö ÃÊ±âÈ­
+		Log.e("Game / game ", "ë‚œì´ë„ : " + GameData.share().getGameDifficulty());
+		// ìƒëª…ìˆ˜ ì´ˆê¸°í™”
 		GameData.share().setHeartNumber(3); 		
-		// ¾ÆÀÌÅÛ ÃÊ±âÈ­
+		// ì•„ì´í…œ ì´ˆê¸°í™”
 		GameData.share().resetItem();
-//		// °ÔÀÓ½Ã°£ ÃÊ±âÈ­
-//		GameData.share().setSeconds(900); // gameStart·Î ÀÌµ¿
+//		// ê²Œì„ì‹œê°„ ì´ˆê¸°í™”
+//		GameData.share().setSeconds(900); // gameStartë¡œ ì´ë™
 
 		//
-		// ÅÇ Á¦½ºÃÄ µî·Ï
-		// ¾Èµå·ÎÀÌµå ´Ù¸¥¹æ½ÄÀÌ¶ó ÇöÀç·Î¼­´Â cocos2D¿Í ¾î·Á¿ò.
-		// selector ¸Ş¼Òµå È®ÀÎÇÒ°Í
+		// íƒ­ ì œìŠ¤ì³ ë“±ë¡
+		// ì•ˆë“œë¡œì´ë“œ ë‹¤ë¥¸ë°©ì‹ì´ë¼ í˜„ì¬ë¡œì„œëŠ” cocos2Dì™€ ì–´ë ¤ì›€.
+		// selector ë©”ì†Œë“œ í™•ì¸í• ê²ƒ
 		//CCTouchDispatcher a = CCTouchDispatcher.
 		// ?????
 		ArrayList<View> a = new ArrayList<View>();
@@ -170,20 +170,20 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		CCDirector.sharedDirector().getOpenGLView().addTouchables(a);
 		
 		 //
-		 // »ç¿îµå (·Îµå)
+		 // ì‚¬ìš´ë“œ (ë¡œë“œ)
 		 SoundEngine.sharedEngine().preloadEffect(
-				 this.mContext, R.raw.game_open2); // ÀÌÆåÆ® (È¿°úÀ½) // (Å¸ÀÏ)pickup
+				 this.mContext, R.raw.game_open2); // ì´í™íŠ¸ (íš¨ê³¼ìŒ) // (íƒ€ì¼)pickup
 		 SoundEngine.sharedEngine().preloadEffect(
-				 this.mContext, R.raw.game_pumpkin); // ÀÌÆåÆ® (È¿°úÀ½) // (È£¹Ú)hit
+				 this.mContext, R.raw.game_pumpkin); // ì´í™íŠ¸ (íš¨ê³¼ìŒ) // (í˜¸ë°•)hit
 		 SoundEngine.sharedEngine().preloadEffect(
-				 this.mContext, R.raw.game_mushroom); // ÀÌÆåÆ® (È¿°úÀ½) // (¹ö¼¸)move
+				 this.mContext, R.raw.game_mushroom); // ì´í™íŠ¸ (íš¨ê³¼ìŒ) // (ë²„ì„¯)move
 		
 		//
-		// Å¸ÀÏ¸Ê ·Îµå
+		// íƒ€ì¼ë§µ ë¡œë“œ
 		this.tileMap = CCTMXTiledMap.tiledMap(GameData.share().gameMap);
 		 
 		//
-		// ¸Ê ¿Ã¸®°í ±âº» Å©±â ÁöÁ¤
+		// ë§µ ì˜¬ë¦¬ê³  ê¸°ë³¸ í¬ê¸° ì§€ì •
 		this.addChild(this.tileMap, -1);
 
 		//texture.setAntiAliasTexParameters();
@@ -199,38 +199,38 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		mapSize = CGSize.make(tileMap.getMapSize().width * tileSize.width, tileMap.getMapSize().height * tileSize.height);
 
 		 //
-		 // Å¸ÀÏ¸Ê ·¹ÀÌ¾î µî·Ï
+		 // íƒ€ì¼ë§µ ë ˆì´ì–´ ë“±ë¡
 		/*
 		this.bg = this.tileMap.layerNamed("Background"); // Layer Name in Tiled
 		this.meta = this.tileMap.layerNamed("Meta");
 		this.meta.setVisible(false);
 		this.fg = this.tileMap.layerNamed("Foreground");
-		this.mineLayer = this.tileMap.layerNamed("MineLayer");		 // Áö·Ú ¹× ¾ÆÀÌÅÛ »Ñ¸± ·¹ÀÌ¾î
-		this.itemLayer = this.tileMap.layerNamed("ItemLayer");			 // Áö·Ú ¹× ¾ÆÀÌÅÛ, ±ê¹ß °¡Á®¿À´Â ·¹ÀÌ¾î
-		this.flagLayer = this.tileMap.layerNamed("FlagLayer");			 // ±ê¹ß ²ÈÀ» ·¹ÀÌ¾î
-		this.earthLayer = this.tileMap.layerNamed("CrackedEarth");	 // °¥¶óÁø´ëÁö ·¹ÀÌ¾î
+		this.mineLayer = this.tileMap.layerNamed("MineLayer");		 // ì§€ë¢° ë° ì•„ì´í…œ ë¿Œë¦´ ë ˆì´ì–´
+		this.itemLayer = this.tileMap.layerNamed("ItemLayer");			 // ì§€ë¢° ë° ì•„ì´í…œ, ê¹ƒë°œ ê°€ì ¸ì˜¤ëŠ” ë ˆì´ì–´
+		this.flagLayer = this.tileMap.layerNamed("FlagLayer");			 // ê¹ƒë°œ ê½‚ì„ ë ˆì´ì–´
+		this.earthLayer = this.tileMap.layerNamed("CrackedEarth");	 // ê°ˆë¼ì§„ëŒ€ì§€ ë ˆì´ì–´
 	*/
-		this.itemLayer = this.tileMap.layerNamed("ItemLayer");			 // Áö·Ú ¹× ¾ÆÀÌÅÛ, ±ê¹ß °¡Á®¿À´Â ·¹ÀÌ¾î
-		this.earthLayer = this.tileMap.layerNamed("CrackedEarth");	 // °¥¶óÁø´ëÁö ·¹ÀÌ¾î(¾ÆÀÌÅÛ ÀÌÆåÆ®)
+		this.itemLayer = this.tileMap.layerNamed("ItemLayer");			 // ì§€ë¢° ë° ì•„ì´í…œ, ê¹ƒë°œ ê°€ì ¸ì˜¤ëŠ” ë ˆì´ì–´
+		this.earthLayer = this.tileMap.layerNamed("CrackedEarth");	 // ê°ˆë¼ì§„ëŒ€ì§€ ë ˆì´ì–´(ì•„ì´í…œ ì´í™íŠ¸)
 		this.bg = this.tileMap.layerNamed("Background");					 // Layer Name in Tiled
-		this.mineLayer = this.tileMap.layerNamed("MineLayer");		 // Áö·Ú(È£¹Ú) ¹× ¾ÆÀÌÅÛ »Ñ¸± ·¹ÀÌ¾î
-		this.fg = this.tileMap.layerNamed("Foreground");					 // ÀÜµğ
-		this.flagLayer = this.tileMap.layerNamed("FlagLayer");			 // ±ê¹ß(¹ö¼¸) ²ÈÀ» ·¹ÀÌ¾î
-		this.meta = this.tileMap.layerNamed("Meta");							 // ¼±ÅÃ ºÒ°¡ ¿µ¿ª
+		this.mineLayer = this.tileMap.layerNamed("MineLayer");		 // ì§€ë¢°(í˜¸ë°•) ë° ì•„ì´í…œ ë¿Œë¦´ ë ˆì´ì–´
+		this.fg = this.tileMap.layerNamed("Foreground");					 // ì”ë””
+		this.flagLayer = this.tileMap.layerNamed("FlagLayer");			 // ê¹ƒë°œ(ë²„ì„¯) ê½‚ì„ ë ˆì´ì–´
+		this.meta = this.tileMap.layerNamed("Meta");							 // ì„ íƒ ë¶ˆê°€ ì˜ì—­
 		this.meta.setVisible(false);
 	
 		
 		theLayer.setScale(GameConfig.share().kDefaultScale * 128 / tileMap.getTileSize().width);
 		theLayer.setPosition(	(-mapSize.width/2 * theLayer.getScale() + winSize.width /2), 0);
 		//theLayer.setPosition(getMapCenterPosition().x, getMapCenterPosition().y - getMapDeltaSize().height);
-		currentScale = this.getScale(); // Ã³À½ ½ºÄÉÀÏ ÀúÀå		
-		 currentLayerX = this.getPosition().x; // Ã³À½ È­¸éÀÇ xÁÂÇ¥ ÀúÀå
-		 currentLayerY = this.getPosition().y; // Ã³À½ È­¸éÀÇ yÁÂÇ¥ ÀúÀå
+		currentScale = this.getScale(); // ì²˜ìŒ ìŠ¤ì¼€ì¼ ì €ì¥		
+		 currentLayerX = this.getPosition().x; // ì²˜ìŒ í™”ë©´ì˜ xì¢Œí‘œ ì €ì¥
+		 currentLayerY = this.getPosition().y; // ì²˜ìŒ í™”ë©´ì˜ yì¢Œí‘œ ì €ì¥
 //
 //		 progress = new GameProgressBar(mContext);
 //		 progress.delegate = (GameProgressBarDelegate) this;
 //		 
-		// ÀüÃ¼ Å¸ÀÏ(¼¿) µî·Ï
+		// ì „ì²´ íƒ€ì¼(ì…€) ë“±ë¡
 		cells = new ArrayList<MineCell2>();
 		sphereBaseCells = new ArrayList<MineCell2>();
 		int count = 0;
@@ -251,23 +251,23 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 						 mapSize.height - (y * tileSize.height + tileSize.height / 2)));
 				 cells.add(cell);
 //				 
-//					// test code // ¼öÁ¤±¸°¡ ¼û°ÜÁø Å¸ÀÏ¿¡ Ç¥½ÃÇÑ ¶óº§
+//					// test code // ìˆ˜ì •êµ¬ê°€ ìˆ¨ê²¨ì§„ íƒ€ì¼ì— í‘œì‹œí•œ ë¼ë²¨
 //					CCLabel label = CCLabel.makeLabel(""+ cell.getCell_ID(), "Arial", (30 * tileSize.width) / 128);
 //					this.addChild(label);
 //					label.setColor(ccColor3B.ccWHITE);
 //					label.setPosition(cell.getTilePosition());
 //				 
 				 if (!this.isCollidable(CGPoint.make(x, y)) && !this.isPreOpened(CGPoint.make(x, y))) {
-					// ¿­¸®Áö ¾ÊÀº Å¸ÀÏ¼ö
+					// ì—´ë¦¬ì§€ ì•Šì€ íƒ€ì¼ìˆ˜
 					 unopenedTile ++;
 				}
 				 //
-				 //isCollidableÀº ºñÈ°¼º  ¼¿À» ÀÇ¹ÌÇÑ´Ù.
+				 //isCollidableì€ ë¹„í™œì„±  ì…€ì„ ì˜ë¯¸í•œë‹¤.
 				 if (this.isCollidable(CGPoint.make(x, y))) 
 					cell.setCollidable(true);
 				 
 				//
-				// isPreOpened´Â Ã³À½ºÎÅÍ ¿­·ÁÀÖ´Â ¼¿µéÀ» ¿­¸°¼¿·Î µî·ÏÇÑ´Ù.
+				// isPreOpenedëŠ” ì²˜ìŒë¶€í„° ì—´ë ¤ìˆëŠ” ì…€ë“¤ì„ ì—´ë¦°ì…€ë¡œ ë“±ë¡í•œë‹¤.
 				if (this.isPreOpened(CGPoint.make(x, y)))
 					cell.setOpened(true);
 
@@ -278,7 +278,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		 Log.e("Game / game ", "unopenedTile : " + unopenedTile);
 		
 		//
-		// ÁÖº¯Å¸ÀÏ µî·Ï(¼±ÅÃÁöÁ¡)
+		// ì£¼ë³€íƒ€ì¼ ë“±ë¡(ì„ íƒì§€ì )
 		ArrayList<MineCell2> cellsTemp = cells;
 		int size = cellsTemp.size();
 		for (int i = 0; i < size; i++) {
@@ -286,23 +286,23 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			for (int k = -1; k < 2; k++) {
 				for (int m = -1; m < 2; m++) {
 					//
-					// ¸Ê ¹Ù±ù ¼¿
+					// ë§µ ë°”ê¹¥ ì…€
 					if (cellsTemp.get(i).getTileCoord().x + k < 0 || cellsTemp.get(i).getTileCoord().x + k >= this.tileMap.getMapSize().width) continue;
 					if (cellsTemp.get(i).getTileCoord().x + m < 0 || cellsTemp.get(i).getTileCoord().x + m >= this.tileMap.getMapSize().height) continue;
 
 					//
-					// ÁÖº¯ ¼¿
+					// ì£¼ë³€ ì…€
 					MineCell2 cellRound = this.cellFromCoord(CGPoint.ccp(
 							cellsTemp.get(i).getTileCoord().x + k,
 							cellsTemp.get(i).getTileCoord().y + m));
 
 					//
-					// ºñÈ°¼º ¼¿
+					// ë¹„í™œì„± ì…€
 					if (cellRound != null && cellRound.isCollidable())
 						continue;
 
 					//
-					// À¯È¿ÇÑ ÁÖº¯¼¿ µî·Ï(ÇöÀç ¼¿ Æ÷ÇÔ)
+					// ìœ íš¨í•œ ì£¼ë³€ì…€ ë“±ë¡(í˜„ì¬ ì…€ í¬í•¨)
 					cellsTemp.get(i).addRoundCell(cellRound);
 					
 				}
@@ -310,13 +310,13 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			/***************************/
 			
 			/***************************/
-			// ¼öÁ¤±¸ À§Ä¡¼¿ µî·Ï
+			// ìˆ˜ì •êµ¬ ìœ„ì¹˜ì…€ ë“±ë¡
 			// * 2
 			// 3 4
 			for (int m = 0; m < 2; m++) {
 				for (int k = 0; k < 2; k++) {
 					//
-					// ¸Ê ¹Ù±ù ¼¿ÀÌ¸é ºÒ°¡´É ¼¿·Î ÁöÁ¤ÇÏ°í ºüÁ® ³ª°£´Ù.
+					// ë§µ ë°”ê¹¥ ì…€ì´ë©´ ë¶ˆê°€ëŠ¥ ì…€ë¡œ ì§€ì •í•˜ê³  ë¹ ì ¸ ë‚˜ê°„ë‹¤.
 					if (cellsTemp.get(i).getTileCoord().x + k < 0 || cellsTemp.get(i).getTileCoord().x + k >= this.tileMap.getMapSize().width) {
 						cellsTemp.get(i).setSphereBasePossible(false);
 						break;
@@ -327,13 +327,13 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 					}
 
 					//
-					// ¼öÁ¤±¸ À§Ä¡ ¼¿
+					// ìˆ˜ì •êµ¬ ìœ„ì¹˜ ì…€
 					MineCell2 sphereCell = this.cellFromCoord(CGPoint.ccp(
 							cellsTemp.get(i).getTileCoord().x + k,
 							cellsTemp.get(i).getTileCoord().y + m));
 
 					//
-					// ºñÈ°¼º ¼¿					
+					// ë¹„í™œì„± ì…€					
 					if (sphereCell != null && sphereCell.isCollidable()){
 						cellsTemp.get(i).setSphereBasePossible(false);
 						break;
@@ -347,7 +347,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			/***************************/
 			
 			/***************************/
-			// ¼öÁ¤±¸ ¹Ù±ù ÁÖº¯¼¿ 12°³ µî·Ï
+			// ìˆ˜ì •êµ¬ ë°”ê¹¥ ì£¼ë³€ì…€ 12ê°œ ë“±ë¡
 			// 1 5 7 9
 			// 2 * # A
 			// 3 # # B
@@ -355,32 +355,32 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			for (int k = -1; k <= 2; k++) {
 				for (int m = -1; m <= 2; m++) {
 					//
-					// ¸Ê ¹Ù±ù ¼¿
+					// ë§µ ë°”ê¹¥ ì…€
 					if (cellsTemp.get(i).getTileCoord().x + k < 0 || cellsTemp.get(i).getTileCoord().x + k >= this.tileMap.getMapSize().width) continue;
 					if (cellsTemp.get(i).getTileCoord().y + m < 0 || cellsTemp.get(i).getTileCoord().y + m >= this.tileMap.getMapSize().height) continue;
 
 					//
-					// ½ºÇÇ¾î (º»Ã¼) À§Ä¡ ¼¿ - (º»Ã¼°¡ ÀÖ´Â ¼¿Àº sphereRoundCell µî·Ï¿¡¼­ Á¦¿Ü)
+					// ìŠ¤í”¼ì–´ (ë³¸ì²´) ìœ„ì¹˜ ì…€ - (ë³¸ì²´ê°€ ìˆëŠ” ì…€ì€ sphereRoundCell ë“±ë¡ì—ì„œ ì œì™¸)
 					if (k == 0 ||  k == 1) {
 						if (m == 0 || m == 1)
 							continue;
 					}
 					
 					//
-					// ÁÖº¯¼¿ (º»Ã¼°¡ À§Ä¡ÇÑ ¼¿À» Á¦¿ÜÇÑ)
+					// ì£¼ë³€ì…€ (ë³¸ì²´ê°€ ìœ„ì¹˜í•œ ì…€ì„ ì œì™¸í•œ)
 					MineCell2 sphereCellRound = this.cellFromCoord(CGPoint.ccp(
 							cellsTemp.get(i).getTileCoord().x + k,
 							cellsTemp.get(i).getTileCoord().y + m));
 					
 					//
-					// ºñÈ°¼º ¼¿ - Àº µî·ÏÇÏÁö ¾Ê´Â´Ù. (nullÀÌ ³ª¿Ã¼ö ¾ø´Ù.)
+					// ë¹„í™œì„± ì…€ - ì€ ë“±ë¡í•˜ì§€ ì•ŠëŠ”ë‹¤. (nullì´ ë‚˜ì˜¬ìˆ˜ ì—†ë‹¤.)
 					if (sphereCellRound.isCollidable()) continue;
-					cellsTemp.get(i).addSphereRoundCell(sphereCellRound); // ¿©±â´Â ÀÌ»ó ¾ø´Âµí
+					cellsTemp.get(i).addSphereRoundCell(sphereCellRound); // ì—¬ê¸°ëŠ” ì´ìƒ ì—†ëŠ”ë“¯
 				}
 			}
 			
 		}
-		//ÁÖº¯Å¸ÀÏ µî·Ï for(i) end
+		//ì£¼ë³€íƒ€ì¼ ë“±ë¡ for(i) end
 		
 		//
 		// debug
@@ -394,21 +394,21 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		// debug end
 
 //		//
-//		//Áö·Ú ¼³Ä¡
+//		//ì§€ë¢° ì„¤ì¹˜
 //		this.scatterMines();
 		
-		// ¿ø·¡ ¼ø¼­´Â ¼öÁ¤±¸ºÎÅÍ 
+		// ì›ë˜ ìˆœì„œëŠ” ìˆ˜ì •êµ¬ë¶€í„° 
 		//
-		// ¼öÁ¤±¸ ¼³Ä¡
+		// ìˆ˜ì •êµ¬ ì„¤ì¹˜
 		this.scatterSpheres();
 		
 
 		//
-		// Áö·Ú ¼³Ä¡
+		// ì§€ë¢° ì„¤ì¹˜
 		this.scatterMines();
 		
 		//
-		// »çÀü¿¡ ¿­·ÁÁø ¼¿ ÁÖº¯¿¡ Áö·Ú°¡ ¼³Ä¡µÇ¾úÀ¸¸é Áö·Ú¼ö Ç¥½Ã¸¦ ÇÑ´Ù.
+		// ì‚¬ì „ì— ì—´ë ¤ì§„ ì…€ ì£¼ë³€ì— ì§€ë¢°ê°€ ì„¤ì¹˜ë˜ì—ˆìœ¼ë©´ ì§€ë¢°ìˆ˜ í‘œì‹œë¥¼ í•œë‹¤.
 		cellsTemp = cells;
 		size = cellsTemp.size();
 		for (int i = 0; i < size; i++) {
@@ -420,7 +420,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		}
 
 		//
-		// °¥¶óÁø ´ëÁö ·¹ÀÌ¾î(this.earthLayer)¿¡ Å¸ÀÏÀ» ·£´ıÇÏ°Ô Ã¤¿î´Ù.
+		// ê°ˆë¼ì§„ ëŒ€ì§€ ë ˆì´ì–´(this.earthLayer)ì— íƒ€ì¼ì„ ëœë¤í•˜ê²Œ ì±„ìš´ë‹¤.
 		cellsTemp = cells;
 		size = cellsTemp.size();
 		for (int i = 0; i < size; i++) {
@@ -448,11 +448,11 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			bbbbb();
 		}
 			
-		// °ÔÀÓ½Ã°£ ÃÊ±âÈ­
+		// ê²Œì„ì‹œê°„ ì´ˆê¸°í™”
 		GameData.share().setSeconds(900);
 		UserData.share(mContext).myBroomstick();
 	}
-	// »ı¼ºÀÚGame end
+	// ìƒì„±ìGame end
 	
 	private void aaaaa() {
 			Log.e("Game / game", "I'm Ready!");
@@ -464,10 +464,10 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 	}
 	
 	public static void bbbbb() {
-		// °ÔÀÓ½Ã°£ ÃÊ±âÈ­
+		// ê²Œì„ì‹œê°„ ì´ˆê¸°í™”
 		GameData.share().setSeconds(900);
 		Config.getInstance().setDisableButton(false);
-//		Game.HudLayer.testText.setString("°ÔÀÓ ½ÃÀÛ! testText"); // ´À¸° ±â±â¿¡¼­´Â »¸¾î¹ö¸²...
+//		Game.HudLayer.testText.setString("ê²Œì„ ì‹œì‘! testText"); // ëŠë¦° ê¸°ê¸°ì—ì„œëŠ” ë»—ì–´ë²„ë¦¼...
 	}
 	
 	static GameEnding ending = null;
@@ -529,25 +529,25 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 //
 /********************************************************/
 /**
- * ¹®Á¦ÁöÁ¡
- * ¾Ö´Ï¸ŞÀÌ¼Ç
+ * ë¬¸ì œì§€ì 
+ * ì• ë‹ˆë©”ì´ì…˜
  * 
- * ÀÌ¸ğÆ¼ÄÜ ¾Ö´Ï´Â À§Ä¡°¡ Á¤ÇØÁöÁö ¾Ê¾Ò½À´Ï´Ù.
- * Game ¶Ç´Â HudÁß ¹«³­ÇÑ °÷¿¡ ³Ö¾îÁÖ½Ã¸é µË´Ï´Ù.
+ * ì´ëª¨í‹°ì½˜ ì• ë‹ˆëŠ” ìœ„ì¹˜ê°€ ì •í•´ì§€ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.
+ * Game ë˜ëŠ” Hudì¤‘ ë¬´ë‚œí•œ ê³³ì— ë„£ì–´ì£¼ì‹œë©´ ë©ë‹ˆë‹¤.
  **/
 	static CCScene scene = null;
 //	public CCScene scene() {
 	public static CCScene scene() {
-		// ±âÁ¸¿¡´Â staticÀ¸·Î ¸â¹ö º¯¼ö·Î ¼±¾ğÇÏ¿´¾úÀ½. ÀÌ»ó½Ã ¿ø·¡ ´ë·Î ¹Ù²Ü°Í
+		// ê¸°ì¡´ì—ëŠ” staticìœ¼ë¡œ ë©¤ë²„ ë³€ìˆ˜ë¡œ ì„ ì–¸í•˜ì˜€ì—ˆìŒ. ì´ìƒì‹œ ì›ë˜ ëŒ€ë¡œ ë°”ê¿€ê²ƒ
 		scene = CCScene.node();
 		
-		// °ÔÀÓ ·¹ÀÌ¾î
+		// ê²Œì„ ë ˆì´ì–´
 //		Game game = Game.getInstance();		
 		Game game = new Game();		
 		scene.addChild((CCLayer)game);
-		game.setAnchorPoint(0.0f, 0.0f); /*** Áß¿ä ***/
+		game.setAnchorPoint(0.0f, 0.0f); /*** ì¤‘ìš” ***/
 		
-		// Çìµå ¾÷ µğ½ºÇÃ·¹ÀÌ ·¹ÀÌ¾î
+		// í—¤ë“œ ì—… ë””ìŠ¤í”Œë ˆì´ ë ˆì´ì–´
 		HudLayer hudLayer = new HudLayer();
 		scene.addChild((CCLayer)hudLayer);
 		game.hud = hudLayer;
@@ -615,13 +615,13 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 	
 
 	// map utility
-	// ÇöÀç È­¸éÀÇ positionÀ» ÁöÁ¤
+	// í˜„ì¬ í™”ë©´ì˜ positionì„ ì§€ì •
 	public CGPoint getMapCurrentPosition() {
-		// È­¸éÀ» ÁÜ¾Æ¿ôÇÏ¸é ¿©±â¸¦ °è¼ÓÅ½.
-		// È­¸éÀ» ¸ØÃèÀ»¶§ currentLayerX,currentLayerY, currentScale °ªÀ»
-		//ÅÍÄ¡¹«ºê (allTouches count == 1)¿¡¼­ ÀúÀåÇÑÈÄ  ±× °ªÀ¸·Î ÀÌ°÷¿¡¼­ °è»êÇØÁÜ
+		// í™”ë©´ì„ ì¤Œì•„ì›ƒí•˜ë©´ ì—¬ê¸°ë¥¼ ê³„ì†íƒ.
+		// í™”ë©´ì„ ë©ˆì·„ì„ë•Œ currentLayerX,currentLayerY, currentScale ê°’ì„
+		//í„°ì¹˜ë¬´ë¸Œ (allTouches count == 1)ì—ì„œ ì €ì¥í•œí›„  ê·¸ ê°’ìœ¼ë¡œ ì´ê³³ì—ì„œ ê³„ì‚°í•´ì¤Œ
 		//CGPoint centerPosition = CGPoint.ccp(currentLayerX / currentScale, currentLayerY / currentScale);
-		// game LayerÀÇ anchor point°ªÀ» ¾ò¾î ½ºÄÉÀÏ°ª°ú ¿¬»ê
+		// game Layerì˜ anchor pointê°’ì„ ì–»ì–´ ìŠ¤ì¼€ì¼ê°’ê³¼ ì—°ì‚°
 
 		Log.e("Game / getMapCurrentPosition", "cLayerX : " + (int)currentLayerX + ", cLayerY : " +(int)currentLayerY + ", cScale : " + currentScale);		
 		//CGPoint centerPosition = CGPoint.ccp((winSize.width + currentLayerX) / currentScale, (winSize.height + currentLayerY) / currentScale);
@@ -656,37 +656,37 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 	}
 	
 	//
-	// ³­ÀÌµµ ¼³Á¤ (³­ÀÌµµ¿¡ µû¶ó Áö·Ú¼ö°¡ ¸¹¾ÆÁü)
+	// ë‚œì´ë„ ì„¤ì • (ë‚œì´ë„ì— ë”°ë¼ ì§€ë¢°ìˆ˜ê°€ ë§ì•„ì§)
 	public void scatterMines() {
-		 //(void)scatterMines:(NSMutableArray *)cells onLayer:(CCTMXLayer *)layer{ ¼öÁ¤µÈ °ÍÀÌ¶ó´Âµ¥...
+		 //(void)scatterMines:(NSMutableArray *)cells onLayer:(CCTMXLayer *)layer{ ìˆ˜ì •ëœ ê²ƒì´ë¼ëŠ”ë°...
 		//
-		// ³­ÀÌµµ¿¡ µû¶ó
+		// ë‚œì´ë„ì— ë”°ë¼
 		//GameData.share().getMineNumber(gameData.share.getGameDifficulty);
 		final int maxMineNumber = GameData.share().getMineNumber();
 		//Log.e("Game / scatterMines", "getMineNumber : " + GameData.share().getMineNumber());
 		
 		// unsigned
-		// ÀÛÀº°ªÀ¸·Î º¯È¯
+		// ì‘ì€ê°’ìœ¼ë¡œ ë³€í™˜
 		int mineGid = CCFormatter.swapIntToLittleEndian(this.itemLayer.tileGIDAt(CGPoint.make(0f, 0f))); // mind gid
 		//Log.e("Game / scatterMines", "mineGid : " + mineGid);
 		for (int i = 0; i < maxMineNumber; i++) {
 			boolean isBoolean = true;
 			while (isBoolean) {
 				//
-				// ¹«ÀÛÀ§ ¼¿ ÇÏ³ª ÃßÃâ
-				//cellsµé °¹¼öÁß¿¡ ÀÓÀÇÀÇ¼ö ¹ß»ı???
+				// ë¬´ì‘ìœ„ ì…€ í•˜ë‚˜ ì¶”ì¶œ
+				//cellsë“¤ ê°¯ìˆ˜ì¤‘ì— ì„ì˜ì˜ìˆ˜ ë°œìƒ???
 				int rand = (int)(Math.random() * cells.size());
 				MineCell2 cell = cells.get(rand);
 				//Log.e("Game / scatterMines", i + "/" + maxMineNumber);
 				
 				//
-				// ÇöÀç ¹«ÀÛÀ§ ÃßÃâ ¼¿ÀÌ ¿ÀÇÂµÈ ¼¿ÀÌ Áö·Ú°¡ ¾Æ´Ï°í ¼¿ ÀÌ¸é Áö·Ú·Î ¼³Á¤ÇÑ´Ù.
+				// í˜„ì¬ ë¬´ì‘ìœ„ ì¶”ì¶œ ì…€ì´ ì˜¤í”ˆëœ ì…€ì´ ì§€ë¢°ê°€ ì•„ë‹ˆê³  ì…€ ì´ë©´ ì§€ë¢°ë¡œ ì„¤ì •í•œë‹¤.
 				//if (cell.isMine() || cell.isOpened() || cell.isCollidable() || cell.isSphere()) {
 				if (!cell.isMine() && !cell.isOpened() && !cell.isCollidable() && !cell.isSphere() && !this.isDontSetMine(cell.getTileCoord())) {
 					//if(cell.isMine == NO && cell.isOpened == NO && cell.isCollidable == NO && cell.isSphere == NO && [self isDontSetMine:cell.tileCoord] == NO)
 					
 					cell.setMine(true);
-					this.mineLayer.setTileGID(mineGid, cell.getTileCoord()); // ·¹ÀÌ¾î°¡ ºñ¾îÀÖÀ¸¸é ¿¡·¯³²!
+					this.mineLayer.setTileGID(mineGid, cell.getTileCoord()); // ë ˆì´ì–´ê°€ ë¹„ì–´ìˆìœ¼ë©´ ì—ëŸ¬ë‚¨!
 					//this.fg.setTileGID(mineGid, cell.tileCoord); // for test
 					isBoolean = false;
 				}
@@ -697,8 +697,8 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 	public void scatterSpheres() {
 		for (int i = 0; i < GameData.share().kNumberOfSphere; i++) {
 			//
-			// Á¤ÇØÁø È®·ü¿¡ ¸ÂÃç ¼öÁ¤±¸ÀÇ Á¾·ù¸¦ °áÁ¤ÇÑ´Ù.
-			// unsigned ¾øÀ½
+			// ì •í•´ì§„ í™•ë¥ ì— ë§ì¶° ìˆ˜ì •êµ¬ì˜ ì¢…ë¥˜ë¥¼ ê²°ì •í•œë‹¤.
+			// unsigned ì—†ìŒ
 			final int fireChange = GameData.share().kFireChance;
 			final int windChange = GameData.share().kWindChance;
 			final int cloudChange = GameData.share().kCloudChance;
@@ -706,7 +706,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			final int divineChange = GameData.share().kDivineChance;
 			final int earthChange = GameData.share().kEarthChance;
 			
-			// unsigned ¾øÀ½
+			// unsigned ì—†ìŒ
 			int location = 0;
 			
 			//NSRange ????
@@ -737,23 +737,23 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			while (isBoolean) {
 				
 				//
-				// ¹«ÀÛÀ§ ¼¿ ÇÏ³ª ÃßÃâ
+				// ë¬´ì‘ìœ„ ì…€ í•˜ë‚˜ ì¶”ì¶œ
 				int rand = (int) (Math.random() * cells.size());
 				MineCell2 cell = cells.get(rand);
 				
 				//
-				// ** (1) ÇöÀç ¹«ÀÛÀ§ ÃßÃâ ¼¿ÀÇ ¼öÁ¤±¸ ÀÚ¸® 4°³ÀÇ ¼¿ÀÌ
-				//		- 1) ¿ÀÇÂµÈ ¼¿ÀÌ ¾Æ´Ï°í
-				//		- 2) Áö·Ú°¡ ¾Æ´Ï°í
-				//		- 3) À¯È¿ÇÑ ¼¿
-				//		- 4) ÀÌ¹Ì ¼öÁ¤±¸°¡ ¼³Ä¡µÈ °ÍÀÌ ¾Æ´Ï¸é ¼öÁ¤±¸ ¾ÆÀÌÅÛ ¿µ¿ªÀ¸·Î ¼³Á¤ÇÑ´Ù.
+				// ** (1) í˜„ì¬ ë¬´ì‘ìœ„ ì¶”ì¶œ ì…€ì˜ ìˆ˜ì •êµ¬ ìë¦¬ 4ê°œì˜ ì…€ì´
+				//		- 1) ì˜¤í”ˆëœ ì…€ì´ ì•„ë‹ˆê³ 
+				//		- 2) ì§€ë¢°ê°€ ì•„ë‹ˆê³ 
+				//		- 3) ìœ íš¨í•œ ì…€
+				//		- 4) ì´ë¯¸ ìˆ˜ì •êµ¬ê°€ ì„¤ì¹˜ëœ ê²ƒì´ ì•„ë‹ˆë©´ ìˆ˜ì •êµ¬ ì•„ì´í…œ ì˜ì—­ìœ¼ë¡œ ì„¤ì •í•œë‹¤.
 				
 				//
-				// ** (2) ±â¹İ¼¿ÀÌ °¡´ÉÇÑ ¼¿ÀÌ¾î¾ß ÇÑ´Ù.
-				//isBoolean = false; // ÀÓ½Ã¿ë. isSphereBasePossible°¡ ÇöÀç ¹«Á¶°Ç falseÀÌ´Ù.
+				// ** (2) ê¸°ë°˜ì…€ì´ ê°€ëŠ¥í•œ ì…€ì´ì–´ì•¼ í•œë‹¤.
+				//isBoolean = false; // ì„ì‹œìš©. isSphereBasePossibleê°€ í˜„ì¬ ë¬´ì¡°ê±´ falseì´ë‹¤.
 				if(cell.isSphereCellsClear() && cell.isSphereBasePossible()) {
 					//
-					// ¼öÁ¤±¸ ¼³Ä¡µÈ ±â¹İ¼¿ µî·ÏÇÏ¿© ¿ÀÇÂ Ã¼Å©¿¡ »ç¿ë
+					// ìˆ˜ì •êµ¬ ì„¤ì¹˜ëœ ê¸°ë°˜ì…€ ë“±ë¡í•˜ì—¬ ì˜¤í”ˆ ì²´í¬ì— ì‚¬ìš©
 					sphereBaseCells.add(cell);
 					cell.setSphereType(sphereType);
 					cell.setToSphereCells(sphereType);
@@ -780,7 +780,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 
 	public void addSphereTo(CCTMXLayer layer, int sphereType, MineCell2 baseCell) {
 		
-		// 0Àº user°¡ ¾ÆÀÌÅÛÀ» È¹µæ 0ÀÌ ¾Æ´Ï¸é ÃÖÃÊ ¸Ê¿¡ ¼öÁ¤±¸ ¼³Ä¡
+		// 0ì€ userê°€ ì•„ì´í…œì„ íšë“ 0ì´ ì•„ë‹ˆë©´ ìµœì´ˆ ë§µì— ìˆ˜ì •êµ¬ ì„¤ì¹˜
 		if (GameData.share().isMultiGame) {
 			try {
 				if (sphereType == 0) {
@@ -807,27 +807,27 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			if (sphereType == 0)
 				sphereType = 7;
 			//Log.e("Game / addSphereTo", "sphereType check1 : " + counter + "," + sphereType);
-			//sphereType = sphereType == 0 ? 7 : sphereType; // tilemapÀÇ 7¹øÂ° Å¸ÀÏ(0:7~3:7)¿¡  ºó ¼öÁ¤±¸°¡ ÀÖ¾î¼­
+			//sphereType = sphereType == 0 ? 7 : sphereType; // tilemapì˜ 7ë²ˆì§¸ íƒ€ì¼(0:7~3:7)ì—  ë¹ˆ ìˆ˜ì •êµ¬ê°€ ìˆì–´ì„œ
 			
 			int gid = CCFormatter.swapIntToLittleEndian(this.itemLayer.tileGIDAt(CGPoint.make(counter, sphereType)));
 			//layer.setTileGID(gid, cell.getTileCoord());
 			layer.setTileGID(gid, cell.getTileCoord());
-			// test code // ¼öÁ¤±¸ º¼¼ö ÀÕ°Ô ÇØÁÜ
-			this.fg.setTileGID(gid, cell.getTileCoord()); // ÀÓ½Ã¿ë Â÷ÈÄ ¹®Á¦½Ã Á¤½ÄÀ¸·Î °íÄ¥°Í
+			// test code // ìˆ˜ì •êµ¬ ë³¼ìˆ˜ ì‡ê²Œ í•´ì¤Œ
+			this.fg.setTileGID(gid, cell.getTileCoord()); // ì„ì‹œìš© ì°¨í›„ ë¬¸ì œì‹œ ì •ì‹ìœ¼ë¡œ ê³ ì¹ ê²ƒ
 			
 			//
-			// test code // ¼öÁ¤±¸°¡ ¼û°ÜÁø Å¸ÀÏ¿¡ Ç¥½ÃÇÑ ¶óº§
+			// test code // ìˆ˜ì •êµ¬ê°€ ìˆ¨ê²¨ì§„ íƒ€ì¼ì— í‘œì‹œí•œ ë¼ë²¨
 //			CCLabel label = CCLabel.makeLabel(""+ cell.getUnSignedCellId(), "Arial", (30 * tileSize.width) / 128);
 //			this.addChild(label, 1000);
 //			label.setColor(ccColor3B.ccc3(240, 0, 240));
 //			label.setPosition(cell.getTilePosition());
 			counter++;
 			/*
-			// ¼öÁ¤±¸ ¿ÀÇÂ½Ã ¸¶Áö¸·Ä­ ¿À¸¥ÂÊ¿¡ tile ÇÑÄ­´õ Ãß°¡
+			// ìˆ˜ì •êµ¬ ì˜¤í”ˆì‹œ ë§ˆì§€ë§‰ì¹¸ ì˜¤ë¥¸ìª½ì— tile í•œì¹¸ë” ì¶”ê°€
 			if (counter == 4 && sphereType == 7) {
 				gid = CCFormatter.swapIntToLittleEndian(this.itemLayer.tileGIDAt(CGPoint.make(counter, sphereType)));
 				layer.setTileGID(gid, CGPoint.ccp(cell.getTileCoord().x+1, cell.getTileCoord().y));
-				this.fg.setTileGID(gid, CGPoint.ccp(cell.getTileCoord().x+1, cell.getTileCoord().y)); // ÀÓ½Ã¿ë Â÷ÈÄ ¹®Á¦½Ã Á¤½ÄÀ¸·Î °íÄ¥°Í
+				this.fg.setTileGID(gid, CGPoint.ccp(cell.getTileCoord().x+1, cell.getTileCoord().y)); // ì„ì‹œìš© ì°¨í›„ ë¬¸ì œì‹œ ì •ì‹ìœ¼ë¡œ ê³ ì¹ ê²ƒ
 			}
 			*/
 		}
@@ -847,7 +847,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 	double longPressTime = 0;
 	double doubleTouchTime = 0;
 	
-	// ±âÁ¸ ÁÂÇ¥¿Í °°Àº À§Ä¡¸¦ Å¬¸¯Çß´ÂÁö È®ÀÎÇÏ´Â ¸Ş¼Òµå
+	// ê¸°ì¡´ ì¢Œí‘œì™€ ê°™ì€ ìœ„ì¹˜ë¥¼ í´ë¦­í–ˆëŠ”ì§€ í™•ì¸í•˜ëŠ” ë©”ì†Œë“œ
 	public boolean locationMatchingTest(CGPoint a, CGPoint b, float errorRange) {
 		boolean isBoolean = false;
 		if (a != null && b != null) 
@@ -887,14 +887,14 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 	private float getDistance(CGPoint point1, CGPoint point2) {
 		
 		Log.e("Game / getDistance", "point1:" + point1 + ",point2:" + point2); 
-		// sqrt = Á¦°ö±Ù , pow = ¸î ½Â
+		// sqrt = ì œê³±ê·¼ , pow = ëª‡ ìŠ¹
 		return (float) Math.sqrt(
 				Math.pow(point1.x - point2.x, 2.0f) + 
 				Math.pow(point1.y - point2.y, 2.0f));
 	}
 
 	//
-	//positionÀ» ±â±â È­¸é Áß½ÉÀ¸·Î ÁöÁ¤ÇØÁÜ.
+	//positionì„ ê¸°ê¸° í™”ë©´ ì¤‘ì‹¬ìœ¼ë¡œ ì§€ì •í•´ì¤Œ.
 	public CGPoint getMapCenterPosition() {
 		// -mapSize	 : x: -864.0, y: -1280.0 
 		//   winSize	 : x:  160.0, y:   284.0 
@@ -920,7 +920,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 	}
 	
 	public CGSize getMapDeltaSize() {
-		// º¯È­µÇ´Â scale¿¡ µû¶ó mapÀÇ »çÀÌÁî¸¦ º¯°æ (1:1, 3456:5120)
+		// ë³€í™”ë˜ëŠ” scaleì— ë”°ë¼ mapì˜ ì‚¬ì´ì¦ˆë¥¼ ë³€ê²½ (1:1, 3456:5120)
 		CGSize scaleMapSize = CGSize.make(mapSize.width * this.getScale(), mapSize.height * this.getScale());
 		// (-1408 -2034)
 		CGSize deltaSize =  CGSize.make(winSize.width / 2 - scaleMapSize.width / 2 , winSize.height / 2 - scaleMapSize.height / 2);
@@ -960,7 +960,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		//if (deltaLocation.x >= 3 || deltaLocation.y >= 3) {
 			theLayer.setPosition(CGPoint.ccpAdd(theLayer.getPosition(), deltaLocation));
 			
-			// scale »ç¿ë½Ã ÀÌ»ó Çö»ó ¹ß»ı
+			// scale ì‚¬ìš©ì‹œ ì´ìƒ í˜„ìƒ ë°œìƒ
 			theLayer.setPosition(CGPoint.ccp(
 					CGPoint.clampf(theLayer.getPosition().x, this.getMapMinPosition().x, this.getMapMaxPosition().x),
 					CGPoint.clampf(theLayer.getPosition().y, this.getMapMinPosition().y, this.getMapMaxPosition().y))
@@ -981,7 +981,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		*/
 	}
 
-	// previousLocation¿¡ ¹®Á¦ ÀÖ´Âµí ÀÌº¥Æ® ¹Ş¾Æ¿Ã¶§ Àß Á¤¸®ÇÒ°Í
+	// previousLocationì— ë¬¸ì œ ìˆëŠ”ë“¯ ì´ë²¤íŠ¸ ë°›ì•„ì˜¬ë•Œ ì˜ ì •ë¦¬í• ê²ƒ
 	private void layerScale(MotionEvent event) {
 		
 		if (currentLocation1 != null) 
@@ -1006,22 +1006,22 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		CGPoint pinchCenter = this.convertToNodeSpace(CGPoint.ccpMidpoint(currentLocation1, currentLocation2));
 	
 		//
-		// ÃÖ¼Ò/ÃÖ´ë È®´ëÀ² ¹üÀ§¿¡¼­ ·¹ÀÌ¾î È®´ë Ãà¼Ò¸¦ ÇÉÄ¡ °Å¸®¿¡ µû¶ó ÇÑ´Ù.
+		// ìµœì†Œ/ìµœëŒ€ í™•ëŒ€ìœ¨ ë²”ìœ„ì—ì„œ ë ˆì´ì–´ í™•ëŒ€ ì¶•ì†Œë¥¼ í•€ì¹˜ ê±°ë¦¬ì— ë”°ë¼ í•œë‹¤.
 		float newScale = theLayer.getScale() + (deltaDistance * GameConfig.share().kPinchZoomMultiplier);
 		
-		// clampf ±×³É ¹üÀ§ ¾È¿¡ µé¾î°¡´ÂÁö È®ÀÎÈÄ ¸®ÅÏ(128 pixel ±âÁØ)
+		// clampf ê·¸ëƒ¥ ë²”ìœ„ ì•ˆì— ë“¤ì–´ê°€ëŠ”ì§€ í™•ì¸í›„ ë¦¬í„´(128 pixel ê¸°ì¤€)
 		newScale = CGPoint.clampf(newScale, GameConfig.share().kMinScale * 128 / tileSize.width, GameConfig.share().kMaxScale * 128 / tileSize.width);
 		
 		
 		Log.e("Game / layerScale", "scale:" + ((int)(theLayer.getScale()*100)/100f) +", new scale:"+ ((int)(newScale*100)/100f) +", delta:" + (int)deltaDistance);
 		float positionScale = newScale - theLayer.getScale();
-		theLayer.setScale(newScale); // ÁÜ¾Æ¿ôÀ» ÇÏ°ÔÇØÁÜ
+		theLayer.setScale(newScale); // ì¤Œì•„ì›ƒì„ í•˜ê²Œí•´ì¤Œ
 		Log.e("Game / layerScale", "theLayer position" + theLayer.getPosition());
 		Log.e("Game / layerScale", "theLayer getAnchorPoint" + theLayer.getAnchorPoint());
 		theLayer.setPosition(CGPoint.ccpSub(theLayer.getPosition(), 
-				CGPoint.make(pinchCenter.x * positionScale, pinchCenter.y * positionScale) )); // ¼±ÅÃÇÑ È­¸é¿¡¼­ ÁÜ¾Æ¿ôÀ» ÇÔ
+				CGPoint.make(pinchCenter.x * positionScale, pinchCenter.y * positionScale) )); // ì„ íƒí•œ í™”ë©´ì—ì„œ ì¤Œì•„ì›ƒì„ í•¨
 		
-		// ¿©±â¼­ È­¸é ¹Ğ¸² ¹ß»ı
+		// ì—¬ê¸°ì„œ í™”ë©´ ë°€ë¦¼ ë°œìƒ
 		theLayer.setPosition(CGPoint.ccp(
 				CGPoint.clampf(theLayer.getPosition().x, this.getMapMinPosition().x, this.getMapMaxPosition().x),
 				CGPoint.clampf(theLayer.getPosition().y, this.getMapMinPosition().y, this.getMapMaxPosition().y))
@@ -1034,19 +1034,19 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 	// handle touches
 		 
 		//
-		// ·ÕÅÍÄ¡ : ±ê¹ß ²È±â
+		// ë¡±í„°ì¹˜ : ê¹ƒë°œ ê½‚ê¸°
 		public void handleLongPress(MotionEvent event) {
 			
 			//Log.e("Game / handleLongPress", "click : " + event.getAction());
 				CGPoint location = CGPoint.ccp(event.getRawX(), event.getRawY());
-				// 4»çºĞ¸éÀ» 1»çºĞ¸éÀ¸·Î º¯È¯
+				// 4ì‚¬ë¶„ë©´ì„ 1ì‚¬ë¶„ë©´ìœ¼ë¡œ ë³€í™˜
 				location = CCDirector.sharedDirector().convertToGL(location);
-				// GameLayer ÁÂÃøÇÏ´ÜÀ¸·ÎºÎÅÍ ÅÍÄ¡ À§Ä¡±îÁöÀÇ °Å¸®°ª(x,y)
+				// GameLayer ì¢Œì¸¡í•˜ë‹¨ìœ¼ë¡œë¶€í„° í„°ì¹˜ ìœ„ì¹˜ê¹Œì§€ì˜ ê±°ë¦¬ê°’(x,y)
 				location = this.convertToNodeSpace(location);
 				CGPoint location2 = this.convertToNodeSpace(location);
-				// Å¸ÀÏÀÇ ¾î´À ÁÂÇ¥ÀÎÁö È®ÀÎÇÏ¿© °ª ºÒ·¯¿À±â
+				// íƒ€ì¼ì˜ ì–´ëŠ ì¢Œí‘œì¸ì§€ í™•ì¸í•˜ì—¬ ê°’ ë¶ˆëŸ¬ì˜¤ê¸°
 				CGPoint coord = this.tileCoordForPosition(location);
-				//Log.e("Game / handleLongPress", "coord : " + coord); // ÁÂÃø»ó´Ü 0,0 ¿ìÃøÇÏ´Ü 26, 39
+				//Log.e("Game / handleLongPress", "coord : " + coord); // ì¢Œì¸¡ìƒë‹¨ 0,0 ìš°ì¸¡í•˜ë‹¨ 26, 39
 				
 	
 				ArrayList<MineCell2> cellArray = cells;
@@ -1061,11 +1061,11 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 						// effect sound play
 						SoundEngine.sharedEngine().playSound(this.mContext, R.raw.game_mushroom, false);
 	
-						// ²È¾ÆÁ®ÀÖ´Â ¹ö¼¸(±ê¹ß)À» Ãë¼ÒÇÒ¶§ ¹ö¼¸(±ê¹ß)À» ¾ø¾ÖÁÜ
+						// ê½‚ì•„ì ¸ìˆëŠ” ë²„ì„¯(ê¹ƒë°œ)ì„ ì·¨ì†Œí• ë•Œ ë²„ì„¯(ê¹ƒë°œ)ì„ ì—†ì• ì¤Œ
 						if (cellArray.get(k).isMarked()) {
 							if (numberOfMine == -1) {
-								// Áö·Ú°¡ ÀÖ´Â ÀÚ¸®¿¡ ¹ö¼¸(±ê¹ß)ÀÌ ²ÈÇôÀÖ´Â°É Ãë¼ÒÇÒ¶§
-								// ±âÁ¸¿¡ +1 ¿¬»êÇØÁØ°ªÀ» Ãë¼ÒÇÑ´Ù.(´Ù½Ã -1)
+								// ì§€ë¢°ê°€ ìˆëŠ” ìë¦¬ì— ë²„ì„¯(ê¹ƒë°œ)ì´ ê½‚í˜€ìˆëŠ”ê±¸ ì·¨ì†Œí• ë•Œ
+								// ê¸°ì¡´ì— +1 ì—°ì‚°í•´ì¤€ê°’ì„ ì·¨ì†Œí•œë‹¤.(ë‹¤ì‹œ -1)
 								int aaa = GameData.share().previousMineNumber();
 								//Log.e("previousMineNumber : ", " " + aaa);
 							}
@@ -1080,15 +1080,15 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 //							}
 							
 						} else {
-							// ¿ÀÇÂ¾ÈµÈ ¼¿¿¡ ¹ö¼¸(±ê¹ß)²È±â
+							// ì˜¤í”ˆì•ˆëœ ì…€ì— ë²„ì„¯(ê¹ƒë°œ)ê½‚ê¸°
 							if (!cellArray.get(k).isOpened()) {
-								// Áö·Ú°¡ ÀÖ´Â ÀÚ¸®¿¡ ±ê¹ßÀ» ²ÈÀ» °æ¿ì¸¸ Å½
+								// ì§€ë¢°ê°€ ìˆëŠ” ìë¦¬ì— ê¹ƒë°œì„ ê½‚ì„ ê²½ìš°ë§Œ íƒ
 								if (numberOfMine == -1) {
 									//
 								//	int mine = GameData.share().currentMineNumber();
-									// Áö·ÚÀÖ´Â °÷¿¡ È£¹Ú (±ê¹ß) À» ²È´Â ¼ö¿Í ³­ÀÌµµ Áö·Ú¼ö°¡ °°À¸¸é °ÔÀÓ¿À¹ö
-									// gamedata.share.getgamedifficulty´Â ³­ÀÌµµ ¼³Á¤ÇÏ´Â
-									// Ã¢¿¡¼­ ¼³Á¤µÇ¼­ µé¾î¿È
+									// ì§€ë¢°ìˆëŠ” ê³³ì— í˜¸ë°• (ê¹ƒë°œ) ì„ ê½‚ëŠ” ìˆ˜ì™€ ë‚œì´ë„ ì§€ë¢°ìˆ˜ê°€ ê°™ìœ¼ë©´ ê²Œì„ì˜¤ë²„
+									// gamedata.share.getgamedifficultyëŠ” ë‚œì´ë„ ì„¤ì •í•˜ëŠ”
+									// ì°½ì—ì„œ ì„¤ì •ë˜ì„œ ë“¤ì–´ì˜´
 									/**************************************/
 									Log.e("Game / handleLongPress", "unopenedTile : " + unopenedTile + " / "+ GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
 									if (unopenedTile  == GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty())) {
@@ -1108,7 +1108,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 //										e.printStackTrace();
 //									}
 								}
-								//Log.e("Game / handleLongPress", "Áö·Ú ¾øÀ½");
+								//Log.e("Game / handleLongPress", "ì§€ë¢° ì—†ìŒ");
 							}
 							this.hud.updateProgress();
 							break;
@@ -1119,9 +1119,9 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		}
 
 	//
-	// ´õºíÅÍÄ¡ : ¼¿ ¿ÀÇÂ
+	// ë”ë¸”í„°ì¹˜ : ì…€ ì˜¤í”ˆ
 	public void handleDoubleTap(MotionEvent event) {
-		Log.e("Game / handleDoubleTap", "¸¶ÀÎ °¹¼ö : " + GameData.share().getMineNumber());
+		Log.e("Game / handleDoubleTap", "ë§ˆì¸ ê°¯ìˆ˜ : " + GameData.share().getMineNumber());
 	
 		if (!Config.getInstance().isDisableButton()) {
 			//Log.e("Game / handleDoubleTap", "enableButton");
@@ -1129,29 +1129,29 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			CGPoint location = null;
 			CGPoint coord = null;
 			
-			// GL ÁÂÇ¥
+			// GL ì¢Œí‘œ
 			location = CGPoint.ccp(event.getRawX(), event.getRawY());
-			// cocos2d ÁÂÇ¥·Î º¯È¯
+			// cocos2d ì¢Œí‘œë¡œ ë³€í™˜
 			location = CCDirector.sharedDirector().convertToGL(location);
-			// layer ÁÂÃø ÇÏ´ÜÀ¸·Î ºÎÅÍ  ÁÂÇ¥±îÁöÀÇ °Å¸®
+			// layer ì¢Œì¸¡ í•˜ë‹¨ìœ¼ë¡œ ë¶€í„°  ì¢Œí‘œê¹Œì§€ì˜ ê±°ë¦¬
 			location = this.convertToNodeSpace(location);
-			// Å¸ÀÏÀÇ ¾î´À ÁÂÇ¥ÀÎÁö È®ÀÎÇÏ¿© °ª ºÒ·¯¿À±â
+			// íƒ€ì¼ì˜ ì–´ëŠ ì¢Œí‘œì¸ì§€ í™•ì¸í•˜ì—¬ ê°’ ë¶ˆëŸ¬ì˜¤ê¸°
 			coord = this.tileCoordForPosition(location);
 			
 			for (final MineCell2 cell : cells) {
 					int numberOfMine = cell.getNumberOfMushroomAndPumpkinAround();
 					
-					// ÀüÃ¼ Å¸ÀÏÀ» °Ë»öÇÏ¿© ÅÍÄ¡ÇÑ À§Ä¡¿Í Å¸ÀÏÀÇ À§Ä¡°ªÀÌ ÀÏÄ¡ÇÒ½Ã
+					// ì „ì²´ íƒ€ì¼ì„ ê²€ìƒ‰í•˜ì—¬ í„°ì¹˜í•œ ìœ„ì¹˜ì™€ íƒ€ì¼ì˜ ìœ„ì¹˜ê°’ì´ ì¼ì¹˜í• ì‹œ
 					if (CGPoint.equalToPoint(cell.getTileCoord(), coord) && !cell.isCollidable()) {
-						// ¿ÀÇÂµÈ ¼¿ ´©¸£¸é
+						// ì˜¤í”ˆëœ ì…€ ëˆ„ë¥´ë©´
 						if (cell.isOpened()) {
-							// ¼¿ ÀúÀåµÈ ÁÖº¯ ¸¶ÀÎ¼ö¸¦ ¾ò¾î³» 1ÀÌ»óÀÌ¸é
+							// ì…€ ì €ì¥ëœ ì£¼ë³€ ë§ˆì¸ìˆ˜ë¥¼ ì–»ì–´ë‚´ 1ì´ìƒì´ë©´
 							if (numberOfMine > 0) {
 								cell.roundOpen();
 							}
-							// ´İÇôÀÖ´Â ¼¿ ´©¸£¸é
+							// ë‹«í˜€ìˆëŠ” ì…€ ëˆ„ë¥´ë©´
 						} else {
-							//ÁöÁ¤µÈ ¼¿À» ¿­¾îÁØ´Ù.(tileÀÇ fg¸¦ Á¦°Å)
+							//ì§€ì •ëœ ì…€ì„ ì—´ì–´ì¤€ë‹¤.(tileì˜ fgë¥¼ ì œê±°)
 							
 							CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
 								public void run() {
@@ -1175,7 +1175,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 
 				
 				//
-				// ¸ğµÎ ¿­¸° ¼öÁ¤±¸°¡ ÀÖ´ÂÁö È®ÀÎÇÑ´Ù.
+				// ëª¨ë‘ ì—´ë¦° ìˆ˜ì •êµ¬ê°€ ìˆëŠ”ì§€ í™•ì¸í•œë‹¤.
 				float startDelay = 0;
 				for (MineCell2 cell : sphereBaseCells) {
 		
@@ -1186,27 +1186,27 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 					int sphereType = cell.getSphereItem();
 					if (sphereType > 0) {
 						
-						// »õ·Î ¿­·ÁÁø ¼¿µé¿¡ ¼öÁ¤±¸°¡ ¿­·È´Ù.
-						// ºó ¼öÁ¤±¸·Î ÁöÁ¤ÇÏ°í,
+						// ìƒˆë¡œ ì—´ë ¤ì§„ ì…€ë“¤ì— ìˆ˜ì •êµ¬ê°€ ì—´ë ¸ë‹¤.
+						// ë¹ˆ ìˆ˜ì •êµ¬ë¡œ ì§€ì •í•˜ê³ ,
 						cell.setSphereType(kSphereTypeEmpty);
 		
-						//Log.e("Game / handleDoubleTap", "check 1 / ¾ÆÀÌÅÛ Å¸ÀÏ º¯°æ");
-						// ºó ¼öÁ¤±¸ Å¸ÀÏ·Î ¹Ù²Û´Ù.
+						//Log.e("Game / handleDoubleTap", "check 1 / ì•„ì´í…œ íƒ€ì¼ ë³€ê²½");
+						// ë¹ˆ ìˆ˜ì •êµ¬ íƒ€ì¼ë¡œ ë°”ê¾¼ë‹¤.
 						this.addSphereTo(this.mineLayer, kSphereTypeEmpty, cell);
 						
-						// ¼öÁ¤±¸ È¹µæ¼ö¸¦ Å¸ÀÔº°·Î ÇÏ³ª Áõ°¡½ÃÅ²´Ù.
+						// ìˆ˜ì •êµ¬ íšë“ìˆ˜ë¥¼ íƒ€ì…ë³„ë¡œ í•˜ë‚˜ ì¦ê°€ì‹œí‚¨ë‹¤.
 						GameData.share().increaseItemByType(sphereType);
 						
-						// UI ¾÷µ¥ÀÌÆ®¸¦ ÇÑ´Ù.
-						// ¼öÁ¤±¸¸¦ Å¬¸¯ÇØ¼­ È°¼ºÈ­½ÃÅ°¸é +1 ¾¿ ¶óº§¿¡ ³Ö¾îÁØ´Ù.
+						// UI ì—…ë°ì´íŠ¸ë¥¼ í•œë‹¤.
+						// ìˆ˜ì •êµ¬ë¥¼ í´ë¦­í•´ì„œ í™œì„±í™”ì‹œí‚¤ë©´ +1 ì”© ë¼ë²¨ì— ë„£ì–´ì¤€ë‹¤.
 						this.hud.updateSphereItemNumber();
 						
-						// ¹öÆ°¿¡ Å¬¸¯È¿°ú¸¦ ³Ö´Â´Ù.
+						// ë²„íŠ¼ì— í´ë¦­íš¨ê³¼ë¥¼ ë„£ëŠ”ë‹¤.
 						this.hud.clickEffect(sphereType, startDelay);
 						startDelay += 0.2f;
 					}
 				}
-				// end ¸ğµÎ ¿­¸° ¼öÁ¤±¸°¡ ÀÖ´ÂÁö È®ÀÎÇÑ´Ù. 
+				// end ëª¨ë‘ ì—´ë¦° ìˆ˜ì •êµ¬ê°€ ìˆëŠ”ì§€ í™•ì¸í•œë‹¤. 
 				Log.e("Game / handleDoubleTap", 
 						"unopenedTile : " + unopenedTile +  
 						", Max Mine : " + GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
@@ -1223,67 +1223,67 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 
 	@Override
 	public boolean ccTouchesBegan(MotionEvent event) {
-		// device ÁÂÇ¥¸¦ ÀĞ¾î¿Â´Ù. (openGL x)
+		// device ì¢Œí‘œë¥¼ ì½ì–´ì˜¨ë‹¤. (openGL x)
 		currentTouchLocation = CCDirector.sharedDirector().convertToGL(CGPoint.make(event.getRawX(), event.getRawY()));
 //		previousTouchLocation = CCDirector.sharedDirector().convertToGL(CGPoint.make(event.getRawX(), event.getRawY()));
 		
 		isLongTap = true;
 		
 //		// effect sound load
-//		SoundEngine.sharedEngine().preloadSound(this.mContext, R.raw.ding); // ¹«½¼ »ç¿îµåÀÌÁö??
+//		SoundEngine.sharedEngine().preloadSound(this.mContext, R.raw.ding); // ë¬´ìŠ¨ ì‚¬ìš´ë“œì´ì§€??
 		
-		// ÇöÀç ÂïÈù ÁÂÇ¥ °è»ê
+		// í˜„ì¬ ì°íŒ ì¢Œí‘œ ê³„ì‚°
 		CGPoint convertedLocation = CCDirector.sharedDirector().convertToGL(CGPoint.make(event.getRawX(), event.getRawY()));
 		double tempTime = System.currentTimeMillis();
 		
 		boolean abc = locationMatchingTest(touchLocation, convertedLocation, 20); // default : 20
 		
-		// ´õºíÅÇ (Áö¿¬½Ã°£ 0.3ÃÊ)
+		// ë”ë¸”íƒ­ (ì§€ì—°ì‹œê°„ 0.3ì´ˆ)
 		if (abc && doubleTap + 500 > tempTime && event.getPointerCount()  == 1) {
 		//if (abc && doubleTap + 500 > tempTime) {
 			handleDoubleTap(event);
 			isLongTap = false;
-			touchLocation = convertedLocation; // ÁÂÇ¥°¡ ¾øÀ»½Ã ´ëÀÔ
+			touchLocation = convertedLocation; // ì¢Œí‘œê°€ ì—†ì„ì‹œ ëŒ€ì…
 			doubleTap = 0;
 			//handleDoubleTap(event);
 			
-		// ½Ì±ÛÅÇ	
+		// ì‹±ê¸€íƒ­	
 		} else
-			{ // °°Àº À§Ä¡°¡ ¼±ÅÃ µÇ¾úÀ»½Ã
-			touchLocation = convertedLocation; // ÁÂÇ¥°¡ ¾øÀ»½Ã ´ëÀÔ
+			{ // ê°™ì€ ìœ„ì¹˜ê°€ ì„ íƒ ë˜ì—ˆì„ì‹œ
+			touchLocation = convertedLocation; // ì¢Œí‘œê°€ ì—†ì„ì‹œ ëŒ€ì…
 			doubleTap = tempTime;
 		}
 		return super.ccTouchesBegan(event);
 	}
 
-	// È­¸éÀÌµ¿ °ú ÁÜÀÎ ¾Æ¿ô½Ã
+	// í™”ë©´ì´ë™ ê³¼ ì¤Œì¸ ì•„ì›ƒì‹œ
 	@Override
 	public boolean ccTouchesMoved(MotionEvent event) {
 		 if (!Config.getInstance().isDisableButton()) {
 
 		//
-		// Á¶Àı ÇÒ ·¹ÀÌ¾î ÁöÁ¤
+		// ì¡°ì ˆ í•  ë ˆì´ì–´ ì§€ì •
 		CCLayer theLayer = this;
 		boolean isMove = true;
 
 		//
-		// ÀÏ¹İ
+		// ì¼ë°˜
 
 		/*************************************/
-		// ÇöÀç ÂïÈù ÁÂÇ¥ °è»ê
+		// í˜„ì¬ ì°íŒ ì¢Œí‘œ ê³„ì‚°
 		// convert event location to CCPoint
 		CGPoint convertedLocation = CCDirector.sharedDirector().convertToGL(CGPoint.make(event.getRawX(), event.getRawY()));
 		double tempTime = System.currentTimeMillis();
 		boolean abc = locationMatchingTest(touchLocation, convertedLocation, 10); // default : 10
 		
-		//·ÕÅ¬¸¯ (¹®Á¦Á¡ ÀúÇØ»óµµ¿¡¼­´Â ÅÍÄ¡ ¹«ºê°¡ ÀÏ¾î³ªÁö ¾Ê´Â´Ù.)
+		//ë¡±í´ë¦­ (ë¬¸ì œì  ì €í•´ìƒë„ì—ì„œëŠ” í„°ì¹˜ ë¬´ë¸Œê°€ ì¼ì–´ë‚˜ì§€ ì•ŠëŠ”ë‹¤.)
 		if (event.getPointerCount() == 1 && isLongTap) {
 			if (abc) {
 				if (doubleTap + 300 < tempTime) {
 					handleLongPress(event);
 					convertedLocation = this.convertToNodeSpace(convertedLocation);
 					isLongTap = false;
-					touchLocation = convertedLocation; // ÁÂÇ¥°¡ ¾øÀ»½Ã ´ëÀÔ
+					touchLocation = convertedLocation; // ì¢Œí‘œê°€ ì—†ì„ì‹œ ëŒ€ì…
 					doubleTap = 0;
 
 				    isMove = false;
@@ -1318,7 +1318,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 					CGPoint.ccp(event.getX(pointerIndex2), event.getY(pointerIndex2)));
 			
 			
-			// sqrt = Á¦°ö±Ù , pow = ¸î ½Â
+			// sqrt = ì œê³±ê·¼ , pow = ëª‡ ìŠ¹
 			float currentDistance = (float) Math.sqrt(
 					Math.pow(currentLocation1.x - currentLocation2.x, 2.0f) + 
 					Math.pow(currentLocation1.y - currentLocation2.y, 2.0f));
@@ -1332,29 +1332,29 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			pinchCenter = this.convertToNodeSpace(pinchCenter);
 			
 			//
-			// ÃÖ¼Ò/ÃÖ´ë È®´ëÀ² ¹üÀ§¿¡¼­ ·¹ÀÌ¾î È®´ë Ãà¼Ò¸¦ ÇÉÄ¡ °Å¸®¿¡ µû¶ó ÇÑ´Ù.
+			// ìµœì†Œ/ìµœëŒ€ í™•ëŒ€ìœ¨ ë²”ìœ„ì—ì„œ ë ˆì´ì–´ í™•ëŒ€ ì¶•ì†Œë¥¼ í•€ì¹˜ ê±°ë¦¬ì— ë”°ë¼ í•œë‹¤.
 			float newScale = theLayer.getScale() + (deltaDistance * GameConfig.share().kPinchZoomMultiplier);
-			// clampf ±×³É ¹üÀ§ ¾È¿¡ µé¾î°¡´ÂÁö È®ÀÎÈÄ ¸®ÅÏ (128pixel ±âÁØ)
+			// clampf ê·¸ëƒ¥ ë²”ìœ„ ì•ˆì— ë“¤ì–´ê°€ëŠ”ì§€ í™•ì¸í›„ ë¦¬í„´ (128pixel ê¸°ì¤€)
 			newScale = CGPoint.clampf(newScale, GameConfig.share().kMinScale * 128 / tileSize.width, GameConfig.share().kMaxScale * 128 / tileSize.width);
 			float positionScale = newScale - theLayer.getScale();
-			theLayer.setScale(newScale); // ÁÜ¾Æ¿ôÀ» ÇÏ°ÔÇØÁÜ
+			theLayer.setScale(newScale); // ì¤Œì•„ì›ƒì„ í•˜ê²Œí•´ì¤Œ
 			Log.e("Game / game",
 					"cLocation1 : (" + (int)currentLocation1.x + ", " +  (int)currentLocation1.y +"), pLocation1 : (" + (int)previousLocation1.x + ", " +  (int)previousLocation1.y);		
 			Log.e("Game / game",
 					"cLocation2 : (" + (int)currentLocation2.x + ", " +  (int)currentLocation2.y +"), pLocation2 : (" + (int)previousLocation2.x + ", " +  (int)previousLocation2.y);		
 			Log.e("Game / game", "MapCurrentPosition : " + this.getMapCurrentPosition());		
-//			theLayer.setPosition(this.getMapCurrentPosition()); // ¼±ÅÃÇÑ È­¸é¿¡¼­ ÁÜ¾Æ¿ôÀ» ÇÔ
+//			theLayer.setPosition(this.getMapCurrentPosition()); // ì„ íƒí•œ í™”ë©´ì—ì„œ ì¤Œì•„ì›ƒì„ í•¨
 			theLayer.setPosition(CGPoint.ccpSub(theLayer.getPosition(), 
-					CGPoint.make(pinchCenter.x * positionScale, pinchCenter.y * positionScale) )); // ¼±ÅÃÇÑ È­¸é¿¡¼­ ÁÜ¾Æ¿ôÀ» ÇÔ
+					CGPoint.make(pinchCenter.x * positionScale, pinchCenter.y * positionScale) )); // ì„ íƒí•œ í™”ë©´ì—ì„œ ì¤Œì•„ì›ƒì„ í•¨
 			
 			
-			// scale »ç¿ë½Ã ÀÌ»ó Çö»ó ¹ß»ı
+			// scale ì‚¬ìš©ì‹œ ì´ìƒ í˜„ìƒ ë°œìƒ
 			theLayer.setPosition(CGPoint.ccp(
 					CGPoint.clampf(theLayer.getPosition().x, this.getMapMinPosition().x, this.getMapMaxPosition().x),
 					CGPoint.clampf(theLayer.getPosition().y, this.getMapMinPosition().y, this.getMapMaxPosition().y))
 			);
-			// ¿Ü°û ¿µ¿ª ¼³Á¤(ÇöÀç À§Ä¡°ªÀÌ Æ²·Á ¹ö±×ÀÓ.)
-			// ÁÜ¾Æ¿ôÇÒ¶§ È­¸é¾È¿¡¼­¸¸ ÁÜ ÀÎ µÇ°Ô ÇØÁÜ
+			// ì™¸ê³½ ì˜ì—­ ì„¤ì •(í˜„ì¬ ìœ„ì¹˜ê°’ì´ í‹€ë ¤ ë²„ê·¸ì„.)
+			// ì¤Œì•„ì›ƒí• ë•Œ í™”ë©´ì•ˆì—ì„œë§Œ ì¤Œ ì¸ ë˜ê²Œ í•´ì¤Œ
 
 //				mapLabel.setPosition(CGPoint.ccp(this.getPosition().x / 2 * Xscale, this.getPosition().y / 2 * Yscale));
 //				mapLabel.setString("mapPosition :"+ (int)this.getPosition().x + ", " +(int)this.getPosition().y);
@@ -1371,7 +1371,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			
 		    //int pointerIndex = event.findPointerIndex(event.getPointerId(0));
 
-		    // ¹¹Áö??
+		    // ë­ì§€??
 				if (previousTouchLocation == null) {
 					currentTouchLocation = CCDirector.sharedDirector().convertToGL(
 							CGPoint.ccp(event.getRawX(), event.getRawY()));
@@ -1400,17 +1400,17 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 //			if (deltaLocation.x < -120 || deltaLocation.x > 120 || deltaLocation.y < -120 || deltaLocation.y > 120) {
 			isMove2= true;	
 			theLayer.setPosition(CGPoint.ccpAdd(theLayer.getPosition(), deltaLocation));
-			// scale »ç¿ë½Ã ÀÌ»ó Çö»ó ¹ß»ı
+			// scale ì‚¬ìš©ì‹œ ì´ìƒ í˜„ìƒ ë°œìƒ
 			theLayer.setPosition(CGPoint.ccp(
 					CGPoint.clampf(theLayer.getPosition().x, this.getMapMinPosition().x, this.getMapMaxPosition().x),
 					CGPoint.clampf(theLayer.getPosition().y, this.getMapMinPosition().y, this.getMapMaxPosition().y))
 			);
 			//Log.e("Game / Moved", "1touch theLayer1 : " + theLayer.getPosition());
 			// ccpAdd : return ccp(v1.x + v2.x,v1.y + v2.y);
-			// ¹é±×¶ó¿îµå ÀÌ¹ÌÁö ¹ÛÀ¸·Î deviceView ¿µ¿ªÀÌ ¸ø ¹ş¾î³ª°Ô ÇÔ
-			// (¾øÀ¸¸é È­¸éÀÌ ³¡³ª´Â°÷¿¡¼­ ¸ØÃß´Â°Ô ¾Æ´Ï¶ó ³¡±îÁö ¿òÁ÷ÀÓ)
+			// ë°±ê·¸ë¼ìš´ë“œ ì´ë¯¸ì§€ ë°–ìœ¼ë¡œ deviceView ì˜ì—­ì´ ëª» ë²—ì–´ë‚˜ê²Œ í•¨
+			// (ì—†ìœ¼ë©´ í™”ë©´ì´ ëë‚˜ëŠ”ê³³ì—ì„œ ë©ˆì¶”ëŠ”ê²Œ ì•„ë‹ˆë¼ ëê¹Œì§€ ì›€ì§ì„)
 			
-			// ¿Ü°û ¿µ¿ª ¼³Á¤(ÇöÀç À§Ä¡°ªÀÌ Æ²·Á ¹ö±×ÀÓ.)
+			// ì™¸ê³½ ì˜ì—­ ì„¤ì •(í˜„ì¬ ìœ„ì¹˜ê°’ì´ í‹€ë ¤ ë²„ê·¸ì„.)
 			
 //			mapLabel.setPosition(CGPoint.ccp(this.getPosition().x/2 * Xscale,this.getPosition().y/2 * Yscale));
 //			mapLabel.setString("mapPosition :"+ (int)this.getPosition().x + ", " +(int)this.getPosition().y);
@@ -1418,11 +1418,11 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			//Log.e("Game / game", "this.getAnchorPoint : " + this.getAnchorPoint() + " / this.getPosition : " + (int)this.getPosition().x + ", " +(int)this.getPosition().y );			
 			
 			// scale
-			currentScale = this.getScale(); // ¿òÁ÷ÀÎ ÇöÀç ½ºÄÉÀÏÀ» ÀúÀå
-			currentLayerX = theLayer.getPosition().x; // ÇöÀç È­¸éÀÇ x °ªÀ» ÀúÀå 
-			currentLayerY = theLayer.getPosition().y; // ÇöÀç È­¸éÀÇ y °ªÀ» ÀúÀå
+			currentScale = this.getScale(); // ì›€ì§ì¸ í˜„ì¬ ìŠ¤ì¼€ì¼ì„ ì €ì¥
+			currentLayerX = theLayer.getPosition().x; // í˜„ì¬ í™”ë©´ì˜ x ê°’ì„ ì €ì¥ 
+			currentLayerY = theLayer.getPosition().y; // í˜„ì¬ í™”ë©´ì˜ y ê°’ì„ ì €ì¥
 					 
-			// ÀÌµ¿¹æÇâ¿¡ ¸ÂÃß¾î ¸¶¹ı»ç ½ºÇÁ¶óÀÌÆ® ÅØ½ºÃ³¸¦ ¹Ù²Ù¾î ÁØ´Ù.
+			// ì´ë™ë°©í–¥ì— ë§ì¶”ì–´ ë§ˆë²•ì‚¬ ìŠ¤í”„ë¼ì´íŠ¸ í…ìŠ¤ì²˜ë¥¼ ë°”ê¾¸ì–´ ì¤€ë‹¤.
 			int direction = this.getTouchMoveDirection(deltaLocation);
 			this.hud.setMagicianTo(direction);
 		}
@@ -1452,14 +1452,14 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		 
 	/*****************************/
 	private CGPoint displayLimit() {
-		//È­¸é Áß°£ ÁÂÇ¥
+		//í™”ë©´ ì¤‘ê°„ ì¢Œí‘œ
 		float wid = 	winSize.width/2;
 		float hei = winSize.height/2;  
-		// layerºÎÅÍ È­¸é Áß°£±îÁöÀÇ ÁÂÇ¥(GL --> cocos2D --> nodeSpace)
+		// layerë¶€í„° í™”ë©´ ì¤‘ê°„ê¹Œì§€ì˜ ì¢Œí‘œ(GL --> cocos2D --> nodeSpace)
 		return this.convertToNodeSpace(CCDirector.sharedDirector().convertToGL(CGPoint.make(wid, hei)));
 	}
 	
-	// current layer position + (º¯ÇÑ ÁÂÇ¥ - ±âÁ¸ ÁÂÇ¥) * (before scale - (after ÁÂÇ¥ / before ÁÂÇ¥))
+	// current layer position + (ë³€í•œ ì¢Œí‘œ - ê¸°ì¡´ ì¢Œí‘œ) * (before scale - (after ì¢Œí‘œ / before ì¢Œí‘œ))
 	private CGPoint setLayerPosition(CCLayer currentLayer, CGPoint displayBeforePosition, CGPoint displayAfterPosition, float beforeScale, float afterScale) {
 		float x = currentLayer.getPosition().x + (displayAfterPosition.x - displayBeforePosition.x) * (beforeScale - (displayAfterPosition.x / displayBeforePosition.x));
 		float y = currentLayer.getPosition().y + (displayAfterPosition.y - displayBeforePosition.y) * (beforeScale - (displayAfterPosition.y / displayBeforePosition.y));
@@ -1479,12 +1479,12 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 	// tile methods
 	public void markFlag(CGPoint tileCoord) {
 
-		int flagGid = this.itemLayer.tileGIDAt(CGPoint.ccp(1, 0)); // »¡°£±ê¹ß(¹æÀå)
+		int flagGid = this.itemLayer.tileGIDAt(CGPoint.ccp(1, 0)); // ë¹¨ê°„ê¹ƒë°œ(ë°©ì¥)
 		flagGid = CCFormatter.swapIntToLittleEndian(flagGid);
 		this.flagLayer.setTileGID(flagGid, tileCoord);
 		
 		//
-		// Áö·Ú¼ö ÇÏ³ª °¨¼Ò½ÃÅ³½Ã µğ½ºÇÃ·¹ÀÌ ¾÷µ¥ÀÌÆ® ½ÃÅ²´Ù.
+		// ì§€ë¢°ìˆ˜ í•˜ë‚˜ ê°ì†Œì‹œí‚¬ì‹œ ë””ìŠ¤í”Œë ˆì´ ì—…ë°ì´íŠ¸ ì‹œí‚¨ë‹¤.
 		this.hud.updateMineNumber(GameData.share().decreaseMineNumber());
 	}
 
@@ -1492,14 +1492,14 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 	// effects
 	public void rotateAllMineNumberLabel() {
 		//
-		// ÇöÀç º¸ÀÌ´Â ¹øÈ£µéÀ» 2¹ÙÄû 2ÃÊ°£ µ¹¸®°í ¸ØÃá´Ù.
+		// í˜„ì¬ ë³´ì´ëŠ” ë²ˆí˜¸ë“¤ì„ 2ë°”í€´ 2ì´ˆê°„ ëŒë¦¬ê³  ë©ˆì¶˜ë‹¤.
 		ArrayList<MineCell2> cellsTemp = cells;
 		int size = cellsTemp.size();
 		for (int k = 0; k < size; k++) {
 			//rotateBy rot = ~~~~~
-			//Áö¼Ó½Ã°£, È¸Àü°¢µµ
+			//ì§€ì†ì‹œê°„, íšŒì „ê°ë„
 			CCRotateBy rot = CCRotateBy.action(2f, 360f);
-			CCLabel label = (CCLabel) this.getChildByTag(cellsTemp.get(k).getCell_ID()); // µÉ¶û°¡ ¸ô¶ó??
+			CCLabel label = (CCLabel) this.getChildByTag(cellsTemp.get(k).getCell_ID()); // ë ë‘ê°€ ëª°ë¼??
 			label.runAction(CCSequence.actions(rot, rot, rot));
 		}
 	}
@@ -1537,12 +1537,12 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 //		return this.hud.updateHeart();
 //	}
 
-	// ÁÖº¯ Áö·Ú ¼ö
+	// ì£¼ë³€ ì§€ë¢° ìˆ˜
 	public void displayMineNumber(int numberOfMine, CGPoint position, int tag) {
 			if (this.isCollidable(this.tileCoordForPosition(position))) {
 				return;
 			}
-				// ±ÛÀÚ Å©±â ±âÁ¸ÀÇ 2/3·Î °¨¼Ò(»çÀ¯ : ¼öÁ¤±¸ ¹Ù´Û¿¡ ¼ıÀÚ°¡ °ãÃÄ¾ß µÇ¼­ ¼öÁ¤±¸¿¡ ÀÇÇØ ¼ıÀÚ°¡ °¡·ÁÁü. - ¹ÚÁ¤·Ä ÆÀÀå´Ô)
+				// ê¸€ì í¬ê¸° ê¸°ì¡´ì˜ 2/3ë¡œ ê°ì†Œ(ì‚¬ìœ  : ìˆ˜ì •êµ¬ ë°”ë‹¦ì— ìˆ«ìê°€ ê²¹ì³ì•¼ ë˜ì„œ ìˆ˜ì •êµ¬ì— ì˜í•´ ìˆ«ìê°€ ê°€ë ¤ì§. - ë°•ì •ë ¬ íŒ€ì¥ë‹˜)
 				CCLabel label = CCLabel.makeLabel("" + numberOfMine + " ", "Arial-Bold", (int)((70 * (2 / 3.0) * tileSize.width) / 128));
 				this.addChild(label, 100000, tag);
 				label.setAnchorPoint(0.5f, 0.5f);
@@ -1556,8 +1556,8 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 	public void removeTile(CGPoint tileCoord) {
 		// Global ID // Globally unique IDentifier
 		int tileGid = this.meta.tileGIDAt(tileCoord); 
-		tileGid = CCFormatter.swapIntToLittleEndian(tileGid); // ¹ºÁö ¾ÆÁ÷ ¸ğ¸£°ÚÀ½.
-		// 0 : ÀÏ½Ã Å¸ÀÏ°ª ¾øÀ½
+		tileGid = CCFormatter.swapIntToLittleEndian(tileGid); // ë­”ì§€ ì•„ì§ ëª¨ë¥´ê² ìŒ.
+		// 0 : ì¼ì‹œ íƒ€ì¼ê°’ ì—†ìŒ
 		
 		if(tileGid > 0){
 			HashMap<String , String> properties = this.tileMap.propertiesForGID(tileGid);
@@ -1572,18 +1572,18 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 					SoundEngine.sharedEngine().playEffect(this.mContext, R.raw.game_open2); // pickup
 					//Log.e("Game / removeTile", "getFg : " + getFg());
 					//Log.e("Game / removeTile", "tileCoord : " + tileCoord);
-					// ÀÚÁÖ ¹®Á¦ ¹ß»ı stack over flow Error (thread ¿À¹ö)
+					// ìì£¼ ë¬¸ì œ ë°œìƒ stack over flow Error (thread ì˜¤ë²„)
 					this.getFg().removeTileAt(tileCoord);
 				}
 	
 			} else {
-				// ÆøÅºÀº ¾ø´Âµ¥ Å¸ÀÏÀÌ ¾È¾ø¾îÁö´Â ¿¡·¯
+				// í­íƒ„ì€ ì—†ëŠ”ë° íƒ€ì¼ì´ ì•ˆì—†ì–´ì§€ëŠ” ì—ëŸ¬
 				//Log.e("Game / removeTile", "properties - boom empty");
 			}
 		} else {
 			//Log.e("Game / removeTile", "properties - tile empty");
 			SoundEngine.sharedEngine().playEffect(this.mContext,R.raw.game_open2); // pickup
-			// ¿¡·¯ stack over flow error
+			// ì—ëŸ¬ stack over flow error
 			this.getFg().removeTileAt(tileCoord);
 		}
 	}
@@ -1606,17 +1606,17 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		return CGPoint.ccp(x, y);
 	}
 
-		// metaLayer (ÀÛ¾÷ ºÒ°¡´É ¿µ¿ª)
+		// metaLayer (ì‘ì—… ë¶ˆê°€ëŠ¥ ì˜ì—­)
 		public boolean isMetaChecked(CGPoint tileCoord, String metaString) {
-			// tileÀÌ ÀÖ´Â °÷Àº 0ÀÌ ¾Æ´Ñ °ªÀ» °¡Áø´Ù.
+			// tileì´ ìˆëŠ” ê³³ì€ 0ì´ ì•„ë‹Œ ê°’ì„ ê°€ì§„ë‹¤.
 			int gid = CCFormatter.swapIntToLittleEndian(this.meta.tileGIDAt(tileCoord));
-			// tileÀÌ ±ò¸°°÷
+			// tileì´ ê¹”ë¦°ê³³
 			if (gid > 0) {
-				// tileMapÀÇ GID¸¦ key·Î ³Ö¾î HashMapÀ¸·Î º¯È¯ÇÏ¿© Properties·Î ÀúÀåÇÑ´Ù.
+				// tileMapì˜ GIDë¥¼ keyë¡œ ë„£ì–´ HashMapìœ¼ë¡œ ë³€í™˜í•˜ì—¬ Propertiesë¡œ ì €ì¥í•œë‹¤.
 				HashMap<String, String> Properties = this.tileMap.propertiesForGID(gid);
-				// <--- ¹®Á¦ ÁöÁ¡Àº ¾Æ¸¶ Å°°ªÀÌ ¾Èµé¾î ÀÖ¾î¼­ ÀÎ°Í°°´Ù È®ÀÎ ÇÊ¿ä.
+				// <--- ë¬¸ì œ ì§€ì ì€ ì•„ë§ˆ í‚¤ê°’ì´ ì•ˆë“¤ì–´ ìˆì–´ì„œ ì¸ê²ƒê°™ë‹¤ í™•ì¸ í•„ìš”.
 				if (Properties !=null && Properties.size() != 0) {
-					// tileÀ» ¸¸µé¶§ tile¿¡ ÀÌ¸§À» ³Ö¾ú´ø °Í°ú °°Àº ÀÌ¸§ÀÇ Å¸ÀÏÀ» Ã£´Â´Ù.
+					// tileì„ ë§Œë“¤ë•Œ tileì— ì´ë¦„ì„ ë„£ì—ˆë˜ ê²ƒê³¼ ê°™ì€ ì´ë¦„ì˜ íƒ€ì¼ì„ ì°¾ëŠ”ë‹¤.
 					String collisionValue = Properties.get(metaString);	
 					if (collisionValue != null && collisionValue.equals("YES")) {
 						return true;
@@ -1630,7 +1630,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		    return this.isMetaChecked(tileCoord, "isDontSetMine");
 		}
 	//
-	// ÇöÀç Å×½ºÆ® Å¸ÀÏ¸Ê¿¡¼­ isPreOpenedÅ¸ÀÏÀº ¸ŞÅ¸Å¸ÀÏ ¶ô ¹Ù·Î ¿À¸¥ÂÊ Åõ¸í Å¸ÀÏÀ» ÀÌ¿ëÇÏ°í ÀÖÀ½????
+	// í˜„ì¬ í…ŒìŠ¤íŠ¸ íƒ€ì¼ë§µì—ì„œ isPreOpenedíƒ€ì¼ì€ ë©”íƒ€íƒ€ì¼ ë½ ë°”ë¡œ ì˜¤ë¥¸ìª½ íˆ¬ëª… íƒ€ì¼ì„ ì´ìš©í•˜ê³  ìˆìŒ????
 	public boolean isPreOpened(CGPoint tileCoord) {
 		return this.isMetaChecked(tileCoord, "isPreOpened");
 	}
@@ -1643,7 +1643,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		this.flagLayer.removeTileAt(tileCoord);
 		
 		//
-		// Áö·Ú¼ö ÇÏ³ª Áõ°¡½ÃÅ°°í µğ½ºÇÃ·¹ÀÌ ¾÷µ¥ÀÌÆ® ½ÃÅ²´Ù.
+		// ì§€ë¢°ìˆ˜ í•˜ë‚˜ ì¦ê°€ì‹œí‚¤ê³  ë””ìŠ¤í”Œë ˆì´ ì—…ë°ì´íŠ¸ ì‹œí‚¨ë‹¤.
 		this.hud.updateMineNumber(GameData.share().increaseMineNumber());
 	}
 
@@ -1655,7 +1655,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		this.fg = fg;
 	}
 
-	// ¹º°¡ ´Ù¸§...
+	// ë­”ê°€ ë‹¤ë¦„...
 	public CCSprite animationMagma() {
 		CCSpriteFrameCache.sharedSpriteFrameCache().addSpriteFrames(folder + "effectMagma-hd.plist");
 		ArrayList<CCSpriteFrame> frames = new ArrayList<CCSpriteFrame>();
@@ -1663,7 +1663,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			String frameName = "magma" + i + ".png";
 			frames.add(CCSpriteFrameCache.sharedSpriteFrameCache().spriteFrameByName(frameName));
 		}
-		// À½...  name StringÀÌ ´Ù¸£´Ù
+		// ìŒ...  name Stringì´ ë‹¤ë¥´ë‹¤
 		CCAnimation animation = CCAnimation.animation("", 0.1f, frames);
 		CCAnimate animate = CCAnimate.action(animation);
 		CCSprite sprite = CCSprite.sprite("magma1.png");
@@ -1695,17 +1695,17 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 	}
 	
 	//
-	final int kDirectionDown 			= 0;			/***  ¡é   ***/ 
-	final int kDirectionLeftDown 	= 45;		/*** ¢×  ***/
-	final int kDirectionLeft 				= 90;		/*** ¡ç  ***/
-	final int kDirectionLeftUp 			= 135;		/*** ¢Ø  ***/
-	final int kDirectionUp 				= 180;		/*** ¡è    ***/
-	final int kDirectionRightUp 		= 225;		/*** ¢Ö  ***/
-	final int kDirectionRight 			= 270;		/*** ¡æ  ***/
-	final int kDirectionRightDown = 315;		/*** ¢Ù  ***/
+	final int kDirectionDown 			= 0;			/***  â†“   ***/ 
+	final int kDirectionLeftDown 	= 45;		/*** â†™  ***/
+	final int kDirectionLeft 				= 90;		/*** â†  ***/
+	final int kDirectionLeftUp 			= 135;		/*** â†–  ***/
+	final int kDirectionUp 				= 180;		/*** â†‘    ***/
+	final int kDirectionRightUp 		= 225;		/*** â†—  ***/
+	final int kDirectionRight 			= 270;		/*** â†’  ***/
+	final int kDirectionRightDown = 315;		/*** â†˜  ***/
 	
 	//
-	// È­¸é ¿òÁ÷ÀÏ¶§
+	// í™”ë©´ ì›€ì§ì¼ë•Œ
 	public int getTouchMoveDirection(CGPoint deltaVector) {
 		
 		CGPoint dv = deltaVector; // delta vector
@@ -1722,36 +1722,36 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 
 		if (isDiagonal) {
 			if (dv.x > 0 && dv.y > 0) {
-				//Log.e("Direction", "¢Ö");
+				//Log.e("Direction", "â†—");
 				return kDirectionRightUp;
 			} else if (dv.x > 0 && dv.y < 0) {
-				//Log.e("Direction", "¢Ù");
+				//Log.e("Direction", "â†˜");
 				return kDirectionRightDown;
 			} else if (dv.x < 0 && dv.y > 0) {
-				//Log.e("Direction", "¢Ø");
+				//Log.e("Direction", "â†–");
 				return kDirectionLeftUp;
 			} else if (dv.x < 0 && dv.y < 0) {
-				//Log.e("Direction", "¢×");
+				//Log.e("Direction", "â†™");
 				return kDirectionLeftDown;
 			}
 		}
 
 		if (isVertical) {
 			if (dv.y > 0) {
-				//Log.e("Direction", "¡è");
+				//Log.e("Direction", "â†‘");
 				return kDirectionUp;
 			} else {
-				//Log.e("Direction", "¡é");
+				//Log.e("Direction", "â†“");
 				return kDirectionDown;
 			}
 		}
 
 		if (isHorizontal) {
 			if (dv.x > 0) {
-				//Log.e("Direction", "¡æ");
+				//Log.e("Direction", "â†’");
 				return kDirectionRight;
 			} else {
-				//Log.e("Direction", "¡ç");
+				//Log.e("Direction", "â†");
 				return kDirectionLeft;
 			}
 		}
@@ -1783,7 +1783,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		float tilePixelSize = CCTMXTiledMap.tiledMap(GameData.share().gameMap).getTileSize().width;
 		static GameProgressBar gameProgressBar;
 
-		// (»ı¸í) ÅÂ±× ³Ñ¹ö
+		// (ìƒëª…) íƒœê·¸ ë„˜ë²„
 		static final int kTagHeart = 9999; // final x
 		static final int kButtonOff = 0; // final x
 		static final int kButtonOn = 1; // final x
@@ -1795,10 +1795,10 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			this.winSize = CCDirector.sharedDirector().winSize();
 			this.mContext = CCDirector.sharedDirector().getActivity().getApplicationContext();
 
-			// ÅÍÄ¡°¡ ¾ÈµÉ½Ã ¾Æ·¡ ¸í·ÉÀ» ºñÈ°¼ºÈ­ ÇÒ °Í
+			// í„°ì¹˜ê°€ ì•ˆë ì‹œ ì•„ë˜ ëª…ë ¹ì„ ë¹„í™œì„±í™” í•  ê²ƒ
 			//CCTouchDispatcher.sharedDispatcher().addTargetedDelegate(this, 0, true);
 			//this.setIsTouchEnabled(true);
-			//this.isTouchEnabled_ = true; // cclayer ¸â¹ö
+			//this.isTouchEnabled_ = true; // cclayer ë©¤ë²„
 			
 			int margin = 5;
 			label = CCLabel.makeLabel("0", "verdana-Bold", (18 * tilePixelSize) / 128);
@@ -1809,12 +1809,12 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			this.addChild(label);
 	
 			int testTextSize = 72;
-			testText = CCLabel.makeLabel("½Ã°£ÀÌ ÃÊ±âÈ­ µÇ¸é ½ÃÀÛ", "Arial", (testTextSize * tilePixelSize) / 128);
+			testText = CCLabel.makeLabel("ì‹œê°„ì´ ì´ˆê¸°í™” ë˜ë©´ ì‹œì‘", "Arial", (testTextSize * tilePixelSize) / 128);
 			testText.setColor(ccColor3B.ccWHITE);
 			testText.setPosition(winSize.width/2, winSize.height / 2);
 					this.addChild(testText);
 					//
-					// »ó´Ü Áß¾Ó °ÔÀÓÁøÇà½Ã°£ ¹× ÁøÇà ¸·´ë±â
+					// ìƒë‹¨ ì¤‘ì•™ ê²Œì„ì§„í–‰ì‹œê°„ ë° ì§„í–‰ ë§‰ëŒ€ê¸°
 					gameProgressBar = new GameProgressBar(this.mContext);
 					this.addChild(gameProgressBar);
 					//gameProgressBar.startTime(gameEnding);
@@ -1824,14 +1824,14 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 
 					
 					//
-					// ÁÂ»ó´Ü Ã£Àº Áö·Ú °¹¼ö ¹× »ı¸í Ç¥½Ã
+					// ì¢Œìƒë‹¨ ì°¾ì€ ì§€ë¢° ê°¯ìˆ˜ ë° ìƒëª… í‘œì‹œ
 					CCSprite statusBase = CCSprite.sprite(hudLayerFolder + "game-statusBase-hd.png");
 					statusBase.setPosition(
 							statusBase.getContentSize().width / 2 + margin, 
 							winSize.height - statusBase.getContentSize().height / 2 - margin);
 					this.addChild(statusBase);
 					
-					//  ÇöÀç ¸Ê¿¡¼­ Ã£¾Æ¾ßµÇ´Â Áö·Ú(È£¹Ú)ÀÇ °¹¼ö ±ÛÀÚ
+					//  í˜„ì¬ ë§µì—ì„œ ì°¾ì•„ì•¼ë˜ëŠ” ì§€ë¢°(í˜¸ë°•)ì˜ ê°¯ìˆ˜ ê¸€ì
 					statusMine = CCLabel.makeLabel(
 //							GameData.share().getMineNumber() + " ", "AvenirNextCondensed-Bold", 11);
 							GameData.share().getMineNumber() + " ", "Arial-Bold", 30);
@@ -1839,10 +1839,10 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 							statusBase.getContentSize().width / 2,
 							statusBase.getContentSize().height / 4);
 					statusBase.addChild(statusMine);
-					this.updateHeart(); // »ı¸í Ç¥½Ã ÃÊ±âÈ­
+					this.updateHeart(); // ìƒëª… í‘œì‹œ ì´ˆê¸°í™”
 		
 					//
-					// ¿ì»ó´Ü ¹Ì´Ï¸Ê ¹öÆ°
+					// ìš°ìƒë‹¨ ë¯¸ë‹ˆë§µ ë²„íŠ¼
 					CCMenuItem item = CCMenuItemImage.item(
 							hudLayerFolder + "game-buttonMinimap-normal-hd.png",
 							hudLayerFolder + "game-buttonMinimap-select-hd.png", 
@@ -1859,7 +1859,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 					//Log.e("HudLayer", "minimap loaded");
 		
 					//
-					// ÇÏ´Ü ¼öÁ¤±¸ ¾ÆÀÌÅÛ
+					// í•˜ë‹¨ ìˆ˜ì •êµ¬ ì•„ì´í…œ
 					CCSprite itemBase = CCSprite.sprite(hudLayerFolder + "game-itemBase-hd.png");
 					this.addChild(itemBase);
 					itemBase.setPosition(
@@ -1894,10 +1894,10 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 									+ itemOn.getContentSize().height / 8);
 					itemBase.addChild(itemMenu);
 					
-					// Ãß°¡ÇÏ¸é ÅÍÄ¡°¡ ¾ÈµÊ.  È®ÀÎÇÒ °Í
+					// ì¶”ê°€í•˜ë©´ í„°ì¹˜ê°€ ì•ˆë¨.  í™•ì¸í•  ê²ƒ
 					
 					//
-					// ÀÌ¸ğÆ¼ÄÜ
+					// ì´ëª¨í‹°ì½˜
 					GameEmoticon gameEmoticon = new GameEmoticon();
 					this.addChild(gameEmoticon);
 					
@@ -1907,7 +1907,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 					this.updateSphereItemNumber();
 		
 					//
-					// test code - °ÔÀÓÀÌ ½ÃÀÛµÇ¸é °ÔÀÓ¿£µù È­¸éÀÌ ¹Ù·Î¶ä
+					// test code - ê²Œì„ì´ ì‹œì‘ë˜ë©´ ê²Œì„ì—”ë”© í™”ë©´ì´ ë°”ë¡œëœ¸
 					// GameEnding ending = GameEnding.share(this.mContext);
 					// this.addChild(ending, GameConfig.share().kDepthPopup);
 		
@@ -1918,11 +1918,11 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		
 					//
 					// test code
-					// game°ú hudlayer¿¡ mcontextµÑ´Ù ÀÖÀ½.
+					// gameê³¼ hudlayerì— mcontextë‘˜ë‹¤ ìˆìŒ.
 					UserData userData = UserData.share(mContext);
 		
 					//
-					// ¸¶¹ı»ç
+					// ë§ˆë²•ì‚¬
 					CCSpriteFrameCache.sharedSpriteFrameCache().addSpriteFrames(hudLayerFolder + "magician.plist");
 					magician = CCSprite.sprite(hudLayerFolder + "R-WizardAngle-0.png");
 					this.addChild(magician, -1);
@@ -1947,14 +1947,14 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		//
 		public boolean updateHeart() {
 			//Log.e("HudLayer", "HudLayer --------- updateHeart --------- HudLayer");
-			// value´Â 3
+			// valueëŠ” 3
 			int value = GameData.share().getHeartNumber();
 
 			for (int i = 0; i < GameData.share().kMaxHeartNumber * 2; i++) {
 				this.removeChildByTag(kTagHeart, true);
 			}
 
-			// ÇÏÆ® À§Ä¡
+			// í•˜íŠ¸ ìœ„ì¹˜
 			CGPoint position = CGPoint.make(
 					winSize.width / 20, winSize.height - winSize.width / 4.3f);
 			int z = 0;
@@ -1992,7 +1992,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			//Log.e("frameName", frameName);
 			//CCSpriteFrame frame = CCSpriteFrameCache.sharedSpriteFrameCache().spriteFrameByName(frameName);
 			
-			// Àú»ç¾ç ±â±â¿¡¼­´Â ¹ö¹÷°Å¸².
+			// ì €ì‚¬ì–‘ ê¸°ê¸°ì—ì„œëŠ” ë²„ë²…ê±°ë¦¼.
 			CCTexture2D t2d = CCTextureCache.sharedTextureCache().addImage(frameName); 
 			CCSpriteFrame frame = CCSpriteFrame.frame(t2d,CGRect.make(0,0,301,277),CGPoint.ccp(0,0));
 			
@@ -2000,9 +2000,9 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		}
 
 		//
-		// ¼öÁ¤±¸¾ÆÀÌÅÛ ¹öÆ° È°¼ºÈ­ ÁöÁ¤
-		// @ sphereType : ¼öÁ¤±¸ À¯Çü
-		// @ state : È°¼ºÈ­ ¿©ºÎ, kBUttonOn, kButtonOff;
+		// ìˆ˜ì •êµ¬ì•„ì´í…œ ë²„íŠ¼ í™œì„±í™” ì§€ì •
+		// @ sphereType : ìˆ˜ì •êµ¬ ìœ í˜•
+		// @ state : í™œì„±í™” ì—¬ë¶€, kBUttonOn, kButtonOff;
 
 
 		// button callback
@@ -2010,10 +2010,10 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			this.clickEffect(sphereType, 0.0f);
 		}
 
-		// ¾ÈµÉ¼öµµ ÀÖ´Â ºÎºĞ
+		// ì•ˆë ìˆ˜ë„ ìˆëŠ” ë¶€ë¶„
 		public void clickEffect(int sphereType, float startDelay) {
 			//
-			// È°¼ºÈ­µÈ ¾ÆÀÌÅÛ¹öÆ°ÀÇ Å¬¸¯ È¿°ú ¿À¹ö·¹ÀÌ¸¦ ÀÏÁ¤½Ã°£ Ä×´Ù ²ö´Ù.
+			// í™œì„±í™”ëœ ì•„ì´í…œë²„íŠ¼ì˜ í´ë¦­ íš¨ê³¼ ì˜¤ë²„ë ˆì´ë¥¼ ì¼ì •ì‹œê°„ ì¼°ë‹¤ ëˆë‹¤.
 			CCSprite overlay = CCSprite.sprite(hudLayerFolder + "game-itemOver-hd.png");
 
 			for (CCNode itemNode : itemMenu.getChildren()) {
@@ -2021,7 +2021,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 				if (item.getTag() == sphereType && item.selectedIndex() == kButtonOn) {
 					item.addChild(overlay);
 					overlay.setPosition(item.getContentSize().width / 2, item.getContentSize().height / 2);
-					// flashOut ¸Ş¼Òµå°¡ ¾ÈµÇ´Â ºÎºĞÀÌ ÀÖ¾î ¸·¾Æµ×À½.(remove node) ´ë½Å ´Ù¸¥°Í ³Ö¾î¼­ Å×½ºÆ®Áß...
+					// flashOut ë©”ì†Œë“œê°€ ì•ˆë˜ëŠ” ë¶€ë¶„ì´ ìˆì–´ ë§‰ì•„ë’€ìŒ.(remove node) ëŒ€ì‹  ë‹¤ë¥¸ê²ƒ ë„£ì–´ì„œ í…ŒìŠ¤íŠ¸ì¤‘...
 					Utility.getInstance().flashOut(overlay, startDelay, 0.5f);
 					break;
 				}
@@ -2079,12 +2079,12 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		
 		
 		/*****************************************************/
-		/** ¹®Á¦ÁöÁ¡
+		/** ë¬¸ì œì§€ì 
 		 *  
-		 * ¾Ö´Ï¸ÅÀÌ¼Ç
-		 * ¾ÆÀÌÅÛ ¹ßµ¿ ¾Ö´Ï
+		 * ì• ë‹ˆë§¤ì´ì…˜
+		 * ì•„ì´í…œ ë°œë™ ì• ë‹ˆ
 		 * 
-		 * ¾ÆÀÌÅÛ ÇÇÇØ ¾Ö´Ï´Â GameMinimap.java ÀÇ receivePlayData method È®ÀÎ
+		 * ì•„ì´í…œ í”¼í•´ ì• ë‹ˆëŠ” GameMinimap.java ì˜ receivePlayData method í™•ì¸
 		 * 
 		 * 
 		 * @return
@@ -2106,42 +2106,42 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 					break;
 				case kButtonFire:
 					//Log.e("button pressed", "kButtonFire");
-					effectName = "ºÒ¸¶¹ı";
+					effectName = "ë¶ˆë§ˆë²•";
 					break;
 				case kButtonWind:
 					//Log.e("button pressed", "kButtonWind");
-					effectName = "¹Ù¶÷¸¶¹ı";
+					effectName = "ë°”ëŒë§ˆë²•";
 					break;
 				case kButtonCloud:
 					//Log.e("button pressed", "kButtonCloud");
-					effectName = "±¸¸§¸¶¹ı";
+					effectName = "êµ¬ë¦„ë§ˆë²•";
 					break;
 				case kButtonDivine:
 					//Log.e("button pressed", "kButtonDivine");
-					effectName = "½Å¼º¸¶¹ı";
+					effectName = "ì‹ ì„±ë§ˆë²•";
 					break;
 				case kButtonEarth:
 					//Log.e("button pressed", "kButtonEarth");
-					effectName = "´ëÁö¸¶¹ı";
+					effectName = "ëŒ€ì§€ë§ˆë²•";
 					break;
 				case kButtonMirror:
 					//Log.e("button pressed", "kButtonMirror");
-					effectName = "¹İ»ç¸¶¹ı";
+					effectName = "ë°˜ì‚¬ë§ˆë²•";
 					break;
 
 				default:
 					//Log.e("button pressed", "default");
-					effectName = "¸¶¹ıÁöÁ¤ ¿À·ù";
+					effectName = "ë§ˆë²•ì§€ì • ì˜¤ë¥˜";
 					break;
 				}
 				final String alertText  = effectName;
 				//
-				// ¼öÁ¤±¸¾ÆÀÌÅÛ ¹öÆ° Å¬¸¯ °øÅë
+				// ìˆ˜ì •êµ¬ì•„ì´í…œ ë²„íŠ¼ í´ë¦­ ê³µí†µ
 				if (((CCMenuItem) button).getTag() >= 1 && ((CCMenuItem) button).getTag() <= 6) {
 					//
-					// ¸¶¹ı»ç ¾×¼Ç
-					// - ¾Ö´Ï¸ŞÀÌ¼ÇÀ» À§¿¡ ¿Ã·È´Ú ³¡³ª¸é Áö¿ö¹ö¸°´Ù.
-					// - º»·¡ Ä³¸¯ÅÍ´Â °¡·È´Ù°¡ ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ³¡³­ ÈÄ¿¡ (0.4ÃÊ ÀÌÈÄ) ´Ù½Ã º¸ÀÌµµ·Ï ÇÑ´Ù.
+					// ë§ˆë²•ì‚¬ ì•¡ì…˜
+					// - ì• ë‹ˆë©”ì´ì…˜ì„ ìœ„ì— ì˜¬ë ¸ë‹¥ ëë‚˜ë©´ ì§€ì›Œë²„ë¦°ë‹¤.
+					// - ë³¸ë˜ ìºë¦­í„°ëŠ” ê°€ë ¸ë‹¤ê°€ ì• ë‹ˆë©”ì´ì…˜ì´ ëë‚œ í›„ì— (0.4ì´ˆ ì´í›„) ë‹¤ì‹œ ë³´ì´ë„ë¡ í•œë‹¤.
 					Utility.getInstance().animationMagicianAction(this);
 					magician.setVisible(false);
 					final CCNode layer = this;
@@ -2153,11 +2153,11 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 								magician.setVisible(true);
 								layer.removeChildByTag(888, true);
 								//
-								// ¾ÆÀÌÅÛ¼ö¸¦ °¨¼Ò½ÃÅ°°í
-								// ¶óº§ µğ½ºÇÃ·¹ÀÌ¸¦ ¾÷µ¥ÀÌÆ® ½ÃÅ°°í
-								// ¹öÆ° Å¬¸¯ È¿°ú
+								// ì•„ì´í…œìˆ˜ë¥¼ ê°ì†Œì‹œí‚¤ê³ 
+								// ë¼ë²¨ ë””ìŠ¤í”Œë ˆì´ë¥¼ ì—…ë°ì´íŠ¸ ì‹œí‚¤ê³ 
+								// ë²„íŠ¼ í´ë¦­ íš¨ê³¼
 
-								// µğÆæ½º¿Í ¾îÅÃ ±¸ºĞ ÇÊ¿ä ÀÌÀ¯????
+								// ë””íœìŠ¤ì™€ ì–´íƒ êµ¬ë¶„ í•„ìš” ì´ìœ ????
 								if (GameData.share().isMultiGame) {
 									try {
 										NetworkController.getInstance().sendPlayDataMagicAttack(((CCMenuItem) button).getTag());
@@ -2170,14 +2170,14 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 								updateSphereItemNumber();
 								clickEffect(((CCMenuItem) button).getTag());
 /*
-								// ¹ßµ¿ ÀÌÆåÆ® (±âº» È®ÀÎ Ãë¼Ò °æ°íÃ¢)
+								// ë°œë™ ì´í™íŠ¸ (ê¸°ë³¸ í™•ì¸ ì·¨ì†Œ ê²½ê³ ì°½)
 								AlertDialog.Builder builder = 
 										new AlertDialog.Builder(CCDirector.sharedDirector().getActivity());
 								builder
-								//.setMessage(alertText + " ¹ßµ¿")
-								.setTitle(alertText + " ¹ßµ¿")
+								//.setMessage(alertText + " ë°œë™")
+								.setTitle(alertText + " ë°œë™")
 										.setPositiveButton(
-												"È®ÀÎ",new DialogInterface.OnClickListener() {
+												"í™•ì¸",new DialogInterface.OnClickListener() {
 													public void onClick(DialogInterface dialog,
 															int id) {
 														// your Code here
@@ -2299,14 +2299,14 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		
 		
 		/*****************************************************/
-		/** ¹®Á¦ÁöÁ¡
+		/** ë¬¸ì œì§€ì 
 		 *  
-		 * ¾Ö´Ï¸ÅÀÌ¼Ç
-		 * °ÔÀÓ Á¾·á ¾Ö´Ï GameEnding.java
+		 * ì• ë‹ˆë§¤ì´ì…˜
+		 * ê²Œì„ ì¢…ë£Œ ì• ë‹ˆ GameEnding.java
 		 * 
 		 * @return
 		 */
-		static boolean isGameOver = false; // °ÔÀÓ Á¾·á ¸Ş½ÃÁö¸¦ ¼­¹ö·Î ¹«ÇÑ º¸³»´Â°ÍÀ» ¹æÁöÇÔ.
+		static boolean isGameOver = false; // ê²Œì„ ì¢…ë£Œ ë©”ì‹œì§€ë¥¼ ì„œë²„ë¡œ ë¬´í•œ ë³´ë‚´ëŠ”ê²ƒì„ ë°©ì§€í•¨.
 		
 //		public static void gameOver() {
 		public static void gameOver(int myPoint, int otherPoint) {
@@ -2314,7 +2314,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			Config.getInstance().setDisableButton(true);
 			
 			if (GameData.share().isMultiGame) {
-				 // °ÔÀÓ Á¾·á ¸Ş½ÃÁö¸¦ ¼­¹ö·Î ¹«ÇÑ º¸³»´Â°ÍÀ» ¹æÁöÇÔ.
+				 // ê²Œì„ ì¢…ë£Œ ë©”ì‹œì§€ë¥¼ ì„œë²„ë¡œ ë¬´í•œ ë³´ë‚´ëŠ”ê²ƒì„ ë°©ì§€í•¨.
 				if (!isGameOver) {
 					try {
 						isGameOver = !isGameOver;
@@ -2379,7 +2379,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		
 		//others
 		
-		// À§ÂÊ Ä³¸¯ÅÍ ¾ó±¼¸¸ÀÖ´Â ÇÁ·Î±×·¹½º¹Ù¿¡ Ä³¸¯ ¾ó±¼ ¿òÁ÷ÀÌ°Ô ÇØÁÜ
+		// ìœ„ìª½ ìºë¦­í„° ì–¼êµ´ë§ŒìˆëŠ” í”„ë¡œê·¸ë ˆìŠ¤ë°”ì— ìºë¦­ ì–¼êµ´ ì›€ì§ì´ê²Œ í•´ì¤Œ
 		public static void updateProgress() {
 			int gameDifficulty  = GameData.share().getGameDifficulty();
 			int maxMine = GameData.share().getMaxMineNumber(gameDifficulty);
@@ -2389,42 +2389,42 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			gameProgressBar.progress(progress, gameProgressBar.kTagIndicatorMe);
 		}
 		
-		// Áö·Ú°¹¼ö ¼ıÀÚ·Î Ç¥½ÃÇÏ´Â ¸Ş¼­µå
+		// ì§€ë¢°ê°¯ìˆ˜ ìˆ«ìë¡œ í‘œì‹œí•˜ëŠ” ë©”ì„œë“œ
 		public static void updateMineNumber(int remainedMineNumber) {
 			statusMine.setString("" + remainedMineNumber);
 		}
 
-		// ¼öÁ¤±¸¸¦ È°¼ºÈ­½ÃÅ°¸é +1¾¿ ¶óº§ÀÌ ºÙ°ÔÇÔ
+		// ìˆ˜ì •êµ¬ë¥¼ í™œì„±í™”ì‹œí‚¤ë©´ +1ì”© ë¼ë²¨ì´ ë¶™ê²Œí•¨
 		public void updateSphereItemNumber() {
 			//
-			// ÀüÃ¼ ¶óº§ Á¦°Å
+			// ì „ì²´ ë¼ë²¨ ì œê±°
 			for (int i = 0; i < 6; i++) {
 				this.removeChildByTag(999, true);
 			}
 
 			for (int i = 0; i < 6; i++) {
 				//
-				// »õ ¶óº§ Ãß°¡
+				// ìƒˆ ë¼ë²¨ ì¶”ê°€
 				int sphereType = i + 1;
 				int itemNumber = GameData.share().getItemNumberByType(sphereType);
 				String string = itemNumber > 0 ? "+" + itemNumber : "  " ;
 				//CCLabel l = CCLabel.makeLabel(string, "Arial", 12);
-				// ¾ÆÀÌÅÛº° ¼ö·®À» Ç¥½ÃÇÏ´Â ±ÛÀÚ
+				// ì•„ì´í…œë³„ ìˆ˜ëŸ‰ì„ í‘œì‹œí•˜ëŠ” ê¸€ì
 				CCLabel l = CCLabel.makeLabel(string, "Arial-Bold", 24);
 				l.setTag(999);
 				this.addChild(l);
 				l.setPosition(i * 50f*2 + 50f*2, l.getContentSize().height * 1.2f);
 
 				//
-				// ¹öÆ° »óÅÂ ¼³Á¤
+				// ë²„íŠ¼ ìƒíƒœ ì„¤ì •
 				this.setSphereItemState(sphereType, itemNumber > 0 ?
 						kButtonOn : kButtonOff);
 			}
 			//Log.e("Game / updateSphereItemNumber", "end");
 		}
 
-		// ¿ø·¡ ÄÚµå¿¡¼­ ÀÚµ¿ÀÌ ÇÏµµ ¸¹¾Æ¼­ 
-		//Áö±İ ÀÛ¼ºÇÑ°Ô µ¹¾Æ°¡µµ Àß µ¹¾Æ°¡´Â°ÇÁö ¸ğ¸£°Ú´Ù.
+		// ì›ë˜ ì½”ë“œì—ì„œ ìë™ì´ í•˜ë„ ë§ì•„ì„œ 
+		//ì§€ê¸ˆ ì‘ì„±í•œê²Œ ëŒì•„ê°€ë„ ì˜ ëŒì•„ê°€ëŠ”ê±´ì§€ ëª¨ë¥´ê² ë‹¤.
 		public void setSphereItemState(int sphereType, int state) {
 
 			List<CCMenuItemToggle> item = new ArrayList<CCMenuItemToggle>();
@@ -2485,7 +2485,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 //		CCLabel point3 = CCLabel.makeLabel("point3 : ", "Arial", (30* tilePixelSize) / 128);
 //		CCLabel point4 = CCLabel.makeLabel("point4 : ", "Arial", (30* tilePixelSize) / 128);
 	}
-	/**************************** º¯°æ ****************************/
+	/**************************** ë³€ê²½ ****************************/
 	int globalIndex;
 	int myPoint;
 	int otherPoint;
@@ -2508,7 +2508,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		this.myPoint = point;
 		this.otherPoint = otherPoint;
 		this.endingZoomOutAndBlastFX();
-//		this.performSelector(endingZoomOut, null, 4); // ¾²·¹µå½½¸³ (¸Ş¼­µå¸í, ÀÎÀÚ, µô·¹ÀÌ Å¸ÀÓ)
+//		this.performSelector(endingZoomOut, null, 4); // ì“°ë ˆë“œìŠ¬ë¦½ (ë©”ì„œë“œëª…, ì¸ì, ë”œë ˆì´ íƒ€ì„)
 	}
 	
 	private void endingZoomOut() {
@@ -2525,10 +2525,10 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		CCNode theLayer = this;
 		float newScale = theLayer.getScale() - 0.05f;
 		newScale = CGPoint.clampf(newScale, GameConfig.share().kMinScale, GameConfig.share().kMaxScale);
-		theLayer.setScale(newScale); // ÁÜ ¾Æ¿ô
-		theLayer.setPosition(this.getMapCurrentPosition()); // ÇöÀç È­¸é¿¡¼­ ÁÜ ¾Æ¿ôÇÔ
+		theLayer.setScale(newScale); // ì¤Œ ì•„ì›ƒ
+		theLayer.setPosition(this.getMapCurrentPosition()); // í˜„ì¬ í™”ë©´ì—ì„œ ì¤Œ ì•„ì›ƒí•¨
 		
-		// ÁÜ ¾Æ¿ô½Ã È­¸é ¾È¿¡¼­¸¸ ÁÜ ¾Æ¿ô µÇ°ÔÇÔ.
+		// ì¤Œ ì•„ì›ƒì‹œ í™”ë©´ ì•ˆì—ì„œë§Œ ì¤Œ ì•„ì›ƒ ë˜ê²Œí•¨.
 		theLayer.setPosition(CGPoint.ccp(
 				CGPoint.clampf(theLayer.getPosition().x, this.getMapMinPosition().x, this.getMapMaxPosition().x),
 				CGPoint.clampf(theLayer.getPosition().y, this.getMapMinPosition().y, this.getMapMaxPosition().y)

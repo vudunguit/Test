@@ -1,4 +1,4 @@
-package com.aga.mine.pages2;
+ï»¿package com.aga.mine.pages2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,10 +32,10 @@ public class GameMinimap extends CCLayer{
 
 	CCTMXTiledMap tileMap = null;
 	static CCSprite base  = null;
-	//¹è°æ
+	//ë°°ê²½
 	CCTMXLayer bg = null;
 	CCTMXLayer meta = null;
-	//Àü°æ?
+	//ì „ê²½?
 	CCTMXLayer fg = null;
 	CCTMXLayer mineLayer = null;
 	CCTMXLayer itemLayer = null;
@@ -74,14 +74,14 @@ public class GameMinimap extends CCLayer{
 		Utility.getInstance().dimScreen(this);
 
 		//
-		// º£ÀÌ½º
+		// ë² ì´ìŠ¤
 		CCSprite base = CCSprite.sprite(hudLayerFolder + "minimap-base-hd.png");
 		this.addChild(base);
 		base.setPosition(winSize.width/2, winSize.height/2);
 		base.setTag(kTagMinimap);
 		
 		//
-		// ´İ±â¹öÆ°
+		// ë‹«ê¸°ë²„íŠ¼
 		CCMenuItem itemExit = CCMenuItemImage.item(
 				hudLayerFolder + "minimap-buttonExit-normal-hd.png", 
 				hudLayerFolder + "minimap-buttonExit-select-hd.png", 
@@ -94,22 +94,22 @@ public class GameMinimap extends CCLayer{
 				base.getContentSize().height - itemExit.getContentSize().height * 0.7f);
 		
 		//
-		// ¹Ì´Ï¸Ê
+		// ë¯¸ë‹ˆë§µ
 		
-		// Å¸ÀÏ¸Ê ·Îµå
+		// íƒ€ì¼ë§µ ë¡œë“œ
 		this.tileMap = CCTMXTiledMap.tiledMap(GameData.share().gameMap);
 		//this.tileMap = new Game().getTileMap();
 		
-		// Å¸ÀÏ¸Ê ·¹ÀÌ¾î µî·Ï
-		this.itemLayer = this.tileMap.layerNamed("ItemLayer");			 // Áö·Ú ¹× ¾ÆÀÌÅÛ, ±ê¹ß °¡Á®¿À´Â ·¹ÀÌ¾î
+		// íƒ€ì¼ë§µ ë ˆì´ì–´ ë“±ë¡
+		this.itemLayer = this.tileMap.layerNamed("ItemLayer");			 // ì§€ë¢° ë° ì•„ì´í…œ, ê¹ƒë°œ ê°€ì ¸ì˜¤ëŠ” ë ˆì´ì–´
 		this.bg = this.tileMap.layerNamed("Background");					 // Layer Name in Tiled
-		this.mineLayer = this.tileMap.layerNamed("MineLayer");		 // Áö·Ú(È£¹Ú) ¹× ¾ÆÀÌÅÛ »Ñ¸± ·¹ÀÌ¾î
-		this.fg = this.tileMap.layerNamed("Foreground");					 // ÀÜµğ
-		this.flagLayer = this.tileMap.layerNamed("FlagLayer");			 // ±ê¹ß(¹ö¼¸) ²ÈÀ» ·¹ÀÌ¾î
-		this.meta = this.tileMap.layerNamed("Meta");							 // ¼±ÅÃ ºÒ°¡ ¿µ¿ª
+		this.mineLayer = this.tileMap.layerNamed("MineLayer");		 // ì§€ë¢°(í˜¸ë°•) ë° ì•„ì´í…œ ë¿Œë¦´ ë ˆì´ì–´
+		this.fg = this.tileMap.layerNamed("Foreground");					 // ì”ë””
+		this.flagLayer = this.tileMap.layerNamed("FlagLayer");			 // ê¹ƒë°œ(ë²„ì„¯) ê½‚ì„ ë ˆì´ì–´
+		this.meta = this.tileMap.layerNamed("Meta");							 // ì„ íƒ ë¶ˆê°€ ì˜ì—­
 		this.meta.setVisible(false);
 		
-		// ¸Ê ¿Ã¸®°í ±âº» Å©±â ÁöÁ¤, ÇÁ·¹ÀÓ µÚ·Î ¿Ã¸°´Ù.
+		// ë§µ ì˜¬ë¦¬ê³  ê¸°ë³¸ í¬ê¸° ì§€ì •, í”„ë ˆì„ ë’¤ë¡œ ì˜¬ë¦°ë‹¤.
 		base.addChild(this.tileMap, -1);
 //		this.setVisible(false);
 		this.tileMap.setScale(0.167f);
@@ -123,7 +123,7 @@ public class GameMinimap extends CCLayer{
 		tileSize = CGSize.make(tileMap.getTileSize().width, tileMap.getTileSize().height);
 		mapSize = CGSize.make(tileMap.getMapSize().width * tileSize.width, tileMap.getMapSize().height * tileSize.height);
 		 
-		// ÀüÃ¼ Å¸ÀÏ(¼¿) µî·Ï
+		// ì „ì²´ íƒ€ì¼(ì…€) ë“±ë¡
 		cells = new ArrayList<MineCell>();
 		sphereBaseCells = new ArrayList<MineCell>();
 		int count = 0;
@@ -155,8 +155,8 @@ public class GameMinimap extends CCLayer{
 	public void removeTile(CGPoint tileCoord) {
 		// Global ID // Globally unique IDentifier
 		int tileGid = this.meta.tileGIDAt(tileCoord); 
-		tileGid = CCFormatter.swapIntToLittleEndian(tileGid); // ¹ºÁö ¾ÆÁ÷ ¸ğ¸£°ÚÀ½.
-		// 0 : ÀÏ½Ã Å¸ÀÏ°ª ¾øÀ½
+		tileGid = CCFormatter.swapIntToLittleEndian(tileGid); // ë­”ì§€ ì•„ì§ ëª¨ë¥´ê² ìŒ.
+		// 0 : ì¼ì‹œ íƒ€ì¼ê°’ ì—†ìŒ
 		
 		if(tileGid > 0){
 			HashMap<String , String> properties = this.tileMap.propertiesForGID(tileGid);
@@ -171,12 +171,12 @@ public class GameMinimap extends CCLayer{
 				}
 	
 			} else {
-				// ÆøÅºÀº ¾ø´Âµ¥ Å¸ÀÏÀÌ ¾È¾ø¾îÁö´Â ¿¡·¯
+				// í­íƒ„ì€ ì—†ëŠ”ë° íƒ€ì¼ì´ ì•ˆì—†ì–´ì§€ëŠ” ì—ëŸ¬
 				//Log.e("Game / removeTile", "properties - boom empty");
 			}
 		} else {
 			//Log.e("Game / removeTile", "properties - tile empty");
-			// ¿¡·¯ stack over flow error
+			// ì—ëŸ¬ stack over flow error
 			this.getFg().removeTileAt(tileCoord);
 		}
 	}
@@ -249,10 +249,10 @@ public class GameMinimap extends CCLayer{
 	
 	
 	/*****************************************************/
-	/** ¹®Á¦ÁöÁ¡
+	/** ë¬¸ì œì§€ì 
 	 *  
-	 * ¾Ö´Ï¸ÅÀÌ¼Ç
-	 * ¾ÆÀÌÅÛ ÇÇÇØ ¾Ö´Ï
+	 * ì• ë‹ˆë§¤ì´ì…˜
+	 * ì•„ì´í…œ í”¼í•´ ì• ë‹ˆ
 	 * 
 	 * @return
 	 */
@@ -296,16 +296,16 @@ public class GameMinimap extends CCLayer{
 //			
 		case kPlayDataMagicAttack:
 			if (0 < data && data < 4) {
-				Game.HudLayer.testText.setString("ÀûÀÇ °ø°İÀ» ¹Ş½À´Ï´Ù. type : " + data);
+				Game.HudLayer.testText.setString("ì ì˜ ê³µê²©ì„ ë°›ìŠµë‹ˆë‹¤. type : " + data);
 			} else if (data < 7) {
-				Game.HudLayer.testText.setString("ÀûÀÌ ¹æ¾î ÇÏ¿´½À´Ï´Ù. type : " + data);
+				Game.HudLayer.testText.setString("ì ì´ ë°©ì–´ í•˜ì˜€ìŠµë‹ˆë‹¤. type : " + data);
 			} else {
-				Game.HudLayer.testText.setString("¾Ë¼ö¾ø´Â Å¸ÀÔÀÇ °ø°İ type : " + data);
+				Game.HudLayer.testText.setString("ì•Œìˆ˜ì—†ëŠ” íƒ€ì…ì˜ ê³µê²© type : " + data);
 			}
 			break;
 			
 		case kPlayDataMagicDefense:
-			Game.HudLayer.testText.setString("ÀûÀÌ ¹æ¾î ÇÏ¿´½À´Ï´Ù. kPlayDataMagicDefense");
+			Game.HudLayer.testText.setString("ì ì´ ë°©ì–´ í•˜ì˜€ìŠµë‹ˆë‹¤. kPlayDataMagicDefense");
 			break;
 			
 //		case kPlayDataGameOver:
@@ -319,7 +319,7 @@ public class GameMinimap extends CCLayer{
 //			break;
 			
 		case kPlayDataEmoticon:
-			Game.HudLayer.testText.setString("ÀÌ¸ğÆ¼ÄÜÀÌ ¿Ô½À´Ï´Ù. type : " + data);
+			Game.HudLayer.testText.setString("ì´ëª¨í‹°ì½˜ì´ ì™”ìŠµë‹ˆë‹¤. type : " + data);
 			break;
 //			
 //		case kPlayDataMine:
@@ -330,8 +330,8 @@ public class GameMinimap extends CCLayer{
 //			
 		case kPlayDataSphere:
 			count = 0;
-			for (int m = 0; m < 2; m++) { // ¼¼·Î ¹æÇâ
-				for (int k = 0; k < 2; k++) { // °¡·Î ¹æÇâ
+			for (int m = 0; m < 2; m++) { // ì„¸ë¡œ ë°©í–¥
+				for (int k = 0; k < 2; k++) { // ê°€ë¡œ ë°©í–¥
 					CGPoint targetTile = CGPoint.make(cell.x + k, cell.y + m);
 
 					removeTile(targetTile);
@@ -343,12 +343,12 @@ public class GameMinimap extends CCLayer{
 			break;
 			
 		case kPlayDataSphereTake:
-			Game.HudLayer.testText.setString("Warning!!!! ÀûÀÌ ¾ÆÀÌÅÛ È¹µæ");
+			Game.HudLayer.testText.setString("Warning!!!! ì ì´ ì•„ì´í…œ íšë“");
 //			count = 0;
 //			if (itemType == 0)
 //				itemType = 7;
-//			for (int m = 0; m < 2; m++) { // ¼¼·Î ¹æÇâ
-//				for (int k = 0; k < 2; k++) { // °¡·Î ¹æÇâ
+//			for (int m = 0; m < 2; m++) { // ì„¸ë¡œ ë°©í–¥
+//				for (int k = 0; k < 2; k++) { // ê°€ë¡œ ë°©í–¥
 //					CGPoint targetTile = CGPoint.make(cell.x + k, cell.y + m);
 //					this.mineLayer.removeTileAt(targetTile);
 //					cellGID = CCFormatter.swapIntToLittleEndian(this.itemLayer.tileGIDAt(CGPoint.make(count, itemType)));
@@ -359,8 +359,8 @@ public class GameMinimap extends CCLayer{
 			break;
 
 		default:
-			Log.e("GameMinimap", "¾Ë¼ö ¾ø´Â µ¥ÀÌÅ¸ Å¸ÀÔ : " + playType);
-			Game.HudLayer.testText.setString("¾Ë¼ö ¾ø´Â µ¥ÀÌÅ¸ Å¸ÀÔ. playType : " + playType);
+			Log.e("GameMinimap", "ì•Œìˆ˜ ì—†ëŠ” ë°ì´íƒ€ íƒ€ì… : " + playType);
+			Game.HudLayer.testText.setString("ì•Œìˆ˜ ì—†ëŠ” ë°ì´íƒ€ íƒ€ì…. playType : " + playType);
 			break;
 		}
 		

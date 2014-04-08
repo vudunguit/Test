@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+﻿package com.aga.mine.mains;
 
 import org.cocos2d.nodes.CCSprite;
 
@@ -14,7 +14,7 @@ public class FrameTitle2 {
 	
 	public static void setTitle(CCSprite parentSprite, String imageFolder) {
 		//
-		// Ÿ��Ʋ �ǳ�
+		// 타이틀 판넬
 		CCSprite titlePanel = CCSprite.sprite(commonfolder + "frame-titlePanel" + fileExtension);
 		parentSprite.addChild(titlePanel);
 		titlePanel.setAnchorPoint(0.5f, 0.5f);
@@ -22,7 +22,7 @@ public class FrameTitle2 {
 			parentSprite.getContentSize().width / 2,
 			parentSprite.getContentSize().height - 110.0f);
 		
-		// Ÿ��Ʋ
+		// 타이틀
 		CCSprite frameTitle = CCSprite.sprite(
 		Utility.getInstance().getNameWithIsoCodeSuffix(
 				imageFolder + imageFolder.substring(2, imageFolder.length()-1) + "-title" + fileExtension));

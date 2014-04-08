@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -44,22 +44,22 @@ public class GameDifficulty extends CCLayer {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
 		
-		//¹è°æ ±×¸² ¼³Á¤
+		//ë°°ê²½ ê·¸ë¦¼ ì„¤ì •
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
 		
 		setBackBoardMenu(commonfolder + "gamebb" + fileExtension);
 		setBoardFrameMenu(commonfolder + "frameGeneral-hd" + fileExtension);
 		
-		// »ó´Ü ¸Ş´º
+		// ìƒë‹¨ ë©”ë‰´
 		TopMenu2.setSceneMenu(this);
-		// ÇÏ´Ü ÀÌ¹ÌÁö
+		// í•˜ë‹¨ ì´ë¯¸ì§€
 		BottomImage.setBottomImage(this);
 
 		this.setIsTouchEnabled(true);
 	}
 	
 	
-	// ¹é º¸µå ¼³Á¤
+	// ë°± ë³´ë“œ ì„¤ì •
 	private void setBackBoardMenu(String imageFullPath) {
 		CCSprite bb = CCSprite.sprite(imageFullPath);
 		bg.addChild(bb);
@@ -68,7 +68,7 @@ public class GameDifficulty extends CCLayer {
 		setMainMenu(bb);
 	}
 	
-	// °Ô½ÃÆÇ ¼³Á¤
+	// ê²Œì‹œíŒ ì„¤ì •
 	private void setBoardFrameMenu(String imageFullPath) {
 		CCSprite boardFrame = CCSprite.sprite(imageFullPath);
 		bg.addChild(boardFrame);
@@ -77,7 +77,7 @@ public class GameDifficulty extends CCLayer {
 		FrameTitle2.setTitle(boardFrame, folder);
 	}
 
-	// °ÔÀÓ ¸Ş´º
+	// ê²Œì„ ë©”ë‰´
 	private void setMainMenu(CCSprite parentSprite){
 		
 		CCMenuItemImage button1 = CCMenuItemImage.item(
@@ -102,9 +102,9 @@ public class GameDifficulty extends CCLayer {
 		parentSprite.addChild(gameMenu, 1);
 		gameMenu.setPosition(parentSprite.getContentSize().width / 2 - 5, parentSprite.getContentSize().height - 58);
 		
-		button1.setPosition(0f, -button1.getContentSize().height*0.5f); // ÃÊ±Ş
-		button2.setPosition(0f, -button1.getContentSize().height*1.5f); // Áß±Ş
-		button3.setPosition(0f, -button1.getContentSize().height*2.5f); // »ó±Ş
+		button1.setPosition(0f, -button1.getContentSize().height*0.5f); // ì´ˆê¸‰
+		button2.setPosition(0f, -button1.getContentSize().height*1.5f); // ì¤‘ê¸‰
+		button3.setPosition(0f, -button1.getContentSize().height*2.5f); // ìƒê¸‰
 		
 		CCSprite	buttonText1 = CCSprite.sprite(
 				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "difficulty-easytext" + fileExtension));
@@ -140,10 +140,10 @@ public class GameDifficulty extends CCLayer {
 	public void nextCallback(Object sender) {
 		CCScene scene = null;
 //		GameData.share().setGameDifficulty((Integer)((CCNode)sender).getUserData());
-//		switch (GameData.share().getGameMode()) {  // gameData·Î ¿Å°Ü¾ßµÊ. (±âÁ¸¿¡ ÀÖÀ½.)
+//		switch (GameData.share().getGameMode()) {  // gameDataë¡œ ì˜®ê²¨ì•¼ë¨. (ê¸°ì¡´ì— ìˆìŒ.)
 		Log.e("GameDifficulty", "tagNumber  : " + userData.getGameMode());
 		
-		switch (userData.getGameMode()) {  // gameData·Î ¿Å°Ü¾ßµÊ. (±âÁ¸¿¡ ÀÖÀ½.)
+		switch (userData.getGameMode()) {  // gameDataë¡œ ì˜®ê²¨ì•¼ë¨. (ê¸°ì¡´ì— ìˆìŒ.)
 		case singleMode:
 			scene = GameLoading.scene();
 			single(scene);
@@ -165,7 +165,7 @@ public class GameDifficulty extends CCLayer {
 			scene = GameDifficulty.scene();
 			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
 						public void run() {
-							Toast.makeText(mContext, "ºøÀÚ·ç°¡ ºÎÁ·ÇÕ´Ï´Ù.", Toast.LENGTH_SHORT).show();
+							Toast.makeText(mContext, "ë¹—ìë£¨ê°€ ë¶€ì¡±í•©ë‹ˆë‹¤.", Toast.LENGTH_SHORT).show();
 						}
 					});
 		}

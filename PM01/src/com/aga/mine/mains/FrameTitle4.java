@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+﻿package com.aga.mine.mains;
 
 import org.cocos2d.nodes.CCSprite;
 
@@ -12,7 +12,7 @@ public class FrameTitle4 {
 	}
 	
 	public static void setTitle(CCSprite parentSprite, String imageFolder) {
-		// Ÿ��Ʋ
+		// 타이틀
 		CCSprite frameTitle = CCSprite.sprite(
 		Utility.getInstance().getNameWithIsoCodeSuffix(
 				imageFolder + imageFolder.substring(2, imageFolder.length()-1) + "-title" + fileExtension));

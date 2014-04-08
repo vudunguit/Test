@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class ShopItem2 extends CCLayer {
 	private Context mContext;
 	UserData userData;
 	
-	// config ÆÄÀÏ¿¡ ³ªÁß¿¡ ¿Å±æ°Í
+	// config íŒŒì¼ì— ë‚˜ì¤‘ì— ì˜®ê¸¸ê²ƒ
 	public static boolean buttonActive = true;
 	int attackAttribute = 1;
 	int defenseAttribute = 1;
@@ -169,23 +169,23 @@ public class ShopItem2 extends CCLayer {
 		defenseMenu.alignItemsHorizontally(10);
 		
 		spherebuyMenu.setPosition(
-				465 - 44, parentSprite.getContentSize().height - 109); // ¼öÁ¤ ±¸¸Å
+				465 - 44, parentSprite.getContentSize().height - 109); // ìˆ˜ì • êµ¬ë§¤
 		
 		offensebuyMenu.setPosition(
-				465 - 44, parentSprite.getContentSize().height - 208); // °ø°İ¾ÆÀÌÅÛ ±¸¸Å
+				465 - 44, parentSprite.getContentSize().height - 208); // ê³µê²©ì•„ì´í…œ êµ¬ë§¤
 		
 		defensebuyMenu.setPosition(
-				465 - 44, parentSprite.getContentSize().height - 404); // ¹æ¾î¾ÆÀÌÅÛ ±¸¸Å
+				465 - 44, parentSprite.getContentSize().height - 404); // ë°©ì–´ì•„ì´í…œ êµ¬ë§¤
 		
 		offenseMenu.setAnchorPoint(0, 0);
 		offenseMenu.setPosition(
 				65 + o_fire.getContentSize().width * 1.5f,
-				587 - 343 + o_fire.getContentSize().height / 2); // °ø°İ ¼Ó¼º ¸Ş´º
+				587 - 343 + o_fire.getContentSize().height / 2); // ê³µê²© ì†ì„± ë©”ë‰´
 		
 		defenseMenu.setAnchorPoint(0, 0);
 		defenseMenu.setPosition(
 				65 + o_fire.getContentSize().width * 1.5f,
-				587 - 538 + o_fire.getContentSize().height / 2); // ¹æ¾î ¼Ó¼º ¸Ş´º
+				587 - 538 + o_fire.getContentSize().height / 2); // ë°©ì–´ ì†ì„± ë©”ë‰´
 		
 		CCSprite buyText = CCSprite.sprite(
 				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "item-textBuy" + fileExtension));
@@ -233,7 +233,7 @@ public class ShopItem2 extends CCLayer {
 	}
 		
 	
-//	//¹è°æ ±×¸² ¼³Á¤ (frameMatching)
+//	//ë°°ê²½ ê·¸ë¦¼ ì„¤ì • (frameMatching)
 	private void setText(CCSprite parentSprite){
 		
 		CCLabel gold1 = CCLabel.makeLabel("Gold", "Arial", 25);
@@ -258,7 +258,7 @@ public class ShopItem2 extends CCLayer {
 		sphereNumber1.setPosition(464 - 75 - 20, parentSprite.getContentSize().height - 63 - 8);
 		
 		sphereNumber2 = CCLabel.makeLabel(
-				"º¸À¯ Á¤·Éº´ :  " + new NumberComma().numberComma(sphereNumber), "Arial", 25);
+				"ë³´ìœ  ì •ë ¹ë³‘ :  " + new NumberComma().numberComma(sphereNumber), "Arial", 25);
 		sphereNumber2.setPosition(464 - 75 - 20, parentSprite.getContentSize().height - 152 + 8);
 		sphereNumber2.setAnchorPoint(1, 0);
 		
@@ -267,7 +267,7 @@ public class ShopItem2 extends CCLayer {
 		parentSprite.addChild(sphereNumber2);	
 
 		
-		/********************* °ø°İ *************************/
+		/********************* ê³µê²© *************************/
 		CCSprite attackItem = CCSprite.sprite(
 				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "item-labelAttack" + fileExtension));
 		attackItem.setPosition(110, parentSprite.getContentSize().height - 190);
@@ -300,7 +300,7 @@ public class ShopItem2 extends CCLayer {
 		offenseAttributeSelected1.setPosition(464 - 75 - 20, parentSprite.getContentSize().height - 163 - 8);
 //		offenseAttributeSelected1.setColor(ccColor3B.ccYELLOW);
 		
-		offenseAttributeSelected2 = CCLabel.makeLabel("°ø°İ ½Ã°£ " + levelFire + "ÃÊ Áõ°¡", "Arial", 22);
+		offenseAttributeSelected2 = CCLabel.makeLabel("ê³µê²© ì‹œê°„ " + levelFire + "ì´ˆ ì¦ê°€", "Arial", 22);
 		offenseAttributeSelected2.setUserData("LevelFire");
 		offenseAttributeSelected2.setAnchorPoint(1, 0);
 		offenseAttributeSelected2.setPosition(464 - 75 - 20, parentSprite.getContentSize().height - 248 + 8);
@@ -310,7 +310,7 @@ public class ShopItem2 extends CCLayer {
 		parentSprite.addChild(offenseAttributeSelected1);				
 		parentSprite.addChild(offenseAttributeSelected2);				
 	
-		/********************* ¹æ¾î *************************/
+		/********************* ë°©ì–´ *************************/
 		
 		CCSprite defenseItem = CCSprite.sprite(
 				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "item-labelDefense" + fileExtension));
@@ -345,7 +345,7 @@ public class ShopItem2 extends CCLayer {
 		defenseAttributeSelected1.setPosition(464 - 75 - 20, parentSprite.getContentSize().height - 358 - 8);
 //		defenseAttributeSelected1.setColor(ccColor3B.ccYELLOW);
 		
-		defenseAttributeSelected2 = CCLabel.makeLabel("ÇÇÇØ ½Ã°£ " + LevelDivine + "ÃÊ °¨¼Ò", "Arial", 22);
+		defenseAttributeSelected2 = CCLabel.makeLabel("í”¼í•´ ì‹œê°„ " + LevelDivine + "ì´ˆ ê°ì†Œ", "Arial", 22);
 		defenseAttributeSelected2.setUserData("LevelDivine");
 		defenseAttributeSelected2.setAnchorPoint(1, 0);
 		defenseAttributeSelected2.setPosition(464 - 75 - 20, parentSprite.getContentSize().height - 444 + 8);
@@ -389,7 +389,7 @@ public class ShopItem2 extends CCLayer {
 				sphereNumber1.setString("MAX");
 				sphereNumber1.setColor(ccColor3B.ccYELLOW);
 			}
-			sphereNumber2.setString("º¸À¯ Á¤·Éº´ :  " + new NumberComma().numberComma(sphereNumber));
+			sphereNumber2.setString("ë³´ìœ  ì •ë ¹ë³‘ :  " + new NumberComma().numberComma(sphereNumber));
 			
 //			Log.e("ShopItem2", "getChildByTag : " + bb.getChildByTag(1));
 //			Log.e("ShopItem2", "userData : " + ((CCMenuItemImage)sender).getUserData());
@@ -475,7 +475,7 @@ public class ShopItem2 extends CCLayer {
 	}
 
 	String[] itemType = { "LevelFire", "LevelWind", "LevelCloud", "LevelDivine", "LevelEarth", "LevelMirror" };
-	String[][] magicText2 = { {"°ø°İ ½Ã°£ ","ÃÊ Áõ°¡"}, {"ÇÇÇØ ½Ã°£ ","ÃÊ °¨¼Ò"}};
+	String[][] magicText2 = { {"ê³µê²© ì‹œê°„ ","ì´ˆ ì¦ê°€"}, {"í”¼í•´ ì‹œê°„ ","ì´ˆ ê°ì†Œ"}};
 	private void setElemental(int type) {
 		String level = FacebookData.getinstance().getDBData(itemType[type]);
 		

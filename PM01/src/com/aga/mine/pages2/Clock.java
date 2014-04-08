@@ -1,4 +1,4 @@
-package com.aga.mine.pages2;
+﻿package com.aga.mine.pages2;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCDirector;

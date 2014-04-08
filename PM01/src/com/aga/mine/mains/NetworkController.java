@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +29,7 @@ import com.aga.mine.pages.UserData;
 
 public class NetworkController extends Activity {
 	
-	// ³×Æ®¿öÅ© »óÈ²
+	// ë„¤íŠ¸ì›Œí¬ ìƒí™©
 	final static int kNetworkStateNotAvailable = 0;
 	final static int kNetworkStateTryingStreamOpen = 1;
 	final static int kNetworkStateStreamOpend = 2;
@@ -41,44 +41,44 @@ public class NetworkController extends Activity {
 	final static int kNetworkStateMatchCompleted = 8;
 	final static int kNetworkStateMatchFailed = 9;
 	/*******************************************/
-	// ¸ÅÄ¡¼­¹ö¿Í Åë½ÅÇÏ´Â ¸Ş½ÃÁö
-	final static int kMessageConnectionCompletedServerConfirm = 0; // ¼­¹ö·Î ºÎÅÍ Á¢¼Ó ¾Ë¶÷
-	final static int kMessagePlayerInformation = 1; // À¯Àú Á¤º¸ º¸³»±â
-	final static int kMessageRequestMatch = 2; // ´ëÀü ¸ÅÄª ½Ãµµ
-	final static int kMessageMatchCompleted = 3; // ¸ÅÄª ¼º°ø
-	final static int kMessageMatchFailed = 4; // ¸ÅÄª ½ÇÆĞ
-	final static int kMessagePlayData = 5; // °ÔÀÓ µ¥ÀÌÅÍ
-	final static int kMessageGameOver = 6; // »ç¿ë¾Ê´Â´Ù, ÇÃ·¹ÀÌµ¥ÀÌÅ¸ °ÔÀÓ¿À¹ö »ç¿ë
-	final static int kMessageDisconnected = 7; // ¿¬°á ²÷±è???
-	final static int kMessageInManagement = 8; // Áßº¹ ¸Ş½ÃÁö, »ç¿ë¾ÈÇÔ. ±×·¯³ª »èÁ¦ÇØ¼± ¾ÈµÊ, 131128
-	final static int kMessageOpponentConnectionLost = 9; // »ó´ë¹æ ¿¬°á ½ÇÆĞ
-	final static int kMessageRequestIsPlayerConnected = 10; // ¿äÃ»ÇÑ À¯Àú¿¡°Ô ÀÀ´ä
-	final static int kMessageRequestMatchInvite = 11; // ÃÊ´ë ´ëÀü ¸ğµå
-	final static int kMessageInSystemManagement = 12; // Á¡°ËÁß?
-	final static int kMessageInRoomOwner = 13; // ¹æÀåÀÎÁö È®ÀÎ
-	final static int kMessageRequestGameOver = 14; // °ÔÀÓÁ¾·á	
-	final static int kMessageRequestScore = 15; // °ÔÀÓÁ¾·á	
-	final static int kMessageGameReady = 16; // °ÔÀÓ ÁØºñ ¿Ï·á¸Ş½ÃÁö (¼­¹ö·Î º¸³»´Â ¸Ş½ÃÁö)
-	final static int kMessageGameStart = 17; // °ÔÀÓ ½ÃÀÛ (¼­¹ö·ÎºÎÅÍ ¹Ş´Â ¸Ş½ÃÁö)
-	final static int kMessageRequestInvite = 18; // ÃÊ´ë ¸ÅÄ¡¿ë ¿äÃ» ¸Ş½ÃÁö
-	final static int kMessageResponseMatchInvite = 19; // ÃÊ´ë ´ëÀü ÀÀ´ä
-	final static int kMessageResponseInvite = 20; // ÃÊ´ë ¸ÅÄ¡¿ë ÀÀ´ä ¸Ş½ÃÁö
-	final static int kMessageWillYouAcceptInvite = 21; // ÃÊ´ë ¸ÅÄ¡ ¿äÃ» ¸Ş½ÃÁö
-	final static int kMessageWillYouAcceptInviteOK = 22; // ÃÊ´ë ¸ÅÄ¡ ÀÀ´ä ¸Ş½ÃÁö
+	// ë§¤ì¹˜ì„œë²„ì™€ í†µì‹ í•˜ëŠ” ë©”ì‹œì§€
+	final static int kMessageConnectionCompletedServerConfirm = 0; // ì„œë²„ë¡œ ë¶€í„° ì ‘ì† ì•ŒëŒ
+	final static int kMessagePlayerInformation = 1; // ìœ ì € ì •ë³´ ë³´ë‚´ê¸°
+	final static int kMessageRequestMatch = 2; // ëŒ€ì „ ë§¤ì¹­ ì‹œë„
+	final static int kMessageMatchCompleted = 3; // ë§¤ì¹­ ì„±ê³µ
+	final static int kMessageMatchFailed = 4; // ë§¤ì¹­ ì‹¤íŒ¨
+	final static int kMessagePlayData = 5; // ê²Œì„ ë°ì´í„°
+	final static int kMessageGameOver = 6; // ì‚¬ìš©ì•ŠëŠ”ë‹¤, í”Œë ˆì´ë°ì´íƒ€ ê²Œì„ì˜¤ë²„ ì‚¬ìš©
+	final static int kMessageDisconnected = 7; // ì—°ê²° ëŠê¹€???
+	final static int kMessageInManagement = 8; // ì¤‘ë³µ ë©”ì‹œì§€, ì‚¬ìš©ì•ˆí•¨. ê·¸ëŸ¬ë‚˜ ì‚­ì œí•´ì„  ì•ˆë¨, 131128
+	final static int kMessageOpponentConnectionLost = 9; // ìƒëŒ€ë°© ì—°ê²° ì‹¤íŒ¨
+	final static int kMessageRequestIsPlayerConnected = 10; // ìš”ì²­í•œ ìœ ì €ì—ê²Œ ì‘ë‹µ
+	final static int kMessageRequestMatchInvite = 11; // ì´ˆëŒ€ ëŒ€ì „ ëª¨ë“œ
+	final static int kMessageInSystemManagement = 12; // ì ê²€ì¤‘?
+	final static int kMessageInRoomOwner = 13; // ë°©ì¥ì¸ì§€ í™•ì¸
+	final static int kMessageRequestGameOver = 14; // ê²Œì„ì¢…ë£Œ	
+	final static int kMessageRequestScore = 15; // ê²Œì„ì¢…ë£Œ	
+	final static int kMessageGameReady = 16; // ê²Œì„ ì¤€ë¹„ ì™„ë£Œë©”ì‹œì§€ (ì„œë²„ë¡œ ë³´ë‚´ëŠ” ë©”ì‹œì§€)
+	final static int kMessageGameStart = 17; // ê²Œì„ ì‹œì‘ (ì„œë²„ë¡œë¶€í„° ë°›ëŠ” ë©”ì‹œì§€)
+	final static int kMessageRequestInvite = 18; // ì´ˆëŒ€ ë§¤ì¹˜ìš© ìš”ì²­ ë©”ì‹œì§€
+	final static int kMessageResponseMatchInvite = 19; // ì´ˆëŒ€ ëŒ€ì „ ì‘ë‹µ
+	final static int kMessageResponseInvite = 20; // ì´ˆëŒ€ ë§¤ì¹˜ìš© ì‘ë‹µ ë©”ì‹œì§€
+	final static int kMessageWillYouAcceptInvite = 21; // ì´ˆëŒ€ ë§¤ì¹˜ ìš”ì²­ ë©”ì‹œì§€
+	final static int kMessageWillYouAcceptInviteOK = 22; // ì´ˆëŒ€ ë§¤ì¹˜ ì‘ë‹µ ë©”ì‹œì§€
 	/*******************************************/
-	// ÇÃ·¹ÀÌ µ¥ÀÌÅ¸ (ÇÃ·¹ÀÌ Áß ¹ß»ıµÇ´Â ¸ÅÄ¡ µ¥ÀÌÅ¸) ºĞ·ù ÄÚµå
+	// í”Œë ˆì´ ë°ì´íƒ€ (í”Œë ˆì´ ì¤‘ ë°œìƒë˜ëŠ” ë§¤ì¹˜ ë°ì´íƒ€) ë¶„ë¥˜ ì½”ë“œ
 	final static int kPlayDataCellOpen = 0;
 	final static int kPlayDataMushroomOn = 1;
 	final static int kPlayDataMushroomOff = 2;
 	final static int kPlayDataMagicAttack = 3;
-	final static int kPlayDataMagicDefense = 4; // °ø°İ ¹æ¾î ±¸ºĞ ÀÌÀ¯??
+	final static int kPlayDataMagicDefense = 4; // ê³µê²© ë°©ì–´ êµ¬ë¶„ ì´ìœ ??
 	final static int kPlayDataGameOver = 5;
 	final static int kPlayDataEmoticon = 6;
 	final static int kPlayDataMine = 7;
 	final static int kPlayDataSphere = 8;
 	final static int kPlayDataSphereTake = 9;
 	/*******************************************/
-	// ¸¶¹ı°ø°İ()¿¡ ´ëÇÑ ¼¼ºÎ ¸¶¹ıºĞ·ù
+	// ë§ˆë²•ê³µê²©()ì— ëŒ€í•œ ì„¸ë¶€ ë§ˆë²•ë¶„ë¥˜
 	final static int kSphereTypeFire  = 1;
 	final static int kSphereTypeWind = 2;
 	final static int kSphereTypeCloud  = 3;
@@ -86,7 +86,7 @@ public class NetworkController extends Activity {
 	final static int kSphereTypeEarth  = 5;
 	final static int kSphereTypeMirror  = 6;
 	/*******************************************/
-	// °ÔÀÓ ³­ÀÌµµ ¼¼ºÎ ¸¶¹ıºĞ·ù
+	// ê²Œì„ ë‚œì´ë„ ì„¸ë¶€ ë§ˆë²•ë¶„ë¥˜
 	final static int kIsRoomOwnerEasy = 1;
 	final static int kIsRoomOwnerNormal = 2;
 	final static int kIsRoomOwnerHard = 3;
@@ -94,7 +94,7 @@ public class NetworkController extends Activity {
 	final static int kIsRoomNormal = 2;
 	final static int kIsRoomHard = 3;
 	/*******************************************/
-	// º¸³»´Â ¸ğµå / ¹Ş´Â ¸ğµå
+	// ë³´ë‚´ëŠ” ëª¨ë“œ / ë°›ëŠ” ëª¨ë“œ
 	final static int kModeSent = 0;
 	final static int kModeReceived = 1;
 	/*******************************************/	
@@ -108,8 +108,8 @@ public class NetworkController extends Activity {
 
 	final static int kTempLevel = 15;
 
-//	final static String kServerHost = "192.168.10.232"; // È¸»ç ³»ºÎ Å×½ºÆ®¿ë
-	final static String kServerHost = "211.110.139.226"; // cafe24 »ó¿ë¼­¹ö
+//	final static String kServerHost = "192.168.10.232"; // íšŒì‚¬ ë‚´ë¶€ í…ŒìŠ¤íŠ¸ìš©
+	final static String kServerHost = "211.110.139.226"; // cafe24 ìƒìš©ì„œë²„
 	final static int kServerPort = 8007;
 
 	public static OutputStream outStream_;
@@ -130,7 +130,7 @@ public class NetworkController extends Activity {
 		return androidClient;
 	}
 	//
-	// ÃÊ±âÈ­
+	// ì´ˆê¸°í™”
 	private NetworkController() {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
@@ -163,7 +163,7 @@ public class NetworkController extends Activity {
 	//		}
 	//	}
 	
-	// µµ¿ì¹Ì sharedController
+	// ë„ìš°ë¯¸ sharedController
 	public static Socket getSocket() throws IOException {
 	
 		if (socket == null)
@@ -206,7 +206,7 @@ public class NetworkController extends Activity {
 		}	
 	}
 	
-// ¼ö½ÅµÈ ¸Ş½ÃÁö Ã³¸®
+// ìˆ˜ì‹ ëœ ë©”ì‹œì§€ ì²˜ë¦¬
 	private static void checkForMessages() throws IOException {
 		Log.e("NetworkController / checkForMessages", "in");
 		inBuffer_.order(ByteOrder.nativeOrder());
@@ -250,7 +250,7 @@ public class NetworkController extends Activity {
 		MessageReader reader = new MessageReader(data);
 		final byte messageType = reader.readByte();		
 
-		// µğ¹ö±× ÄÚµå
+		// ë””ë²„ê·¸ ì½”ë“œ
 		final String[] messageTypeString = {
 				"kMessageConnection",
 				"kMessageConnectionCompletedServerConfirm",
@@ -307,8 +307,8 @@ public class NetworkController extends Activity {
 			
 		case kMessageMatchFailed:
 			Log.e("NetworkController", "kMessageMatchFailed");
-//			NetworkController.getInstance().sendRoomOwner(1); // ¹æÀå ±ÇÇÑ
-			sendRoomOwner(1); // ¹æÀå ±ÇÇÑ
+//			NetworkController.getInstance().sendRoomOwner(1); // ë°©ì¥ ê¶Œí•œ
+			sendRoomOwner(1); // ë°©ì¥ ê¶Œí•œ
 			break;
 			
 			
@@ -365,11 +365,11 @@ public class NetworkController extends Activity {
 		case kMessageRequestScore:
 			Log.e("NetworkController", "kMessageRequestGameOver");
 //			byte result1 = reader.readByte();
-//			Log.e("Network", "»ó´ë¹æ Á¡¼ö : " + result1);
+//			Log.e("Network", "ìƒëŒ€ë°© ì ìˆ˜ : " + result1);
 			
-			Log.e("Network", "data Å©±â : " + data.length);
+			Log.e("Network", "data í¬ê¸° : " + data.length);
 			int result2 = reader.readInt();
-			Log.e("Network", "»ó´ë¹æ Á¡¼ö : " + result2);
+			Log.e("Network", "ìƒëŒ€ë°© ì ìˆ˜ : " + result2);
 //			Game.HudLayer.gameOver();
 			Game.HudLayer.gameOver(1, 1);
 			
@@ -391,7 +391,7 @@ public class NetworkController extends Activity {
 //			if (owner) {
 			
 			
-//				GameRandom.matchNameReceiver(kTempName, matchedOppenentFacebookId); // gamerandom ÀÓ½Ã·Î ¸·À½
+//				GameRandom.matchNameReceiver(kTempName, matchedOppenentFacebookId); // gamerandom ì„ì‹œë¡œ ë§‰ìŒ
 			
 			
 //			} else {
@@ -404,7 +404,7 @@ public class NetworkController extends Activity {
 			Log.e("NetworkController", "kMessageRequestInvite");
 			result = reader.readByte();
 			matchedOppenentFacebookId = reader.readString();
-			Log.e("NetworkController", "³­ÀÌµµ & ID /" + result + " : " + matchedOppenentFacebookId);
+			Log.e("NetworkController", "ë‚œì´ë„ & ID /" + result + " : " + matchedOppenentFacebookId);
 			InvitationReceiver.getInstance().exposePopup();
 			InvitationReceiver.getInstance().setUserName(result, matchedOppenentFacebookId);
 			result = 0;
@@ -414,15 +414,15 @@ public class NetworkController extends Activity {
 			Log.e("NetworkController", "kMessageResponseInvite");
 			result = reader.readByte();
 			matchedOppenentFacebookId = reader.readString();			
-			Log.e("NetworkController", "¼ö¶ô¿©ºÎ & ID /" + result + " : " + matchedOppenentFacebookId);
+			Log.e("NetworkController", "ìˆ˜ë½ì—¬ë¶€ & ID /" + result + " : " + matchedOppenentFacebookId);
 			if (result == 1) {
 //				if (owner) {
-//					GameInvite.getInstance().matchNameReceiver(kTempName, matchedOppenentFacebookId); // gameinvite ÀÓ½Ã·Î ¸·À½
+//					GameInvite.getInstance().matchNameReceiver(kTempName, matchedOppenentFacebookId); // gameinvite ì„ì‹œë¡œ ë§‰ìŒ
 //				} else {
 //					GameInvite.getInstance().matchNameReceiver(matchedOppenentFacebookId, kTempName);	
 //				}
 			} else {
-				Log.e("NetworkController", "kMessageResponseInvite ½ÇÆĞ");
+				Log.e("NetworkController", "kMessageResponseInvite ì‹¤íŒ¨");
 			}
 			result = 0;
 			break;
@@ -431,18 +431,18 @@ public class NetworkController extends Activity {
 			Log.e("NetworkController", "kMessageWillYouAcceptInvite");
 			result = reader.readByte();
 			matchedOppenentFacebookId = reader.readString();			
-			Log.e("NetworkController", "ÃÊ´ë ¿äÃ» ³­ÀÌµµ & ID /" + result + " : " + matchedOppenentFacebookId);
+			Log.e("NetworkController", "ì´ˆëŒ€ ìš”ì²­ ë‚œì´ë„ & ID /" + result + " : " + matchedOppenentFacebookId);
 			break;
 			
 		default:
-			Log.e("NetworkController", "Á¤ÀÇµÇÁö ¾ÊÀº ¸Ş½ÃÁö°¡ ¼ö½ÅµÇ¾ú½À´Ï´Ù. : " + messageType);
+			Log.e("NetworkController", "ì •ì˜ë˜ì§€ ì•Šì€ ë©”ì‹œì§€ê°€ ìˆ˜ì‹ ë˜ì—ˆìŠµë‹ˆë‹¤. : " + messageType);
 			break;
 		}
 		
 	}
 	
 	// StartLayer.StartLayer()
-	// ¼­¹ö Á¢¼Ó
+	// ì„œë²„ ì ‘ì†
 	public boolean isInternetConnectionOk() {
 		Log.e("NetworkController", "isInternetConnectionOk");
 		
@@ -481,7 +481,7 @@ public class NetworkController extends Activity {
 			inStream_ = socket.getInputStream();
 			outStream_ = socket.getOutputStream();
 	
-			// 1024Å©±âÀÇ ¹öÆÛ »ı¼º
+			// 1024í¬ê¸°ì˜ ë²„í¼ ìƒì„±
 //			inBuffer_ = ByteBuffer.allocate(1024);
 			inBuffer_ = ByteBuffer.allocateDirect(1024);
 			// lim = cap, pos = 0 
@@ -492,7 +492,7 @@ public class NetworkController extends Activity {
 			byte[] read = new byte[1024];
 	
 			while (true) {
-				int len = inStream_.read(read); // ¸Ş¼Òµå°¡ ¹ŞÀºµ¥ÀÌÅ¸°¡ ÀÖ¾î¾ß ½ÇÇàµÊ.
+				int len = inStream_.read(read); // ë©”ì†Œë“œê°€ ë°›ì€ë°ì´íƒ€ê°€ ìˆì–´ì•¼ ì‹¤í–‰ë¨.
 				if (len > 0) {
 					byte[] data = new byte[len];
 	
@@ -500,7 +500,7 @@ public class NetworkController extends Activity {
 						data[i] = read[i];
 					}
 	
-					// add to inBuffer (³»¿ë ÀúÀå)
+					// add to inBuffer (ë‚´ìš© ì €ì¥)
 					inBuffer_.put(data);
 					checkForMessages();
 				}
@@ -513,7 +513,7 @@ public class NetworkController extends Activity {
 		} catch (ConnectException e) {
 			System.out
 					.println(e.getMessage()
-							+ "\nConnection refused = ¼­¹ö°¡ ´İÇôÀÖ´Ù.\n¼­¹ö°¡ on »óÅÂÀÎÁö, ÀÔ·ÂÇÑ ip ¶Ç´Â port number°¡ ¿Ã¹Ù¸¥Áö È®ÀÎÇÏ½Ã¿À.");
+							+ "\nConnection refused = ì„œë²„ê°€ ë‹«í˜€ìˆë‹¤.\nì„œë²„ê°€ on ìƒíƒœì¸ì§€, ì…ë ¥í•œ ip ë˜ëŠ” port numberê°€ ì˜¬ë°”ë¥¸ì§€ í™•ì¸í•˜ì‹œì˜¤.");
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -560,7 +560,7 @@ public class NetworkController extends Activity {
 		Log.e("sendData()","called !");
 	}
 
-	/******************* ¼­¹ö º¸³»±â ¸Ş¼Òµåµé ********************/
+	/******************* ì„œë²„ ë³´ë‚´ê¸° ë©”ì†Œë“œë“¤ ********************/
 	public void sendGameReady() throws IOException {
 		Log.e("NetworkController", "sending GameReady ......");
 		MessageWriter message = new MessageWriter();
@@ -590,12 +590,12 @@ public class NetworkController extends Activity {
 		Log.e("NetworkController", "sending RequestGameOver");
 	}
 	
-	// ¼­¹ö Á¢¼Ó½Ã ¼­¹ö¿¡ º¸³¿
+	// ì„œë²„ ì ‘ì†ì‹œ ì„œë²„ì— ë³´ëƒ„
 	private static void sendPlayerInformation() throws IOException {
 		Log.e("NetworkController", "sending player information ......");
 		MessageWriter message = new MessageWriter();
 		message.writeByte((byte) kMessagePlayerInformation);
-		// ÇÃ·¹ÀÌ¾î°¡ º¸³»´Â Á¤º¸
+		// í”Œë ˆì´ì–´ê°€ ë³´ë‚´ëŠ” ì •ë³´
 		message.writeString(kTempFacebookId);
 		message.writeString(kTempName);
 		message.writeByte((byte) kTempLevel);
@@ -630,13 +630,13 @@ public class NetworkController extends Activity {
 			message.writeByte((byte) 1);
 			owner = true;
 //			UserData.share(CCDirector.sharedDirector().getActivity()).iso
-//			GameRandom.isOwner = true; // gamerandom ÀÓ½Ã·Î ¸·À½
-//			GameInvite.getInstance().isOwner = true; // gameinvite ÀÓ½Ã·Î ¸·À½
+//			GameRandom.isOwner = true; // gamerandom ì„ì‹œë¡œ ë§‰ìŒ
+//			GameInvite.getInstance().isOwner = true; // gameinvite ì„ì‹œë¡œ ë§‰ìŒ
 		} else {
 			message.writeByte((byte) 0);
 			owner = false;
-//			GameRandom.isOwner = false; // gamerandom ÀÓ½Ã·Î ¸·À½
-//			GameInvite.getInstance().isOwner = false; // gameinvite ÀÓ½Ã·Î ¸·À½
+//			GameRandom.isOwner = false; // gamerandom ì„ì‹œë¡œ ë§‰ìŒ
+//			GameInvite.getInstance().isOwner = false; // gameinvite ì„ì‹œë¡œ ë§‰ìŒ
 		}
 		sendData(message.data_);
 		setMessage(kMessageInRoomOwner, kModeSent);
@@ -662,7 +662,7 @@ public class NetworkController extends Activity {
 		Log.e("NetworkController", "sendRequestMatch");
 	}
 	
-	// Çü½ÄÀ¸·Î ÇØ´ç ÆäÀÌ½ººÏ ¾ÆÀÌµğ ÇÃ·¹ÀÌ¾î°¡ Á¢¼ÓÁß ¿©ºÎ¸¦ ¾Ë·Á´Ş¶ó´Â ¿äÃ»À» º¸³½´Ù.
+	// í˜•ì‹ìœ¼ë¡œ í•´ë‹¹ í˜ì´ìŠ¤ë¶ ì•„ì´ë”” í”Œë ˆì´ì–´ê°€ ì ‘ì†ì¤‘ ì—¬ë¶€ë¥¼ ì•Œë ¤ë‹¬ë¼ëŠ” ìš”ì²­ì„ ë³´ë‚¸ë‹¤.
 	private void sendRequestIsPlayerConntected (String	facebookID) throws IOException {
 		MessageWriter message = new MessageWriter();
 		
@@ -675,7 +675,7 @@ public class NetworkController extends Activity {
 		
 	}
 
-	 // ÇØ´ç ÆäÀÌ½ººÏ¾ÆÀÌµğÀÇ ÇÃ·¹ÀÌ¾î¿Í ¸ÅÄ¡¸¦ ÀÌ·ç¾î ´Ş¶ó´Â ¿äÃ»À» º¸³½´Ù.
+	 // í•´ë‹¹ í˜ì´ìŠ¤ë¶ì•„ì´ë””ì˜ í”Œë ˆì´ì–´ì™€ ë§¤ì¹˜ë¥¼ ì´ë£¨ì–´ ë‹¬ë¼ëŠ” ìš”ì²­ì„ ë³´ë‚¸ë‹¤.
 	public void sendRequestMatchInvite(int Difficulty, String facebookID) throws IOException {
 		MessageWriter message = new MessageWriter();
 		message.writeByte((byte) kMessageRequestMatchInvite);
@@ -687,12 +687,12 @@ public class NetworkController extends Activity {
 	}
 	
 
-	 // ÇØ´ç ÆäÀÌ½ººÏ¾ÆÀÌµğÀÇ ÇÃ·¹ÀÌ¾î¿Í ¸ÅÄ¡¸¦ ÀÌ·ç¾î ´Ş¶ó´Â ¿äÃ»À» º¸³½´Ù.
+	 // í•´ë‹¹ í˜ì´ìŠ¤ë¶ì•„ì´ë””ì˜ í”Œë ˆì´ì–´ì™€ ë§¤ì¹˜ë¥¼ ì´ë£¨ì–´ ë‹¬ë¼ëŠ” ìš”ì²­ì„ ë³´ë‚¸ë‹¤.
 	public void sendResponseMatchInvite(int isInvite, String facebookID) throws IOException {
 		MessageWriter message = new MessageWriter();
 		
 		message.writeByte((byte) kMessageResponseMatchInvite);
-		message.writeByte((byte) isInvite); // 0Àº °ÅºÎ 1Àº ½ÂÀÎ
+		message.writeByte((byte) isInvite); // 0ì€ ê±°ë¶€ 1ì€ ìŠ¹ì¸
 		message. writeString(facebookID);
 		
 		this.sendData(message.data_);
@@ -703,7 +703,7 @@ public class NetworkController extends Activity {
 	
 	
 	
-	 // °ÔÀÓ ÇÃ·¹ÀÌ¾î µ¥ÀÌÅ¸ º¸³»±â
+	 // ê²Œì„ í”Œë ˆì´ì–´ ë°ì´íƒ€ ë³´ë‚´ê¸°
 	private void sendPlayData(int type, int value) throws IOException {
 		MessageWriter message = new MessageWriter();
 		
@@ -741,13 +741,13 @@ public class NetworkController extends Activity {
 //	}
 //	
 //	 Game.addSphereTo()
-	// ¾ÆÀÌÅÛ Å¸ÀÔÃß°¡ ÇÊ¿ä
+	// ì•„ì´í…œ íƒ€ì…ì¶”ê°€ í•„ìš”
 	//private void sendPlayDatasphereTake(int cell_ID) throws IOException {
 	public void sendPlayDatasphereTake(int cell_ID) throws IOException {
 		this.sendPlayData(kPlayDataSphereTake, cell_ID);
 	}
 //	 Game.addSphereTo()
-	// ¾ÆÀÌÅÛ Å¸ÀÔÃß°¡ ÇÊ¿ä
+	// ì•„ì´í…œ íƒ€ì…ì¶”ê°€ í•„ìš”
 	//private void sendPlayDataSphere(int cell_ID) throws IOException {
 	public void sendPlayDataSphere(int cell_ID) throws IOException {
 		this.sendPlayData(kPlayDataSphere, cell_ID);
@@ -775,15 +775,15 @@ public class NetworkController extends Activity {
 
 
 	//
-	// ÇöÀç, µô¸®°ÔÀÌÆ®´Â Å×½ºÆ®¿ë ¸Ş½ÃÁö Ãâ·ÂÀ» À§ÇØ »ç¿ëµÇ´Âµ¥ Áö³ªÁö ¾Ê´Â´Ù.
+	// í˜„ì¬, ë”œë¦¬ê²Œì´íŠ¸ëŠ” í…ŒìŠ¤íŠ¸ìš© ë©”ì‹œì§€ ì¶œë ¥ì„ ìœ„í•´ ì‚¬ìš©ë˜ëŠ”ë° ì§€ë‚˜ì§€ ì•ŠëŠ”ë‹¤.
 	static interface NetworkControllerDelegate{
-		// ³×Æ®¿öÅ© »óÈ² º¯µ¿½Ã È£ÃâµÇµµ·Ï ÇÑ´Ù.
+		// ë„¤íŠ¸ì›Œí¬ ìƒí™© ë³€ë™ì‹œ í˜¸ì¶œë˜ë„ë¡ í•œë‹¤.
 		public void stateChanged(int networkState);
-		// ¸Ş½ÃÁö º¸³¾ ¶§ È£Ãâ µÇµµ·Ï ÇÑ´Ù.
+		// ë©”ì‹œì§€ ë³´ë‚¼ ë•Œ í˜¸ì¶œ ë˜ë„ë¡ í•œë‹¤.
 		public void messageSent(int messageType);
-		// ¸Ş½ÃÁö ¹Ş¾ÒÀ» ¶§ È£Ãâ µÇµµ·Ï ÇÑ´Ù.
+		// ë©”ì‹œì§€ ë°›ì•˜ì„ ë•Œ í˜¸ì¶œ ë˜ë„ë¡ í•œë‹¤.
 		public void messageReceived(int messageType);
-		// ¼¼ºÎ»çÇ×À» ¼³Á¤ ÇÏµµ·Ï ÇÑ´Ù.
+		// ì„¸ë¶€ì‚¬í•­ì„ ì„¤ì • í•˜ë„ë¡ í•œë‹¤.
 		public void setDetails(String message);
 		
 	}

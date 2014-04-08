@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class FacebookData {
 	Map<String, String> data = new HashMap<String, String>();
 	int ranking = 0;
 	
-//	private long requestID = (long) (Math.random() * 99L);  //test¿ë 
+//	private long requestID = (long) (Math.random() * 99L);  //testìš© 
 	private String recipientID = null;
 	
 	
@@ -205,7 +205,7 @@ public class FacebookData {
 	}
 
 	public long getRequestID() {
-		long requestID = (long) (Math.random() * 99L);  //test¿ë
+		long requestID = (long) (Math.random() * 99L);  //testìš©
 		return requestID;
 	}
 

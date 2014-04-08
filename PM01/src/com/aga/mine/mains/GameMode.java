@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -42,14 +42,14 @@ public class GameMode extends CCLayer {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
 				
-		//¹è°æ ±×¸² ¼³Á¤
+		//ë°°ê²½ ê·¸ë¦¼ ì„¤ì •
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
 		setBackBoardMenu(commonfolder + "gamebb" + fileExtension);
 		setBoardFrameMenu(commonfolder + "frameGeneral-hd" + fileExtension);
 		
-		// »ó´Ü ¸Ş´º
+		// ìƒë‹¨ ë©”ë‰´
 		TopMenu2.setSceneMenu(this);
-		// ÇÏ´Ü ÀÌ¹ÌÁö
+		// í•˜ë‹¨ ì´ë¯¸ì§€
 		BottomImage.setBottomImage(this);
 		
 		this.setIsTouchEnabled(true);
@@ -65,7 +65,7 @@ public class GameMode extends CCLayer {
 		Log.e("GameMode", "score : " + DataFilter.addGameScore("" + scoreValue));
 	}
 	
-	// ¹é º¸µå ¼³Á¤
+	// ë°± ë³´ë“œ ì„¤ì •
 	private void setBackBoardMenu(String imageFullPath) {
 		CCSprite bb = CCSprite.sprite(imageFullPath);
 		bg.addChild(bb);
@@ -74,18 +74,18 @@ public class GameMode extends CCLayer {
 		setMainMenu(bb);
 	}
 	
-	// °Ô½ÃÆÇ ¼³Á¤
+	// ê²Œì‹œíŒ ì„¤ì •
 	private void setBoardFrameMenu(String imageFullPath) {
 		CCSprite boardFrame = CCSprite.sprite(imageFullPath);
 		bg.addChild(boardFrame);
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
 
-		// °Ô½ÃÆÇ¸í
+		// ê²Œì‹œíŒëª…
 		FrameTitle2.setTitle(boardFrame, folder);
 	}
 	
-	// °ÔÀÓ ¸Ş´º
+	// ê²Œì„ ë©”ë‰´
 	private void setMainMenu(CCSprite parentSprite){
 		
 		CCMenuItemImage button1 = CCMenuItemImage.item(
@@ -126,9 +126,9 @@ public class GameMode extends CCLayer {
 		parentSprite.addChild(gameMenu, 1);
 		gameMenu.setPosition(parentSprite.getContentSize().width / 2 - 5, parentSprite.getContentSize().height - 58);
 		
-		button1.setPosition(0f, -button1.getContentSize().height*0.5f); // ½Ì±Û
-		button2.setPosition(0f, -button1.getContentSize().height*1.5f); // ´ëÀü
-		button3.setPosition(0f, -button1.getContentSize().height*2.5f); // ÃÊ´ë
+		button1.setPosition(0f, -button1.getContentSize().height*0.5f); // ì‹±ê¸€
+		button2.setPosition(0f, -button1.getContentSize().height*1.5f); // ëŒ€ì „
+		button3.setPosition(0f, -button1.getContentSize().height*2.5f); // ì´ˆëŒ€
 	}
 
 	@Override
@@ -150,7 +150,7 @@ public class GameMode extends CCLayer {
 	public void nextCallback(Object sender) {
 		int tagNumber = ((CCNode)sender).getTag();
 		Log.e("GameMode", "tagNumber  : " + tagNumber);
-		userData.setGameMode(tagNumber); // gameData·Î ¿Å°Ü¾ßµÊ. (±âÁ¸¿¡ ÀÖÀ½.)
+		userData.setGameMode(tagNumber); // gameDataë¡œ ì˜®ê²¨ì•¼ë¨. (ê¸°ì¡´ì— ìˆìŒ.)
 		CCScene scene = GameDifficulty.scene();
 		CCDirector.sharedDirector().replaceScene(scene);
 	}

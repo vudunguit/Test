@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.menus.CCMenuItemSprite;
@@ -10,7 +10,7 @@ public class SpriteSummery {
 	public static CCSprite imageSummary(String image1, String image2) {
 		CCSprite sprite1 = CCSprite.sprite(image1);
 		CCSprite sprite2 = CCSprite.sprite(image2);
-//		sprite2.setAnchorPoint(0.5f, 0.5f); // ¿ø·¡ ÀÌ°Ô ¸Â´Â°Çµ¥ ¾ÈµÈ´Ù. ³ªÁß¿¡ È®ÀÎ
+//		sprite2.setAnchorPoint(0.5f, 0.5f); // ì›ë˜ ì´ê²Œ ë§ëŠ”ê±´ë° ì•ˆëœë‹¤. ë‚˜ì¤‘ì— í™•ì¸
 		sprite2.setAnchorPoint(0,0);
 		sprite2.setPosition(sprite1.getPosition().x/2, sprite1.getPosition().y/2);
 		sprite1.addChild(sprite2);
@@ -19,7 +19,7 @@ public class SpriteSummery {
 	
 	public static CCSprite imageSummary(CCSprite baseSprite, String image) {
 		CCSprite sprite2 = CCSprite.sprite(image);
-//		sprite2.setAnchorPoint(0.5f, 0.5f); // ¿ø·¡ ÀÌ°Ô ¸Â´Â°Çµ¥ ¾ÈµÈ´Ù. ³ªÁß¿¡ È®ÀÎ
+//		sprite2.setAnchorPoint(0.5f, 0.5f); // ì›ë˜ ì´ê²Œ ë§ëŠ”ê±´ë° ì•ˆëœë‹¤. ë‚˜ì¤‘ì— í™•ì¸
 		sprite2.setAnchorPoint(0,0);
 		sprite2.setPosition(baseSprite.getPosition().x/2, baseSprite.getPosition().y/2);
 		baseSprite.addChild(sprite2);

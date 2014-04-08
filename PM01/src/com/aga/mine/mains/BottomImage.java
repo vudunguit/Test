@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCNode;
@@ -17,7 +17,7 @@ public class BottomImage {
 		return CCDirector.sharedDirector().winSize();
 	}
 	
-	// ÇÏ´Ü ÀÌ¹ÌÁö
+	// í•˜ë‹¨ ì´ë¯¸ì§€
 	public static void setBottomImage(CCNode nodeThis) {
 		CCSprite pumpkinL = CCSprite.sprite(commonfolder + "pumpkinL" + fileExtension);
 		nodeThis.addChild(pumpkinL);

@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.util.concurrent.ExecutionException;
 
@@ -29,10 +29,10 @@ public class DailyBeckoner {
 	CCDirector director = CCDirector.sharedDirector();
 	
 	public DailyBeckoner() {
-		// facebookHelper¸¦ ÅëÇØ facebook »ç¿ëÀÚ¿Í Ä£±¸µé °´Ã¼¸¦ ºÒ·¯¿Í¾ß ÇÏÁö¸¸
-		// facebookHelper¸¦ °ÅÄ¡Áö ¾Ê¾Æ null pointer exception ¹ß»ı
+		// facebookHelperë¥¼ í†µí•´ facebook ì‚¬ìš©ìì™€ ì¹œêµ¬ë“¤ ê°ì²´ë¥¼ ë¶ˆëŸ¬ì™€ì•¼ í•˜ì§€ë§Œ
+		// facebookHelperë¥¼ ê±°ì¹˜ì§€ ì•Šì•„ null pointer exception ë°œìƒ
 		
-		// ¾Æ·¡¿¡¼­ ½º·¹µå ¹®Á¦ ¹ß»ıÇÒ¼ö ÀÖÀ½. (datafilter »ç¿ë½Ã)
+		// ì•„ë˜ì—ì„œ ìŠ¤ë ˆë“œ ë¬¸ì œ ë°œìƒí• ìˆ˜ ìˆìŒ. (datafilter ì‚¬ìš©ì‹œ)
 		String facebookID = FacebookData.getinstance().getUserInfo().getId();
 		Log.e("Daily", "facebookID : " + facebookID);
 		if (!DataFilter.readFilter(getUserDBData(facebookID)))
@@ -55,7 +55,7 @@ public class DailyBeckoner {
 
 	}
 	
-	// ÀÏ´Ü ÀÓ½Ã·Î ¿­¾î³ù½À´Ï´Ù.
+	// ì¼ë‹¨ ì„ì‹œë¡œ ì—´ì–´ë†¨ìŠµë‹ˆë‹¤.
 	public static void setUserDBData(String facebookID) {
 		Log.e("Daily", "setUserDBData");
 		try {

@@ -1,4 +1,4 @@
-package com.aga.mine.pages;
+ï»¿package com.aga.mine.pages;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -56,10 +56,10 @@ public class Effect extends CCLayer{
 		ArrayList<CCSpriteFrame> frames = new ArrayList<CCSpriteFrame>();
 		DecimalFormat df = new DecimalFormat("00");
 		for (int i = 0; i < numberOfFrame; i++) {
-			String frameName = prefix + df.format(i+1) + ".png"; // prefix null exception ¶ã¼ö ÀÖÀ½. (¶ß¸é 3Ç×¿¬»êÀ¸·Î Ã³¸®ÇÒ°Í)
+			String frameName = prefix + df.format(i+1) + ".png"; // prefix null exception ëœ°ìˆ˜ ìžˆìŒ. (ëœ¨ë©´ 3í•­ì—°ì‚°ìœ¼ë¡œ ì²˜ë¦¬í• ê²ƒ)
 			frames.add(CCSpriteFrameCache.sharedSpriteFrameCache().spriteFrameByName(frameName));
 		}
-		// id°¡ ¹ºÁö ¸ð¸£°Ú´Ù. 
+		// idê°€ ë­”ì§€ ëª¨ë¥´ê² ë‹¤. 
 		CCDelayTime before = CCDelayTime.action(delayBefore);
 		CCDelayTime after = CCDelayTime.action(delayAfter);
 		CCAnimation animation = CCAnimation.animation("pumpkinExplosion", frameTime, frames	);
@@ -67,9 +67,9 @@ public class Effect extends CCLayer{
 		String frameName = prefix + "01.png";
 		CCSprite sprite = CCSprite.sprite(frameName);
 		sprite.setTag(kTagGrossini);
-		// CCCallFuncND ÀÌ°Å Àß µÉÁö ¸ð¸£°ÚÀ½.
+		// CCCallFuncND ì´ê±° ìž˜ ë ì§€ ëª¨ë¥´ê² ìŒ.
 		// parent 
-		CCCallFunc removeMySprite =  CCCallFunc.action(this, "removeAction"); // this ¶Ç´Â nodeThis
+		CCCallFunc removeMySprite =  CCCallFunc.action(this, "removeAction"); // this ë˜ëŠ” nodeThis
 //		CCCallFunc removeMySprite1 =  CCCallFunc.action(sprite, "removeFromParentAndCleanup");
 //		CCCallFuncN removeMySprite2 =  CCCallFuncN.action(sprite, "removeFromParentAndCleanup", null);
 //		CCCallFuncND removeMySprite =  CCCallFuncND.action(sprite, "removeFromParentAndCleanup", null);

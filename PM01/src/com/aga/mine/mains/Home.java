@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class Home extends CCLayer{
 	final static int homeLayerTag = 2;
 	final static int mailBoxLayerTag = 3;
 	
-	// ³ªÁß¿¡ ´Ù¸¥ Å¬·¡½º¿¡¼­ Á¤ÀÇÇÑ °Í°ú ÇÏ³ª·Î ÇÕÄ¡±â
+	// ë‚˜ì¤‘ì— ë‹¤ë¥¸ í´ë˜ìŠ¤ì—ì„œ ì •ì˜í•œ ê²ƒê³¼ í•˜ë‚˜ë¡œ í•©ì¹˜ê¸°
 	final int broomstickButton = 1001;
 	final int goldButton = 1002;
 	final int shopButton = 1003;
@@ -38,7 +38,7 @@ public class Home extends CCLayer{
 	final int presentGoldButton = 1010;
 	final int presentBroomstickButton = 1011;
 	
-//	static CCLayer scroll = CCLayer.node(); // ¾Èµå·ÎÀÌµå ºä·Î ÀÎÇÏ¿© Á¦°ÅµÊ.
+//	static CCLayer scroll = CCLayer.node(); // ì•ˆë“œë¡œì´ë“œ ë·°ë¡œ ì¸í•˜ì—¬ ì œê±°ë¨.
 	
 	public static CCScene scene() {
 		Log.e("Home", "scene");
@@ -54,7 +54,7 @@ public class Home extends CCLayer{
 //		scroll.setPosition(
 //				CCDirector.sharedDirector().winSize().width / 2 - scroll.getContentSize().width / 2,
 //				CCDirector.sharedDirector().winSize().height / 2 - scroll.getContentSize().height + 110);
-//		scene.addChild(scroll, scrollLayerTag, scrollLayerTag); // ¾Èµå·ÎÀÌµå ºä·Î ÀÎÇÏ¿© Á¦°ÅµÊ.
+//		scene.addChild(scroll, scrollLayerTag, scrollLayerTag); // ì•ˆë“œë¡œì´ë“œ ë·°ë¡œ ì¸í•˜ì—¬ ì œê±°ë¨.
 		
 		CCLayer mailBox = CCLayer.node();
 		scene.addChild(mailBox,mailBoxLayerTag,mailBoxLayerTag);
@@ -82,7 +82,7 @@ public class Home extends CCLayer{
 
 //		scroll = HomeScroll.getInstance(this).getLayer();
 //		scroll = HomeScroll.getInstance().getLayer();
-/*		scroll = HomeScroll.getInstance().getLayer(this); // ¾Èµå·ÎÀÌµå ºä·Î ÀÎÇÏ¿© Á¦°ÅµÊ.
+/*		scroll = HomeScroll.getInstance().getLayer(this); // ì•ˆë“œë¡œì´ë“œ ë·°ë¡œ ì¸í•˜ì—¬ ì œê±°ë¨.
 		scroll.setAnchorPoint(0.5f, 1);
 		scroll.setPosition(
 				CCDirector.sharedDirector().winSize().width / 2 - scroll.getContentSize().width / 2,
@@ -106,14 +106,14 @@ public class Home extends CCLayer{
 		return CCDirector.sharedDirector().winSize();
 	}
 
-	// ¹é º¸µå ¼³Á¤
+	// ë°± ë³´ë“œ ì„¤ì •
 	private CCSprite setBackBoardMenu(CCSprite parent, String imageFullPath) {
 		CCSprite backBoard = setHomeMenu(parent, imageFullPath);
 		new HomeMiddle(backBoard, folder, this);
 		return backBoard;
 	}
 
-	// °Ô½ÃÆÇ ¼³Á¤
+	// ê²Œì‹œíŒ ì„¤ì •
 	private CCSprite setBoardFrameMenu(CCSprite parent, String imageFullPath) {
 		CCSprite boardFrame = setHomeMenu(parent, imageFullPath);	
 		new HomeTop(boardFrame, folder, this);
@@ -209,7 +209,7 @@ public class Home extends CCLayer{
 				Log.e("Home", "mailReceiveAll : " + item);
 				DataFilter.itemEraser(item);
 			}
-			// child sprite Á¦°Å ¹æ½ÄÀ¸·Î ¼öÁ¤ ¿äÇÔ.
+			// child sprite ì œê±° ë°©ì‹ìœ¼ë¡œ ìˆ˜ì • ìš”í•¨.
 			mailBoxLayer.removeChildByTag(999, true);
 			new MailBox(mailBoxLayer, "11mailbox/", this);
 		} else if (value == presentGold) {
@@ -290,33 +290,33 @@ public class Home extends CCLayer{
 		String data = (String) ((CCMenuItemImage)sender).getUserData();
 		
 		if (value == mailButton) {
-			// ¾Èµå·ÎÀÌµå ½ºÅ©·Ñºä·Î ±³Ã¼ÇØ¾ßµË´Ï´Ù.
+			// ì•ˆë“œë¡œì´ë“œ ìŠ¤í¬ë¡¤ë·°ë¡œ êµì²´í•´ì•¼ë©ë‹ˆë‹¤.
 			new MailBox(mailBoxLayer, "11mailbox/", this);
 			
 			List<CCNode> layers = homeScene.getChildren();
-			for (CCNode ccNode : layers) { // home scene¿¡ ºÙÀº layer
+			for (CCNode ccNode : layers) { // home sceneì— ë¶™ì€ layer
 				CCLayer tempLayer = (CCLayer) ccNode;
-				if (tempLayer != mailBoxLayer) {  // layerÁß¿¡ mailboxlayer¸¸ Á¦¿Ü
+				if (tempLayer != mailBoxLayer) {  // layerì¤‘ì— mailboxlayerë§Œ ì œì™¸
 					tempLayer.setIsTouchEnabled(false);
 					
 //					List<CCNode> sprites = tempLayer.getChildren();
 //					for (CCNode ccNode2 : sprites) {
 //						Log.e("Home", "CCNode " + ccNode2);
-//						if (ccNode2 instanceof CCMenu) { // layerÁß¿¡ menu¸¸ °í¸£°í
+//						if (ccNode2 instanceof CCMenu) { // layerì¤‘ì— menuë§Œ ê³ ë¥´ê³ 
 //							Log.e("Home", "ccNode2 " + ccNode2);
-//							List<CCNode> tempMenuItems = ccNode2.getChildren(); // menu¿¡¼­ ¹öÆ°À» °ñ¶ó¼­
+//							List<CCNode> tempMenuItems = ccNode2.getChildren(); // menuì—ì„œ ë²„íŠ¼ì„ ê³¨ë¼ì„œ
 //							for (CCNode ccNode3 : tempMenuItems) {
-//								((CCMenuItem)ccNode3).setIsEnabled(false); // ÅÍÄ¡ Àá±İ
+//								((CCMenuItem)ccNode3).setIsEnabled(false); // í„°ì¹˜ ì ê¸ˆ
 //							}
 //						} else if (ccNode2 instanceof CCMenuItem) {
-//							((CCMenuItem)ccNode2).setIsEnabled(false); // ¹Ù·Î menuitemÀÌ ³ª¿À¸é ÅÍÄ¡ Àá±İ
+//							((CCMenuItem)ccNode2).setIsEnabled(false); // ë°”ë¡œ menuitemì´ ë‚˜ì˜¤ë©´ í„°ì¹˜ ì ê¸ˆ
 //
 						}
 					}
 				} else if (value == mailcloseButton) {
 					mailBoxLayer.removeChildByTag(999, true);
 					List<CCNode> layers = homeScene.getChildren();
-					for (CCNode ccNode : layers) { // home scene¿¡ ºÙÀº layer
+					for (CCNode ccNode : layers) { // home sceneì— ë¶™ì€ layer
 						CCLayer tempLayer = (CCLayer) ccNode;
 							tempLayer.setIsTouchEnabled(true);
 					}
@@ -328,7 +328,7 @@ public class Home extends CCLayer{
 							DataFilter.itemEraser(item);	
 						}
 					}
-					// child sprite Á¦°Å ¹æ½ÄÀ¸·Î ¼öÁ¤ ¿äÇÔ.
+					// child sprite ì œê±° ë°©ì‹ìœ¼ë¡œ ìˆ˜ì • ìš”í•¨.
 					mailBoxLayer.removeChildByTag(999, true);
 					new MailBox(mailBoxLayer, "11mailbox/", this);
 				} else if (value == presentGoldButton) {

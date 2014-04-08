@@ -1,4 +1,4 @@
-package com.aga.mine.pages2;
+ï»¿package com.aga.mine.pages2;
 
 import java.util.Currency;
 import java.util.HashMap;
@@ -7,18 +7,18 @@ import org.cocos2d.types.CGPoint;
 
 import android.util.Log;
 
-	// ÀÏ´Ü ¹°¾îº¼°Í »©°í ¿Ï·á
+	// ì¼ë‹¨ ë¬¼ì–´ë³¼ê²ƒ ë¹¼ê³  ì™„ë£Œ
 public class GameData {
 
 	//
-	// °ÔÀÓ µ¥ÀÌÅÍ ÀÏ¹İ (»ı¸í·Â)
+	// ê²Œì„ ë°ì´í„° ì¼ë°˜ (ìƒëª…ë ¥)
 	final int kMaxHeartNumber = 3;
 	
-	// ¼öÁ¤±¸
-	final int kNumberOfSphere = 3; // ±âº»3°³
+	// ìˆ˜ì •êµ¬
+	final int kNumberOfSphere = 3; // ê¸°ë³¸3ê°œ
 
 	//
-	// ¼öÁ¤±¸ È®·ü
+	// ìˆ˜ì •êµ¬ í™•ë¥ 
 	final int kFireChance = 14;
 	final int kWindChance = 21;
 	final int kCloudChance = 35;
@@ -28,17 +28,17 @@ public class GameData {
 	final int kMirrorChance = 6;
 
 	//
-	// °ÔÀÓ ³­ÀÌµµ
+	// ê²Œì„ ë‚œì´ë„
 	final int kGameDifficultyEasy = 0;
 	final int kGameDifficultyNormal = 1;
 	final int kGameDifficultyHard = 2;
 
-	// °ÔÀÓ µ¥ÀÌÅÍ
+	// ê²Œì„ ë°ì´í„°
 	HashMap<String, Integer> data;
 	int currentMine;
 	
 	//
-	// ³­ÀÌµµº° Áö·Ú °¹¼ö
+	// ë‚œì´ë„ë³„ ì§€ë¢° ê°¯ìˆ˜
 	final int kMaxMineNumberEasy    =  30;
 	final int kMaxMineNumberNormal  =  60;
 	final int kMaxMineNumberHard     = 90;
@@ -46,7 +46,7 @@ public class GameData {
 	
 	String mapFolder =  "80map/";
 	//
-	// °ÔÀÓ ¸Ê
+	// ê²Œì„ ë§µ
 	//String gameMap = "tileMap.tmx";
 	//String gameMap = "tilemap02.tmx";
 	//
@@ -78,29 +78,29 @@ public class GameData {
 	//---------------------------------------------------------------//
 
     //
-    // °ÔÀÓ¼³Á¤ ½ºÇÁ·¹µå½¬Æ®¸¦ ÀĞ¾îµéÀÎ´Ù.
+    // ê²Œì„ì„¤ì • ìŠ¤í”„ë ˆë“œì‰¬íŠ¸ë¥¼ ì½ì–´ë“¤ì¸ë‹¤.
    final int maxMineNumber = getMaxMineNumber(getGameDifficulty());
    
 	private void initGameData() {
 	
 		    
 		    //
-		    // ÃÊ±â°ªÀ¸·Î ÁöÁ¤ÇÑ´Ù.
+		    // ì´ˆê¸°ê°’ìœ¼ë¡œ ì§€ì •í•œë‹¤.
 		   this.data = new HashMap<String, Integer>();
 		   
-		   // value ²¨³¾¶§´Â Çüº¯È¯ ÇØÁà¾ßµÊ.
-		   data.put("HeartNumber", 3);	 // »ı¸í¼ö
-		   data.put("MineNumber", maxMineNumber);	 // ³²¾ÆÀÖ´Â Áö·Ú¼ö
-		   data.put("Seconds", 900); 		// 15 min, ³²Àº °ÔÀÓ ÁøÇà½Ã°£ // Game¿¡¼­ ´Ù½Ã °ªÀ» ³Ö¾î¼­ ¹«ÀÇ¹Ì ÇÏ´Ù.
-		   data.put("ItemFire", 0);				// È¹µæÇÑ ¼öÁ¤±¸, ºÒ	
-		   data.put("ItemWind", 0);			// È¹µæÇÑ ¼öÁ¤±¸, ¹Ù¶÷	
-		   data.put("ItemCloud", 0);			// È¹µæÇÑ ¼öÁ¤±¸, ±¸¸§
-		   data.put("ItemDivine", 0);			// È¹µæÇÑ ¼öÁ¤±¸, ½Å¼º
-		   data.put("ItemEarth", 0);			// È¹µæÇÑ ¼öÁ¤±¸, ´ëÁö
-		   data.put("ItemMirror", 0);			// È¹µæÇÑ ¼öÁ¤±¸, ¹İ»ç
-		   data.put("GameDifficulty", 1);	// °ÔÀÓ ³­ÀÌµµ // ÀÓ½Ã·Î 1
+		   // value êº¼ë‚¼ë•ŒëŠ” í˜•ë³€í™˜ í•´ì¤˜ì•¼ë¨.
+		   data.put("HeartNumber", 3);	 // ìƒëª…ìˆ˜
+		   data.put("MineNumber", maxMineNumber);	 // ë‚¨ì•„ìˆëŠ” ì§€ë¢°ìˆ˜
+		   data.put("Seconds", 900); 		// 15 min, ë‚¨ì€ ê²Œì„ ì§„í–‰ì‹œê°„ // Gameì—ì„œ ë‹¤ì‹œ ê°’ì„ ë„£ì–´ì„œ ë¬´ì˜ë¯¸ í•˜ë‹¤.
+		   data.put("ItemFire", 0);				// íšë“í•œ ìˆ˜ì •êµ¬, ë¶ˆ	
+		   data.put("ItemWind", 0);			// íšë“í•œ ìˆ˜ì •êµ¬, ë°”ëŒ	
+		   data.put("ItemCloud", 0);			// íšë“í•œ ìˆ˜ì •êµ¬, êµ¬ë¦„
+		   data.put("ItemDivine", 0);			// íšë“í•œ ìˆ˜ì •êµ¬, ì‹ ì„±
+		   data.put("ItemEarth", 0);			// íšë“í•œ ìˆ˜ì •êµ¬, ëŒ€ì§€
+		   data.put("ItemMirror", 0);			// íšë“í•œ ìˆ˜ì •êµ¬, ë°˜ì‚¬
+		   data.put("GameDifficulty", 1);	// ê²Œì„ ë‚œì´ë„ // ì„ì‹œë¡œ 1
 		   
-		   data.put("GameMode", 1);		// °ÔÀÓ ¸ğµå // ÀÓ½Ã·Î 1
+		   data.put("GameMode", 1);		// ê²Œì„ ëª¨ë“œ // ì„ì‹œë¡œ 1
 		   
 		   currentMine = 0;
 	}
@@ -109,11 +109,11 @@ public class GameData {
 	public int getMaxMineNumber(int gameDifficulty) {
 		int value = -1;
 
-		// Å×½ºÆ®¸¦ À§ÇØ Áö·Ú¼ö ÀÓ½Ã ¼öÁ¤
+		// í…ŒìŠ¤íŠ¸ë¥¼ ìœ„í•´ ì§€ë¢°ìˆ˜ ì„ì‹œ ìˆ˜ì •
 		switch (gameDifficulty) {
 		case kGameDifficultyEasy:
 			Log.e("GameData / getMaxMineNumber", "gameDifficulty --> MineNumber : " + 30);
-			value = 30; // ±âº» 30°³
+			value = 30; // ê¸°ë³¸ 30ê°œ
 			break;
 
 		case kGameDifficultyNormal:
@@ -131,7 +131,7 @@ public class GameData {
 	}
 
 	//HeartNumber
-	//return°ªÀÌ intÁö¸¸ hashmap¿¡ integer·Î ÀúÀåµÇ¾î ÀÚµ¿Çüº¯È¯ÀÌ ¾ÈµÉ½Ã Çüº¯È¯ ÇÊ¿ä
+	//returnê°’ì´ intì§€ë§Œ hashmapì— integerë¡œ ì €ì¥ë˜ì–´ ìë™í˜•ë³€í™˜ì´ ì•ˆë ì‹œ í˜•ë³€í™˜ í•„ìš”
 	public int getHeartNumber() {
 		return getGameData("HeartNumber");
 	}
@@ -160,16 +160,16 @@ public class GameData {
 		this.setGameData("MineNumber", number);
 	}
 	
-	// ¹ö¼¸(±ê¹ß)À» ²È¾ÒÀ»¶§ ²ÈÀº ÀÚ¸®¿¡ Áö·Ú°¡ ÀÖÀ¸¸é +1
+	// ë²„ì„¯(ê¹ƒë°œ)ì„ ê½‚ì•˜ì„ë•Œ ê½‚ì€ ìë¦¬ì— ì§€ë¢°ê°€ ìˆìœ¼ë©´ +1
 	public int currentMineNumber() {
 		int a = currentMine +=1;
-		Log.e("gameData currentMineNumber", "currentMine : " + a);  // log·Î È®ÀÎ
+		Log.e("gameData currentMineNumber", "currentMine : " + a);  // logë¡œ í™•ì¸
 		return a;
 	}
 	
 	public int previousMineNumber() {
 		int a = currentMine -=1;
-		Log.e("gameData previousMineNumber", "currentMine : " + a);  // log·Î È®ÀÎ
+		Log.e("gameData previousMineNumber", "currentMine : " + a);  // logë¡œ í™•ì¸
 		return a;
 	}
 	
@@ -192,7 +192,7 @@ public class GameData {
 	}
 	
 	public void setSeconds(int seconds) {
-		seconds = (int)CGPoint.clampf((float)seconds,	0, (float)seconds); //¹¹¿¡ ¾²´Â ¹°°ÇÀÎ°í?
+		seconds = (int)CGPoint.clampf((float)seconds,	0, (float)seconds); //ë­ì— ì“°ëŠ” ë¬¼ê±´ì¸ê³ ?
 		this.setGameData("Seconds", seconds);
 	}
 	
@@ -214,22 +214,22 @@ public class GameData {
 	public int getItemNumberByType(int sphereType){
 		//
 		// sphereType from 1 to 6
-		//","·Î ±¸ºĞÇÏ¿© ½ºÆ®¸µ ¹è¿­·Î ¸¸µç´Ù?
+		//","ë¡œ êµ¬ë¶„í•˜ì—¬ ìŠ¤íŠ¸ë§ ë°°ì—´ë¡œ ë§Œë“ ë‹¤?
 		String keyString = "ItemFire,ItemWind,ItemCloud,ItemDivine,ItemEarth,ItemMirror";
 		String[] keyArray = keyString.split(",",6);
-		//Log.e("GameData", "±¸½½ Á¾·ù:" + (sphereType) + ":" + keyArray[sphereType-1]);
+		//Log.e("GameData", "êµ¬ìŠ¬ ì¢…ë¥˜:" + (sphereType) + ":" + keyArray[sphereType-1]);
 		//Log.e("GameData", "getGameData:" + getGameData(keyArray[sphereType-1]));
 		return getGameData(keyArray[sphereType-1]);
 	}
 
 	public int getGameData(String key) {
-		// ÀÓ½Ã·Î
+		// ì„ì‹œë¡œ
 		//
 		return data.get(key);
 	}
 
 	public void setItemNumberByType(int sphereType, int number){
-	//","·Î ±¸ºĞÇÏ¿© ½ºÆ®¸µ ¹è¿­·Î ¸¸µç´Ù?	
+	//","ë¡œ êµ¬ë¶„í•˜ì—¬ ìŠ¤íŠ¸ë§ ë°°ì—´ë¡œ ë§Œë“ ë‹¤?	
 	String keyString = "ItemFire,ItemWind,ItemCloud,ItemDivine,ItemEarth,ItemMirror";
 	String[] keyArray = keyString.split(",", 6);
 
@@ -251,15 +251,15 @@ public class GameData {
 		}
 	}
 	
-	// ³­ÀÌµµ
+	// ë‚œì´ë„
 	public int getGameDifficulty(){
-		//Log.e("get", ""+getGameData("GameDifficulty"));  // log·Î È®ÀÎ
-		return 0; // ÀÓ½Ã·Î expert
+		//Log.e("get", ""+getGameData("GameDifficulty"));  // logë¡œ í™•ì¸
+		return 0; // ì„ì‹œë¡œ expert
 		//return getGameData("GameDifficulty");
 	}
 	
 	public void setGameDifficulty(int difficulty) {
-		Log.e("GameData / setGameDifficulty", "Difficulty : "+ getGameData("GameDifficulty"));  // log·Î È®ÀÎ
+		Log.e("GameData / setGameDifficulty", "Difficulty : "+ getGameData("GameDifficulty"));  // logë¡œ í™•ì¸
 		this.setGameData("GameDifficulty", difficulty);
 	}
 

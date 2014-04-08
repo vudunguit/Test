@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
@@ -21,11 +21,11 @@ public class BottomMenu5 {
 		return CCDirector.sharedDirector().winSize();
 	}
 	
-	// ÇÏ´Ü ¸Ş´º
+	// í•˜ë‹¨ ë©”ë‰´
 	public static void setBottomMenu(CCSprite parentSprite, String imageFolder, CCNode nodeThis, int type) {
 		
 	
-		// ÁÂÃø ¹öÆ°(»óÁ¡)
+		// ì¢Œì¸¡ ë²„íŠ¼(ìƒì )
 		CCMenuItem button1 = CCMenuItemImage.item(
 						imageFolder + "guide-back-normal" + fileExtension,
 						imageFolder + "guide-back-select" + fileExtension,
@@ -34,7 +34,7 @@ public class BottomMenu5 {
 		CCMenuItem button3;
 		
 		if (type == 3) {
-		// ¿ìÃø ¹öÆ°(¼³Á¤)
+		// ìš°ì¸¡ ë²„íŠ¼(ì„¤ì •)
 			button3 = CCMenuItemImage.item(
 						imageFolder + "guide-done-normal" + fileExtension,
 						imageFolder + "guide-done-select" + fileExtension,

@@ -1,4 +1,4 @@
-package com.aga.mine.pages2;
+ï»¿package com.aga.mine.pages2;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -37,10 +37,10 @@ public class GameEnding extends CCLayer {
 		setpoint();
 	}
 
-	// ¹Ş¾Æ¾ßµÇ´Â °ª
-	// Àû»ö, Ã»»ö
-	// facebookID (image´Â web ¶Ç´Â ÀúÀåµÈ °Í È£Ãâ)
-	// 3°¡Áö Á¡¼ö (Á¡¼ö°¡ ÀÖÀ»½Ã lv, exp È£Ãâ)
+	// ë°›ì•„ì•¼ë˜ëŠ” ê°’
+	// ì ìƒ‰, ì²­ìƒ‰
+	// facebookID (imageëŠ” web ë˜ëŠ” ì €ì¥ëœ ê²ƒ í˜¸ì¶œ)
+	// 3ê°€ì§€ ì ìˆ˜ (ì ìˆ˜ê°€ ìˆì„ì‹œ lv, exp í˜¸ì¶œ)
 	private void mainMenu() {
 		
 		String userColor = "";
@@ -71,7 +71,7 @@ public class GameEnding extends CCLayer {
 		picture.setScale(1.4f);
 		picture.setPosition(240, backboard.getContentSize().height - 195);
 		
-		CCLabel name = CCLabel.makeLabel("È«±æµ¿", "Arial", 30);
+		CCLabel name = CCLabel.makeLabel("í™ê¸¸ë™", "Arial", 30);
 		backboard.addChild(name);
 		name.setAnchorPoint(0, 0.5f);
 		name.setPosition(
@@ -94,9 +94,9 @@ public class GameEnding extends CCLayer {
 		exp.setPosition(460, backboard.getContentSize().height - 396); //400
 		
 		/*********************************************************/
-		// °æÇèÄ¡ ¹Ù
+		// ê²½í—˜ì¹˜ ë°”
 		CCSprite expbg = null;
-		// °æÇèÄ¡°¡ 0ÀÏ¶§ true·Î »ç¿ëÇÒ °Í
+		// ê²½í—˜ì¹˜ê°€ 0ì¼ë•Œ trueë¡œ ì‚¬ìš©í•  ê²ƒ
 		if (values[2] < 500) {
 			expbg = base;	
 		} else {
@@ -112,8 +112,8 @@ public class GameEnding extends CCLayer {
 			CCSprite expBar = CCSprite.sprite(folder + "ending-exp02.png");
 			expbg.addChild(expBar, 1);
 			expBar.setAnchorPoint(1, 0.5f);
-			expBar.setPosition((int)(Math.random() * 322) + 172, 45); // x°ª 172 = 0
-//			expBar.setPosition(172, 45); // x°ª 172 = 0
+			expBar.setPosition((int)(Math.random() * 322) + 172, 45); // xê°’ 172 = 0
+//			expBar.setPosition(172, 45); // xê°’ 172 = 0
 //			expBar.setPosition(494, 45);
 			
 			CCSprite expTail = CCSprite.sprite(folder + "ending-exp03.png");
@@ -139,7 +139,7 @@ public class GameEnding extends CCLayer {
 		}
 		
 		/*********************************************************/
-		// ÁÂÃø ¹öÆ°
+		// ì¢Œì¸¡ ë²„íŠ¼
 		CCMenuItem buttonL = CCMenuItemImage.item(
 				folder + "ending-button1.png",
 				folder + "ending-button2.png",
@@ -158,7 +158,7 @@ public class GameEnding extends CCLayer {
 				- leftbutton.getAnchorPoint().y * buttonL.getContentSize().height - 10
 				);
 		
-		// ¿ìÃø ¹öÆ°
+		// ìš°ì¸¡ ë²„íŠ¼
 		CCMenuItem buttonR = CCMenuItemImage.item(
 				folder + "ending-button1.png",
 				folder + "ending-button2.png",

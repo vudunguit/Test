@@ -1,11 +1,11 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 public class NumberComma {
 	
 	public NumberComma() {
 	}
 	
-	// String¿¡ comma »ğÀÔ
+	// Stringì— comma ì‚½ì…
 	public String numberComma(final String string) {
 		if (string.length() < 4) 
 			return string;

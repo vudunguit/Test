@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class ShopBroomstick2 extends CCLayer {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
 		
-		// BackGround ÆÄÀÏ
+		// BackGround íŒŒì¼
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
 		setBackBoardMenu(commonfolder + "gamebb" + fileExtension);
 		setBoardFrameMenu(commonfolder + "frameGeneral-hd" + fileExtension);
@@ -95,12 +95,12 @@ public class ShopBroomstick2 extends CCLayer {
 			button.setUserData(ds);
 			listMenus.add(button);
 			
-			// ºøÀÚ·ç ÀÌ¹ÌÁö
+			// ë¹—ìë£¨ ì´ë¯¸ì§€
 			CCSprite goldimage = CCSprite.sprite(folder + (int)ds[1] + fileExtension);
 			goldimage.setPosition(goldimage.getContentSize().width / 2, button.getContentSize().height / 2);
 			button.addChild(goldimage);
 			
-			// °¡°İ
+			// ê°€ê²©
 			CCLabel  gold = CCLabel.makeLabel(numberComma((int)ds[0]), "Arial", 28);
 //			gold.setColor(ccColor3B.ccYELLOW);
 //			gold.setAnchorPoint(1, 1);
@@ -124,8 +124,8 @@ public class ShopBroomstick2 extends CCLayer {
 					button.getContentSize().height - 9);
 			button.addChild(goldText);
 			
-			// ºøÀÚ·ç
-			CCLabel  stick = CCLabel.makeLabel("ºøÀÚ·ç " + plus((int)ds[1], (int)ds[2]) + "°³", "Arial", 26);
+			// ë¹—ìë£¨
+			CCLabel  stick = CCLabel.makeLabel("ë¹—ìë£¨ " + plus((int)ds[1], (int)ds[2]) + "ê°œ", "Arial", 26);
 			stick.setAnchorPoint(1, 0);
 			stick.setPosition(button.getContentSize().width - 132, 15);
 			button.addChild(stick);
@@ -142,20 +142,20 @@ public class ShopBroomstick2 extends CCLayer {
 		return values;
 	}
 	
-	// int °ªÀ» StringÀ¸·Î º¯È¯ÇÏ¿© comma »ğÀÔ
+	// int ê°’ì„ Stringìœ¼ë¡œ ë³€í™˜í•˜ì—¬ comma ì‚½ì…
 	private String Decimal(int value) {
 		DecimalFormat format = new DecimalFormat("###,###,###,###");
 		String ret = format.format(value);
 		return ret;
 	}
 	
-	// int °ªÀ» StringÀ¸·Î º¯È¯ÇÏ¿© comma »ğÀÔ
+	// int ê°’ì„ Stringìœ¼ë¡œ ë³€í™˜í•˜ì—¬ comma ì‚½ì…
 	private String numberComma(int value) {
 		String s = Integer.toString(value);
 		return numberComma(s);
 	}
 	
-	// String¿¡ comma »ğÀÔ
+	// Stringì— comma ì‚½ì…
 	private String numberComma(String string) {
 		if (string.length() < 4) 
 			return string;
@@ -190,14 +190,14 @@ public class ShopBroomstick2 extends CCLayer {
 	public void buttonCallback(Object sender) {
 		double[] value = (double[]) ((CCNode)sender).getUserData();
 		
-		// ·Î±×¿ë
+		// ë¡œê·¸ìš©
 		for (double d : value) {
 			Log.e("ShopBroomstick2", "buttonCallback : " + (int)d);
 		}
 		
-//		double requestID = Math.random() * 9223372036854775807L;  //facebook ¾Ë¸²±Û¹øÈ£·Î ´ëÃ¼ÇÒ °Í
-		long requestID = FacebookData.getinstance().getRequestID();  //test¿ë 
-		String recipientID = FacebookData.getinstance().getRecipientID(); // »óÁ¡ ÀÌµ¿ ¹æ½Ä¿¡ µû¸¥ ID º¯°æ
+//		double requestID = Math.random() * 9223372036854775807L;  //facebook ì•Œë¦¼ê¸€ë²ˆí˜¸ë¡œ ëŒ€ì²´í•  ê²ƒ
+		long requestID = FacebookData.getinstance().getRequestID();  //testìš© 
+		String recipientID = FacebookData.getinstance().getRecipientID(); // ìƒì  ì´ë™ ë°©ì‹ì— ë”°ë¥¸ ID ë³€ê²½
 		String senderID = FacebookData.getinstance().getUserInfo().getId();
 		String data = 
 				"0,RequestModeMailBoxAdd*22," + requestID + 

@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+﻿package com.aga.mine.mains;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;

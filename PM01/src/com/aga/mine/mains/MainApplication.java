@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+﻿package com.aga.mine.mains;
 
 import com.facebook.SessionDefaultAudience;
 import com.sromku.simple.fb.Permission;

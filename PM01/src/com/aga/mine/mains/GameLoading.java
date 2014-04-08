@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -37,13 +37,13 @@ public class GameLoading extends CCLayer {
 		return CGPoint.make(winsize().width/2, winsize().height/2);
 	}
 	
-	// ¹è°æ ½ºÄÉÀÏ ¼³Á¤
+	// ë°°ê²½ ìŠ¤ì¼€ì¼ ì„¤ì •
 	private void setBackground() {
 		bg = CCSprite.sprite(folder + "gameloadbg" + fileExtension);
 		bg.setPosition(center());
 		this.addChild(bg);
 		
-		// Å¸ÀÌÆ²¸í
+		// íƒ€ì´í‹€ëª…
 		FrameTitle4.setTitle(bg, folder);
 	}
 	

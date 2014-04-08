@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
@@ -20,10 +20,10 @@ public class HomeBottom {
 		setBottomMenu(parentSprite, imageFolder, nodeThis);
 	}
 
-	// ÇÏ´Ü ¸Ş´º
+	// í•˜ë‹¨ ë©”ë‰´
 	private void setBottomMenu(CCSprite parentSprite, String imageFolder, CCNode nodeThis) {
 		
-		// ÁÂÃø ¹öÆ°(»óÁ¡)
+		// ì¢Œì¸¡ ë²„íŠ¼(ìƒì )
 		CCMenuItem button1 = CCMenuItemImage.item(
 				SpriteSummery.imageSummary(
 						imageFolder + "home-shopbutton1" + fileExtension,
@@ -34,7 +34,7 @@ public class HomeBottom {
 						nodeThis, "clicked");
 		button1.setUserData("shop");
 		
-		//Áß¾Ó ¹öÆ°(ÀÔÀå)
+		//ì¤‘ì•™ ë²„íŠ¼(ì…ì¥)
 		CCMenuItem button2 = CCMenuItemImage.item(
 				SpriteSummery.imageSummary(
 						imageFolder + "home-enterbutton1" + fileExtension,
@@ -45,7 +45,7 @@ public class HomeBottom {
 						nodeThis, "clicked");
 		button2.setUserData("enter");
 		
-		// ¿ìÃø ¹öÆ°(¼³Á¤)
+		// ìš°ì¸¡ ë²„íŠ¼(ì„¤ì •)
 		CCMenuItem button3 = CCMenuItemImage.item(
 				SpriteSummery.imageSummary(
 						imageFolder + "home-optionbutton1" + fileExtension,
@@ -68,7 +68,7 @@ public class HomeBottom {
 		button3.setPosition(winsize().width - 5, 30);
 		button3.setAnchorPoint(1, 0);
 		
-		// Ä£±¸ ÃÊ´ë ¹öÆ°
+		// ì¹œêµ¬ ì´ˆëŒ€ ë²„íŠ¼
 		CCMenuItem friendsInvite = CCMenuItemImage.item(
 				SpriteSummery.imageSummary(
 						imageFolder + "home-invitebutton1" + fileExtension,

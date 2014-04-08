@@ -1,24 +1,24 @@
-package com.aga.mine.pages;
+ï»¿package com.aga.mine.pages;
 
-// ÀÏ´Ü ¹°¾îº¼°Í »©°í ¿Ï·á
+// ì¼ë‹¨ ë¬¼ì–´ë³¼ê²ƒ ë¹¼ê³  ì™„ë£Œ
 public class GameConfig {
 
 	//
-	// °ÔÀÓ ¼³Á¤ ÀÏ¹İ
-	final float kLongPressTime = 0.8f; // ·ÕÇÁ·¹½º ¹ßµ¿½Ã°£
-	final float kDefaultScale = 0.71f; // Ã³À½ ¸Ê ½ºÄÉÀÏ, .23f for full screen
+	// ê²Œì„ ì„¤ì • ì¼ë°˜
+	final float kLongPressTime = 0.8f; // ë¡±í”„ë ˆìŠ¤ ë°œë™ì‹œê°„
+	final float kDefaultScale = 0.71f; // ì²˜ìŒ ë§µ ìŠ¤ì¼€ì¼, .23f for full screen
 
-	// ÁÜÀÎ . ¾Æ¿ô °ü·Ã
+	// ì¤Œì¸ . ì•„ì›ƒ ê´€ë ¨
 	final float kPinchZoomMultiplier = 0.005f;
 	//final float kPinchZoomMultiplier = 0.0015f;
 	final float kMinScale = 0.23f;
 	final float kMaxScale = 1.0f;
 
-	// ÀÌ¸ğÆ¼ÄÜ ÆĞ³Î ÀÌµ¿ ½Ã°£
+	// ì´ëª¨í‹°ì½˜ íŒ¨ë„ ì´ë™ ì‹œê°„
 	final float kEmoticonPanelMoveTime = 0.2f;
 
 	//
-	// ·¹ÀÌ¾î ±íÀÌ, ¸Ş´º Çãµå
+	// ë ˆì´ì–´ ê¹Šì´, ë©”ë‰´ í—ˆë“œ
 	final int kDepthUI = 0;
 	final int kDepthPopup = 20;
 	int kDepthMagician = 10;
@@ -66,7 +66,7 @@ public class GameConfig {
 		this.isEndingOn = isEndingOn;
 	}
 	
-	/**************************** º¯°æ ****************************/
+	/**************************** ë³€ê²½ ****************************/
 	public void resetPreOpenedCells() {
 		// TODO Auto-generated method stub
 		

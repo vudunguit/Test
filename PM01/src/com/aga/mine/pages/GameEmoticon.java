@@ -1,4 +1,4 @@
-package com.aga.mine.pages;
+ï»¿package com.aga.mine.pages;
 
 import java.io.IOException;
 
@@ -23,8 +23,8 @@ import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.Utility;
 
 
-// ÀÌ¹ÌÁö ÆÄÀÏ¸íÀÇ -hd¸¦ Á¦°Å ÇÏ¿©¼­ ¿À·ù ¹ß»ı ÇÔ.
-// ¿Ï·áÈÄ ÆÄÀÏ¸í º¯°æÇÒ°Í
+// ì´ë¯¸ì§€ íŒŒì¼ëª…ì˜ -hdë¥¼ ì œê±° í•˜ì—¬ì„œ ì˜¤ë¥˜ ë°œìƒ í•¨.
+// ì™„ë£Œí›„ íŒŒì¼ëª… ë³€ê²½í• ê²ƒ
 public class GameEmoticon extends CCLayer{
 
 	String folder = "62game_emoticon/";
@@ -47,7 +47,7 @@ public class GameEmoticon extends CCLayer{
 		isEmoticonPanelOn = false;
 		
 		//
-		// º£ÀÌ½º
+		// ë² ì´ìŠ¤
 		base = CCSprite.sprite(folder + "emoticon-base.png");
 		this.addChild(base);
 		CGSize baseActive = CGSize.make(
@@ -55,7 +55,7 @@ public class GameEmoticon extends CCLayer{
 				base.getContentSize().height);
 		
 		//
-		// ÅÇ ¹öÆ°
+		// íƒ­ ë²„íŠ¼
 		CCMenuItem item = CCMenuItemImage.item(
 				folder + "emoticon-baseButton-hd.png",
 				folder + "emoticon-baseButton-hd.png",
@@ -74,21 +74,21 @@ public class GameEmoticon extends CCLayer{
 		base.setPosition(GameConfig.share().isEmoticonPanelOn ? basePositionOn : basePositionOff);
 		
 		//
-		// Á¦¸ñ
+		// ì œëª©
 		String titleFile = Utility.getInstance().getNameWithIsoCodeSuffix(folder + "emoticon-title.png");
 		CCSprite title = CCSprite.sprite(titleFile);
 		base.addChild(title);
 		title.setPosition(baseActive.width / 2, baseActive.height - title.getContentSize().height * 1.2f);
 		
 		//
-		// ÀÌ¸ğÆ¼ÄÜµé
+		// ì´ëª¨í‹°ì½˜ë“¤
 		CCSprite emoticonBase = CCSprite.sprite(folder + "emoticon-tiles.png");
 		base.addChild(emoticonBase);
 		emoticonBase.setPosition(baseActive.width / 2, baseActive.height / 2 + baseActive.height / 50);
 		
-		// ÀÌ¸ğÆ¼ÄÜ ¼¿ À§Ä¡°ª È®ÀÎ
+		// ì´ëª¨í‹°ì½˜ ì…€ ìœ„ì¹˜ê°’ í™•ì¸
 		CGPoint basePosition = CGPoint.ccp(baseActive.width / 11f, baseActive.height / 3.5f);
-		float cellSize = 38f * 2; // 128pixel ±âÁØ(ÇöÀç 64pixel »ç¿ëÁß) 
+		float cellSize = 38f * 2; // 128pixel ê¸°ì¤€(í˜„ì¬ 64pixel ì‚¬ìš©ì¤‘) 
 		for (int i = 0; i < 7; i++) {
 			for (int k = 0; k < 4; k++) {
 				CCLabel mark = CCLabel.makeLabel("+", "Arial", 15);
@@ -99,13 +99,13 @@ public class GameEmoticon extends CCLayer{
 		}
 		
 		//
-		// ÀÔ·ÂÃ¢
+		// ì…ë ¥ì°½
 		CCSprite inputBase = CCSprite.sprite(folder + "emoticon-inputBase-hd.png");
 		base.addChild(inputBase);
 		inputBase.setPosition(baseActive.width/2 , inputBase.getContentSize().height * 0.9f);
 		
 		//
-		// º¸³»±â ¹öÆ°
+		// ë³´ë‚´ê¸° ë²„íŠ¼
 		CCMenuItem itemSend = CCMenuItemImage.item(
 				folder + "emoticon-buttonSend-hd.png", 
 				folder + "emoticon-buttonSendOver-hd.png",
@@ -118,8 +118,8 @@ public class GameEmoticon extends CCLayer{
 				itemSend.getContentSize().height * 0.6f);
 		
 		//
-		// ¹öÆ° ±ÛÀÚ
-		// ¾ğ¾î ÆÄ¾ÇÈÄ ÆÄÀÏ¸í¿¡ ºÙ¿©¼­ ÀúÀåÇÏ±â
+		// ë²„íŠ¼ ê¸€ì
+		// ì–¸ì–´ íŒŒì•…í›„ íŒŒì¼ëª…ì— ë¶™ì—¬ì„œ ì €ì¥í•˜ê¸°
 		//String textFile = Utility.getInstance().getNameWithIsoCodeSuffix("emoticon-textSendKo-hd.png");
 		String textFile = folder + Utility.getInstance().getNameWithIsoCodeSuffix("emoticon-textSend.png");
 		CCSprite textSend = CCSprite.sprite(textFile);
@@ -152,11 +152,11 @@ public class GameEmoticon extends CCLayer{
 
 			if (GameConfig.share().isMinimapPanelOn == false) {
 				
-				// ÀÌ¸ğÆ¼ÄÜ ÆĞ³Î ¿Â/¿ÀÇÁ
+				// ì´ëª¨í‹°ì½˜ íŒ¨ë„ ì˜¨/ì˜¤í”„
 				isEmoticonPanelOn = !isEmoticonPanelOn;
 				GameConfig.share().setEmoticonPanelOn(isEmoticonPanelOn);
 				
-				// ¿Â/¿ÀÇÁ ¾Ö´Ï¸ŞÀÌ¼Ç
+				// ì˜¨/ì˜¤í”„ ì• ë‹ˆë©”ì´ì…˜
 				CCFiniteTimeAction moveOn = CCMoveTo.action(GameConfig.share().kEmoticonPanelMoveTime, basePositionOn);
 				CCFiniteTimeAction moveOff = CCMoveTo.action(GameConfig.share().kEmoticonPanelMoveTime, basePositionOff);
 				
@@ -172,7 +172,7 @@ public class GameEmoticon extends CCLayer{
 		case kButtonSend:
 			Log.e("clicked", "kButtonSend clicked");
 			if (GameData.share().isMultiGame) {
-				int EmoticonID = 1; // ÀÎÀÚ°ªÀº ÀÌ¸ğÆ¼ÄÜ ID°ªÀ» ³Ö´Â´Ù.
+				int EmoticonID = 1; // ì¸ìê°’ì€ ì´ëª¨í‹°ì½˜ IDê°’ì„ ë„£ëŠ”ë‹¤.
 				try {
 					NetworkController.getInstance().sendPlayDataEmoticon(EmoticonID);
 				} catch (IOException e) {

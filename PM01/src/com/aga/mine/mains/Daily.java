@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -41,7 +41,7 @@ public class Daily extends CCLayer {
 			goldtext(bg, dailyCount);
 		}
 		
-		//Ãâ¼®ºÎ Å¸ÀÌÆ²
+		//ì¶œì„ë¶€ íƒ€ì´í‹€
 		private void setTitle() {
 			CCSprite title = CCSprite.sprite(
 					Utility.getInstance().getNameWithIsoCodeSuffix(folder + "daily-title" + fileExtension));
@@ -57,7 +57,7 @@ public class Daily extends CCLayer {
 			close.setAnchorPoint(0, 0);
 		}
 		
-			// Ãâ¼®ºÎ gold ÀÌ¹ÌÁö
+			// ì¶œì„ë¶€ gold ì´ë¯¸ì§€
 			private void gold(CCSprite parent, int dailyCount) {
 				int[] goldX = { 100, 204, 308, 410, 517 };
 				int[] goldY = { 1136 - 370, 1136 - 479, 1136 - 590, 1136 - 707, 1136 - 820, 1136 - 940 };
@@ -82,7 +82,7 @@ public class Daily extends CCLayer {
 						parent.addChild(gold, 1);
 						gold.setPosition(goldX[i] + 10, goldY[k]);
 						
-						//µµÀå Âï±â
+						//ë„ì¥ ì°ê¸°
 						if (dailyCount > count) {
 							CCSprite stamp = CCSprite.sprite(
 									Utility.getInstance().getNameWithIsoCodeSuffix(folder + "stamp" + fileExtension));
@@ -91,10 +91,10 @@ public class Daily extends CCLayer {
 							stamp.setAnchorPoint(0.5f, 0.5f);
 							stamp.setScale(0.23f);		
 						} else if (dailyCount == count) {
-							Log.e("Daily", "µµÀåÂï±â ¾Ö´Ï¸ŞÀÌ¼Ç ³ÖÀ» °÷ ÀÔ´Ï´Ù.");
+							Log.e("Daily", "ë„ì¥ì°ê¸° ì• ë‹ˆë©”ì´ì…˜ ë„£ì„ ê³³ ì…ë‹ˆë‹¤.");
 							Log.e("Daily", "stamp animation");
 							
-							CCSprite stamp = CCSprite.sprite(folder + "ani_stamp" + fileExtension); // ÀÓ½Ã ÀÌ¹ÌÁö
+							CCSprite stamp = CCSprite.sprite(folder + "ani_stamp" + fileExtension); // ì„ì‹œ ì´ë¯¸ì§€
 							parent.addChild(stamp, 100);
 							stamp.setPosition(goldX[i], goldY[k]);
 							stamp.setAnchorPoint(0.5f, 0.5f);
@@ -106,7 +106,7 @@ public class Daily extends CCLayer {
 				}
 			}
 
-			// Ãâ¼®ºÎ gold ¹× º¸»ó °¡°İ text
+			// ì¶œì„ë¶€ gold ë° ë³´ìƒ ê°€ê²© text
 			private void goldtext(CCSprite parent, int dailyCount) {
 				int[] textX = { 100, 204, 308, 410, 517 };
 				int[] textY = { 1136 - 338, 1136 - 445, 1136 - 555, 1136 - 670, 1136 - 787, 1136 - 894 };
@@ -138,8 +138,8 @@ public class Daily extends CCLayer {
 					}
 				}
 				
-				Log.e("Daily", "¿ìÆí º¸³»±â / Gold " + reward[dailyCount -1]);
-				// ¿ìÆí º¸³»±â
+				Log.e("Daily", "ìš°í¸ ë³´ë‚´ê¸° / Gold " + reward[dailyCount -1]);
+				// ìš°í¸ ë³´ë‚´ê¸°
 			}
 		
 		@Override

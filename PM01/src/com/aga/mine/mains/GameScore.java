@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+﻿package com.aga.mine.mains;
 
 public class GameScore {
 	

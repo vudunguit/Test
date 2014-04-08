@@ -1,4 +1,4 @@
-package com.aga.mine.pages;
+ï»¿package com.aga.mine.pages;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,10 +14,10 @@ import com.aga.mine.mains.Config;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.R;
 
-// for¹® µ¹¸®¸é ¼­ size ¶Ç´Â length·Î ¾ò¾î¿Â °´Ã¼ ÀÖÀ¸¸é º°µµ·Î size º¯¼ö ¸¸µé¾î¼­ ±×°ªÀ¸·Î ÇÒ°Í
-// Àß¸øÇÏ¸é Å«ÀÏ³² ¤·¤·
-//±×³É ÀÌÇØ ¾ÈµÇµµ Àû´çÈ÷ Æ÷Æ®Áß... ³ªÁß¿¡ ¾Èµ¹¾Æ°¥°Í°°À½.
-//³Ê¹« ½É°¢ÇØ¼­ ¾îµğ°¡ ¹®Á¦ÀÎÁö ¸øÃ£À»±îºÁ ½ÉÈ÷ °ÆÁ¤µÊ
+// forë¬¸ ëŒë¦¬ë©´ ì„œ size ë˜ëŠ” lengthë¡œ ì–»ì–´ì˜¨ ê°ì²´ ìˆìœ¼ë©´ ë³„ë„ë¡œ size ë³€ìˆ˜ ë§Œë“¤ì–´ì„œ ê·¸ê°’ìœ¼ë¡œ í• ê²ƒ
+// ì˜ëª»í•˜ë©´ í°ì¼ë‚¨ ã…‡ã…‡
+//ê·¸ëƒ¥ ì´í•´ ì•ˆë˜ë„ ì ë‹¹íˆ í¬íŠ¸ì¤‘... ë‚˜ì¤‘ì— ì•ˆëŒì•„ê°ˆê²ƒê°™ìŒ.
+//ë„ˆë¬´ ì‹¬ê°í•´ì„œ ì–´ë””ê°€ ë¬¸ì œì¸ì§€ ëª»ì°¾ì„ê¹Œë´ ì‹¬íˆ ê±±ì •ë¨
 //this.delegate.removeTile(this.tileCoord);
 public class MineCell2 extends CCLayer{
 	
@@ -36,16 +36,16 @@ public class MineCell2 extends CCLayer{
 	}
 	/***************************************/
 	
-	// Áö·Ú
+	// ì§€ë¢°
 	private boolean isMine;
-	// ¿­¾îº» ¸ÊÀÇ Tile
+	// ì—´ì–´ë³¸ ë§µì˜ Tile
 	private boolean isOpened;
 //	private boolean isMarked = false;
-	// Áö·Ú°¡ ÀÖÀ»°Í °°Àº °÷ Ã¼Å©
+	// ì§€ë¢°ê°€ ìˆì„ê²ƒ ê°™ì€ ê³³ ì²´í¬
 	private boolean isMarked = false;
-	// ±¸½½
+	// êµ¬ìŠ¬
 	private boolean isSphere;
-	// ¼±ÅÃ ¸øÇÏ´Â ¿µ¿ª
+	// ì„ íƒ ëª»í•˜ëŠ” ì˜ì—­
 	private boolean isCollidable;
 	
 	private int Cell_ID;
@@ -59,7 +59,7 @@ public class MineCell2 extends CCLayer{
 	//int plusMine;
 	
 	Context mContext;
-	// Àß µÉ·Á³¶????
+	// ì˜ ë ë ¤ë‚­????
 	MineCellDelegate delegate ;
 	
 	ArrayList<MineCell2> sphereCells;
@@ -107,18 +107,18 @@ public class MineCell2 extends CCLayer{
 		return sphereRoundCells;
 	}
 
-	// ¼±ÅÃµÈ ÁöÁ¡ÀÇ ÁÖº¯ ¼¿ÀÇ ¸¶Å©?? µÈ°ÍÀÇ °¹¼ö¸¦ °Ë»çÇÏ¿© °Ë»çµÈ °ªÀ» µ¹·ÁÁØ´Ù.(Flag Áö·Ú Ã¼Å©)
+	// ì„ íƒëœ ì§€ì ì˜ ì£¼ë³€ ì…€ì˜ ë§ˆí¬?? ëœê²ƒì˜ ê°¯ìˆ˜ë¥¼ ê²€ì‚¬í•˜ì—¬ ê²€ì‚¬ëœ ê°’ì„ ëŒë ¤ì¤€ë‹¤.(Flag ì§€ë¢° ì²´í¬)
 	public int getNumberOfMushroomAndPumpkinAround() {
-		//Log.e("Áö·Ú ÁÖº¯ ¼ıÀÚ","" + isMine());
-		// È£¹ÚÀº -1À» ³Ö¾ú´Ù.
+		//Log.e("ì§€ë¢° ì£¼ë³€ ìˆ«ì","" + isMine());
+		// í˜¸ë°•ì€ -1ì„ ë„£ì—ˆë‹¤.
 		if (isMarked()) return -1;
 		
 		int count = 0;
 		/*
 		if (getRoundCells() == null) {
-			Log.e("MineCell / getNumberOfMushroomAround","ÁÖº¯¿¡ ¼¿ÀÌ ¾øÀ½. / getRoundCells() == null");
+			Log.e("MineCell / getNumberOfMushroomAround","ì£¼ë³€ì— ì…€ì´ ì—†ìŒ. / getRoundCells() == null");
 		} else if(getRoundCells().size() == 0){
-			Log.e("MineCell / getNumberOfMushroomAround","ÁÖº¯¿¡ ¼¿ÀÇ °¹¼ö°¡ 0°³ / getRoundCells().size() == 0");
+			Log.e("MineCell / getNumberOfMushroomAround","ì£¼ë³€ì— ì…€ì˜ ê°¯ìˆ˜ê°€ 0ê°œ / getRoundCells().size() == 0");
 		}
 		*/
 		if (getRoundCells() != null && getRoundCells().size() != 0) {
@@ -126,8 +126,8 @@ public class MineCell2 extends CCLayer{
 			int size = getRoundCells().size();
 			for (int k = 0; k < size; k++) {
 
-				// cellsTemp.get(k) ÀÌ nullÀÌ¶ó ¿¡·¯ ¹ß»ı
-				// cellArray.get(k)ÀÌ nullÀÌ ³ª¿À¸é roundcell·Î µî·Ï½Ã ¹®Á¦°¡ ÀÖ´Â°Í
+				// cellsTemp.get(k) ì´ nullì´ë¼ ì—ëŸ¬ ë°œìƒ
+				// cellArray.get(k)ì´ nullì´ ë‚˜ì˜¤ë©´ roundcellë¡œ ë“±ë¡ì‹œ ë¬¸ì œê°€ ìˆëŠ”ê²ƒ
 				if (cellArray.get(k) != null && (
 						(cellArray.get(k).isMarked() || (cellArray.get(k).isMine() && cellArray.get(k).isOpened())
 								))) 
@@ -137,9 +137,9 @@ public class MineCell2 extends CCLayer{
 		return count;
 	}
 	
-	// ¼ıÀÚ ÁÖº¯ÀÇ ¸¶ÀÎ ¼ö (¤§¤§¤§)
+	// ìˆ«ì ì£¼ë³€ì˜ ë§ˆì¸ ìˆ˜ (ã„·ã„·ã„·)
 	public int getNumberOfMineAround() {
-		//Log.e("Áö·Ú ÁÖº¯ ¼ıÀÚ","" + isMine());
+		//Log.e("ì§€ë¢° ì£¼ë³€ ìˆ«ì","" + isMine());
 		if (isMine()) return -1;
 
 		int count = 0;
@@ -164,7 +164,7 @@ public class MineCell2 extends CCLayer{
 
 	public boolean isSphereCellsClear() {
 		for (MineCell2 mineCell : getSphereCells()) {
-			if (mineCell != null) { // null °ªÀÌ ³ª¿Í¼­´Â ¾ÈµÈ´Ù. (ÀÓ½Ã)
+			if (mineCell != null) { // null ê°’ì´ ë‚˜ì™€ì„œëŠ” ì•ˆëœë‹¤. (ì„ì‹œ)
 				if (!mineCell.isMine() && !mineCell.isOpened() && !mineCell.isCollidable() && !mineCell.isSphere()) {
 					// return true;
 				} else {
@@ -180,25 +180,25 @@ public class MineCell2 extends CCLayer{
 			ArrayList<MineCell> cellArray = getSphereCells();
 			int size = cellArray.size();
 			for (int k = 0; k < size; k++) {
-				if (cellArray.get(k) != null) { // null °ªÀÌ ³ª¿Í¼­´Â ¾ÈµÈ´Ù. 
+				if (cellArray.get(k) != null) { // null ê°’ì´ ë‚˜ì™€ì„œëŠ” ì•ˆëœë‹¤. 
 					if (!cellArray.get(k).isMine() && !cellArray.get(k).isOpened() && !cellArray.get(k).isCollidable() && !cellArray.get(k).isSphere()) {
 						//	return true;
 						} else {
-							// ÇÏ³ª¶óµµ trueÀÌ¸é false ¹İÈ¯
+							// í•˜ë‚˜ë¼ë„ trueì´ë©´ false ë°˜í™˜
 							return false;
 					}
 //				} else {
 		//			return false;
 	//			}
 			}
-			//getSphereCells ÀÌ nullÀÌ°Å³ª µ¥ÀÌÅÍ°¡ ¾øÀ¸¸é ¾î¶»°Ô ÇØ¾ßµÇÁö???
+			//getSphereCells ì´ nullì´ê±°ë‚˜ ë°ì´í„°ê°€ ì—†ìœ¼ë©´ ì–´ë–»ê²Œ í•´ì•¼ë˜ì§€???
 			//Log.e("MineCell isSphereCellsClear", "null or size 0");
-			//return true; // ÀÓ½Ã
+			//return true; // ì„ì‹œ
 		}
 		return true;
 	}*/
 	
-	//unsigned ¹®Á¦
+	//unsigned ë¬¸ì œ
 	public void setToSphereCells(int sphereType) {
 		int counter = 1;
 		if (getSphereRoundCells() != null && getSphereRoundCells().size() != 0) {
@@ -206,9 +206,9 @@ public class MineCell2 extends CCLayer{
 			//Log.e("setToSphereCells ", " " + cells);
 			int size = cells.size();
 			for (int i = 0; i < size; i++) {
-				// ¾øÀ»½Ã ±× °ª¸¸ ÆĞ½º~
+				// ì—†ì„ì‹œ ê·¸ ê°’ë§Œ íŒ¨ìŠ¤~
 				if (cells.get(i) != null) {
-				cells.get(i).setSphere(true); // ÅöÇÏ¸é ¿¡·¯³ª´Â ºÎºĞ
+				cells.get(i).setSphere(true); // íˆ­í•˜ë©´ ì—ëŸ¬ë‚˜ëŠ” ë¶€ë¶„
 				cells.get(i).setSphereCell_ID(sphereType * 10 + counter); // 1*10+1,1*10+2,1*10+3,1*10+4
 				}
 			}
@@ -219,11 +219,11 @@ public class MineCell2 extends CCLayer{
 	public int roundOpen() {
 		int numberOfMine = this.getNumberOfMineAround();
 		int getNumberOfMushroomAround = this.getNumberOfMushroomAndPumpkinAround();
-		//Log.e("ÆøÅº ³ëÃâµÊ", "" + numberOfMine + "," + plusMine + ",");
+		//Log.e("í­íƒ„ ë…¸ì¶œë¨", "" + numberOfMine + "," + plusMine + ",");
 /*		int boom = 0;
 		int mushroomSum = 0;*/
 		if (numberOfMine == getNumberOfMushroomAround) {
-			// ´õºíÅÇÀ» ÇßÀ»¶§ ´õºí ÅÇÇÑ°÷ÀÇ ¼ıÀÚ°¡ ÀÖÀ¸¸é Å½??
+			// ë”ë¸”íƒ­ì„ í–ˆì„ë•Œ ë”ë¸” íƒ­í•œê³³ì˜ ìˆ«ìê°€ ìˆìœ¼ë©´ íƒ??
 			ArrayList<MineCell2> cells = getRoundCells();
 			int size = cells.size();
 			for (int i = 0; i < size; i++) {
@@ -235,21 +235,21 @@ public class MineCell2 extends CCLayer{
 /*			//Log.e("mineCell For", "" + cells.get(i));
 			
 			if(cells.get(i).isOpened()) {
-				// ¿ÀÇÂ ÇÑ ¼¿À» ´©¸¦¶§ ¼¿ÁÖº¯¿¡ ³ëÃâµÈ Áö·Ú°¡ ÀÖÀ¸¸é ±× Áö·Ú ¸¸Å­ + ÇØÁØ´Ù.
+				// ì˜¤í”ˆ í•œ ì…€ì„ ëˆ„ë¥¼ë•Œ ì…€ì£¼ë³€ì— ë…¸ì¶œëœ ì§€ë¢°ê°€ ìˆìœ¼ë©´ ê·¸ ì§€ë¢° ë§Œí¼ + í•´ì¤€ë‹¤.
 				if(cells.get(i).getNumberOfMineAround() == -1) {
 					boom ++;
 				}
-				//Log.e("ÆøÅº ³ëÃâµÊ ", " ");
+				//Log.e("í­íƒ„ ë…¸ì¶œë¨ ", " ");
 			}
 			mushroomSum = getNumberOfMushroomAround + boom;
 			//Log.e("getNumber", mushroomSum + ", boom :" + boom);
 			if (numberOfMine == getNumberOfMushroomAround) {
 				cells.get(i).open();
 			} else if (numberOfMine == mushroomSum) {
-				//Log.e("¿Ö ¾ÈÅ¸Áö ", "?????????????????????????");
+				//Log.e("ì™œ ì•ˆíƒ€ì§€ ", "?????????????????????????");
 				cells.get(i).open();
 			}
-			Log.e("MineCell / roundOpen", "ÆøÅº ³ëÃâµÊ");
+			Log.e("MineCell / roundOpen", "í­íƒ„ ë…¸ì¶œë¨");
 			
 			*/
 		}
@@ -302,16 +302,16 @@ public class MineCell2 extends CCLayer{
 	
 	
 	/*****************************************************/
-	/** ¹®Á¦ÁöÁ¡ 
+	/** ë¬¸ì œì§€ì  
 	 * 
 	 * Thread
 	 * 
-	 * Å¸ÀÏopen½Ã UI ¸ØÃã 
-	 * ¸¹Àº Å¸ÀÏopenÈÄ¿¡µµ UI ¼º´É ÀúÇÏ
+	 * íƒ€ì¼openì‹œ UI ë©ˆì¶¤ 
+	 * ë§ì€ íƒ€ì¼opení›„ì—ë„ UI ì„±ëŠ¥ ì €í•˜
 	 * 
 	 * 
-	 * ¾Ö´Ï¸ÅÀÌ¼Ç
-	 * ¼öÁ¤±¸ È¹µæ & Å¸ÀÏ ¿ÀÇÂ ¾Ö´Ï
+	 * ì• ë‹ˆë§¤ì´ì…˜
+	 * ìˆ˜ì •êµ¬ íšë“ & íƒ€ì¼ ì˜¤í”ˆ ì• ë‹ˆ
 	 * 
 	 * 
 	 * @return
@@ -325,18 +325,18 @@ public class MineCell2 extends CCLayer{
 //		});
 		
 		
-		// ¼¿ÁÖº¯ÀÇ Áö·Ú °¹¼ö¸¦ ±¸ÇÑ´Ù.
+		// ì…€ì£¼ë³€ì˜ ì§€ë¢° ê°¯ìˆ˜ë¥¼ êµ¬í•œë‹¤.
 		int numberOfMine = this.getNumberOfMineAround();
-		// numberOfMine : Å¸ÀÏ¿¡ ÀûÈ÷´Â ¼ıÀÚ
+		// numberOfMine : íƒ€ì¼ì— ì íˆëŠ” ìˆ«ì
 		//Log.e("MineCell / open", "numberOfMine: " + numberOfMine);
 		/*
-		//Áö·Ú¸é
+		//ì§€ë¢°ë©´
 		if (numberOfMine == -1) {
-			Log.e("MineCell / open", "Áö·Ú ¹âÀ½ ¤Ğ¤Ğ »ı¸í·Â °¨¼Ò");
+			Log.e("MineCell / open", "ì§€ë¢° ë°ŸìŒ ã… ã…  ìƒëª…ë ¥ ê°ì†Œ");
 		}
 		*/
 		//
-		// ÀÌ¹Ì ¿ÀÇÂµÇ¾ú°Å³ª ±ê¹ß²ÈÀº ¼¿ÀÌ¸é ±×³É ºüÁ® ³ª¿Â´Ù.
+		// ì´ë¯¸ ì˜¤í”ˆë˜ì—ˆê±°ë‚˜ ê¹ƒë°œê½‚ì€ ì…€ì´ë©´ ê·¸ëƒ¥ ë¹ ì ¸ ë‚˜ì˜¨ë‹¤.
 		if(isOpened() || isMarked()) return numberOfMine;
 		this.setOpened(true);
 		
@@ -351,10 +351,10 @@ public class MineCell2 extends CCLayer{
 		}
 		
 		//
-		// ÇöÀç Å¸ÀÏ Á¦°Å
-		/*** ±×³É ÀÌÇØ ¾ÈµÇµµ Àû´çÈ÷ Æ÷Æ®Áß... ³ªÁß¿¡ ¾Èµ¹¾Æ°¥°Í°°À½. ***/
-		/*** ³Ê¹« ½É°¢ÇØ¼­ ¾îµğ°¡ ¹®Á¦ÀÎÁö ¸øÃ£À»±îºÁ ½ÉÈ÷ °ÆÁ¤µÊ ***/
-		/*** ÀÏ´Ü ¾óÃß ¼öÁ¤µÊ ***/
+		// í˜„ì¬ íƒ€ì¼ ì œê±°
+		/*** ê·¸ëƒ¥ ì´í•´ ì•ˆë˜ë„ ì ë‹¹íˆ í¬íŠ¸ì¤‘... ë‚˜ì¤‘ì— ì•ˆëŒì•„ê°ˆê²ƒê°™ìŒ. ***/
+		/*** ë„ˆë¬´ ì‹¬ê°í•´ì„œ ì–´ë””ê°€ ë¬¸ì œì¸ì§€ ëª»ì°¾ì„ê¹Œë´ ì‹¬íˆ ê±±ì •ë¨ ***/
+		/*** ì¼ë‹¨ ì–¼ì¶” ìˆ˜ì •ë¨ ***/
 //		this.delegate.removeTile(this.tileCoord);
 		this.delegate.removeTile(this.tileCoord, isCollidable, isCollidable);
 		//NetworkController.getInstance().send
@@ -362,15 +362,15 @@ public class MineCell2 extends CCLayer{
 		
 		if (numberOfMine > 0) {
 			//
-			// ¿­·ÁÁø ¼¿(Å¸ÀÏ)ÀÇ ÁÖº¯¼¿ Áö·Ú °¹¼ö¸¦ Ç¥½ÃÇÑ´Ù.
-			Log.e("MineCell / open", "ÁÖº¯ ¸¶ÀÎ °¹¼ö : " + numberOfMine);
+			// ì—´ë ¤ì§„ ì…€(íƒ€ì¼)ì˜ ì£¼ë³€ì…€ ì§€ë¢° ê°¯ìˆ˜ë¥¼ í‘œì‹œí•œë‹¤.
+			Log.e("MineCell / open", "ì£¼ë³€ ë§ˆì¸ ê°¯ìˆ˜ : " + numberOfMine);
 			this.delegate.displayMineNumber(numberOfMine, tilePosition, Cell_ID);
 		}
 		
-		// Áö·Ú´Â -1·Î ÁöÁ¤ÇßÀ½ ¼ıÀÚ°¡ ¾ø´Â°Å´Â 0, ¼ıÀÚÀÖ´Â°Ç ±×¼ıÀÚ´ë·Î
+		// ì§€ë¢°ëŠ” -1ë¡œ ì§€ì •í–ˆìŒ ìˆ«ìê°€ ì—†ëŠ”ê±°ëŠ” 0, ìˆ«ììˆëŠ”ê±´ ê·¸ìˆ«ìëŒ€ë¡œ
 		else if (numberOfMine == -1){
 			//Log.e("MineCell / open", "plusMine : " + plusMine);
-			// Áö·Ú·Î Ç¥½Ã
+			// ì§€ë¢°ë¡œ í‘œì‹œ
 			this.setMine(true);
 			this.setOpened(true);
 //			try {
@@ -381,23 +381,23 @@ public class MineCell2 extends CCLayer{
 //			}
 			
 			
-			// Áö·Ú¸¦ ´©¸£¸é Áö·Ú°¹¼ö (È­¸éÁÂÃøÀ§ Áö·Ú ¼ıÀÚ) ÇÏ³ª¸¦ ¾ø¾ÖÁØ´Ù.
+			// ì§€ë¢°ë¥¼ ëˆ„ë¥´ë©´ ì§€ë¢°ê°¯ìˆ˜ (í™”ë©´ì¢Œì¸¡ìœ„ ì§€ë¢° ìˆ«ì) í•˜ë‚˜ë¥¼ ì—†ì• ì¤€ë‹¤.
 			int mineNumber = GameData.share().decreaseMineNumber();
 			
-			// È­¸é¿¡ Áö·Ú °¹¼ö °»½Å
+			// í™”ë©´ì— ì§€ë¢° ê°¯ìˆ˜ ê°±ì‹ 
 			Game.HudLayer.updateMineNumber(mineNumber);
 			
-			// ÇÁ·Î±×·¹½º ÇÏ³ª Áõ°¡			
+			// í”„ë¡œê·¸ë ˆìŠ¤ í•˜ë‚˜ ì¦ê°€			
 			Game.HudLayer.updateProgress();
 			
-			// Áö·Ú¸¦ ´©¸£¸é ½ÇÁ¦ Áö·Ú°¹¼ö(currentMineNumber)¿¡ +1¸¦ ÇØÁÜ.
-			// +1À» ¾ÈÇØÁÖ¸é~  ¾È¾Ë·ªÁÜ (³ëÃâÁö·Ú°¡ ½ÇÁ¦ Áö·Ú¿¡ Æ÷ÇÔÀÌ ¾ÈµÊ)
+			// ì§€ë¢°ë¥¼ ëˆ„ë¥´ë©´ ì‹¤ì œ ì§€ë¢°ê°¯ìˆ˜(currentMineNumber)ì— +1ë¥¼ í•´ì¤Œ.
+			// +1ì„ ì•ˆí•´ì£¼ë©´~  ì•ˆì•Œë´ì¤Œ (ë…¸ì¶œì§€ë¢°ê°€ ì‹¤ì œ ì§€ë¢°ì— í¬í•¨ì´ ì•ˆë¨)
 			//int currentMine = GameData.share().currentMineNumber() + 1;
 			int currentMine = GameData.share().currentMineNumber();
-			Log.e("MineCell / open", "ÃÖ´ë Áö·Ú ¼ö : " + GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
+			Log.e("MineCell / open", "ìµœëŒ€ ì§€ë¢° ìˆ˜ : " + GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
 			Log.e("MineCell / open", "open3 : currentMineNumber" + currentMine + ", decreaseMineNumber : " + mineNumber);
 
-			//ÃÖ´ë Áö·Ú °¹¼ö¿Í currentMineÀÇ ¼ö°¡ °°À¸¸é °ÔÀÓ Á¾·á
+			//ìµœëŒ€ ì§€ë¢° ê°¯ìˆ˜ì™€ currentMineì˜ ìˆ˜ê°€ ê°™ìœ¼ë©´ ê²Œì„ ì¢…ë£Œ
 			Log.e("MineCell / open", "currentMine : " + currentMine + ", MaxMineNumber : " +  GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
 			if (currentMine == GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty())) {
 			Log.e("MineCell / open", "delegate - gameOver *** mission complete ***");
@@ -405,15 +405,15 @@ public class MineCell2 extends CCLayer{
 				this.delegate.gameOver(currentMine, currentMine);
 			}
 			
-			// Áö·Ú¸¦ ´©¸£¸é »ı¸í ÇÏ³ª °¨¼Ò ½ÃÅ²´Ù.(ÇöÀç¼¿Àº ÀÌ¹Ì ¿ÀÇÂµÇ¾úÀ½)
-			// Áö·Ú¸¦ ¹âÀ»½Ã »ı¸í °¨¼Ò (-1)
+			// ì§€ë¢°ë¥¼ ëˆ„ë¥´ë©´ ìƒëª… í•˜ë‚˜ ê°ì†Œ ì‹œí‚¨ë‹¤.(í˜„ì¬ì…€ì€ ì´ë¯¸ ì˜¤í”ˆë˜ì—ˆìŒ)
+			// ì§€ë¢°ë¥¼ ë°Ÿì„ì‹œ ìƒëª… ê°ì†Œ (-1)
 			GameData.share().decreaseHeartNumber();
 			
-			// »ı¸í¼ö¸¦ ¾÷µ¥ÀÌÆ® ½ÃÅ²´Ù.
+			// ìƒëª…ìˆ˜ë¥¼ ì—…ë°ì´íŠ¸ ì‹œí‚¨ë‹¤.
 //			Log.e("MineCell / open", "updateHeart : " + this.delegate.updateHeart());
 			this.delegate.updateHeart();
 
-			// »ı¸í¼ö ´Ù¾ø¾îÁö¸é °ÔÀÓ¿À¹ö
+			// ìƒëª…ìˆ˜ ë‹¤ì—†ì–´ì§€ë©´ ê²Œì„ì˜¤ë²„
 			//if (true) {
 			if (GameData.share().isHeartOut()) {
 				Log.e("MineCell / open", "delegate - gameOver *** mission failed ***");
@@ -424,14 +424,14 @@ public class MineCell2 extends CCLayer{
 			}
 		}
 		
-		//Log.e("MineCell / open", "Âß~~~~~~~~~~~~~~~~~~");
+		//Log.e("MineCell / open", "ì­‰~~~~~~~~~~~~~~~~~~");
 		//
-		// ÇöÀç¼¿ ÁÖº¯¿¡ Áö·Ú³ª ¼öÁ¤±¸°¡ ¾ø´Ù¸é , ÁÖº¯ ¼¿À» ¸ğµÎ ¿¬´Ù.
-		// Áö·Ú°¡ ¾ø´Â °÷¸¸ ¿­±â ¶Ç´Â Áö·Ú¿Í ¾ÆÀÌÅÛÀÌ ¾ø´Â °÷¸¸ ¿­±â
+		// í˜„ì¬ì…€ ì£¼ë³€ì— ì§€ë¢°ë‚˜ ìˆ˜ì •êµ¬ê°€ ì—†ë‹¤ë©´ , ì£¼ë³€ ì…€ì„ ëª¨ë‘ ì—°ë‹¤.
+		// ì§€ë¢°ê°€ ì—†ëŠ” ê³³ë§Œ ì—´ê¸° ë˜ëŠ” ì§€ë¢°ì™€ ì•„ì´í…œì´ ì—†ëŠ” ê³³ë§Œ ì—´ê¸°
 		int numberOfSphere = this.getNumberOfSphereAround();
-		// Áö·Ú ¾ø´Â °÷¸¸ ¿­¾îÁÖ±â
+		// ì§€ë¢° ì—†ëŠ” ê³³ë§Œ ì—´ì–´ì£¼ê¸°
 		if(numberOfMine  + numberOfSphere == 0){
-		// Áö·Ú ¾ø´Â °÷°ú ¼öÁ¤±¸±îÁö ¿­¾îÁÖ±â
+		// ì§€ë¢° ì—†ëŠ” ê³³ê³¼ ìˆ˜ì •êµ¬ê¹Œì§€ ì—´ì–´ì£¼ê¸°
 		//if (numberOfMine == 0) {
 			for (final MineCell2 cell : getRoundCells()) {
 //				CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
@@ -638,7 +638,7 @@ public class MineCell2 extends CCLayer{
 	*/
 	
 	
-	/**************************** º¯°æ ****************************/
+	/**************************** ë³€ê²½ ****************************/
 	public void preOpens(boolean isAi) {
 		this.preOpened(0);
 		this.open(isAi);
@@ -687,7 +687,7 @@ public class MineCell2 extends CCLayer{
 	private void openCount(int count) {
 		int tileCount = 10;
 		boolean isLoop = false;
-		int effectCount = R.raw.game_open2; // landOpen_01.mp3·Î º¯°æÇÒ°Í
+		int effectCount = R.raw.game_open2; // landOpen_01.mp3ë¡œ ë³€ê²½í• ê²ƒ
 		
 		if (count > 1) {
 			tileCount += 20;
@@ -711,87 +711,87 @@ public class MineCell2 extends CCLayer{
 	}
 	
 	private int open(boolean isAi) {
-		// ¼¿ ÁÖº¯ÀÇ Áö·Ú °¹¼ö¸¦ ±¸ÇÑ´Ù.
+		// ì…€ ì£¼ë³€ì˜ ì§€ë¢° ê°¯ìˆ˜ë¥¼ êµ¬í•œë‹¤.
 		int numberOfMine = this.getNumberOfMineAround();
 /*		if (numberOfMine == -1)
-			Log.e("MineCell2", "open : " + "Áö·Ú?");*/
-		// Å¸ÀÏÀ» Á¦°ÅÇÒ¼ö ¾ø´Â °æ¿ì
+			Log.e("MineCell2", "open : " + "ì§€ë¢°?");*/
+		// íƒ€ì¼ì„ ì œê±°í• ìˆ˜ ì—†ëŠ” ê²½ìš°
 		if (isOpened() || isMarked() || isSphere())
 			return numberOfMine;
 		
 		setOpened(true);
 		
-		// ÇöÀç Å¸ÀÏ Á¦°Å
+		// í˜„ì¬ íƒ€ì¼ ì œê±°
 //		this.delegate.removeTile(this.tileCoord);
 		this.delegate.removeTile(this.tileCoord, isAi, isAi);
 		GameConfig.share().setDelayTime(GameConfig.share().getDelayTime());
 		
-		// ¾ÆÀÌÆù¿¡¼­ Thread¸¦ ÁöÁ¤ÇÑ ½Ã°£µ¿¾È Á¤ÁöÇÏ´Â °Í (¾Èµå·ÎÀÌµå´Â Thread°ü¸® ÀßÇØ¾ßµÉµí. )
-//		this.performSelector(removeTile, isAi, GameConfig.share().getDelayTime()); // ¹¹³Ä?
+		// ì•„ì´í°ì—ì„œ Threadë¥¼ ì§€ì •í•œ ì‹œê°„ë™ì•ˆ ì •ì§€í•˜ëŠ” ê²ƒ (ì•ˆë“œë¡œì´ë“œëŠ” Threadê´€ë¦¬ ì˜í•´ì•¼ë ë“¯. )
+//		this.performSelector(removeTile, isAi, GameConfig.share().getDelayTime()); // ë­ëƒ?
 		
 		GameConfig.share().setDelayTime(GameConfig.share().getDelayTime() + 0.03f);
 		
 
 		if (numberOfMine > 0 && !isAi) {
-			// ¿­·ÁÁø ¼¿ÀÇ ÁÖº¯¼¿ Áö·Ú °¹¼ö¸¦ Ç¥½ÃÇÑ´Ù.
-//			this.performSelector(displayMineNumber, numberOfMine, GameConfig.share().getDelayTime() + 0.02f); // ¹¹³Ä?
+			// ì—´ë ¤ì§„ ì…€ì˜ ì£¼ë³€ì…€ ì§€ë¢° ê°¯ìˆ˜ë¥¼ í‘œì‹œí•œë‹¤.
+//			this.performSelector(displayMineNumber, numberOfMine, GameConfig.share().getDelayTime() + 0.02f); // ë­ëƒ?
 		}
 		
-		// Áö·Ú´Â -1
+		// ì§€ë¢°ëŠ” -1
 		else if(numberOfMine == -1) {
 			this.setMine(true);
 			this.setOpened(true);
-			// »ı¸í °¨¼Ò
+			// ìƒëª… ê°ì†Œ
 			GameData.share().decreaseHeartNumber();
-			// »ç¿îµå ³Ö±â
-			// »ı¸í ¾÷µ¥ÀÌÆ®
+			// ì‚¬ìš´ë“œ ë„£ê¸°
+			// ìƒëª… ì—…ë°ì´íŠ¸
 			this.delegate.updateHeart();
-			// Áö·Ú ¼ıÀÚ °¨¼Ò
+			// ì§€ë¢° ìˆ«ì ê°ì†Œ
 			this.delegate.updateMineNumber();
-			// »ı¸í¼ö°¡ 0ÀÌ µÇ¸é °ÔÀÓ Á¾·á
+			// ìƒëª…ìˆ˜ê°€ 0ì´ ë˜ë©´ ê²Œì„ ì¢…ë£Œ
 			if (GameData.share().isHeartOut()) {
 				if (Config.getInstance().isGuest() || Config.getInstance().getModeChoise() == kModeSingle ) {
-//					this.performSelector(gameover, 0, 1); // ¹¹³Ä?
-					guestSingleMatchScore = 1; // ½Ì±Û ¶Ç´Â °Ô½ºÆ®¸ğµå ÀÏ½Ã Á¡¼ö ºñ±³
+//					this.performSelector(gameover, 0, 1); // ë­ëƒ?
+					guestSingleMatchScore = 1; // ì‹±ê¸€ ë˜ëŠ” ê²ŒìŠ¤íŠ¸ëª¨ë“œ ì¼ì‹œ ì ìˆ˜ ë¹„êµ
 				} else {
-//					this.performSelector(sendRequestGameOver, 0, 0.5f); // ¹¹³Ä?
+//					this.performSelector(sendRequestGameOver, 0, 0.5f); // ë­ëƒ?
 					Log.e("MineCell2", "open : " + "GameOver");
 				}
 				GameProgressBar progressBar = new GameProgressBar(mContext);
 				progressBar.stopTime();
 			}
 		}
-		// Áö·Ú ¶Ç´Â ¼öÁ¤±¸°¡ ¾Æ´Ñ ¿­¸®Áö ¾ÊÀº ¼¿ÀÌ¸é ¿­¶§¸¶´Ù count¸¦ +1 ÇØÁØ´Ù.
-		// count¿Í °ÔÀÓ Å¬·¡½º¿¡¼­ ¹Ş¾Æ¿Â unOpenedCellÀÇ ¼ıÀÚ°¡ °°À¸¸é Áö·Ú°¡ ¾Æ´Ñ ¸ğµç ¼¿À» ¿ÀÇÂÇÑ °ÍÀ¸·Î °£ÁÖÇÏ°í °ÔÀÓÀ» Á¾·áÇÑ´Ù.
-		// (¿ÀÇÂ¾ÈµÈ ÀüÃ¼ ¼¿ - ¼öÁ¤±¸ (4°³ ¼¿) * ¼ö·®) - ³­ÀÌµµº° Áö·Ú ¼ö
+		// ì§€ë¢° ë˜ëŠ” ìˆ˜ì •êµ¬ê°€ ì•„ë‹Œ ì—´ë¦¬ì§€ ì•Šì€ ì…€ì´ë©´ ì—´ë•Œë§ˆë‹¤ countë¥¼ +1 í•´ì¤€ë‹¤.
+		// countì™€ ê²Œì„ í´ë˜ìŠ¤ì—ì„œ ë°›ì•„ì˜¨ unOpenedCellì˜ ìˆ«ìê°€ ê°™ìœ¼ë©´ ì§€ë¢°ê°€ ì•„ë‹Œ ëª¨ë“  ì…€ì„ ì˜¤í”ˆí•œ ê²ƒìœ¼ë¡œ ê°„ì£¼í•˜ê³  ê²Œì„ì„ ì¢…ë£Œí•œë‹¤.
+		// (ì˜¤í”ˆì•ˆëœ ì „ì²´ ì…€ - ìˆ˜ì •êµ¬ (4ê°œ ì…€) * ìˆ˜ëŸ‰) - ë‚œì´ë„ë³„ ì§€ë¢° ìˆ˜
 		if (numberOfMine > -1) {
-			int openCell = GameData.share().getOpenedCell(); // ¿ÀÇÂµÈ ¼¿ ¼ö
-			int pumpkin = this.delegate.difficultyMine(); // ³­ÀÌµµº° È£¹Ú ¼ö
-			int mine = this.delegate.markedMine(); // Ã£Àº È£¹Ú ¼ö
-			int heart = GameData.share().getHeart(); // ³²Àº »ı¸í¼ö
-			int time = 900 - GameData.share().getSecond(); // ³²Àº ½Ã°£
-//			int heart = GameData.share().getHeartNumber(); // ³²Àº »ı¸í¼ö
-//			int time = 900 - GameData.share().getSeconds(); // ¼Ò¿ä ½Ã°£
+			int openCell = GameData.share().getOpenedCell(); // ì˜¤í”ˆëœ ì…€ ìˆ˜
+			int pumpkin = this.delegate.difficultyMine(); // ë‚œì´ë„ë³„ í˜¸ë°• ìˆ˜
+			int mine = this.delegate.markedMine(); // ì°¾ì€ í˜¸ë°• ìˆ˜
+			int heart = GameData.share().getHeart(); // ë‚¨ì€ ìƒëª…ìˆ˜
+			int time = 900 - GameData.share().getSecond(); // ë‚¨ì€ ì‹œê°„
+//			int heart = GameData.share().getHeartNumber(); // ë‚¨ì€ ìƒëª…ìˆ˜
+//			int time = 900 - GameData.share().getSeconds(); // ì†Œìš” ì‹œê°„
 			
-			int myPoint = (int)(((pumpkin + heart) * mine + time) * (pumpkin * 0.006f)); // ¸ğµç »ı¸í ¼Ò¸ğ½Ã´Â ¼ö½ÄÀ» »ç¿ëÇÏÁö ¾Ê´Â´Ù.
+			int myPoint = (int)(((pumpkin + heart) * mine + time) * (pumpkin * 0.006f)); // ëª¨ë“  ìƒëª… ì†Œëª¨ì‹œëŠ” ìˆ˜ì‹ì„ ì‚¬ìš©í•˜ì§€ ì•ŠëŠ”ë‹¤.
 			Log.e("MineCell2", "myPoint : " + myPoint);
 			
-			// °ÔÀÓ¿À¹ö
+			// ê²Œì„ì˜¤ë²„
 			if (this.delegate.unOpenedCell() - this.delegate.difficultyMine() == openCell) {
 				
-				// ½Ì±Û or  °Ô½ºÆ®
+				// ì‹±ê¸€ or  ê²ŒìŠ¤íŠ¸
 				if (Config.getInstance().isGuest() || Config.getInstance().getModeChoise() == kModeSingle) {
-					guestSingleMatchScore = 2; // ½Ì±Û ¶Ç´Â °Ô½ºÆ®¸ğµå ÀÏ½Ã Á¡¼ö ºñ±³
-//					this.performSelector(gameover, myPoint, 1); // ¹¹³Ä?
-				} else { // ´ëÀü
-					guestSingleMatchScore = 3; // ½Ì±Û ¶Ç´Â °Ô½ºÆ®¸ğµå ÀÏ½Ã Á¡¼ö ºñ±³
-//					this.performSelector(sendRequestGameOver, myPoint, 0.5f); // ¹¹³Ä?
+					guestSingleMatchScore = 2; // ì‹±ê¸€ ë˜ëŠ” ê²ŒìŠ¤íŠ¸ëª¨ë“œ ì¼ì‹œ ì ìˆ˜ ë¹„êµ
+//					this.performSelector(gameover, myPoint, 1); // ë­ëƒ?
+				} else { // ëŒ€ì „
+					guestSingleMatchScore = 3; // ì‹±ê¸€ ë˜ëŠ” ê²ŒìŠ¤íŠ¸ëª¨ë“œ ì¼ì‹œ ì ìˆ˜ ë¹„êµ
+//					this.performSelector(sendRequestGameOver, myPoint, 0.5f); // ë­ëƒ?
 				}
 				
 			}
 		}
 		
-		// ÇöÀç¼¿ ÁÖº¯¿¡ Áö·Ú°¡ ¾ø´Ù¸é ÁÖº¯ ¸ğµç ¼¿À» ¿¬´Ù.
+		// í˜„ì¬ì…€ ì£¼ë³€ì— ì§€ë¢°ê°€ ì—†ë‹¤ë©´ ì£¼ë³€ ëª¨ë“  ì…€ì„ ì—°ë‹¤.
 		if (numberOfMine == 0) {
 			for (MineCell2 cell : roundCells) {
 				cell.open(isAi);
@@ -805,7 +805,7 @@ public class MineCell2 extends CCLayer{
 	final int kModeVersus = 2;
 	final int kModeInvite = 3;
 	
-	// ½Ì±Û °ÔÀÓ Á¾·á½Ã Á¡¼ö
+	// ì‹±ê¸€ ê²Œì„ ì¢…ë£Œì‹œ ì ìˆ˜
 	private void gameOver(int point) {
 		if (guestSingleMatchScore == 2) {
 			this.delegate.gameOver(point, 0);
@@ -817,7 +817,7 @@ public class MineCell2 extends CCLayer{
 	}
 	
 
-	// ´ëÀü °ÔÀÓ Á¾·á½Ã Á¡¼ö
+	// ëŒ€ì „ ê²Œì„ ì¢…ë£Œì‹œ ì ìˆ˜
 	private void sendRequestGameOver(int point) {
 		try {
 			NetworkController.getInstance().sendRequestGameOver(point);

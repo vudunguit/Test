@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -73,22 +73,22 @@ public class Invite extends CCLayer {
 		userData = UserData.share(mContext);
 		
 		
-		//¹è°æ ±×¸² ¼³Á¤
+		//ë°°ê²½ ê·¸ë¦¼ ì„¤ì •
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg-invite" + fileExtension);
 		
 		setBackBoardMenu(folder + "invite-bb" + fileExtension);
 		setBoardFrameMenu(commonfolder + "frameGeneral-hd" + fileExtension);
 		
-		// »ó´Ü ¸Ş´º
+		// ìƒë‹¨ ë©”ë‰´
 		TopMenu2.setSceneMenu(this);
-		// ÇÏ´Ü ÀÌ¹ÌÁö
+		// í•˜ë‹¨ ì´ë¯¸ì§€
 		BottomImage.setBottomImage(this);
 		
 		this.setIsTouchEnabled(true);
 	}
 
 
-	// ¹é º¸µå ¼³Á¤
+	// ë°± ë³´ë“œ ì„¤ì •
 	private void setBackBoardMenu(String imageFullPath) {
 		CCSprite bb = CCSprite.sprite(imageFullPath);
 		bg.addChild(bb);
@@ -98,7 +98,7 @@ public class Invite extends CCLayer {
 		friendsList(bb, aaa);
 	}
 	
-	// °Ô½ÃÆÇ ¼³Á¤
+	// ê²Œì‹œíŒ ì„¤ì •
 	private void setBoardFrameMenu(String imageFullPath) {
 		CCSprite boardFrame = CCSprite.sprite(imageFullPath);
 		bg.addChild(boardFrame);
@@ -107,23 +107,23 @@ public class Invite extends CCLayer {
 		FrameTitle2.setTitle(boardFrame, folder);
 	}
 
-	String[] aaa =  {"±è ±æ µ¿","ÀÌ ±æ µ¿","¹Ú ±æ µ¿","ÃÖ ±æ µ¿"};
+	String[] aaa =  {"ê¹€ ê¸¸ ë™","ì´ ê¸¸ ë™","ë°• ê¸¸ ë™","ìµœ ê¸¸ ë™"};
 	
-	// ¸ŞÀÎ ¸Ş´º
+	// ë©”ì¸ ë©”ë‰´
 	private void setMainMenu(CCSprite parentSprite){
-		CCLabel  inviteCountText = CCLabel.makeLabel("ÇöÀçÃÊ´ëÀÎ¿ø         ¸í", "Arial", 25); // ÇöÀç ÃÊ´ë ÀÎ¿ø (³ë¶õ»ö)
+		CCLabel  inviteCountText = CCLabel.makeLabel("í˜„ì¬ì´ˆëŒ€ì¸ì›         ëª…", "Arial", 25); // í˜„ì¬ ì´ˆëŒ€ ì¸ì› (ë…¸ë€ìƒ‰)
 		parentSprite.addChild(inviteCountText);
 		inviteCountText.setColor(ccColor3B.ccYELLOW);
 		inviteCountText.setPosition(parentSprite.getContentSize().width / 2, 187);
 		
 		String app_Invite = FacebookData.getinstance().getDBData("InviteNumber");
 		CCLabel  inviteCount = CCLabel.makeLabel(
-				new NumberComma().numberComma(app_Invite), "Arial", 35); // ÇöÀç ÃÊ´ë ÀÎ¿ø (³ë¶õ»ö)
+				new NumberComma().numberComma(app_Invite), "Arial", 35); // í˜„ì¬ ì´ˆëŒ€ ì¸ì› (ë…¸ë€ìƒ‰)
 		parentSprite.addChild(inviteCount);
 		inviteCount.setColor(ccColor3B.ccYELLOW);
 		inviteCount.setPosition(parentSprite.getContentSize().width/2 + 60, 190);
 
-		CCLabel inviteText = CCLabel.makeLabel("ÃÊ´ë´Â ÇÏ·ç 20¸í±îÁö °¡´É ÇÕ´Ï´Ù.", "Arial", 20); // Èò»ö
+		CCLabel inviteText = CCLabel.makeLabel("ì´ˆëŒ€ëŠ” í•˜ë£¨ 20ëª…ê¹Œì§€ ê°€ëŠ¥ í•©ë‹ˆë‹¤.", "Arial", 20); // í°ìƒ‰
 		parentSprite.addChild(inviteText);
 		inviteText.setPosition(parentSprite.getContentSize().width/2, 160.0f);		
 
@@ -139,28 +139,28 @@ public class Invite extends CCLayer {
 		
 	private void jewelButton(CCSprite backBoard, float position, int gold, int friends) {
 
-		CCSprite statusPanel = CCSprite.sprite(folder + "invite-statusPanel" + fileExtension); //º¸¼® ¹öÆ°
+		CCSprite statusPanel = CCSprite.sprite(folder + "invite-statusPanel" + fileExtension); //ë³´ì„ ë²„íŠ¼
 		statusPanel.setAnchorPoint(0.5f, 0.0f);
 		statusPanel.setPosition(
 				backBoard.getContentSize().width/2 + statusPanel.getContentSize().width * position, 
 				statusPanel.getContentSize().height/2-10.0f);
 		
 		CCLabel  statusPanelText1 = CCLabel.makeLabel(
-				"Gold " + new NumberComma().numberComma(gold), "Arial", 22); // º¸¼® º¸»ó °¹¼ö (³ë¶õ»ö)
+				"Gold " + new NumberComma().numberComma(gold), "Arial", 22); // ë³´ì„ ë³´ìƒ ê°¯ìˆ˜ (ë…¸ë€ìƒ‰)
 		statusPanelText1.setColor(ccColor3B.ccYELLOW);
 		statusPanelText1.setAnchorPoint(0.5f, 1.0f);
 		statusPanelText1.setPosition(
 				statusPanel.getContentSize().width / 2,
 				statusPanel.getContentSize().height - 3);
 		
-		CCLabel  statusPanelText2 = CCLabel.makeLabel("Ä£±¸ ÃÊ´ë", "Arial", 22); // ÇöÀç ÃÊ´ë ÀÎ¿ø (³ë¶õ»ö)
+		CCLabel  statusPanelText2 = CCLabel.makeLabel("ì¹œêµ¬ ì´ˆëŒ€", "Arial", 22); // í˜„ì¬ ì´ˆëŒ€ ì¸ì› (ë…¸ë€ìƒ‰)
 		statusPanelText2.setColor(ccColor3B.ccYELLOW);
 		statusPanelText2.setAnchorPoint(0.5f, 1.0f);
 		statusPanelText2.setPosition(
 				statusPanel.getContentSize().width / 2,
 				statusPanel.getContentSize().height - 39f);
 
-		CCLabel  statusPanelText3 = CCLabel.makeLabel(friends + "¸í", "Arial", 22); // ÇöÀç ÃÊ´ë ÀÎ¿ø (³ë¶õ»ö)
+		CCLabel  statusPanelText3 = CCLabel.makeLabel(friends + "ëª…", "Arial", 22); // í˜„ì¬ ì´ˆëŒ€ ì¸ì› (ë…¸ë€ìƒ‰)
 		statusPanelText3.setColor(ccColor3B.ccYELLOW);
 		statusPanelText3.setAnchorPoint(0.5f, 1.0f);
 		statusPanelText3.setPosition(
@@ -179,13 +179,13 @@ public class Invite extends CCLayer {
 	//	int i = 0;
 		for (int i = 0; i < names.length; i++) {
 
-			// Ä£±¸ ¸®½ºÆ® ÆÇ³Ú
+			// ì¹œêµ¬ ë¦¬ìŠ¤íŠ¸ íŒë„¬
 			CCSprite listPanel = CCSprite.sprite(folder + "invite-listPanel" + fileExtension);
 			listPanel.setPosition(
 					parentSprite.getContentSize().width / 2,
 					parentSprite.getContentSize().height - listPanel.getContentSize().height * (0.5f + i) - 50);
 
-			// Ä£±¸ ÀÌ¹ÌÁö
+			// ì¹œêµ¬ ì´ë¯¸ì§€
 			CCSprite listPictureFrame = CCSprite.sprite(commonfolder + "frame-pictureFrame-hd" + fileExtension);
 			listPictureFrame.setPosition(50.0f, listPanel.getContentSize().height / 2);
 			listPictureFrame.setScale(0.8f);
@@ -199,7 +199,7 @@ public class Invite extends CCLayer {
 
 			listPanel.addChild(myName);
 
-			// Ä£±¸ÃÊ´ë
+			// ì¹œêµ¬ì´ˆëŒ€
 			inviteButton = CCMenuItemImage.item(
 					Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button1" + fileExtension),
 					Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button1" + fileExtension), 
@@ -208,7 +208,7 @@ public class Invite extends CCLayer {
 			timerBack = CCMenuItemImage.item(folder + "blank" + fileExtension, folder + "blank" + fileExtension);
 			timerBack.setPosition(0f,0f);
 
-			CCLabel buttonName = CCLabel.makeLabel("24½Ã°£ ³²À½", "Arial", 24.0f);
+			CCLabel buttonName = CCLabel.makeLabel("24ì‹œê°„ ë‚¨ìŒ", "Arial", 24.0f);
 			timerBack.addChild(buttonName);
 			buttonName.setColor(ccColor3B.ccRED);
 			buttonName.setPosition(timerBack.getContentSize().width / 2, timerBack.getContentSize().height / 2);
@@ -231,11 +231,11 @@ public class Invite extends CCLayer {
 			//
 			CCSprite invite;
 			if (visible_) {
-				// ÃÊ´ëÇÏ±â(È°¼ºÈ­)
+				// ì´ˆëŒ€í•˜ê¸°(í™œì„±í™”)
 				invite = CCSprite.sprite(
 						Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button1" + fileExtension)); 
 			} else {
-				// ÃÊ´ëÇÏ±â(ºñÈ°¼ºÈ­)
+				// ì´ˆëŒ€í•˜ê¸°(ë¹„í™œì„±í™”)
 				invite = CCSprite.sprite(
 						Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button2" + fileExtension)); 
 			}
@@ -272,7 +272,7 @@ public class Invite extends CCLayer {
 		a.removeFromParentAndCleanup(true);
 		Log.e("Invite", "timerCallback : " + a.getUserData());
 
-		long requestID = FacebookData.getinstance().getRequestID();  //test¿ë 
+		long requestID = FacebookData.getinstance().getRequestID();  //testìš© 
 		String recipientID = FacebookData.getinstance().getUserInfo().getId();
 		String senderID = "1";
 		String sendMailData = 

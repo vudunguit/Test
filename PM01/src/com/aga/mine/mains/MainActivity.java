@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.io.IOException;
 import java.util.List;
@@ -63,16 +63,16 @@ public class MainActivity extends Activity {
 		public void handleMessage(Message msg) {
 			switch(msg.what) {
 			case Constant.MSG_DISPLAY_FRIENDLIST:
-				//API Äİ : 
+				//API ì½œ : 
 				FriendListAapter adapter = new FriendListAapter(MainActivity.this);
 				mListView.setAdapter(adapter);
 				RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 				
-				// assetsÀÇ frameGeneral-hd.png, frameMatching-hd.pngÆÄÀÏÀÇ width, heightÀ» ¹Ş¾Æ¿Í¼­ ÀÛ¾÷À» ÇØ¾ßµÇ´Âµ¥
-				// inputstreamÀ» ÇØ¾ßµÇ°í ÇÚµé·¯¿¡¼­ ÀÛ¾÷ ÇÏ±â¿¡´Â ¹®Á¦°¡ ÀÖ¾î ÀÌ¹ÌÁö Å©±â¸¦ »ó¼ö·Î Á¤ÀÇÇÏ¿© ÀÛ¾÷Çß½À´Ï´Ù.
+				// assetsì˜ frameGeneral-hd.png, frameMatching-hd.pngíŒŒì¼ì˜ width, heightì„ ë°›ì•„ì™€ì„œ ì‘ì—…ì„ í•´ì•¼ë˜ëŠ”ë°
+				// inputstreamì„ í•´ì•¼ë˜ê³  í•¸ë“¤ëŸ¬ì—ì„œ ì‘ì—… í•˜ê¸°ì—ëŠ” ë¬¸ì œê°€ ìˆì–´ ì´ë¯¸ì§€ í¬ê¸°ë¥¼ ìƒìˆ˜ë¡œ ì •ì˜í•˜ì—¬ ì‘ì—…í–ˆìŠµë‹ˆë‹¤.
 				
-				// ·©Å·¿¡ µé¾î°¡´Â ÆäÀÌ½ººÏ ÀÌ¹ÌÁö Å©±â ¹× ¸®½ºÆ®ºä ¿À¸¥ÂÊ 2¹øÂ° ÀÌ¹ÌÁö(¼±¹°»óÀÚ)ÀÇ rightMarginÀÌ ÇØ»óµµ º°·Î º¯°æµË´Ï´Ù.
-				// ÇØ»óµµ¿¡ ¸Â°Ô ÀÌ¹ÌÁö´Â Ä¿Áö°í ¸¶ÁøÀº ÀÛ¾ÆÁ®¾ß µË´Ï´Ù.(scale°ª Àû¿ë) 
+				// ë­í‚¹ì— ë“¤ì–´ê°€ëŠ” í˜ì´ìŠ¤ë¶ ì´ë¯¸ì§€ í¬ê¸° ë° ë¦¬ìŠ¤íŠ¸ë·° ì˜¤ë¥¸ìª½ 2ë²ˆì§¸ ì´ë¯¸ì§€(ì„ ë¬¼ìƒì)ì˜ rightMarginì´ í•´ìƒë„ ë³„ë¡œ ë³€ê²½ë©ë‹ˆë‹¤.
+				// í•´ìƒë„ì— ë§ê²Œ ì´ë¯¸ì§€ëŠ” ì»¤ì§€ê³  ë§ˆì§„ì€ ì‘ì•„ì ¸ì•¼ ë©ë‹ˆë‹¤.(scaleê°’ ì ìš©) 
 				float scale = main.getWidth() / frameGeneralWidth ;
 				float height = main.getHeight();
 				params.setMargins(
@@ -153,13 +153,13 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         try {
-            // Á¾·á½Ã ¹«Á¶°Ç ÆĞ¹è (°ÔÀÓÁßÀÌ ¾Æ´Ò½Ã ¿¬°á¸¸ ²÷À» °Í)
+            // ì¢…ë£Œì‹œ ë¬´ì¡°ê±´ íŒ¨ë°° (ê²Œì„ì¤‘ì´ ì•„ë‹ì‹œ ì—°ê²°ë§Œ ëŠì„ ê²ƒ)
             NetworkController.getInstance().sendRequestGameOver(0);
             NetworkController.getInstance().closeSocket();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.e("MainActivity", "mine Á¾·á");
+        Log.e("MainActivity", "mine ì¢…ë£Œ");
         new Process().killProcess(Process.myPid());
     }
 
@@ -170,24 +170,24 @@ public class MainActivity extends Activity {
         mSimpleFacebook.onActivityResult(this, requestCode, resultCode, data);
     }
 
-    // Back-key Å¬¸¯½Ã ÇÁ·Î±×·¥ Á¾·á ÄÚµå
+    // Back-key í´ë¦­ì‹œ í”„ë¡œê·¸ë¨ ì¢…ë£Œ ì½”ë“œ
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
         case KeyEvent.KEYCODE_BACK:
 
             new AlertDialog.Builder(this).setTitle(R.string.app_name)
-                        .setMessage("Á¾·áÇÏ°Ú½À´Ï±î?")
-                        .setPositiveButton("¿¹", new DialogInterface.OnClickListener() {
+                        .setMessage("ì¢…ë£Œí•˜ê² ìŠµë‹ˆê¹Œ?")
+                        .setPositiveButton("ì˜ˆ", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int which) {
-                                moveTaskToBack(true); // º»Activity finishÈÄ ´Ù¸¥ Activity°¡ ¶ß´Â °É ¹æÁö.
+                                moveTaskToBack(true); // ë³¸Activity finishí›„ ë‹¤ë¥¸ Activityê°€ ëœ¨ëŠ” ê±¸ ë°©ì§€.
                                 //      finish();
                                 new Process().killProcess(Process.myPid());
                                 // android.os.Process.killProcess(android.os.Process.myPid()); 
-                                // -> ÇØ´ç ¾îÇÃÀÇ ÇÁ·Î¼¼½º¸¦ °­Á¦ Kill½ÃÅ²´Ù.
+                                // -> í•´ë‹¹ ì–´í”Œì˜ í”„ë¡œì„¸ìŠ¤ë¥¼ ê°•ì œ Killì‹œí‚¨ë‹¤.
                             }
                         })
-                        .setNegativeButton("¾Æ´Ï¿À", null)
+                        .setNegativeButton("ì•„ë‹ˆì˜¤", null)
                         .show();
         }
 
@@ -412,21 +412,21 @@ public class MainActivity extends Activity {
     private void nextCallback(boolean facebookReady) {
         Log.e("FacebookHelper", "nextCallback");
         if (facebookReady) {
-        	//ToDo: ¼º´É°³¼±: È­¸éÀ» ¸ØÃßÁö ¾Ê°í µ¥ÀÌÅÍ ·ÎµùÈÄ Ãâ¼®ºÎ·Î ÀÌµ¿
-        	//1) ·Îµù¹Ù Ç¥½Ã
-        	//2) ÇÚµé·¯ send message
-        	//3) µ¥ÀÌÅÍ ·Îµù ÈÄ ·Îµù¹Ù ÇØÁ¦
-        	//4) È­¸é ÀÌµ¿
+        	//ToDo: ì„±ëŠ¥ê°œì„ : í™”ë©´ì„ ë©ˆì¶”ì§€ ì•Šê³  ë°ì´í„° ë¡œë”©í›„ ì¶œì„ë¶€ë¡œ ì´ë™
+        	//1) ë¡œë”©ë°” í‘œì‹œ
+        	//2) í•¸ë“¤ëŸ¬ send message
+        	//3) ë°ì´í„° ë¡œë”© í›„ ë¡œë”©ë°” í•´ì œ
+        	//4) í™”ë©´ ì´ë™
         	
-        	//¾Èµå·ÎÀÌµå ºä·Î ´ëÃ¼
+        	//ì•ˆë“œë¡œì´ë“œ ë·°ë¡œ ëŒ€ì²´
 /*            HomeScroll.getInstance().setData(
                     DataFilter.getRanking(FacebookData.getinstance().getUserInfo(),FacebookData.getinstance().getFriendsInfo())
             );*/
-        	// °ÔÀÓ½ºÄÚ¾î ¹Ş¾Æ¿À±â
+        	// ê²Œì„ìŠ¤ì½”ì–´ ë°›ì•„ì˜¤ê¸°
     		FacebookData.getinstance().setGameScore(DataFilter.getRanking());
         	
-            // daily(Ãâ¼®ºÎ)´Â 1ÀÏ 1È¸¸¸ È£ÃâÇÏ¹Ç·Î DailyBeckoner¿¡¼­ Ã¼Å© ÈÄ ÀÌµ¿ÇÏ°Ô µÊ.(ÀÌ¹Ì 1È¸ÀÌ»ó Á¢¼Ó½Ã home sceneÀ¸·Î ÀÌµ¿) 
-            // DailyBeckoner È£Ãâ½Ã facebook Á¤º¸µéÀ» °¡Áö°í ÀÖ¾î¾ßµË´Ï´Ù.
+            // daily(ì¶œì„ë¶€)ëŠ” 1ì¼ 1íšŒë§Œ í˜¸ì¶œí•˜ë¯€ë¡œ DailyBeckonerì—ì„œ ì²´í¬ í›„ ì´ë™í•˜ê²Œ ë¨.(ì´ë¯¸ 1íšŒì´ìƒ ì ‘ì†ì‹œ home sceneìœ¼ë¡œ ì´ë™) 
+            // DailyBeckoner í˜¸ì¶œì‹œ facebook ì •ë³´ë“¤ì„ ê°€ì§€ê³  ìˆì–´ì•¼ë©ë‹ˆë‹¤.
             new DailyBeckoner();
         }
     }

@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class ShopGold2 extends CCLayer {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
 		
-		// BackGround ÆÄÀÏ
+		// BackGround íŒŒì¼
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
 		setBackBoardMenu(commonfolder + "gamebb" + fileExtension);
 		setBoardFrameMenu(commonfolder + "frameGeneral-hd" + fileExtension);
@@ -98,19 +98,19 @@ public class ShopGold2 extends CCLayer {
 					this, "buttonCallback");
 			button.setUserData(ds[0]);
 			
-			// °ñµå ÀÌ¹ÌÁö
+			// ê³¨ë“œ ì´ë¯¸ì§€
 			CCSprite goldimage = CCSprite.sprite(folder + (int)ds[1] + fileExtension);
 			goldimage.setPosition(goldimage.getContentSize().width / 2, button.getContentSize().height / 2);
 			button.addChild(goldimage);
 			
-			// ÀÎ¾Û °¡°İ
+			// ì¸ì•± ê°€ê²©
 			CCLabel  usd = CCLabel.makeLabel("$ " + ds[0], "Arial", 26);
 			usd.setColor(ccColor3B.ccYELLOW);
 			usd.setAnchorPoint(1, 1);
 			usd.setPosition(button.getContentSize().width - 15, button.getContentSize().height - 5);
 			button.addChild(usd);
 			
-			// °ñµå&Ãß°¡°ñµå
+			// ê³¨ë“œ&ì¶”ê°€ê³¨ë“œ
 			CCLabel  value = CCLabel.makeLabel(plus((int)ds[1], (int)ds[2]), "Arial", 30);
 			value.setAnchorPoint(1, 0);
 			value.setPosition(button.getContentSize().width - 15, 10);
@@ -137,20 +137,20 @@ public class ShopGold2 extends CCLayer {
 		return values;
 	}
 	
-	// int °ªÀ» StringÀ¸·Î º¯È¯ÇÏ¿© comma »ğÀÔ
+	// int ê°’ì„ Stringìœ¼ë¡œ ë³€í™˜í•˜ì—¬ comma ì‚½ì…
 	private String Decimal(int value) {
 		DecimalFormat format = new DecimalFormat("###,###,###,###");
 		String ret = format.format(value);
 		return ret;
 	}
 	
-	// int °ªÀ» StringÀ¸·Î º¯È¯ÇÏ¿© comma »ğÀÔ
+	// int ê°’ì„ Stringìœ¼ë¡œ ë³€í™˜í•˜ì—¬ comma ì‚½ì…
 	private String numberComma(int value) {
 		String s = Integer.toString(value);
 		return numberComma(s);
 	}
 	
-	// String¿¡ comma »ğÀÔ
+	// Stringì— comma ì‚½ì…
 	private String numberComma(String string) {
 		if (string.length() < 4) 
 			return string;
@@ -206,9 +206,9 @@ public class ShopGold2 extends CCLayer {
 			}
 		}
 
-//		double requestID = Math.random() * 9223372036854775807L;  //facebook ¾Ë¸²±Û¹øÈ£·Î ´ëÃ¼ÇÒ °Í
-		long requestID = FacebookData.getinstance().getRequestID();  //test¿ë 
-		String recipientID = FacebookData.getinstance().getRecipientID(); // »óÁ¡ ÀÌµ¿ ¹æ½Ä¿¡ µû¸¥ ID º¯°æ
+//		double requestID = Math.random() * 9223372036854775807L;  //facebook ì•Œë¦¼ê¸€ë²ˆí˜¸ë¡œ ëŒ€ì²´í•  ê²ƒ
+		long requestID = FacebookData.getinstance().getRequestID();  //testìš© 
+		String recipientID = FacebookData.getinstance().getRecipientID(); // ìƒì  ì´ë™ ë°©ì‹ì— ë”°ë¥¸ ID ë³€ê²½
 		String senderID = FacebookData.getinstance().getUserInfo().getId();
 		String data = 
 				"0,RequestModeMailBoxAdd*22," + requestID + 

@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.io.IOException;
 
@@ -60,12 +60,12 @@ public class InvitationReceiver extends CCLayer{
 		text2.setColor(text1.getColor());
 		text2.setPosition(text1.getPosition().x, text1.getPosition().y - text1.getContentSize().height);
 		
-		CCLabel text3 = CCLabel.makeLabel("´ëÀüÀ» ½ÅÃ» ÇÏ¿´½À´Ï´Ù. ", "Arial", 30.0f);
+		CCLabel text3 = CCLabel.makeLabel("ëŒ€ì „ì„ ì‹ ì²­ í•˜ì˜€ìŠµë‹ˆë‹¤. ", "Arial", 30.0f);
 		backBoard.addChild(text3);
 		text3.setColor(text2.getColor());
 		text3.setPosition(text2.getPosition().x, text2.getPosition().y - text2.getContentSize().height);
 		
-		CCLabel text4 = CCLabel.makeLabel("½Î¿ï±î~?", "Arial", 40.0f);
+		CCLabel text4 = CCLabel.makeLabel("ì‹¸ìš¸ê¹Œ~?", "Arial", 40.0f);
 		backBoard.addChild(text4);
 		text4.setColor(text3.getColor());
 		text4.setPosition(text3.getPosition().x, text3.getPosition().y - text3.getContentSize().height * 1.5f);
@@ -114,11 +114,11 @@ public class InvitationReceiver extends CCLayer{
 			}
 		}
 		
-		final String[] diffcultyArray = {"ÃÊ±Ş", "Áß±Ş", "»ó±Ş"};
+		final String[] diffcultyArray = {"ì´ˆê¸‰", "ì¤‘ê¸‰", "ìƒê¸‰"};
 		CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
 			public void run() {
-				text1.setString(oppenentPlayer + " ´ÔÀÌ");
-				text2.setString(diffcultyArray[diffculty - 1] + " ³­ÀÌµµÀÇ ");
+				text1.setString(oppenentPlayer + " ë‹˜ì´");
+				text2.setString(diffcultyArray[diffculty - 1] + " ë‚œì´ë„ì˜ ");
 			}
 		});
 		oppenentPlayer = matchedOppenentID;
@@ -151,7 +151,7 @@ public class InvitationReceiver extends CCLayer{
 			NetworkController.getInstance().sendResponseMatchInvite(1, oppenentPlayer);
 //			CCScene scene = GameInvite.getInstance().scene();
 //			CCDirector.sharedDirector().replaceScene(scene);
-//			GameInvite.getInstance().matchNameReceiver(oppenentPlayer, NetworkController.getInstance().kTempName); // ÀÌ°Ç µÉ¶û°¡ ¸ô¶ó
+//			GameInvite.getInstance().matchNameReceiver(oppenentPlayer, NetworkController.getInstance().kTempName); // ì´ê±´ ë ë‘ê°€ ëª°ë¼
 			invitationReceiver = null;
 		} catch (IOException e) {
 			e.printStackTrace();

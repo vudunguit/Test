@@ -1,4 +1,4 @@
-package com.aga.mine.pages2;
+ï»¿package com.aga.mine.pages2;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -22,7 +22,7 @@ import com.facebook.model.GraphUser;
 import android.content.Context;
 import android.util.Log;
 
-//ÀÏ´Ü ¿Ï·á(Å×½ºÆ® Áß)
+//ì¼ë‹¨ ì™„ë£Œ(í…ŒìŠ¤íŠ¸ ì¤‘)
 public class UserData{
 
 	public static String userID = "";
@@ -43,30 +43,30 @@ public class UserData{
 	int kOptionNoviceGuide = 5;
 	public int broomtime = 0;
 	
-	public static int difficulty = 0; // °ÔÀÓ ³­ÀÌµµ
+	public static int difficulty = 0; // ê²Œì„ ë‚œì´ë„
 	
 	//
-	// ÃÖ´ë ±âº» Áö±Ş ºøÀÚ·ç ¼ö
-	final int timeMaxBroomstick = 6; // 6°³
-	// È¨¿¡ ÀúÀåÇÒ ¼ö ÀÖ´Â ÃÖ´ë ºøÀÚ·ç ¼ö
-	final int homeMaxBroomstick = 20; // 20°³
-	// ÃÖ´ë ¿ìÆí¹° ¼ö
+	// ìµœëŒ€ ê¸°ë³¸ ì§€ê¸‰ ë¹—ìë£¨ ìˆ˜
+	final int timeMaxBroomstick = 6; // 6ê°œ
+	// í™ˆì— ì €ì¥í•  ìˆ˜ ìˆëŠ” ìµœëŒ€ ë¹—ìë£¨ ìˆ˜
+	final int homeMaxBroomstick = 20; // 20ê°œ
+	// ìµœëŒ€ ìš°í¸ë¬¼ ìˆ˜
 	final int postboxMax = 30; 
 	
-	// ±âº» Áö±Ş ºøÀÚ·ç ´©Àû ½Ã°£(15ºĞ)
-	public final long broomstickRenewalTime = 900000L; // ±âº» 900000L
+	// ê¸°ë³¸ ì§€ê¸‰ ë¹—ìë£¨ ëˆ„ì  ì‹œê°„(15ë¶„)
+	public final long broomstickRenewalTime = 900000L; // ê¸°ë³¸ 900000L
 //	public final long broomstickRenewalTime = 20000L;
-	// ºøÀÚ·ç º¸³»±â È°¼º ½Ã°£(3½Ã°£) (»ó´ë¿¡°Ô º¸»ó ºøÀÚ·ç1 to¿ìÆíÇÔ)
+	// ë¹—ìë£¨ ë³´ë‚´ê¸° í™œì„± ì‹œê°„(3ì‹œê°„) (ìƒëŒ€ì—ê²Œ ë³´ìƒ ë¹—ìë£¨1 toìš°í¸í•¨)
 	public final long broomstickRepresentTime = 10800000L;
-	// Ä£±¸ ÃÊ´ë È°¼º ½Ã°£ (24½Ã°£) (º¸»óÀº ºøÀÚ·ç1)
+	// ì¹œêµ¬ ì´ˆëŒ€ í™œì„± ì‹œê°„ (24ì‹œê°„) (ë³´ìƒì€ ë¹—ìë£¨1)
 	public final long friendReinviteTime = 86400000L;
 	
-	// ÃÊ´ë ´©Àû´ç º¸»ó (´ÜÀ§ : gold)
+	// ì´ˆëŒ€ ëˆ„ì ë‹¹ ë³´ìƒ (ë‹¨ìœ„ : gold)
 	public final int invite30 = 5000;
 	public final int invite60 = 10000;
 	public final int invite90 = 30000;
 	
-	// ¿¬¼Ó Ãâ¼® º¸»ó (ÃÖ´ë 30ÀÏ)
+	// ì—°ì† ì¶œì„ ë³´ìƒ (ìµœëŒ€ 30ì¼)
 	final public int[] rollBook = {
 			100,200,300,400,1000,
 			500,600,700,800,2000,
@@ -75,7 +75,7 @@ public class UserData{
 			1700,1800,1900,2000,5000,
 			2100,2200,2300,2400,10000};
 	
-	// ºøÀÚ·ç ±¸ÀÔ ºñ¿ë
+	// ë¹—ìë£¨ êµ¬ì… ë¹„ìš©
 	private HashMap<Integer, Integer> buyBroomstick = new HashMap<Integer, Integer>();
 	private void bBroomstick() {
 		buyBroomstick.put(5, 1000);
@@ -86,7 +86,7 @@ public class UserData{
 		buyBroomstick.put(160, 22400);
 	}
 	
-	// °ñµå ±¸ÀÔ ºñ¿ë
+	// ê³¨ë“œ êµ¬ì… ë¹„ìš©
 	private HashMap<Integer, String> buyGold = new HashMap<Integer, String>();
 	private void bGold() {
 		buyGold.put(5000, "$0.99");
@@ -97,7 +97,7 @@ public class UserData{
 		buyGold.put((int)(500000*1.45f), "$99.99");
 	}
 	
-	// ¼öÁ¤±¸ ±¸ÀÔ ºñ¿ë
+	// ìˆ˜ì •êµ¬ êµ¬ì… ë¹„ìš©
 	final public int[] buySphere = {
 			2000, 4600, 10500, 24100, 55400, 127400};
 	
@@ -116,21 +116,21 @@ public class UserData{
 					6960, 9040, 11750, 15270, 19850, 25800, 33540, 43600, 56680 }
 	};
 	
-	// ºÒ¸¶¹ı ±¸ÀÔ ºñ¿ë(°ø°İ)
+	// ë¶ˆë§ˆë²• êµ¬ì… ë¹„ìš©(ê³µê²©)
 	final public int[] buyOffenseFire = {
 			800,1040,1350,1750,2270,
 			2950,3830,4970,6460,8390,
 			10900,14170,18420,23940,31120,
 			40450,52580,68350,88850,115500	};
 	
-	// ¹Ù¶÷¸¶¹ı ±¸ÀÔ ºñ¿ë(°ø°İ)
+	// ë°”ëŒë§ˆë²• êµ¬ì… ë¹„ìš©(ê³µê²©)
 	final public int[] buyOffenseWind = {
 			560,720,930,1200,1560,
 			2020,2620,3400,4420,5740,
 			7460,9690,12590,16360,21260,
 			27630,35910,46680,60680,78880};
 	
-	// ±¸¸§¸¶¹ı ±¸ÀÔ ºñ¿ë(°ø°İ)
+	// êµ¬ë¦„ë§ˆë²• êµ¬ì… ë¹„ìš©(ê³µê²©)
 	final public int[] buyOffenseCloud = {
 			400,520,670,870,1130,
 			1460,1890,2450,3180,4130,
@@ -138,42 +138,42 @@ public class UserData{
 			19850,25800,33540,43600,56680};
 	
 
-	// ºÒ¸¶¹ı ±¸ÀÔ ºñ¿ë(¹æ¾î)
+	// ë¶ˆë§ˆë²• êµ¬ì… ë¹„ìš©(ë°©ì–´)
 	final public int[] buyDefenseFire = {
 			800,1040,1350,1750,2270,
 			2950,3830,4970,6460,8390,
 			10900,14170,18420,23940,31120,
 			40450,52580,68350,88850,115500	};
 	
-	// ¹Ù¶÷¸¶¹ı ±¸ÀÔ ºñ¿ë(¹æ¾î)
+	// ë°”ëŒë§ˆë²• êµ¬ì… ë¹„ìš©(ë°©ì–´)
 	final public int[] buyDefenseWind = {
 			560,720,930,1200,1560,
 			2020,2620,3400,4420,5740,
 			7460,9690,12590,16360,21260,
 			27630,35910,46680,60680,78880};
 	
-	// ±¸¸§¸¶¹ı ±¸ÀÔ ºñ¿ë(¹æ¾î)
+	// êµ¬ë¦„ë§ˆë²• êµ¬ì… ë¹„ìš©(ë°©ì–´)
 	final public int[] buyDefenseCloud = {
 			400,520,670,870,1130,
 			1460,1890,2450,3180,4130,
 			5360,6960,9040,11750,15270,
 			19850,25800,33540,43600,56680};
 
-	// ½Ì±Û¸ğµå ±âº»Á¶°Ç (ÃÊ,Áß,»ó) {È£¹Ú¼ö, »ı¸í¼ö, °ÔÀÓ½Ã°£, Á¤·Â¼®}
+	// ì‹±ê¸€ëª¨ë“œ ê¸°ë³¸ì¡°ê±´ (ì´ˆ,ì¤‘,ìƒ) {í˜¸ë°•ìˆ˜, ìƒëª…ìˆ˜, ê²Œì„ì‹œê°„, ì •ë ¥ì„}
 	final public int[][] singleDefalutData = {
 			{30, 3, 15, 0},
 			{60, 3, 15, 0},
 			{90, 3, 15, 0},
 	} ;
 	
-	// ´ëÀü¸ğµå ±âº»Á¶°Ç (ÃÊ,Áß,»ó) {È£¹Ú¼ö, »ı¸í¼ö, °ÔÀÓ½Ã°£, Á¤·Â¼®}
+	// ëŒ€ì „ëª¨ë“œ ê¸°ë³¸ì¡°ê±´ (ì´ˆ,ì¤‘,ìƒ) {í˜¸ë°•ìˆ˜, ìƒëª…ìˆ˜, ê²Œì„ì‹œê°„, ì •ë ¥ì„}
 	final public int[][] versusDefalutData = {
 			{30, 3, 15, 3},
 			{60, 3, 15, 3},
 			{90, 3, 15, 3},
 	} ;
 	
-	// Á¤·É¼® È®·ü(¾ÆÀÌÅÛÈ¹µæ??? °ø°İ/¹æ¾î¼º°ø·ü??)
+	// ì •ë ¹ì„ í™•ë¥ (ì•„ì´í…œíšë“??? ê³µê²©/ë°©ì–´ì„±ê³µë¥ ??)
 	int offenseProbability = 70;
 	int duringTheOffenseFire = 20; 
 	int duringTheOffenseWind = 30; 
@@ -185,41 +185,41 @@ public class UserData{
 	int duringTheDefenseCloud = 50; 
 	
 	//
-	// ** ½ÂÆĞ ÆË¾÷
-	// * º¸»óÁ¶°Ç
-	// Ã£Àº È£¹Ú¼ö
-	int searchPumpkin = 90; // ¿¹Á¦
-	// »ı¸í¼ö
-	int watersOfLife = 3; // ¿¹Á¦
-	// ¼Ò¿ä½Ã°£
-	int LeadTime = 1000; // ¿¹Á¦
+	// ** ìŠ¹íŒ¨ íŒì—…
+	// * ë³´ìƒì¡°ê±´
+	// ì°¾ì€ í˜¸ë°•ìˆ˜
+	int searchPumpkin = 90; // ì˜ˆì œ
+	// ìƒëª…ìˆ˜
+	int watersOfLife = 3; // ì˜ˆì œ
+	// ì†Œìš”ì‹œê°„
+	int LeadTime = 1000; // ì˜ˆì œ
 	
-	// Æ÷ÀÎÆ®
-	//½Ì±Û¸ğµå : (((Ã£Àº Áö·Ú¼ö * ³²Àº »ı¸í¼ö*1000) / ¼Ò¿ä½Ã°£) * 2)			
-	//´ëÀü¸ğµå : ((Ã£Àº Áö·Ú¼ö * ³²Àº »ı¸í¼ö*1000) / ¼Ò¿ä½Ã°£) * 10
-	// ½Ì±Û
+	// í¬ì¸íŠ¸
+	//ì‹±ê¸€ëª¨ë“œ : (((ì°¾ì€ ì§€ë¢°ìˆ˜ * ë‚¨ì€ ìƒëª…ìˆ˜*1000) / ì†Œìš”ì‹œê°„) * 2)			
+	//ëŒ€ì „ëª¨ë“œ : ((ì°¾ì€ ì§€ë¢°ìˆ˜ * ë‚¨ì€ ìƒëª…ìˆ˜*1000) / ì†Œìš”ì‹œê°„) * 10
+	// ì‹±ê¸€
 	int point = searchPumpkin * watersOfLife * 1000 / LeadTime * 2; 
-	// ´ëÀü
+	// ëŒ€ì „
 	//int point = searchPumpkin * watersOfLife * 1000 / LeadTime * 10;
 	
-	// °æÇèÄ¡ (È¹µæ Æ÷ÀÎÆ® * 1.5)
+	// ê²½í—˜ì¹˜ (íšë“ í¬ì¸íŠ¸ * 1.5)
 	int EXP = (int)(point * 1.5f);
-	// °ñµå (È¹µæ Æ÷ÀÎÆ® / 8)
+	// ê³¨ë“œ (íšë“ í¬ì¸íŠ¸ / 8)
 	int gainGold = (int)(point /8);
 
-	// ** Æ÷ÀÎÆ® Â÷°¨ ¶Ç´Â Æ÷ÀÎÆ® ¹æ¾î µÑÁß¿¡ ÇÏ³ª¸¦ ¼±ÅÃ **
+	// ** í¬ì¸íŠ¸ ì°¨ê° ë˜ëŠ” í¬ì¸íŠ¸ ë°©ì–´ ë‘˜ì¤‘ì— í•˜ë‚˜ë¥¼ ì„ íƒ **
 	int winnersPoint = 200;
 	
-	// Æ÷ÀÎÆ® Â÷°¨ (ÆĞ¹è½Ã ½Â¸®ÀÚ Æ÷ÀÎÆ®ÀÇ / 3)
+	// í¬ì¸íŠ¸ ì°¨ê° (íŒ¨ë°°ì‹œ ìŠ¹ë¦¬ì í¬ì¸íŠ¸ì˜ / 3)
 	int pointSubtraction = (int)(winnersPoint / 3);
 	
-	// Æ÷ÀÎÆ® ¹æ¾î °ñµå (Æ÷ÀÎÆ® Â÷°¨ / 10)
+	// í¬ì¸íŠ¸ ë°©ì–´ ê³¨ë“œ (í¬ì¸íŠ¸ ì°¨ê° / 10)
 	int pointDefense = pointSubtraction / 10;
 	
-	// ¾ÆÀÌÅÛ ÃÑ ±¸¸Åºñ/1È¸ È¹µæ°ñµå	4426 ????
+	// ì•„ì´í…œ ì´ êµ¬ë§¤ë¹„/1íšŒ íšë“ê³¨ë“œ	4426 ????
 	
 	
-	// ·¹º§´ç °æÇèÄ¡ ¹× ·¹º§¾÷ º¸»ó(°ñµå)
+	// ë ˆë²¨ë‹¹ ê²½í—˜ì¹˜ ë° ë ˆë²¨ì—… ë³´ìƒ(ê³¨ë“œ)
 	final int[] expPerLevel = {
 			7000,			7350,			7710,			8090,			8490,
 			8910,			9350,			9810,			10300,		10810,
@@ -263,15 +263,15 @@ public class UserData{
 		return userData;
 	}
 
-	// ÆÄÀÏÀÌ Á¸Àç½Ã µ¥ÀÌÅÍ¸¦ °¡Áö°í ¿À°í, ¾øÀ»½Ã µ¥ÀÌÅÍ »ı¼º(File»ı¼ºx)
+	// íŒŒì¼ì´ ì¡´ì¬ì‹œ ë°ì´í„°ë¥¼ ê°€ì§€ê³  ì˜¤ê³ , ì—†ì„ì‹œ ë°ì´í„° ìƒì„±(Fileìƒì„±x)
 	private UserData(Context context) {
 		mContext = context;
 
 		
-		// ÆÄÀÏ À¯¹« Ã¼Å©(ÆÄÀÏÀÌ Á¸ÀçÇÏ¸é ºÒ·¯¿À±â)
+		// íŒŒì¼ ìœ ë¬´ ì²´í¬(íŒŒì¼ì´ ì¡´ì¬í•˜ë©´ ë¶ˆëŸ¬ì˜¤ê¸°)
 		try {
 			
-			// ÆÄÀÏÀÌ ÀÌ¹Ì ÀÖÀ¸¸é ºÒ·¯¿À°í,
+			// íŒŒì¼ì´ ì´ë¯¸ ìˆìœ¼ë©´ ë¶ˆëŸ¬ì˜¤ê³ ,
 			InputStream fis = mContext.openFileInput(kPath);
 			InputStreamReader isr = new InputStreamReader(fis, "utf-8");
 			BufferedReader br = new BufferedReader(isr);
@@ -294,13 +294,13 @@ public class UserData{
 						String typeValue = key[1].substring(key[1].indexOf(")")+1);
 						Log.e("typeValue", typeValue);
 						
-						int i = key[1].indexOf(")"); // ½ÃÀÛ°ªÀº -1
+						int i = key[1].indexOf(")"); // ì‹œì‘ê°’ì€ -1
 						
 						if (mapType.equals("Integer")) {
 							int value = Integer.parseInt(typeValue);
 							data.put(key[0], value);
 							
-							//longÇü º¯È¯
+							//longí˜• ë³€í™˜
 						} else if (mapType.equals("Long")) {
 							long value = Long.parseLong(typeValue);
 							data.put(key[0], value);
@@ -337,34 +337,34 @@ public class UserData{
 			fis.close();
 			//String hashmapData = sb.toString();
 
-			//Toast.makeText(mContext, "ÆÄÀÏ¿¡¼­ µ¥ÀÌÅÍ ºÒ·¯¿À±â ¼º°ø", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(mContext, "íŒŒì¼ì—ì„œ ë°ì´í„° ë¶ˆëŸ¬ì˜¤ê¸° ì„±ê³µ", Toast.LENGTH_SHORT).show();
 			
 		} catch (FileNotFoundException e) {
 			
-			//Toast.makeText(mContext, "ÃÖÃÊ µ¥ÀÌÅÍ ¸¸µé±â", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(mContext, "ìµœì´ˆ ë°ì´í„° ë§Œë“¤ê¸°", Toast.LENGTH_SHORT).show();
 			// e.printStackTrace();
 			Log.e("Exception", "FileNotFoundException");
-			// ¾øÀ¸¸é, ÃÊ±â°ªÀ¸·Î ÁöÁ¤ÇÑ´Ù.
+			// ì—†ìœ¼ë©´, ì´ˆê¸°ê°’ìœ¼ë¡œ ì§€ì •í•œë‹¤.
 			this.data = new HashMap<String, Object>();
-			data.put("LevelCharacter", 1); // °ªÀº ÀÓ½Ã ³ÖÀ½. Default°ªÀº 0ÀÓ
+			data.put("LevelCharacter", 1); // ê°’ì€ ì„ì‹œ ë„£ìŒ. Defaultê°’ì€ 0ì„
 			data.put("LevelFire", 1);
 			data.put("LevelWind", 1);
 			data.put("LevelCloud", 1);
 			data.put("LevelDivine", 0);
 			data.put("LevelEarth", 0);
 			data.put("LevelMirror", 0);
-			data.put("SphereNumber", 3); // ±âº»3°³(Ãß°¡ ±¸¸Å ½ÃÀÛ°ªÀº 0ºÎÅÍ) + ±¸¸Å°¹¼ö
-			data.put("Exp", 7777L); // °ªÀº ÀÓ½Ã ³ÖÀ½. Default°ªÀº 0ÀÓ
+			data.put("SphereNumber", 3); // ê¸°ë³¸3ê°œ(ì¶”ê°€ êµ¬ë§¤ ì‹œì‘ê°’ì€ 0ë¶€í„°) + êµ¬ë§¤ê°¯ìˆ˜
+			data.put("Exp", 7777L); // ê°’ì€ ì„ì‹œ ë„£ìŒ. Defaultê°’ì€ 0ì„
 			data.put("Gold", 0L);
-			data.put("Point", 654897L); // °ªÀº ÀÓ½Ã ³ÖÀ½. Default°ªÀº 0ÀÓ
-			data.put("HistoryWin", 77); // °ªÀº ÀÓ½Ã ³ÖÀ½. Default°ªÀº 0ÀÓ
-			data.put("HistoryLose", 44); // °ªÀº ÀÓ½Ã ³ÖÀ½. Default°ªÀº 0ÀÓ
-			data.put("ReceivedBroomstick", 0); // Default°ªÀº 6ÀÓ
-			data.put("broomstickRenewalTimeData", 1999999999999L); // ºøÀÚ·ç ¼Ò¸ğµÈ ½ÃÁ¡(½Ã°£)
+			data.put("Point", 654897L); // ê°’ì€ ì„ì‹œ ë„£ìŒ. Defaultê°’ì€ 0ì„
+			data.put("HistoryWin", 77); // ê°’ì€ ì„ì‹œ ë„£ìŒ. Defaultê°’ì€ 0ì„
+			data.put("HistoryLose", 44); // ê°’ì€ ì„ì‹œ ë„£ìŒ. Defaultê°’ì€ 0ì„
+			data.put("ReceivedBroomstick", 0); // Defaultê°’ì€ 6ì„
+			data.put("broomstickRenewalTimeData", 1999999999999L); // ë¹—ìë£¨ ì†Œëª¨ëœ ì‹œì (ì‹œê°„)
 			
-			// ÃÖÁ¾ÀûÀ¸·Î´Â 1ÀÏ 1È¸¸¸ °¡´ÉÇÏ°Ô ÇØ¾ßµÊ.
-			// ¿ø·¡ DB·Î ³Ö¾î¾ßµÊ.
-			data.put("daily", 1); // Ãâ¼® ÀÏ¼ö
+			// ìµœì¢…ì ìœ¼ë¡œëŠ” 1ì¼ 1íšŒë§Œ ê°€ëŠ¥í•˜ê²Œ í•´ì•¼ë¨.
+			// ì›ë˜ DBë¡œ ë„£ì–´ì•¼ë¨.
+			data.put("daily", 1); // ì¶œì„ ì¼ìˆ˜
 
 			ArrayList<Integer> emoticonArray = new ArrayList<Integer>();
 			emoticonArray.add(101);
@@ -373,15 +373,15 @@ public class UserData{
 			data.put("Emoticon", emoticonArray);
 
 			//
-			// ÄğÅ¸ÀÓ
+			// ì¿¨íƒ€ì„
 
-			// Ä£±¸¸ñ·ÏÀ» ºÒ·¯¿Â´Ù
-			// Ä£±¸¾ÆÀÌµğº° 1)ÃÊ´ë, 2)ºøÀÚ·ç ÄğÅ¸ÀÓ(ÃÖ±Ù ¹ß¼Û ½Ã°£)
+			// ì¹œêµ¬ëª©ë¡ì„ ë¶ˆëŸ¬ì˜¨ë‹¤
+			// ì¹œêµ¬ì•„ì´ë””ë³„ 1)ì´ˆëŒ€, 2)ë¹—ìë£¨ ì¿¨íƒ€ì„(ìµœê·¼ ë°œì†¡ ì‹œê°„)
 			data.put("Pester", true);
 			data.put("SendBroomstick", true);
 
 			//
-			// ¼³Á¤
+			// ì„¤ì •
 			data.put("OptionBGM", true);
 			data.put("OptionSFX", true);
 			data.put("OptionRefuseInvitation", false);
@@ -402,12 +402,12 @@ public class UserData{
 	}
 
 	//
-	// kPath ÆÄÀÏ¸íÀ¸·Î ÆÄÀÏÀúÀå
+	// kPath íŒŒì¼ëª…ìœ¼ë¡œ íŒŒì¼ì €ì¥
 	private void updateUserData(final HashMap<String, Object> userData) {
 
 		final Set<Entry<String, Object>> set = userData.entrySet();
 		if (set.equals("")) {
-			Log.e("updateUserData", "UserData ³»¿ëÀÌ ¾ø½À´Ï´Ù.");
+			Log.e("updateUserData", "UserData ë‚´ìš©ì´ ì—†ìŠµë‹ˆë‹¤.");
 		}
 
 		CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
@@ -459,12 +459,12 @@ public class UserData{
 				}
 			}
 		});
-		//Toast.makeText(mContext, "UserData ÆÄÀÏ·Î ÀúÀå ¿Ï·á \r\n" + set.toString(),Toast.LENGTH_LONG).show();
+		//Toast.makeText(mContext, "UserData íŒŒì¼ë¡œ ì €ì¥ ì™„ë£Œ \r\n" + set.toString(),Toast.LENGTH_LONG).show();
 	}
 	// updateUserData() end
 
 	// #pragma mark - data methods general
-	// ÀÌ¸ğÆ¼ÄÜ ¾µ¶§´Â ÇÑ¹ø´õ Çüº¯È¯ ÇØ¾ßµÊ. ArrayList --> int·Î
+	// ì´ëª¨í‹°ì½˜ ì“¸ë•ŒëŠ” í•œë²ˆë” í˜•ë³€í™˜ í•´ì•¼ë¨. ArrayList --> intë¡œ
 	private int getByKey(String key) {
 		return (Integer) this.data.get(key);
 	}
@@ -532,7 +532,7 @@ public class UserData{
 	long nextLevelExp = 5000; // temporary
 
 	public void addExp(long number) {
-		// ÇÒÀÏ : ·¹º§¾÷°æÇèÄ¡¿¡ µû¸¥ ·¹º§¾÷
+		// í• ì¼ : ë ˆë²¨ì—…ê²½í—˜ì¹˜ì— ë”°ë¥¸ ë ˆë²¨ì—…
 		long exp = this.getExp() + number;
 		exp %= nextLevelExp;
 		this.setExp(exp);
@@ -552,8 +552,8 @@ public class UserData{
 	}
 
 	//
-	// false : °ñµåºÎÁ·
-	// true : Á¤»óÃ³¸®
+	// false : ê³¨ë“œë¶€ì¡±
+	// true : ì •ìƒì²˜ë¦¬
 	public boolean reduceGold(long deltaGold) {
 		long gold = this.getGold() - deltaGold;
 		if (gold >= 0) {
@@ -584,8 +584,8 @@ public class UserData{
 	}
 
 	//
-	// return -1 : ¿À·ù
-	// ¾çÀÇ°ª : Á¤»óÃ³¸®
+	// return -1 : ì˜¤ë¥˜
+	// ì–‘ì˜ê°’ : ì •ìƒì²˜ë¦¬
 	public int getHistory(int result) {
 		if (result < 0 || result > 1)
 			return -1;
@@ -614,7 +614,7 @@ public class UserData{
 			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-							// Toast.makeText(mContext, "ºøÀÚ·ç°¡ °¡µæ Ã¡½À´Ï´Ù.",
+							// Toast.makeText(mContext, "ë¹—ìë£¨ê°€ ê°€ë“ ì°¼ìŠµë‹ˆë‹¤.",
 							// Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -643,7 +643,7 @@ public class UserData{
 	}
 	
 	//
-	// Ä£±¸¿¡°Ô Á¶¸£±â
+	// ì¹œêµ¬ì—ê²Œ ì¡°ë¥´ê¸°
 	public boolean getPester() {
 		return this.getBoolByKey("Pester");
 	}
@@ -654,7 +654,7 @@ public class UserData{
 	}
 	
 	//
-	// Ä£±¸¿¡°Ô ÁöÆÎÀÌ º¸³»±â
+	// ì¹œêµ¬ì—ê²Œ ì§€íŒ¡ì´ ë³´ë‚´ê¸°
 	public boolean getSendBroomstick() {
 		return this.getBoolByKey("SendBroomstick");
 	}
@@ -673,7 +673,7 @@ public class UserData{
 	}
 
 	//
-	// ¿É¼Ç°ªÀ» Åä±Û½ÃÅ²´Ù. YES -> NO, NO -> YES
+	// ì˜µì…˜ê°’ì„ í† ê¸€ì‹œí‚¨ë‹¤. YES -> NO, NO -> YES
 	public void toggleOption(int type) {
 		String keyString = "OptionBGM,OptionSFX,OptionRefuseInvitation,OptionReceiveBloomstick,OptionShowMyPicture,OptionNoviceGuide";
 		String[] keyArray = keyString.split(",");
@@ -713,17 +713,17 @@ public class UserData{
 
 
 
-// Ç®ÆĞ½º ÀúÀåÀ§Ä¡ : ÆĞÅ°Áö/files/ÆÄÀÏ¸í
-// ·çÆÃ½Ã ÀúÀåÀ§Ä¡ : data/data/ÆĞÅ°Áö/files/ÆÄÀÏ¸í
+// í’€íŒ¨ìŠ¤ ì €ì¥ìœ„ì¹˜ : íŒ¨í‚¤ì§€/files/íŒŒì¼ëª…
+// ë£¨íŒ…ì‹œ ì €ì¥ìœ„ì¹˜ : data/data/íŒ¨í‚¤ì§€/files/íŒŒì¼ëª…
 
-//MODE_PRIVATE  È¥ÀÚ¸¸ »ç¿ëÇÏ´Â ¹èÅ¸ÀûÀÎ ¸ğµå·Î ÆÄÀÏ »ı¼º .. (µğÆúÆ®) 
-//MODE_APPEND  ÆÄÀÏÀÌ ÀÌ¹Ì Á¸ÀçÇÒ °æ¿ì µ¤¾î¾²±â ¸ğµå·Î ¿­Áö ¾Ê°í Ãß°¡ ¸ğµå·Î ¿¬´Ù. ( ±âÁ¸ ³»¿ë¿¡ Ãß°¡ ) 
-//MODE_WORLD_READABLE  ´Ù¸¥ ÀÀ¿ë ÇÁ·Î±×·¥ÀÌ ÀĞÀ» ¼ö ÀÖµµ·Ï Çã¿ë 
-//MODE_WORLD_WRITEABLE  ´Ù¸¥ ÀÀ¿ë ÇÁ·Î±×·¥ÀÌ ¾µ ¼ö ÀÖµµ·Ï Çã¿ë 
+//MODE_PRIVATE  í˜¼ìë§Œ ì‚¬ìš©í•˜ëŠ” ë°°íƒ€ì ì¸ ëª¨ë“œë¡œ íŒŒì¼ ìƒì„± .. (ë””í´íŠ¸) 
+//MODE_APPEND  íŒŒì¼ì´ ì´ë¯¸ ì¡´ì¬í•  ê²½ìš° ë®ì–´ì“°ê¸° ëª¨ë“œë¡œ ì—´ì§€ ì•Šê³  ì¶”ê°€ ëª¨ë“œë¡œ ì—°ë‹¤. ( ê¸°ì¡´ ë‚´ìš©ì— ì¶”ê°€ ) 
+//MODE_WORLD_READABLE  ë‹¤ë¥¸ ì‘ìš© í”„ë¡œê·¸ë¨ì´ ì½ì„ ìˆ˜ ìˆë„ë¡ í—ˆìš© 
+//MODE_WORLD_WRITEABLE  ë‹¤ë¥¸ ì‘ìš© í”„ë¡œê·¸ë¨ì´ ì“¸ ìˆ˜ ìˆë„ë¡ í—ˆìš© 
 
 //Set<Entry<String, Object>> set = hashMap.entrySet();
 //while(set.iterator().hasNext()){
-//	//³»¿ë..
+//	//ë‚´ìš©..
 //}
 
 /*
@@ -782,20 +782,20 @@ try {
 private void aaa() {
 
 	String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-	File dir = new File(sdPath, "testing"); // sd°æ·Î¿¡ testingÀÌ¶ó´Â Æú´õ¸¦ ¸¸µé ÁØºñ
-	dir.mkdir(); // testing Æú´õ »ı¼º
-	File file = new File(dir, "testFile.txt"); // file.txt ¸¸µé±â
+	File dir = new File(sdPath, "testing"); // sdê²½ë¡œì— testingì´ë¼ëŠ” í´ë”ë¥¼ ë§Œë“¤ ì¤€ë¹„
+	dir.mkdir(); // testing í´ë” ìƒì„±
+	File file = new File(dir, "testFile.txt"); // file.txt ë§Œë“¤ê¸°
 
 	FileOutputStream fos;
 	try {
 		fos = new FileOutputStream(file);
-		// file.txt¿¡ ÀÔ·Â ½ºÆ®¸²(»¡´ë) ²Å±â
-		// String str = mEdit.getText().toString(); //editText¸¦ ÀÌ¿ëÇÏ¿© ±ÛÀÚ ÀÔ·Â
-		String str = "ÀÔ·ÂÀº Àß µÇ¾ú´Â°¡? ¹ö³ªÁö±º"; // ÀÓ½Ã
+		// file.txtì— ì…ë ¥ ìŠ¤íŠ¸ë¦¼(ë¹¨ëŒ€) ê¼½ê¸°
+		// String str = mEdit.getText().toString(); //editTextë¥¼ ì´ìš©í•˜ì—¬ ê¸€ì ì…ë ¥
+		String str = "ì…ë ¥ì€ ì˜ ë˜ì—ˆëŠ”ê°€? ë²„ë‚˜ì§€êµ°"; // ì„ì‹œ
 		fos.write(str.getBytes());
-		// ½ºÆ®¸µ ¹Ğ¾î ³Ö±â
-		fos.close(); // ½ºÆ®¸²²÷±â(»¡´ë »Ì±â)
-		// mEdit.setText("write success"); //editText¿¡ ¿Ï·á ¹®Àå Ãâ·Â
+		// ìŠ¤íŠ¸ë§ ë°€ì–´ ë„£ê¸°
+		fos.close(); // ìŠ¤íŠ¸ë¦¼ëŠê¸°(ë¹¨ëŒ€ ë½‘ê¸°)
+		// mEdit.setText("write success"); //editTextì— ì™„ë£Œ ë¬¸ì¥ ì¶œë ¥
 		Log.e("FileOutputStream", "write success");
 	} catch (FileNotFoundException e) {
 		e.printStackTrace();

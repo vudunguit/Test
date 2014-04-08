@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+Ôªøpackage com.aga.mine.mains;
 
 import org.cocos2d.layers.CCColorLayer;
 import org.cocos2d.layers.CCLayer;
@@ -39,7 +39,7 @@ public class Login extends CCLayer{
 
 	
 	private void setMain() {
-		//∞‘¿”¿Ã∏ß
+		//Í≤åÏûÑÏù¥Î¶Ñ
 		CCSprite title = CCSprite.sprite(
 				Utility.getInstance().getNameWithIsoCodeSuffix(
 						folder + "appload-title" + fileExtension));
@@ -47,25 +47,25 @@ public class Login extends CCLayer{
 		title.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2);
 		title.setAnchorPoint(0.5f ,0.5f);
 		
-		//∑Œµ˘πŸ πË∞Ê
+		//Î°úÎî©Î∞î Î∞∞Í≤Ω
 		CCSprite loadingMap = CCSprite.sprite(folder + "countbg" + fileExtension);
 		bg.addChild(loadingMap);
 		loadingMap.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2);
 		loadingMap.setAnchorPoint(0.5f ,0.5f);
 		
-		// ∑Œµ˘πŸ
+		// Î°úÎî©Î∞î
 		CCSprite loadingBar = CCSprite.sprite(folder + "c01" + fileExtension);
 		bg.addChild(loadingBar);
 		loadingBar.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 0);
 		loadingBar.setAnchorPoint(0.5f ,0.5f);
 		
-		// ≥ø∫Ò
+		// ÎÉÑÎπÑ
 		CCSprite pot = CCSprite.sprite(folder + "pot" + fileExtension);
 		bg.addChild(pot);
 		pot.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 116);
 		pot.setAnchorPoint(0.5f ,0.5f);
 
-		// ∏∂π˝ªÁ
+		// ÎßàÎ≤ïÏÇ¨
 		CCSprite wizard = CCSprite.sprite(folder + "wizard01" + fileExtension);
 		bg.addChild(wizard);
 		wizard.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 116);
@@ -73,13 +73,13 @@ public class Login extends CCLayer{
 	}
 	
 	private void setForeground() {
-		//∆‰¿ÃΩ∫∫œ
+		//ÌéòÏù¥Ïä§Î∂Å
 		CCMenuItem facebook = CCMenuItemImage.item(
 				folder + "Facebook-normal" + fileExtension,
 				folder + "Facebook-select" + fileExtension,
 				this, "facebookCallback");
 		
-		//∞‘Ω∫∆Æ
+		//Í≤åÏä§Ìä∏
 		CCMenuItem guest = CCMenuItemImage.item(
 				folder + "Guest-normal" + fileExtension,
 				folder + "Guest-select" + fileExtension,
@@ -108,7 +108,7 @@ public class Login extends CCLayer{
 	}
 
 	public void guestCallback(Object sender) {
-		CCScene scene = Home.scene();
+		CCScene scene = Home2.scene();
 		CCDirector.sharedDirector().replaceScene(scene);
 	}
 

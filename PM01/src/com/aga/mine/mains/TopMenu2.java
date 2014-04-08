@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.menus.CCMenu;
@@ -30,7 +30,7 @@ public class TopMenu2 extends CCLayer{
 		return CCDirector.sharedDirector().winSize();
 	}
 
-	// »ó´Ü ¸Ş´º (scene ÀÌµ¿)
+	// ìƒë‹¨ ë©”ë‰´ (scene ì´ë™)
 	public static void setSceneMenu(CCNode nodeThis){
 		
 		CCMenuItemImage frameButtonBack = CCMenuItemImage.item(

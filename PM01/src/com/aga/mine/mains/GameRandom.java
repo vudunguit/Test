@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -84,28 +84,28 @@ public class GameRandom extends CCLayer {
 		userData = UserData.share(mContext);
 		this.mode =GameDifficulty.mode;
 		
-		//¹è°æ ±×¸² ¼³Á¤
+		//ë°°ê²½ ê·¸ë¦¼ ì„¤ì •
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1.png");
 		
 		setBackBoardMenu(commonfolder + "gamebb.png");
 		setBoardFrameMenu(commonfolder + "frameMatching-hd.png");
-		// »ó´Ü ¸Ş´º
+		// ìƒë‹¨ ë©”ë‰´
 		TopMenu2.setSceneMenu(this);
-		 // Àá½Ã ÁÖ¼®Ã³¸®
-		// ÇÏ´Ü ÀÌ¹ÌÁö
+		 // ì ì‹œ ì£¼ì„ì²˜ë¦¬
+		// í•˜ë‹¨ ì´ë¯¸ì§€
 		BottomImage.setBottomImage(this);
 //		BottomMenu2.setBottomMenu(null, folder, this);
 
 		CCTouchDispatcher.sharedDispatcher().addTargetedDelegate(this, 0, true);
 		this.setIsTouchEnabled(true);
 		try {
-			NetworkController.getInstance().sendRequestMatch(userData.difficulty); // ³­ÀÌµµ ÁÖÀÔ
+			NetworkController.getInstance().sendRequestMatch(userData.difficulty); // ë‚œì´ë„ ì£¼ì…
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	// ¹é º¸µå ¼³Á¤
+	// ë°± ë³´ë“œ ì„¤ì •
 	private void setBackBoardMenu(String imageFullPath) {
 		CCSprite bb = CCSprite.sprite(imageFullPath);
 		bg.addChild(bb, 0, 0);
@@ -115,7 +115,7 @@ public class GameRandom extends CCLayer {
 		countdown(bb);
 	}
 	
-	// °Ô½ÃÆÇ ¼³Á¤
+	// ê²Œì‹œíŒ ì„¤ì •
 	private void setBoardFrameMenu(String imageFullPath) {
 		CCSprite boardFrame = CCSprite.sprite(imageFullPath);
 		bg.addChild(boardFrame);
@@ -124,7 +124,7 @@ public class GameRandom extends CCLayer {
 		FrameTitle2.setTitle(boardFrame, folder);
 	}
 
-	// ¸ŞÀÎ ¸Ş´º
+	// ë©”ì¸ ë©”ë‰´
 	private void setMainMenu(CCSprite parentSprite){
 		int matchingPanelPosition = -20;
 		
@@ -140,25 +140,25 @@ public class GameRandom extends CCLayer {
 					parentSprite.getContentSize().width / 2, 
 					parentSprite.getContentSize().height - matchingPanel.get(0).getContentSize().height * (i + 0.5f) - (i * 5) - 35  + matchingPanelPosition);
 
-			 // facebook ÀÌ¹ÌÁö
+			 // facebook ì´ë¯¸ì§€
 			pictureFrame = CCSprite.sprite(commonfolder + "frame-pictureFrame-hd.png");
 			matchingPanel.get(i).addChild(pictureFrame, 0, i + 100);
 			pictureFrame.setScale(0.8f);		
 			pictureFrame.setPosition(pictureFrame.getContentSize().width * 2, matchingPanel.get(0).getContentSize().height / 2);
 		}
 		
-//		CCSprite player1Photo = CCSprite.sprite(FacebookData.getinstance().getUserPhoto()); // ÇÁ·ÎÇÊ »çÁø
-		CCSprite player1Photo = CCSprite.sprite(commonfolder + "noPicture.png"); // ÇÁ·ÎÇÊ »çÁø
+//		CCSprite player1Photo = CCSprite.sprite(FacebookData.getinstance().getUserPhoto()); // í”„ë¡œí•„ ì‚¬ì§„
+		CCSprite player1Photo = CCSprite.sprite(commonfolder + "noPicture.png"); // í”„ë¡œí•„ ì‚¬ì§„
 		matchingPanel.get(0).getChildByTag(100).addChild(player1Photo, 0, 1000);
 		player1Photo.setScale(1 / 0.8f);
 		player1Photo.setAnchorPoint(0.5f, 0.5f);
 		player1Photo.setPosition(pictureFrame.getContentSize().width / 2, pictureFrame.getContentSize().height / 2);
 		
 
-		// facebookÀÌ¸§ (network¿¡¼­ ¹ŞÀ» °Í)
+		// facebookì´ë¦„ (networkì—ì„œ ë°›ì„ ê²ƒ)
 //		player1Label = CCLabel.makeLabel(userData.facebookUserInfo.getName(), "Arial", 30.0f);
 		player1Label = CCLabel.makeLabel(FacebookData.getinstance().getUserInfo().getName(), "Arial", 30.0f);
-		player2Label = CCLabel.makeLabel("»ó ´ë", "Arial", 30.0f);
+		player2Label = CCLabel.makeLabel("ìƒ ëŒ€", "Arial", 30.0f);
 		Log.e("GameRandom", "kMessageMatchCompleted : " + "yourName");
 		
 		matchingPanel.get(0).addChild(player1Label);
@@ -174,7 +174,7 @@ public class GameRandom extends CCLayer {
 	
 	private void countdown(CCSprite parentSprite){
 
-		illust = CCSprite.sprite(folder + "randomMatchingBottomIllust.png"); // Ä«¿îÆ® ´Ù¿î ¹è°æ
+		illust = CCSprite.sprite(folder + "randomMatchingBottomIllust.png"); // ì¹´ìš´íŠ¸ ë‹¤ìš´ ë°°ê²½
 		parentSprite.addChild(illust);
 		illust.setPosition(parentSprite.getContentSize().width / 2, illust.getContentSize().height / 2);
 
@@ -203,83 +203,83 @@ public class GameRandom extends CCLayer {
 		countdownNumber5.setPosition(countdownNumber1.getPosition());
 	}
 	
-//	//	¹è°æ ±×¸² ¼³Á¤ (frameMatching)
+//	//	ë°°ê²½ ê·¸ë¦¼ ì„¤ì • (frameMatching)
 //	private void setBackground(){
 		
-//		bg = CCSprite.sprite("bg.png"); //¹é±×¶ó¿îµå(Ç®)
+//		bg = CCSprite.sprite("bg.png"); //ë°±ê·¸ë¼ìš´ë“œ(í’€)
 //		bg.setPosition(CGPoint.make(winsize().width/2, winsize().height/2));
 //		
-//		CCSprite bb = CCSprite.sprite("mode-backboard.png"); //°Ô½ÃÆÇ ¹è°æ
+//		CCSprite bb = CCSprite.sprite("mode-backboard.png"); //ê²Œì‹œíŒ ë°°ê²½
 //		bb.setPosition(CGPoint.make(winsize().width/2-4f, winsize().height/2-10f));
 //		
 		
-//		// ----  ´ëÀü ³ª & »ó´ë --------//
-//		CCSprite mm = CCSprite.sprite("matchPanelMe.png"); // ¸ÅÄª ³ª
+//		// ----  ëŒ€ì „ ë‚˜ & ìƒëŒ€ --------//
+//		CCSprite mm = CCSprite.sprite("matchPanelMe.png"); // ë§¤ì¹­ ë‚˜
 //		mm.setPosition(bb.getContentSize().width/2-10.0f,bb.getContentSize().height - mm.getContentSize().height/2-35f);
-//		//mm.setPosition(CGPoint.make(winsize().width/2-3f,winsize().height-303.0f)); // Á¤»çÀÌÁî ÀÌ¹ÌÁö ³ª¿ÔÀ»½Ã ÃÖÁ¾ À§Ä¡ ÀÌµ¿ ÇÊ¿ä
+//		//mm.setPosition(CGPoint.make(winsize().width/2-3f,winsize().height-303.0f)); // ì •ì‚¬ì´ì¦ˆ ì´ë¯¸ì§€ ë‚˜ì™”ì„ì‹œ ìµœì¢… ìœ„ì¹˜ ì´ë™ í•„ìš”
 //		//mm.setAnchorPoint(0.5f,0.5f);
 //		bb.addChild(mm);
 //		
-//		CCSprite mo = CCSprite.sprite("matchPanelOther.png"); // ¸ÅÄª »ó´ë
+//		CCSprite mo = CCSprite.sprite("matchPanelOther.png"); // ë§¤ì¹­ ìƒëŒ€
 //		mo.setPosition(bb.getContentSize().width/2-10.0f,bb.getContentSize().height - (mo.getContentSize().height*1.5f)-40f);
 //		bb.addChild(mo);
-//		//mo.setPosition(CGPoint.make(winsize().width/2-3f, winsize().height-349.0f)); // Á¤»çÀÌÁî ÀÌ¹ÌÁö ³ª¿ÔÀ»½Ã ÃÖÁ¾ À§Ä¡ ÀÌµ¿ ÇÊ¿ä
+//		//mo.setPosition(CGPoint.make(winsize().width/2-3f, winsize().height-349.0f)); // ì •ì‚¬ì´ì¦ˆ ì´ë¯¸ì§€ ë‚˜ì™”ì„ì‹œ ìµœì¢… ìœ„ì¹˜ ì´ë™ í•„ìš”
 //		//mo.setAnchorPoint(0.5f,0.5f);
 //		//this.addChild(mo);
 //		
-//		CCSprite pictureFrame = CCSprite.sprite("frame-pictureFrame-hd.png"); // ¸ÅÄª ÀÌ¹ÌÁö
-//		//pf.setPosition(CGPoint.make(75.0f, mm.getAnchorPoint().y+1f)); // Á¤»çÀÌÁî ÀÌ¹ÌÁö ³ª¿ÔÀ»½Ã ÃÖÁ¾ À§Ä¡ ÀÌµ¿ ÇÊ¿ä
-//		pictureFrame.setPosition(pictureFrame.getContentSize().width*2, mm.getContentSize().height/2); // CGpoint¶û ¹«½¼ Â÷ÀÎÁö....
+//		CCSprite pictureFrame = CCSprite.sprite("frame-pictureFrame-hd.png"); // ë§¤ì¹­ ì´ë¯¸ì§€
+//		//pf.setPosition(CGPoint.make(75.0f, mm.getAnchorPoint().y+1f)); // ì •ì‚¬ì´ì¦ˆ ì´ë¯¸ì§€ ë‚˜ì™”ì„ì‹œ ìµœì¢… ìœ„ì¹˜ ì´ë™ í•„ìš”
+//		pictureFrame.setPosition(pictureFrame.getContentSize().width*2, mm.getContentSize().height/2); // CGpointë‘ ë¬´ìŠ¨ ì°¨ì¸ì§€....
 //		//pf.setAnchorPoint(0.5f, 0f);
 //		pictureFrame.setScale(0.8f);
 //		mm.addChild(pictureFrame);
 //		mo.addChild(pictureFrame);
 //		
-//		// ÀÌ¸§Àº ½ºÆ®¸µÀ¸·Î db¿¡¼­ ¹ŞÀ»°Í
-//		CCLabel  myName = CCLabel.makeLabel("³ª±æµ¿", "Arial", 30.0f);
+//		// ì´ë¦„ì€ ìŠ¤íŠ¸ë§ìœ¼ë¡œ dbì—ì„œ ë°›ì„ê²ƒ
+//		CCLabel  myName = CCLabel.makeLabel("ë‚˜ê¸¸ë™", "Arial", 30.0f);
 //		myName.setPosition(CGPoint.make(250.0f, mm.getContentSize().height/2));
 //		mm.addChild(myName);
 //		
-//		myName = CCLabel.makeLabel("³Ê±æµ¿", "Arial", 30.0f);
+//		myName = CCLabel.makeLabel("ë„ˆê¸¸ë™", "Arial", 30.0f);
 //		myName.setPosition(CGPoint.make(250.0f, mo.getContentSize().height/2));
 //		mo.addChild(myName);
-//		// ----  ´ëÀü ³ª & »ó´ë --------//
+//		// ----  ëŒ€ì „ ë‚˜ & ìƒëŒ€ --------//
 //		
-//		illust = CCSprite.sprite("randomMatchingBottomIllust.png"); // Ä«¿îÆ® ´Ù¿î ¹è°æ
+//		illust = CCSprite.sprite("randomMatchingBottomIllust.png"); // ì¹´ìš´íŠ¸ ë‹¤ìš´ ë°°ê²½
 //		illust.setPosition(
 //				bb.getContentSize().width/2 - 4.0f, 
 //				illust.getContentSize().height/2 + 20.0f);
 //		bb.addChild(illust);
 //
-//		countdownNumber1 = CCSprite.sprite("n01.png"); // Ä«¿îÆ® 1
+//		countdownNumber1 = CCSprite.sprite("n01.png"); // ì¹´ìš´íŠ¸ 1
 //		countdownNumber1.setPosition(
 //				illust.getContentSize().width/2, 
 //				illust.getContentSize().height/2);
 //		illust.addChild(countdownNumber1);
 //		countdownNumber1.setVisible(false);
 //
-//		countdownNumber2 = CCSprite.sprite("n02.png"); // Ä«¿îÆ® 2
+//		countdownNumber2 = CCSprite.sprite("n02.png"); // ì¹´ìš´íŠ¸ 2
 //		countdownNumber2.setPosition(
 //				illust.getContentSize().width/2, 
 //				illust.getContentSize().height/2);
 //		illust.addChild(countdownNumber2);
 //		countdownNumber2.setVisible(false);
 //		
-//		countdownNumber3 = CCSprite.sprite("n03.png"); // Ä«¿îÆ® 3
+//		countdownNumber3 = CCSprite.sprite("n03.png"); // ì¹´ìš´íŠ¸ 3
 //		countdownNumber3.setPosition(
 //				illust.getContentSize().width/2, 
 //				illust.getContentSize().height/2);
 //		illust.addChild(countdownNumber3);
 //		countdownNumber3.setVisible(false);
 //		
-//		countdownNumber4 = CCSprite.sprite("n04.png"); // Ä«¿îÆ® 4
+//		countdownNumber4 = CCSprite.sprite("n04.png"); // ì¹´ìš´íŠ¸ 4
 //		countdownNumber4.setPosition(
 //				illust.getContentSize().width/2, 
 //				illust.getContentSize().height/2);
 //		illust.addChild(countdownNumber4);
 //		countdownNumber4.setVisible(false);
 //		
-//		countdownNumber5 = CCSprite.sprite("n05.png"); // Ä«¿îÆ® 5
+//		countdownNumber5 = CCSprite.sprite("n05.png"); // ì¹´ìš´íŠ¸ 5
 //		countdownNumber5.setPosition(
 //				illust.getContentSize().width/2, 
 //				illust.getContentSize().height/2);
@@ -291,28 +291,28 @@ public class GameRandom extends CCLayer {
 //		
 //		
 //		
-//		// ----  °Ô½ÃÆÇ Æ² --------//
-//		CCSprite boardFrame = CCSprite.sprite("frameMatching.png"); // °Ô½ÃÆÇ 
+//		// ----  ê²Œì‹œíŒ í‹€ --------//
+//		CCSprite boardFrame = CCSprite.sprite("frameMatching.png"); // ê²Œì‹œíŒ 
 //		boardFrame.setPosition(bb.getContentSize().width/2+5f, bb.getContentSize().height/2+20f);
 //
-//		CCSprite titlePanel = CCSprite.sprite("frame-titlePanel.png"); // °Ô½ÃÆÇ ¸íÆĞ 
+//		CCSprite titlePanel = CCSprite.sprite("frame-titlePanel.png"); // ê²Œì‹œíŒ ëª…íŒ¨ 
 //		titlePanel.setPosition(boardFrame.getContentSize().width/2, boardFrame.getContentSize().height-100.0f);
 //		
-//		CCSprite frameTitle = CCSprite.sprite("random-titleKo.png"); // °Ô½ÃÆÇ ¸í(·£´ı¸ÅÄª ¼±ÅÃ)
+//		CCSprite frameTitle = CCSprite.sprite("random-titleKo.png"); // ê²Œì‹œíŒ ëª…(ëœë¤ë§¤ì¹­ ì„ íƒ)
 //		frameTitle.setPosition(titlePanel.getContentSize().width/2,titlePanel.getContentSize().height/2+2f);
 //		
-//		this.addChild(bg); // ¹é±×¶ó¿îµå
+//		this.addChild(bg); // ë°±ê·¸ë¼ìš´ë“œ
 //		
-//		titlePanel.addChild(frameTitle); // ¸íÆĞ¿¡ °Ô½ÃÆÇ¸í ºÙÀÌ±â
-//		boardFrame.addChild(titlePanel); // °Ô½ÃÆÇ¿¡ ¸íÆĞ ºÙÀÌ±â
-//		bb.addChild(boardFrame, 2); // ¹éº¸µå¿¡ °Ô½ÃÆÇ(Æ²) ºÙÀÌ±â
-//		this.addChild(bb); // layer¿¡ ¹éº¸µåºÙºÙ
+//		titlePanel.addChild(frameTitle); // ëª…íŒ¨ì— ê²Œì‹œíŒëª… ë¶™ì´ê¸°
+//		boardFrame.addChild(titlePanel); // ê²Œì‹œíŒì— ëª…íŒ¨ ë¶™ì´ê¸°
+//		bb.addChild(boardFrame, 2); // ë°±ë³´ë“œì— ê²Œì‹œíŒ(í‹€) ë¶™ì´ê¸°
+//		this.addChild(bb); // layerì— ë°±ë³´ë“œë¶™ë¶™
 //		
 //		}
 	
 	
 //	
-//	// scene ÀÌµ¿ ¸Ş´º
+//	// scene ì´ë™ ë©”ë‰´
 //	private void setSceneMenu(){
 //		
 //		CCMenuItemImage frameButtonBack = CCMenuItemImage.item(
@@ -336,7 +336,7 @@ public class GameRandom extends CCLayer {
 //	}
 
 /*
-	// °ÔÀÓ ¸Ş´º
+	// ê²Œì„ ë©”ë‰´
 	private void setGameMenu(){
 		
 		CCMenuItemImage button1 = CCMenuItemImage.item(
@@ -359,12 +359,12 @@ public class GameRandom extends CCLayer {
 		CCMenuItem[] gameItems = { button1, button2 };
 		CCMenu gameMenu = CCMenu.menu(gameItems);
 
-		button1.setPosition(0f,-button1.getContentSize().height*0.5f); // ·£´ı¸ÅÄª
-		button2.setPosition(0f,-button1.getContentSize().height*1.5f); // °ÔÀÓ½ÃÀÛ
+		button1.setPosition(0f,-button1.getContentSize().height*0.5f); // ëœë¤ë§¤ì¹­
+		button2.setPosition(0f,-button1.getContentSize().height*1.5f); // ê²Œì„ì‹œì‘
 		gameMenu.setPosition(CGPoint.ccp(bb.getContentSize().width/2,bb.getContentSize().height/2-33f));
 		
 		bb.addChild(gameMenu, 1);
-		this.addChild(bb); // ¹éº¸µå
+		this.addChild(bb); // ë°±ë³´ë“œ
 	}
 
 	*/
@@ -380,7 +380,7 @@ public class GameRandom extends CCLayer {
 //	}
 	
 //	
-//	// °ÔÀÓ ¸Ş´º
+//	// ê²Œì„ ë©”ë‰´
 //	public void setMatchingMenu(){
 //	/*	
 //		CCMenuItemSprite button1 = CCMenuItemSprite.item(
@@ -397,7 +397,7 @@ public class GameRandom extends CCLayer {
 ////		CCMenu gameMenu = CCMenu.menu(gameItems);
 //		CCMenu gameMenu = CCMenu.menu(button1);
 //
-//		button1.setPosition(button1.getContentSize().width/2,button1.getContentSize().height/2); // ·£´ı¸ÅÄª
+//		button1.setPosition(button1.getContentSize().width/2,button1.getContentSize().height/2); // ëœë¤ë§¤ì¹­
 //		gameMenu.setPosition(CGPoint.ccp(0.0f, button1.getContentSize().height/2));
 //		addChild(gameMenu);
 //	}
@@ -417,8 +417,8 @@ public class GameRandom extends CCLayer {
 	    }
 	}
 	
-	String userName = "_À¯Àú";
-	String oppenentName = "_»ó´ë";
+	String userName = "_ìœ ì €";
+	String oppenentName = "_ìƒëŒ€";
 	CCSprite player1Photo = null;
 	CCSprite player2Photo = null;
 	
@@ -434,9 +434,9 @@ public class GameRandom extends CCLayer {
 					oppenentName = friend.getName();
 					Bitmap userPhoto = getBitmapFromURL("https://graph.facebook.com/" + friend.getId() +"/picture");
 					if (userPhoto.getRowBytes() < 100) {
-						player2Photo= CCSprite.sprite(commonfolder + "noPicture.png"); // ÇÁ·ÎÇÊ »çÁø
+						player2Photo= CCSprite.sprite(commonfolder + "noPicture.png"); // í”„ë¡œí•„ ì‚¬ì§„
 					} else {
-						player2Photo= CCSprite.sprite(userPhoto); // ÇÁ·ÎÇÊ »çÁø
+						player2Photo= CCSprite.sprite(userPhoto); // í”„ë¡œí•„ ì‚¬ì§„
 					}
 					break;
 				}
@@ -450,9 +450,9 @@ public class GameRandom extends CCLayer {
 					player2Photo = player1Photo;
 					Bitmap userPhoto = getBitmapFromURL("https://graph.facebook.com/" + friend.getId() +"/picture");
 					if (userPhoto.getRowBytes() < 100) {
-						player1Photo= CCSprite.sprite(commonfolder + "noPicture.png"); // ÇÁ·ÎÇÊ »çÁø
+						player1Photo= CCSprite.sprite(commonfolder + "noPicture.png"); // í”„ë¡œí•„ ì‚¬ì§„
 					} else {
-						player1Photo= CCSprite.sprite(userPhoto); // ÇÁ·ÎÇÊ »çÁø
+						player1Photo= CCSprite.sprite(userPhoto); // í”„ë¡œí•„ ì‚¬ì§„
 					}
 					break;
 				}
@@ -464,9 +464,9 @@ public class GameRandom extends CCLayer {
 					player1Label.setString(userName);
 					player2Label.setString(oppenentName);
 					
-//					player1Photo // ÀÌ¹ÌÁö°¡ ¾Èµé¾î°¨. ¼öÁ¤ ¿äÇÔ inviteµµ ÀÛ¾÷ÇÒ°Í.
+//					player1Photo // ì´ë¯¸ì§€ê°€ ì•ˆë“¤ì–´ê°. ìˆ˜ì • ìš”í•¨ inviteë„ ì‘ì—…í• ê²ƒ.
 					
-					//ÀÓ½Ã·Î ¸·À½.
+					//ì„ì‹œë¡œ ë§‰ìŒ.
 //					CCSprite parent1 = (CCSprite) bg.getChildByTag(0).getChildByTag(10).getChildByTag(100);
 //					parent1.removeAllChildren(true);
 //					parent1.addChild(player1Photo, 0, 1000);
@@ -494,7 +494,7 @@ public class GameRandom extends CCLayer {
 		CCScene scene;
 		try {
 			userData.difficulty = 0;
-			NetworkController.getInstance().sendRequestMatch(userData.difficulty); // ³­ÀÌµµ ÁÖÀÔ
+			NetworkController.getInstance().sendRequestMatch(userData.difficulty); // ë‚œì´ë„ ì£¼ì…
 //			if (this.mode == 3) {
 			scene = GameDifficulty.scene();
 //			} else if (this.mode == 4) {
@@ -512,8 +512,8 @@ public class GameRandom extends CCLayer {
 	public void homeCallback(Object sender) {
 		try {
 			userData.difficulty = 0;
-			NetworkController.getInstance().sendRoomOwner(0); // ¹æÀå ±ÇÇÑ
-			NetworkController.getInstance().sendRequestMatch(userData.difficulty); // ³­ÀÌµµ ÁÖÀÔ
+			NetworkController.getInstance().sendRoomOwner(0); // ë°©ì¥ ê¶Œí•œ
+			NetworkController.getInstance().sendRequestMatch(userData.difficulty); // ë‚œì´ë„ ì£¼ì…
 			CCScene scene = Home.scene();
 			CCDirector.sharedDirector().replaceScene(scene);
 			Log.e("CallBack", "HomeLayer");
@@ -531,7 +531,7 @@ public class GameRandom extends CCLayer {
 		} else {
 			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
 				public void run() {
-					Toast.makeText(mContext, "ºøÀÚ·ç°¡ ºÎÁ·ÇÕ´Ï´Ù.", Toast.LENGTH_SHORT)
+					Toast.makeText(mContext, "ë¹—ìë£¨ê°€ ë¶€ì¡±í•©ë‹ˆë‹¤.", Toast.LENGTH_SHORT)
 							.show();
 				}
 			});
@@ -539,7 +539,7 @@ public class GameRandom extends CCLayer {
 		Log.e("CallBack", "GameLayer");
 	}
 	
-	// ½Ã°£µµ ¾øÀ¸´Ï ±×³É ¸·ÄÚµùÇÔ.
+	// ì‹œê°„ë„ ì—†ìœ¼ë‹ˆ ê·¸ëƒ¥ ë§‰ì½”ë”©í•¨.
 	public void count(float dt) {
 		
 //		Log.e("count", "" + count);

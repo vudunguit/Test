@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,8 +57,8 @@ public class InviteScroll extends CCColorLayer{
 	}
 	
 	String friendBackBoardString = invitefolder + "invite-listPanel.png";
-	final int width = 470; // ¸®½ºÆ® °ø°£ Æø 460
-	final int height = (int) CCSprite.sprite(friendBackBoardString).getContentSize().height +3; // ¸®½ºÆ® ³ôÀÌ 78
+	final int width = 470; // ë¦¬ìŠ¤íŠ¸ ê³µê°„ í­ 460
+	final int height = (int) CCSprite.sprite(friendBackBoardString).getContentSize().height +3; // ë¦¬ìŠ¤íŠ¸ ë†’ì´ 78
 	int max_items = 4;
 	final int base_tag = 100;
 	int seperatorWeight = 3;
@@ -126,17 +126,17 @@ public class InviteScroll extends CCColorLayer{
 		
 		
 		/*******************************************************/
-		/** ¹®Á¦ÁöÁ¡ 
+		/** ë¬¸ì œì§€ì  
 		 * 
-		 * ½ºÅ©·Ñºä scroll view
+		 * ìŠ¤í¬ë¡¤ë·° scroll view
 		 * 
-		 * °ÔÀÓ ¼³Ä¡µÈ facebook Ä£±¸µé Áß ÃÊ´ë°ÅºÎ À¯Àú´Â ¸®½ºÆ®¿¡¼­ Á¦¿Ü
-		 * ÀÌ¸§¼ø Á¤·Ä
+		 * ê²Œì„ ì„¤ì¹˜ëœ facebook ì¹œêµ¬ë“¤ ì¤‘ ì´ˆëŒ€ê±°ë¶€ ìœ ì €ëŠ” ë¦¬ìŠ¤íŠ¸ì—ì„œ ì œì™¸
+		 * ì´ë¦„ìˆœ ì •ë ¬
 		 * 
  		 *  **/
 		int count = 0;
 		for (Profile friend : friends) {
-			// Ä£±¸ ¸®½ºÆ®
+			// ì¹œêµ¬ ë¦¬ìŠ¤íŠ¸
 			CCSprite inviteBackBoard = CCSprite.sprite(friendBackBoardString);
 			this.addChild(inviteBackBoard);
 			inviteBackBoard.setPosition(
@@ -145,7 +145,7 @@ public class InviteScroll extends CCColorLayer{
 			inviteBackBoard.setAnchorPoint(0.5f, 1);
 			setFriendInvitionMenu(inviteBackBoard, friend.getName(), friend.getId(), count + 1);
 			count ++;
-			if (count > 9)  // ÀÓ½Ã·Î ¸·À½ 10¸í±îÁö¸¸ ¹Ş°Ô ÀÌ»ç´Ô Ä£±¸ºĞµé ¸¹¾Æ¼­ ¿À·¡°É¸².
+			if (count > 9)  // ì„ì‹œë¡œ ë§‰ìŒ 10ëª…ê¹Œì§€ë§Œ ë°›ê²Œ ì´ì‚¬ë‹˜ ì¹œêµ¬ë¶„ë“¤ ë§ì•„ì„œ ì˜¤ë˜ê±¸ë¦¼.
 				break;
 		}
 		/*******************************************************/
@@ -198,37 +198,37 @@ public class InviteScroll extends CCColorLayer{
 		
 	}
 	
-	//Ä£±¸ ÃÊ´ë ¸Ş´º
-	// facebookÄ£±¸´Â network¸¦ ÅëÇØ ¹ŞÀ» °Í
+	//ì¹œêµ¬ ì´ˆëŒ€ ë©”ë‰´
+	// facebookì¹œêµ¬ëŠ” networkë¥¼ í†µí•´ ë°›ì„ ê²ƒ
 	private void setFriendInvitionMenu(CCSprite parentSprite, String friendName, String friendID, int ranking){
 		
 		if (friendName.length() > 11) {
 			friendName = friendName.substring(0, 10) + "..";
 		}
 		
-		// ÀÌ¹ÌÁöÆ²
+		// ì´ë¯¸ì§€í‹€
 		CCSprite friendImage = CCSprite.sprite(commonfolder + "frame-pictureFrame-hd.png");
 		parentSprite.addChild(friendImage);
 		friendImage.setScale(0.8f);
 		friendImage.setPosition(50.0f, parentSprite.getContentSize().height / 2);
 
 		
-		// »ç¿ëÀÚ ÀÌ¹ÌÁö URL
+		// ì‚¬ìš©ì ì´ë¯¸ì§€ URL
 //		String imageUrl = "https://graph.facebook.com/" + friendID + "/picture"; 
 ////		Log.e("Home", "facebookFriendsInfo : " + imageUrl);
-//		CCSprite userImage= CCSprite.sprite(getBitmapFromURL(imageUrl)); // ÇÁ·ÎÇÊ »çÁø
+//		CCSprite userImage= CCSprite.sprite(getBitmapFromURL(imageUrl)); // í”„ë¡œí•„ ì‚¬ì§„
 //		
 		
-		Bitmap userPhoto = getBitmapFromURL("https://graph.facebook.com/" + friendID +"/picture");  // ÀÌ»ç´Ô Ä£±¸¿ë ÀÓ½Ã ÁÖ¼®
-		Log.e("InviteScroll","userPhoto_Bytes : " + userPhoto.getRowBytes());  // ÀÌ»ç´Ô Ä£±¸¿ë ÀÓ½Ã ÁÖ¼®
+		Bitmap userPhoto = getBitmapFromURL("https://graph.facebook.com/" + friendID +"/picture");  // ì´ì‚¬ë‹˜ ì¹œêµ¬ìš© ì„ì‹œ ì£¼ì„
+		Log.e("InviteScroll","userPhoto_Bytes : " + userPhoto.getRowBytes());  // ì´ì‚¬ë‹˜ ì¹œêµ¬ìš© ì„ì‹œ ì£¼ì„
 		//
 		CCSprite userImage;
-		if (userPhoto.getRowBytes() < 100) {  // ÀÌ»ç´Ô Ä£±¸¿ë ÀÓ½Ã ÁÖ¼®
+		if (userPhoto.getRowBytes() < 100) {  // ì´ì‚¬ë‹˜ ì¹œêµ¬ìš© ì„ì‹œ ì£¼ì„
 //		if (userPhoto == null) {
-			userImage= CCSprite.sprite(commonfolder + "noPicture.png"); // ÇÁ·ÎÇÊ »çÁø
-		} else {  // ÀÌ»ç´Ô Ä£±¸¿ë ÀÓ½Ã ÁÖ¼®
-			userImage= CCSprite.sprite(userPhoto); // ÇÁ·ÎÇÊ »çÁø  // ÀÌ»ç´Ô Ä£±¸¿ë ÀÓ½Ã ÁÖ¼®
-		}  // ÀÌ»ç´Ô Ä£±¸¿ë ÀÓ½Ã ÁÖ¼®
+			userImage= CCSprite.sprite(commonfolder + "noPicture.png"); // í”„ë¡œí•„ ì‚¬ì§„
+		} else {  // ì´ì‚¬ë‹˜ ì¹œêµ¬ìš© ì„ì‹œ ì£¼ì„
+			userImage= CCSprite.sprite(userPhoto); // í”„ë¡œí•„ ì‚¬ì§„  // ì´ì‚¬ë‹˜ ì¹œêµ¬ìš© ì„ì‹œ ì£¼ì„
+		}  // ì´ì‚¬ë‹˜ ì¹œêµ¬ìš© ì„ì‹œ ì£¼ì„
 		
 		friendImage.addChild(userImage);
 		userImage.setAnchorPoint(0.5f, 0.5f);
@@ -290,16 +290,16 @@ public class InviteScroll extends CCColorLayer{
 		
 		
 		/*******************************************************/
-		/** ¹®Á¦ÁöÁ¡ 
+		/** ë¬¸ì œì§€ì  
 		 * 
 		 * scroll view
 		 * 
-		 * ¹öÆ°À» ´­·¶À»½Ã ½ºÅ©·Ñ ÀüÃ¼ ºñÈ°¼º ¶Ç´Â ¹öÆ°µé¸¸ ºñÈ°¼ºÈ­
-		 * (¿©·¯»ç¶÷À» ÇÑ¹ø¿¡ ÃÊ´ëÇÏ´Â°ÍÀ» ¸·±âÀ§ÇØ)
-		 * message°¡ µé¾î¿À¸é ´Ù½Ã È°¼ºÈ­(ÃÊ´ë¿¡ °ÅºÎ½Ã ´Ù½Ã ÃÊ´ëÇÏ±â À§ÇØ)
+		 * ë²„íŠ¼ì„ ëˆŒë €ì„ì‹œ ìŠ¤í¬ë¡¤ ì „ì²´ ë¹„í™œì„± ë˜ëŠ” ë²„íŠ¼ë“¤ë§Œ ë¹„í™œì„±í™”
+		 * (ì—¬ëŸ¬ì‚¬ëŒì„ í•œë²ˆì— ì´ˆëŒ€í•˜ëŠ”ê²ƒì„ ë§‰ê¸°ìœ„í•´)
+		 * messageê°€ ë“¤ì–´ì˜¤ë©´ ë‹¤ì‹œ í™œì„±í™”(ì´ˆëŒ€ì— ê±°ë¶€ì‹œ ë‹¤ì‹œ ì´ˆëŒ€í•˜ê¸° ìœ„í•´)
 		 * 
  		 *  **/
-		// ÃÊ´ë ¹öÆ°
+		// ì´ˆëŒ€ ë²„íŠ¼
 		inviteButton = CCMenuItemImage.item(
 				Utility.getInstance().getNameWithIsoCodeSuffix(invitefolder + "invite-button1.png"),
 				Utility.getInstance().getNameWithIsoCodeSuffix(invitefolder + "invite-button2.png"),
@@ -404,36 +404,36 @@ public class InviteScroll extends CCColorLayer{
 //		}
 //		Log.e("inviteScroll", "friendName - after : " + friendName);
 //		
-//		CCSprite rankingImg = CCSprite.sprite(folder + medalColor + .png"); // ¸Ş´Ş ±×¸²
+//		CCSprite rankingImg = CCSprite.sprite(folder + medalColor + .png"); // ë©”ë‹¬ ê·¸ë¦¼
 //		parentSprite.addChild(rankingImg);
 //		rankingImg.setAnchorPoint(0.5f, 0.5f);
 //		rankingImg.setPosition(
 //				10 + rankingImg.getContentSize().width / 2, 
 //				(parentSprite.getContentSize().height - seperatorWeight) / 2.0f + seperatorWeight);
 //		
-//		CCLabel  rankingNumber = CCLabel.makeLabel("" + ranking, "Arial", 25.0f); // ¼øÀ§ ¹øÈ£
+//		CCLabel  rankingNumber = CCLabel.makeLabel("" + ranking, "Arial", 25.0f); // ìˆœìœ„ ë²ˆí˜¸
 //		rankingImg.addChild(rankingNumber);
 //		rankingNumber.setColor(medalNumberColor);
 //		rankingNumber.setPosition(
 //				rankingImg.getContentSize().width / 2,rankingImg.getContentSize().height / 2);
 //		
-//		CCSprite profilePicture= CCSprite.sprite(commonfolder + "frame-pictureFrame-hd.png"); // ·©Ä¿ ÇÁ·ÎÇÊ »çÁø
+//		CCSprite profilePicture= CCSprite.sprite(commonfolder + "frame-pictureFrame-hd.png"); // ë­ì»¤ í”„ë¡œí•„ ì‚¬ì§„
 //		parentSprite.addChild(profilePicture);
 //		profilePicture.setPosition(
 //				rankingImg.getPosition().x + rankingImg.getContentSize().width * rankingImg.getAnchorPoint().x + 10 +
 //				profilePicture.getContentSize().width * profilePicture.getAnchorPoint().x,
 //				rankingImg.getPosition().y);
 //		
-//		// »ç¿ëÀÚ ÀÌ¹ÌÁö URL
+//		// ì‚¬ìš©ì ì´ë¯¸ì§€ URL
 //		String imageUrl = "https://graph.facebook.com/" + friendID + "/picture"; 
 //		Log.e("Home", "facebookFriendsInfo : " + imageUrl);
-//		CCSprite userImage= CCSprite.sprite(getBitmapFromURL(imageUrl)); // ÇÁ·ÎÇÊ »çÁø
+//		CCSprite userImage= CCSprite.sprite(getBitmapFromURL(imageUrl)); // í”„ë¡œí•„ ì‚¬ì§„
 //		profilePicture.addChild(userImage);
 //		userImage.setAnchorPoint(0.5f, 0.5f);
 //		userImage.setPosition(profilePicture.getContentSize().width / 2, profilePicture.getContentSize().height / 2);
 //		
-//		// facebook friend¿¡¼­ ¹Ş¾Æ¿Ã°Í
-//		CCLabel  rankersName = CCLabel.makeLabel(friendName + " ", "Arial", 30.0f); // ·©Ä¿ ÀÌ¸§
+//		// facebook friendì—ì„œ ë°›ì•„ì˜¬ê²ƒ
+//		CCLabel  rankersName = CCLabel.makeLabel(friendName + " ", "Arial", 30.0f); // ë­ì»¤ ì´ë¦„
 //		parentSprite.addChild(rankersName);
 //		rankersName.setAnchorPoint(0, 0.5f);
 //		rankersName.setPosition(
@@ -442,8 +442,8 @@ public class InviteScroll extends CCColorLayer{
 //				(parentSprite.getContentSize().height - rankersName.getContentSize().height * 2 - seperatorWeight) / 3
 //				);
 //		
-//		// db¿¡¼­ ¹Ş¾Æ¿Ã °Í
-//		CCLabel  rankersScore = CCLabel.makeLabel("760,000", "Arial", 30.0f); // ·©Ä¿ Á¡¼ö
+//		// dbì—ì„œ ë°›ì•„ì˜¬ ê²ƒ
+//		CCLabel  rankersScore = CCLabel.makeLabel("760,000", "Arial", 30.0f); // ë­ì»¤ ì ìˆ˜
 //		parentSprite.addChild(rankersScore);
 //		rankersScore.setAnchorPoint(0, 0.5f);
 //		rankersScore.setPosition(
@@ -454,12 +454,12 @@ public class InviteScroll extends CCColorLayer{
 //	
 //	private void friendGiftButton(CCSprite parentSprite) {
 //
-//		CCMenuItem giftBoxPopup = CCMenuItemImage.item(  // ¼±¹° »óÀÚ ÆË¾÷
+//		CCMenuItem giftBoxPopup = CCMenuItemImage.item(  // ì„ ë¬¼ ìƒì íŒì—…
 //				folder + "home-giftboxOn-hd.png",  
 //				folder + "home-giftboxOff-hd.png",
 //				this,"giftBoxCallback");
 //	    
-//		CCMenuItem broomstickPopup = CCMenuItemImage.item(  // ºøÀÚ·ç ÆË¾÷
+//		CCMenuItem broomstickPopup = CCMenuItemImage.item(  // ë¹—ìë£¨ íŒì—…
 //				folder + 	"home-broomStickBigOn-hd.png",
 //				folder + 	"home-broomstickBigOff-hd.png", 				 
 //				this,"broomStickGiftCallback");
@@ -482,7 +482,7 @@ public class InviteScroll extends CCColorLayer{
 //	}
 //	
 //	
-//	// ¹é º¸µå ¼³Á¤
+//	// ë°± ë³´ë“œ ì„¤ì •
 //	private void setBackBoardMenu(String imageFullPath) {
 //		bb = CCSprite.sprite(imageFullPath);
 //		bg.addChild(bb);
@@ -494,7 +494,7 @@ public class InviteScroll extends CCColorLayer{
 //	
 //
 //	private void userInfo(CCSprite baseSprite) {
-//		CCSprite profileBg = CCSprite.sprite(folder + "home-profileBg-hd.png"); // ÇÁ·ÎÇÊ ¹é±×
+//		CCSprite profileBg = CCSprite.sprite(folder + "home-profileBg-hd.png"); // í”„ë¡œí•„ ë°±ê·¸
 //		baseSprite.addChild(profileBg);
 //		profileBg.setPosition(
 //				baseSprite.getContentSize().width / 2, 
@@ -502,23 +502,23 @@ public class InviteScroll extends CCColorLayer{
 //		
 //		Log.e("Home", "userInfo : " + imageUrl);
 //		
-//		CCSprite profilePicture= CCSprite.sprite(commonfolder + "frame-pictureFrame-hd.png"); // ÇÁ·ÎÇÊ »çÁø Æ²
+//		CCSprite profilePicture= CCSprite.sprite(commonfolder + "frame-pictureFrame-hd.png"); // í”„ë¡œí•„ ì‚¬ì§„ í‹€
 //		profilePicture.setPosition(
 //				profilePicture.getContentSize().width / 2 + 85, 
 //				profileBg.getContentSize().height-60.0f);
 //		
-//		CCMenuItem post = CCMenuItemImage.item(  // ¿ìÆí
+//		CCMenuItem post = CCMenuItemImage.item(  // ìš°í¸
 //				folder + "home-mail-hd.png", 
 //				folder + "home-mail-hd.png", 				 
 //				this,"postCallback");
 //		post.setAnchorPoint(1.0f, 0.5f);
 //		
-//		CCSprite userImage= CCSprite.sprite(getBitmapFromURL(imageUrl)); // ÇÁ·ÎÇÊ »çÁø
+//		CCSprite userImage= CCSprite.sprite(getBitmapFromURL(imageUrl)); // í”„ë¡œí•„ ì‚¬ì§„
 //		profilePicture.addChild(userImage);
 //		userImage.setAnchorPoint(0.5f, 0.5f);
 //		userImage.setPosition(profilePicture.getContentSize().width / 2, profilePicture.getContentSize().height / 2);
 //		
-//		CCSprite newIcon = CCSprite.sprite(folder + "home-mailNew-hd01.png"); // »õ·Î¿î ¿ìÆí
+//		CCSprite newIcon = CCSprite.sprite(folder + "home-mailNew-hd01.png"); // ìƒˆë¡œìš´ ìš°í¸
 //		newIcon.setPosition(
 //				post.getContentSize().width/2, 
 //				post.getContentSize().height);
@@ -535,26 +535,26 @@ public class InviteScroll extends CCColorLayer{
 //		
 //		
 //		
-//		CCSprite levelProgressBar = CCSprite.sprite(folder + "home-progressBar-hd.png"); // ·¹º§ ÇÁ·Î±×·¹½º ¹Ù
+//		CCSprite levelProgressBar = CCSprite.sprite(folder + "home-progressBar-hd.png"); // ë ˆë²¨ í”„ë¡œê·¸ë ˆìŠ¤ ë°”
 //		levelProgressBar.setPosition(
 //				profileBg.getContentSize().width/2+10f,
 //				levelProgressBar.getContentSize().height/2+25.0f);
 //
 //		
-//		CCLabel  ranking = CCLabel.makeLabel("7", "Arial", 30.0f); // ¼øÀ§
+//		CCLabel  ranking = CCLabel.makeLabel("7", "Arial", 30.0f); // ìˆœìœ„
 //		ranking.setPosition(
 //				ranking.getContentSize().width/2+55.0f, 
 //				profileBg.getContentSize().height-60.0f);
 //		
 //	
 //
-//		CCLabel  userName = CCLabel.makeLabel(userData.facebookUserInfo.getName(), "Arial", 30); // ÀÌ¸§
+//		CCLabel  userName = CCLabel.makeLabel(userData.facebookUserInfo.getName(), "Arial", 30); // ì´ë¦„
 //		userName.setPosition(
 //				profilePicture.getPosition().x + ((1 - profilePicture.getAnchorPoint().x) * profilePicture.getContentSize().width) + 12, 
 //				profileBg.getContentSize().height - userName.getContentSize().height / 2 - 20);
 //		userName.setAnchorPoint(0.0f, 0.5f);
 //
-//		CCLabel  score = CCLabel.makeLabel(userData.getPoint() + " ", "Arial", 30); // ÃÖ°í Á¡¼ö
+//		CCLabel  score = CCLabel.makeLabel(userData.getPoint() + " ", "Arial", 30); // ìµœê³  ì ìˆ˜
 //		score.setPosition(
 ////				levelProgressBar.getPosition().x + ((1 - levelProgressBar.getAnchorPoint().x) * levelProgressBar.getContentSize().width),
 ////				profileBg.getContentSize().height- score.getContentSize().height / 2 - 20.0f);
@@ -563,21 +563,21 @@ public class InviteScroll extends CCColorLayer{
 //				profileBg.getContentSize().height- score.getContentSize().height / 2 - 60.0f);
 //				score.setAnchorPoint(0.0f, 0.5f);
 //
-////		CCLabel  record = CCLabel.makeLabel("¿ª´ë ÀüÀû", "Arial", 20.0f); // ÀüÀû
+////		CCLabel  record = CCLabel.makeLabel("ì—­ëŒ€ ì „ì ", "Arial", 20.0f); // ì „ì 
 ////		record.setPosition(
 ////				userName.getPosition().x, 
 ////				profileBg.getContentSize().height- record.getContentSize().height/2-60.0f);
 ////		record.setAnchorPoint(0.0f, 0.5f);
 //		
-//				String Ko = "Àü,½Â,ÆĞ";
-//				String Ch = "îú,ã­,ø¨";
+//				String Ko = "ì „,ìŠ¹,íŒ¨";
+//				String Ch = "æˆ°,å‹,æ•—";
 //				String En = "Played,Won,Lost";
 //				
 //		CCLabel  recordData = CCLabel.makeLabel(
 //				"Played " + (userData.getHistory(0) +  userData.getHistory(1)) +
 //				" : W" + userData.getHistory(1) + 
 //				"/L" + userData.getHistory(0)
-//				,"Arial", 20.0f); // ÀüÀû °ª
+//				,"Arial", 20.0f); // ì „ì  ê°’
 //		recordData.setPosition(
 //				userName.getPosition().x,
 ////				profileBg.getContentSize().height - recordData.getContentSize().height / 2 - 85
@@ -585,19 +585,19 @@ public class InviteScroll extends CCColorLayer{
 //				);
 //		recordData.setAnchorPoint(0, 1);
 //		
-////		CCLabel  winningRate = CCLabel.makeLabel("½Â ·ü", "Arial", 20.0f); // ½Â·ü
+////		CCLabel  winningRate = CCLabel.makeLabel("ìŠ¹ ë¥ ", "Arial", 20.0f); // ìŠ¹ë¥ 
 ////		winningRate.setPosition(
 ////				winningRate.getContentSize().width/2+330.0f, 
 ////				profileBg.getContentSize().height- winningRate.getContentSize().height/2-60.0f);
 ////		score.setAnchorPoint(1.0f, 0.5f);
 //		
-////		CCLabel  winningRateData = CCLabel.makeLabel((int)(100 * userData.getHistory(1) / (userData.getHistory(1) + userData.getHistory(0)))+"%", "Arial", 20.0f); // ½Â·ü °ª
+////		CCLabel  winningRateData = CCLabel.makeLabel((int)(100 * userData.getHistory(1) / (userData.getHistory(1) + userData.getHistory(0)))+"%", "Arial", 20.0f); // ìŠ¹ë¥  ê°’
 ////		winningRateData.setPosition(
 ////				winningRateData.getContentSize().width/2+330.0f, 
 ////				profileBg.getContentSize().height- winningRateData.getContentSize().height/2-85.0f);
 ////		score.setAnchorPoint(1.0f, 0.5f);
 //		
-//		CCLabel  level = CCLabel.makeLabel("Lv"+""+" 1", "Arial", 40.0f); // ·¹º§
+//		CCLabel  level = CCLabel.makeLabel("Lv"+""+" 1", "Arial", 40.0f); // ë ˆë²¨
 //		level.setPosition(
 //				level.getContentSize().width/2+115.0f, 
 //				profileBg.getContentSize().height- level.getContentSize().height/2-110.0f);
@@ -666,7 +666,7 @@ public class InviteScroll extends CCColorLayer{
 //		int idTag = (int)(Long.parseLong(facebookId));
 //		a.getParent().getChildByTag(idTag).setVisible(true);
 		
-		// ³­ÀÌµµ´Â 1(½¬¿ò), 2(º¸Åë), 3(¾î·Á¿ò)
+		// ë‚œì´ë„ëŠ” 1(ì‰¬ì›€), 2(ë³´í†µ), 3(ì–´ë ¤ì›€)
 		try {
 		NetworkController.getInstance().sendRequestMatchInvite(GameData.share().getGameDifficulty(), facebookID);
 	} catch (IOException e) {

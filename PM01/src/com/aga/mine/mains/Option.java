@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.util.List;
 import java.util.Locale;
@@ -48,16 +48,16 @@ public class Option extends CCLayer {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
 		
-		//¹è°æ ±×¸² ¼³Á¤
+		//ë°°ê²½ ê·¸ë¦¼ ì„¤ì •
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
 		
 		setBackBoardMenu(
 				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "option-bb" + fileExtension));
 		setBoardFrameMenu(commonfolder + "frameGeneral-hd" + fileExtension);
 		
-		// »ó´Ü ¸Ş´º
+		// ìƒë‹¨ ë©”ë‰´
 		TopMenu2.setSceneMenu(this);
-		// ÇÏ´Ü ÀÌ¹ÌÁö
+		// í•˜ë‹¨ ì´ë¯¸ì§€
 		BottomImage.setBottomImage(this);
 
 		itemOver.setAnchorPoint(0,0);
@@ -65,7 +65,7 @@ public class Option extends CCLayer {
 		this.setIsTouchEnabled(true);
 	}
 	
-	// ¹é º¸µå ¼³Á¤
+	// ë°± ë³´ë“œ ì„¤ì •
 	private void setBackBoardMenu(String imageFullPath) {
 		CCSprite bb = CCSprite.sprite(imageFullPath);
 		bg.addChild(bb);
@@ -75,7 +75,7 @@ public class Option extends CCLayer {
 		setMainMenu(bb);
 	}
 
-	// °Ô½ÃÆÇ ¼³Á¤
+	// ê²Œì‹œíŒ ì„¤ì •
 	private void setBoardFrameMenu(String imageFullPath) {
 		CCSprite boardFrame = CCSprite.sprite(imageFullPath);
 		bg.addChild(boardFrame);
@@ -84,7 +84,7 @@ public class Option extends CCLayer {
 		FrameTitle2.setTitle(boardFrame, folder);
 	}
 
-	// ¸ŞÀÎ ¸Ş´º
+	// ë©”ì¸ ë©”ë‰´
 	private void setMainMenu(CCSprite parentSprite){
 		MainActivity mMainActivity = MainApplication.getInstance().getActivity();
 		
@@ -178,10 +178,10 @@ public class Option extends CCLayer {
 		
 		music.setAnchorPoint(0, 0);
 		
-		// ÀÌ¹ÌÁö µé¾î°¥ ÁÂÇ¥´Â ¾ÆÆ®ÆÀ¿¡¼­ Á» Áà¾ß ÀÛ¾÷ÇÏ´Âµ¥ ºü¸¦ÅÙµ¥...
+		// ì´ë¯¸ì§€ ë“¤ì–´ê°ˆ ì¢Œí‘œëŠ” ì•„íŠ¸íŒ€ì—ì„œ ì¢€ ì¤˜ì•¼ ì‘ì—…í•˜ëŠ”ë° ë¹ ë¥¼í…ë°...
 		music.setPosition(
-				radioButtonMenuPositions[i][0] + (padding / 2) + (onButton.getContentSize().width) + 29, // ÀÌ¹ÌÁö¿¡¼­ ±ÛÀÚ À§Ä¡ º¯°æ +29 
-				544 + (onButton.getContentSize().height / 2) - radioButtonMenuPositions[i][1] - 4) ; // ÀÌ¹ÌÁö¿¡¼­ ±ÛÀÚ À§Ä¡ º¯°æ -4
+				radioButtonMenuPositions[i][0] + (padding / 2) + (onButton.getContentSize().width) + 29, // ì´ë¯¸ì§€ì—ì„œ ê¸€ì ìœ„ì¹˜ ë³€ê²½ +29 
+				544 + (onButton.getContentSize().height / 2) - radioButtonMenuPositions[i][1] - 4) ; // ì´ë¯¸ì§€ì—ì„œ ê¸€ì ìœ„ì¹˜ ë³€ê²½ -4
 		}
 	}
 	

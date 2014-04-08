@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+ï»¿package com.aga.mine.mains;
 
 import java.util.Calendar;
 
@@ -36,17 +36,17 @@ public class HomeTop extends CCLayer{
 		setBottomMenu(parentSprite, imageFolder, nodeThis);
 	}
 
-	// »ó´Ü ¸Ş´º
+	// ìƒë‹¨ ë©”ë‰´
 	private void setTopMenu(CCSprite parentSprite, String imageFolder, CCNode nodeThis) {
 		
-		// ÁöÆÎÀÌ »óÁ¡ ¹Ù·Î°¡±â ¹è°æ(¹öÆ°)
+		// ì§€íŒ¡ì´ ìƒì  ë°”ë¡œê°€ê¸° ë°°ê²½(ë²„íŠ¼)
 		CCMenuItem broomstickBg = CCMenuItemImage.item(imageFolder
 				+ "home-broomstickBg-hd" + fileExtension, imageFolder
 				+ "home-broomstickBg-hd" + fileExtension, 
 				nodeThis, "clicked2");
 		broomstickBg.setTag(broomstickButton);
 		
-		// °ñµå »óÁ¡ ¹Ù·Î°¡±â ¹è°æ(¹öÆ°)
+		// ê³¨ë“œ ìƒì  ë°”ë¡œê°€ê¸° ë°°ê²½(ë²„íŠ¼)
 		CCMenuItem goldBg = CCMenuItemImage.item(
 				imageFolder + "home-goldBg-hd" + fileExtension,
 				imageFolder + "home-goldBg-hd" + fileExtension, 
@@ -66,7 +66,7 @@ public class HomeTop extends CCLayer{
 		broomstickBg.setPosition(broomstickBg.getContentSize().width / 2, 0f);
 		goldBg.setPosition(topMenu.getContentSize().width - goldBg.getContentSize().width/ 2, 0f);
 
-		 // ÁöÆÎÀÌ ±×¸²
+		 // ì§€íŒ¡ì´ ê·¸ë¦¼
 		CCSprite broomstickImg = CCSprite.sprite(imageFolder + "home-broomstickOn-hd" + fileExtension);
 		broomstickBg.addChild(broomstickImg);
 		broomstickImg.setPosition(
@@ -74,15 +74,15 @@ public class HomeTop extends CCLayer{
 				broomstickBg.getContentSize().height / 2);
 		
 
-		// ÁöÆÎÀÌ ¼ö·®
-		CCLabel broomstickEA = CCLabel.makeLabel("+" + FacebookData.getinstance().getDBData("ReceivedBroomstick"), "Arial", 24.0f); // ÁöÆÎÀÌ ¼ö·®
+		// ì§€íŒ¡ì´ ìˆ˜ëŸ‰
+		CCLabel broomstickEA = CCLabel.makeLabel("+" + FacebookData.getinstance().getDBData("ReceivedBroomstick"), "Arial", 24.0f); // ì§€íŒ¡ì´ ìˆ˜ëŸ‰
 		broomstickBg.addChild(broomstickEA);
 		broomstickEA.setAnchorPoint(0, 0.5f);
 		broomstickEA.setPosition(
 				broomstickImg.getPosition().x + ((1 - broomstickImg.getAnchorPoint().x) * broomstickImg.getContentSize().width) - 2, 
 				broomstickBg.getContentSize().height - broomstickEA.getContentSize().height / 2 - 5.0f);
 
-		 // ÁöÆÎÀÌ ¼ö·® Áõ°¡ (Ä«¿îÆ® ´Ù¿î)
+		 // ì§€íŒ¡ì´ ìˆ˜ëŸ‰ ì¦ê°€ (ì¹´ìš´íŠ¸ ë‹¤ìš´)
 		CCLabel broomstickTime = CCLabel.makeLabel("Loading...", "Arial", 20.0f);
 		broomstickBg.addChild(broomstickTime, 0, 2);
 		broomstickTime.setPosition(
@@ -90,7 +90,7 @@ public class HomeTop extends CCLayer{
 				broomstickTime.getContentSize().height / 2 + 5.0f);
 		broomstickTime.setAnchorPoint(1.0f, 0.5f);
 
-		// °ñµå
+		// ê³¨ë“œ
 		CCLabel gold = CCLabel.makeLabel(
 				new NumberComma().numberComma(FacebookData.getinstance().getDBData("Gold")), "Arial", 22.0f);
 		goldBg.addChild(gold);
@@ -100,7 +100,7 @@ public class HomeTop extends CCLayer{
 
 	private void setTitle(CCSprite parentSprite, String imageFolder) {
 		
-		// Å¸ÀÌÆ² ÆÇ³Ú
+		// íƒ€ì´í‹€ íŒë„¬
 		CCSprite titlePanel = CCSprite.sprite(commonfolder + "frame-titlePanel" + fileExtension);
 		parentSprite.addChild(titlePanel);
 		titlePanel.setAnchorPoint(0.5f, 0.5f);
@@ -108,20 +108,20 @@ public class HomeTop extends CCLayer{
 			parentSprite.getContentSize().width / 2,
 			parentSprite.getContentSize().height - 98);
 		
-		// Å¸ÀÌÆ²
+		// íƒ€ì´í‹€
 		CCSprite frameTitle = CCSprite.sprite(
 				Utility.getInstance().getNameWithIsoCodeSuffix(
 						imageFolder + imageFolder.substring(2, imageFolder.length()-1) + "-title" + fileExtension));
 		titlePanel.addChild(frameTitle);
 		frameTitle.setPosition(titlePanel.getContentSize().width / 2, titlePanel.getContentSize().height / 2);
 			
-		// °æ±â ±â°£ ¹è°æ
+		// ê²½ê¸° ê¸°ê°„ ë°°ê²½
 		CCSprite banner = CCSprite.sprite(commonfolder + "titlebanner" + fileExtension);
 		titlePanel.addChild(banner);
 		banner.setAnchorPoint(0.5f, 1);
 		banner.setPosition(titlePanel.getContentSize().width / 2, 10);
 
-		// ÁÖ°£¼øÀ§ ¸¶°¨ ³²Àº ½Ã°£
+		// ì£¼ê°„ìˆœìœ„ ë§ˆê° ë‚¨ì€ ì‹œê°„
 		CCLabel periodText = CCLabel.makeLabel(setInitTime() + " ", "Arial", 20);
 		banner.addChild(periodText);
 		periodText.setColor(ccColor3B.ccYELLOW);
@@ -148,20 +148,20 @@ public class HomeTop extends CCLayer{
 
 		String deadlineText = "";
 		if (day3 > 0) 
-			deadlineText = day3 + "ÀÏ ";
+			deadlineText = day3 + "ì¼ ";
 		if (hour3 > 0)
-			deadlineText += hour3 + "½Ã ";
+			deadlineText += hour3 + "ì‹œ ";
 		if (min3 > 0) 
-			deadlineText += min3 + "ºĞ ";
-		deadlineText += sec3 + "ÃÊ ÈÄ ¸¶°¨";
+			deadlineText += min3 + "ë¶„ ";
+		deadlineText += sec3 + "ì´ˆ í›„ ë§ˆê°";
 		return deadlineText;
 	}
 	
 	
-	// ÇÏ´Ü ¸Ş´º
+	// í•˜ë‹¨ ë©”ë‰´
 	private void setBottomMenu(CCSprite parentSprite, String imageFolder, CCNode nodeThis) {
 		
-		// ÁÂÃø ¹öÆ°(»óÁ¡)
+		// ì¢Œì¸¡ ë²„íŠ¼(ìƒì )
 		CCMenuItem button1 = SpriteSummery.menuItemBuilder(
 						imageFolder + "home-shopbutton1" + fileExtension,
 						Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "home-shoptext1" + fileExtension),
@@ -170,7 +170,7 @@ public class HomeTop extends CCLayer{
 						nodeThis, "clicked2");
 		button1.setTag(shopButton);
 		
-		//Áß¾Ó ¹öÆ°(ÀÔÀå)
+		//ì¤‘ì•™ ë²„íŠ¼(ì…ì¥)
 		CCMenuItem button2 = SpriteSummery.menuItemBuilder(
 				imageFolder + "home-enterbutton1" + fileExtension,
 				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "home-entertext1" + fileExtension),
@@ -179,7 +179,7 @@ public class HomeTop extends CCLayer{
 				nodeThis, "clicked2");
 		button2.setTag(enterButton);
 		
-		// ¿ìÃø ¹öÆ°(¼³Á¤)
+		// ìš°ì¸¡ ë²„íŠ¼(ì„¤ì •)
 		CCMenuItem button3 = SpriteSummery.menuItemBuilder(
 				imageFolder + "home-optionbutton1" + fileExtension,
 				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "home-optiontext1" + fileExtension),
@@ -200,7 +200,7 @@ public class HomeTop extends CCLayer{
 		button3.setPosition(winsize().width - 5, 30);
 		button3.setAnchorPoint(1, 0);
 		
-		// Ä£±¸ ÃÊ´ë ¹öÆ°
+		// ì¹œêµ¬ ì´ˆëŒ€ ë²„íŠ¼
 		CCMenuItem friendsInvite = SpriteSummery.menuItemBuilder(
 				imageFolder + "home-invitebutton1" + fileExtension,
 				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "home-invitetext1" + fileExtension),

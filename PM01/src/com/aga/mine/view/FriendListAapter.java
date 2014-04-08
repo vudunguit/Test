@@ -1,8 +1,9 @@
-package com.aga.mine.view;
+Ôªøpackage com.aga.mine.view;
 
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,37 +61,44 @@ public class FriendListAapter extends BaseAdapter {
 			holder.tvRanking = (TextView) convertView.findViewById(R.id.tvNumber);
 			holder.tvFBId = (TextView) convertView.findViewById(R.id.tvFBId);
 			holder.tvScore = (TextView) convertView.findViewById(R.id.tvScore);
+			
+			Log.e("FriendListAapter", "size : " + gameScore.size());
+			Log.e("FriendListAapter", "position : " + position + ", rankingID : " +gameScore.get(position).id + ", userID : " + user.getId());
+			//1-3Îì±: Í∏àÏùÄÎèô ÏïÑÏù¥ÏΩò, 4Îì±~ : no image Ï≤òÎ¶¨
+			switch(position) {
+			case 0: 
+				holder.imgNumber.setImageResource(R.drawable.home_circlegold_hd);
+				break;
+			case 1:
+				holder.imgNumber.setImageResource(R.drawable.home_circlesilver_hd);
+				break;
+			case 2:
+				holder.imgNumber.setImageResource(R.drawable.home_circlebronze_hd);
+				holder.tvRanking.setTextColor(Color.WHITE);
+				break;
+			default:
+				holder.imgNumber.setVisibility(View.INVISIBLE);
+				holder.tvRanking.setTextColor(Color.WHITE);
+				break;
+			}
+			
+			if (gameScore.get(position).id.equals(user.getId())) {
+				holder.imgGift.setVisibility(View.INVISIBLE);
+				holder.imgBroomstick.setVisibility(View.INVISIBLE);
+			}
+			
 			convertView.setTag(holder);
 		} else {
 			holder = (Viewholder) convertView.getTag();
 		}
 		
-		//1-3µÓ: ±›¿∫µø æ∆¿Ãƒ‹, 4µÓ~ : no image √≥∏Æ
-		switch(position) {
-		case 0: 
-			holder.imgNumber.setImageResource(R.drawable.home_circlegold_hd);
-			break;
-		case 1:
-			holder.imgNumber.setImageResource(R.drawable.home_circlesilver_hd);
-			break;
-		case 2:
-			holder.imgNumber.setImageResource(R.drawable.home_circlebronze_hd);
-			break;
-		default:
-			holder.imgNumber.setVisibility(View.INVISIBLE);
-			break;
-		}
-		
-		if (gameScore.get(position).id.equals(user.getId())) {
-			holder.imgGift.setVisibility(View.INVISIBLE);
-			holder.imgBroomstick.setVisibility(View.INVISIBLE);
-		}
+
 		
 		holder.tvRanking.setText(String.valueOf(position+1));
 		holder.tvFBId.setText(gameScore.get(position).name);
 		holder.tvScore.setText(String.valueOf(gameScore.get(position).score));
 		
-		//º±π∞ªÛ¿⁄ ≈¨∏Ø ¿Ã∫•∆Æ √≥∏Æ
+		//ÏÑ†Î¨ºÏÉÅÏûê ÌÅ¥Î¶≠ Ïù¥Î≤§Ìä∏ Ï≤òÎ¶¨
 		holder.imgGift.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -98,7 +106,7 @@ public class FriendListAapter extends BaseAdapter {
 			}
 		});
 		
-		//∫¯¿⁄∑Á ≈¨∏Ø ¿Ã∫•∆Æ √≥∏Æ
+		//ÎπóÏûêÎ£® ÌÅ¥Î¶≠ Ïù¥Î≤§Ìä∏ Ï≤òÎ¶¨
 		holder.imgBroomstick.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

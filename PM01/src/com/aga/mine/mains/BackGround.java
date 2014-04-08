@@ -1,4 +1,4 @@
-package com.aga.mine.mains;
+﻿package com.aga.mine.mains;
 
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCNode;
