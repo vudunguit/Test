@@ -140,7 +140,7 @@ public class Option extends CCLayer {
 		
 		CCMenu optionMenu = CCMenu.menu(guide, facebook, provision, more_apps);
 		parentSprite.addChild(optionMenu);
-		optionMenu.alignItemsVertically(0);
+		optionMenu.alignItemsVertically(-4);
 		optionMenu.setPosition(parentSprite.getContentSize().width / 2, guide.getContentSize().height * 2.6f);
 	}
 	

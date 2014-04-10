@@ -13,6 +13,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,39 +50,120 @@ public class MainActivity extends Activity {
     
     private RelativeLayout main;
     private ListView mListView;
-    private float frameGeneralWidth = 640;
-    private float frameGeneralHeight = 889;
-    private float homeListFrameLeftPosition = 90;
-    private float homeListFrameTopPosition = 368;
-    private float homeListFrameRightPosition = 100;
-    private float homeListFrameBottomPosition = 186;
+
+    private int nMargin = 0;
     private float frameCenterPosition = 0.525f;
-    private int nMargin = 2;
+    private float frameGeneralWidth = 640;
+    // 홈 랭크 리스트뷰 위치 (화면중심 높이 52.5% 위치)
+    private float frameGeneralHeight = 889;
+    private float rankListFrameLeftPosition = 90;
+    private float rankListFrameTopPosition = 364;
+    private float rankListFrameRightPosition = 100;
+    private float rankListFrameBottomPosition = 186;
+    
+    // 우편함 리스트뷰 위치 (화면중심 높이 50% 기준)
+    private int verticalShiftPosition = 18;
+    private float itemListBackgroundHeight = 596;
+    private float itemListMarginLeft = 107;
+    private float itemListMarginTop = 131;
+    private float itemListMarginRight = 107;
+    private float itemListMarginBottom = 12;
+    
+    // 친구초대 리스트뷰 위치 (화면중심 높이 52.5% 위치)
+    private float inviteListBackgroundHeight = 580;
+    private float inviteListMarginLeft = 105;
+    private float inviteListMarginTop = 60;
+    private float inviteListMarginRight = 105;
+    private float inviteListMarginBottom = 215;
+    
+    // 이모티콘 리스트뷰 위치 (화면중심 높이 52.5% 위치)
+    private float emoticonListBackgroundHeight = 889;
+    private float emoticonListMarginLeft = 95;
+    private float emoticonListMarginTop = 204;
+    private float emoticonListMarginRight = 106;
+    private float emoticonListMarginBottom = 186;
+    
+    // 친구초대 리스트뷰 위치 (화면중심 높이 52.5% 위치)
+    private float matchListBackgroundHeight = 889;
+    private float matchListMarginLeft = 88;
+    private float matchListMarginTop = 440;
+    private float matchListMarginRight = 100;
+    private float matchListMarginBottom = 186;
     
     public Handler mHandler = new Handler(Looper.getMainLooper()) {
 		@Override
 		public void handleMessage(Message msg) {
+			// 랭킹에 들어가는 페이스북 이미지 크기 및 리스트뷰 오른쪽 2번째 이미지(선물상자)의 rightMargin이 해상도 별로 변경됩니다.
+			// 해상도에 맞게 이미지는 커지고 마진은 작아져야 됩니다.(scale값 적용) 
+			float scale = main.getWidth() / frameGeneralWidth ;
+			float height = main.getHeight();
+			
 			switch(msg.what) {
-			case Constant.MSG_DISPLAY_FRIENDLIST:
+			case Constant.MSG_DISPLAY_RANKLIST:
 				//API 콜 : 
 				FriendListAapter adapter = new FriendListAapter(MainActivity.this);
 				mListView.setAdapter(adapter);
+				mListView.setCacheColorHint(Color.alpha(0));
 				RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 				
 				// assets의 frameGeneral-hd.png, frameMatching-hd.png파일의 width, height을 받아와서 작업을 해야되는데
 				// inputstream을 해야되고 핸들러에서 작업 하기에는 문제가 있어 이미지 크기를 상수로 정의하여 작업했습니다.
-				
-				// 랭킹에 들어가는 페이스북 이미지 크기 및 리스트뷰 오른쪽 2번째 이미지(선물상자)의 rightMargin이 해상도 별로 변경됩니다.
-				// 해상도에 맞게 이미지는 커지고 마진은 작아져야 됩니다.(scale값 적용) 
-				float scale = main.getWidth() / frameGeneralWidth ;
-				float height = main.getHeight();
 				params.setMargins(
-						(int) (homeListFrameLeftPosition * scale) + nMargin, 
-						(int) (height * (1 - frameCenterPosition) + (homeListFrameTopPosition - frameGeneralHeight * 0.5) * scale) + nMargin, 
-						(int) (homeListFrameRightPosition * scale) + nMargin, 
-						(int) (height * frameCenterPosition + (homeListFrameBottomPosition - frameGeneralHeight * 0.5) * scale) + nMargin); //adjust position
+						(int) (rankListFrameLeftPosition * scale) + nMargin, 
+						(int) (height * (1 - frameCenterPosition) + (rankListFrameTopPosition - frameGeneralHeight * 0.5f) * scale) + nMargin, 
+						(int) (rankListFrameRightPosition * scale) + nMargin, 
+						(int) (height * frameCenterPosition + (rankListFrameBottomPosition - frameGeneralHeight * 0.5f) * scale) + nMargin);
 				//MainActivity.this.addContentView(listview, params);
+				
 				main.addView(mListView, params);
+				break;
+				
+			case Constant.MSG_DISPLAY_ITEMLIST:
+//				FriendListAapter itemAdapter = new FriendListAapter(MainActivity.this);
+//				mListView.setAdapter(itemAdapter);
+				RelativeLayout.LayoutParams itemParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+				itemParams.setMargins(
+						(int) (itemListMarginLeft * scale) + nMargin, 
+						(int) (height / 2 + (itemListMarginTop - itemListBackgroundHeight * 0.5f - verticalShiftPosition) * scale) + nMargin, 
+						(int) (itemListMarginRight * scale) + nMargin, 
+						(int) (height / 2 + (itemListMarginBottom - itemListBackgroundHeight * 0.5f + verticalShiftPosition) * scale) + nMargin);
+				main.addView(mListView, itemParams);
+				break;
+				
+			case Constant.MSG_DISPLAY_INVITELIST:
+//				FriendListAapter inviteAdapter = new FriendListAapter(MainActivity.this);
+//				mListView.setAdapter(inviteAdapter);
+				RelativeLayout.LayoutParams inviteParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+				inviteParams.setMargins(
+						(int) (inviteListMarginLeft * scale) + nMargin, 
+						(int) (height * (1 - frameCenterPosition) + (inviteListMarginTop - inviteListBackgroundHeight * 0.5f) * scale) + nMargin, 
+						(int) (inviteListMarginRight * scale) + nMargin, 
+						(int) (height * frameCenterPosition + (inviteListMarginBottom - inviteListBackgroundHeight * 0.5f) * scale) + nMargin);
+				main.addView(mListView, inviteParams);
+				break;
+				
+			case Constant.MSG_DISPLAY_EMOTICONLIST:
+//				FriendListAapter emoticonAdapter = new FriendListAapter(MainActivity.this);
+//				mListView.setAdapter(emoticonAdapter);
+				RelativeLayout.LayoutParams emoticonParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+				emoticonParams.setMargins(
+						(int) (emoticonListMarginLeft * scale) + nMargin, 
+						(int) (height * (1 - frameCenterPosition) + (emoticonListMarginTop - emoticonListBackgroundHeight * 0.5f) * scale) + nMargin, 
+						(int) (emoticonListMarginRight * scale) + nMargin, 
+						(int) (height * frameCenterPosition + (emoticonListMarginBottom - emoticonListBackgroundHeight * 0.5f) * scale) + nMargin);
+				main.addView(mListView, emoticonParams);
+				break;
+				
+			case Constant.MSG_DISPLAY_MATCHLIST:
+//				FriendListAapter matchAdapter = new FriendListAapter(MainActivity.this);
+//				mListView.setAdapter(matchAdapter);
+				RelativeLayout.LayoutParams matchParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+				matchParams.setMargins(
+						(int) (matchListMarginLeft * scale) + nMargin, 
+						(int) (height * (1 - frameCenterPosition) + (matchListMarginTop - matchListBackgroundHeight * 0.5f) * scale) + nMargin, 
+						(int) (matchListMarginRight * scale) + nMargin, 
+						(int) (height * frameCenterPosition + (matchListMarginBottom - matchListBackgroundHeight * 0.5f) * scale) + nMargin);
+				main.addView(mListView, matchParams);
 				break;
 				
 			case Constant.MSG_HIDE_SCROLLVIEW:

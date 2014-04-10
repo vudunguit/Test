@@ -51,7 +51,7 @@ public class ShopBroomstick2 extends CCLayer {
 		
 		// BackGround 파일
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
-		setBackBoardMenu(commonfolder + "gamebb" + fileExtension);
+		setBackBoardMenu(commonfolder + "bb1" + fileExtension);
 		setBoardFrameMenu(commonfolder + "frameGeneral-hd" + fileExtension);
 		
 		TopMenu2.setSceneMenu(this);
@@ -79,8 +79,8 @@ public class ShopBroomstick2 extends CCLayer {
 	
 	private void setMainMenu(CCSprite parentSprite){
 		CCMenu gameMenu = CCMenu.menu(buttons(stickArray));
-		gameMenu.alignItemsVertically(-1);
-		gameMenu.setPosition(CGPoint.ccp(parentSprite.getContentSize().width / 2 - 6, parentSprite.getContentSize().height / 2 - 13));
+		gameMenu.alignItemsVertically(-3);
+		gameMenu.setPosition(CGPoint.ccp(parentSprite.getContentSize().width / 2 - 5, parentSprite.getContentSize().height / 2 - 12));
 		parentSprite.addChild(gameMenu);
 	}
 	

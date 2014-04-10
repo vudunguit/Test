@@ -45,66 +45,27 @@ public class Home extends CCLayer{
 		CCScene scene = CCScene.node();
 		CCLayer home = new Home();
 		scene.addChild(home, homeLayerTag, homeLayerTag);
-//		layer.setIsTouchEnabled(true);
-//		setScrollView(scene);
-		
-//		CCLayer scroll = HomeScroll.getInstance().getLayer(DataFilter.getRanking());
-//		scene.addChild(scroll, 1, 1);
-//		scroll.setAnchorPoint(0.5f, 1);
-//		scroll.setPosition(
-//				CCDirector.sharedDirector().winSize().width / 2 - scroll.getContentSize().width / 2,
-//				CCDirector.sharedDirector().winSize().height / 2 - scroll.getContentSize().height + 110);
-//		scene.addChild(scroll, scrollLayerTag, scrollLayerTag); // 안드로이드 뷰로 인하여 제거됨.
-		
 		CCLayer mailBox = CCLayer.node();
 		scene.addChild(mailBox,mailBoxLayerTag,mailBoxLayerTag);
         return scene;
 	}
-
-//	private static void setScrollView(CCScene scene) {
-//		scene.addChild(HomeScroll.getInstance().getLayer(), 1, 1);
-//
-//		CGPoint pb = bb.convertToWorldSpace(profileBg.getPosition().x,profileBg.getPosition().y);
-////		CGPoint bf = bg.convertToWorldSpace(boardFrame.getPosition().x,boardFrame.getPosition().y);
-//		scene.getChildByTag(1).setPosition(
-//        		scene.getContentSize().width / 2 - scene.getChildByTag(1).getContentSize().width / 2,
-//        		pb.y - (profileBg.getAnchorPoint().y * profileBg.getContentSize().height) - (94 * friendsSize) - 5);
-////		
-////		scrollTopBoundery = pb.y - (profileBg.getAnchorPoint().y * profileBg.getContentSize().height) - (94 * friendsSize) - 5; 
-////		scrollBottomBoundery = bf.y - (boardFrame.getAnchorPoint().y * boardFrame.getContentSize().height) + 180; 
-//	}
 	
 	public Home() {
-//		FacebookData.getinstance().setUserInfo(FacebookData.getinstance().getUserInfo());
-		CCSprite backGround = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg-open" + fileExtension);
-		CCSprite backBoard = setBackBoardMenu(backGround, folder + "home-backboard" + fileExtension);
-		CCSprite boardFrame = setBoardFrameMenu(backGround, commonfolder + "frameGeneral-hd" + fileExtension);
-
-//		scroll = HomeScroll.getInstance(this).getLayer();
-//		scroll = HomeScroll.getInstance().getLayer();
-/*		scroll = HomeScroll.getInstance().getLayer(this); // 안드로이드 뷰로 인하여 제거됨.
-		scroll.setAnchorPoint(0.5f, 1);
-		scroll.setPosition(
-				CCDirector.sharedDirector().winSize().width / 2 - scroll.getContentSize().width / 2,
-				CCDirector.sharedDirector().winSize().height / 2 - scroll.getContentSize().height + 110);*/
-		
-//		CCSprite profileBg = (CCSprite) backBoard.getChildByTag(10);
-//		CGPoint pb = backBoard.convertToWorldSpace(profileBg.getPosition().x,profileBg.getPosition().y);
-//		int friendsSize = FacebookData.getinstance().getFriendsInfo().size();
-//		CCLayer scroll = (CCLayer) this.getParent().getChildByTag(1);
-//		scroll.setPosition(
-//        		winsize().width / 2 - scroll.getContentSize().width / 2,
-//        		pb.y - (profileBg.getAnchorPoint().y * profileBg.getContentSize().height) - (94 * friendsSize) - 5);
-//		CCTouchDispatcher.sharedDispatcher().setDispatchEvents(false);
+//		CCSprite backGround = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg-open" + fileExtension);
+//		setBackBoardMenu(backGround, folder + "home-backboard" + fileExtension);
+		CCSprite backGround = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
+		setBackBoardMenu(backGround, commonfolder + "bb1" + fileExtension);
+		setBoardFrameMenu(backGround, commonfolder + "frameGeneral-hd" + fileExtension);
 		this.setIsTouchEnabled(true);
-		
+
+		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 		//display scroll view
-		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_FRIENDLIST);
+		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_RANKLIST);
 	}
 	
-	private CGSize winsize() {
-		return CCDirector.sharedDirector().winSize();
-	}
+//	private CGSize winsize() {
+//		return CCDirector.sharedDirector().winSize();
+//	}
 
 	// 백 보드 설정
 	private CCSprite setBackBoardMenu(CCSprite parent, String imageFullPath) {
@@ -131,15 +92,15 @@ public class Home extends CCLayer{
 	
 	public void clicked(Object sender) {
 		
-		final int broomstick = 0;
-		final int gold = 1;
-		final int shop = 2;
-		final int enter = 3;
-		final int option = 4;
-		final int invite = 5;
+//		final int broomstick = 0;
+//		final int gold = 1;
+//		final int shop = 2;
+//		final int enter = 3;
+//		final int option = 4;
+//		final int invite = 5;
 		final int mail = 6;
 		final int mailclose = 7;
-		final int getItem = 8;
+//		final int getItem = 8;
 		final int mailReceiveAll = 9;
 		final int presentGold = 10;
 		final int presentBroomstick = 11;
@@ -245,42 +206,44 @@ public class Home extends CCLayer{
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 		
 		int value = ((CCNode) sender).getTag();
-		CCScene scene;
+		CCScene scene = null;
 		
 		switch (value) {
 		case broomstickButton :
-			Log.e("Home", "CallBack3 : broomstick" + value);
+			Log.e("Home", "CallBack3 : broomstick " + value);
 			FacebookData.getinstance().setRecipientID(FacebookData.getinstance().getUserInfo().getId());
 			scene = ShopBroomstick2.scene();
 			break;
 		case goldButton :
-			Log.e("Home", "CallBack3 : gold" + value);
+			Log.e("Home", "CallBack3 : gold " + value);
 			FacebookData.getinstance().setRecipientID(FacebookData.getinstance().getUserInfo().getId());
 			scene = ShopGold2.scene();
 			break;
 		case shopButton :
-				Log.e("Home", "CallBack3 : shop" + value);
+				Log.e("Home", "CallBack3 : shop " + value);
 			scene = Shop.scene();
 			break;
 		case enterButton :
-			Log.e("Home", "CallBack3 : enter" + value);
+			Log.e("Home", "CallBack3 : enter " + value);
 			scene = GameMode.scene();
 			break;
 		case optionButton :
-			Log.e("Home", "CallBack3 : option" + value);
+			Log.e("Home", "CallBack3 : option " + value);
 			scene = Option.scene();
 			break;
 		case inviteButton :
-			Log.e("Home", "CallBack3 : invite" + value);
+			Log.e("Home", "CallBack3 : invite " + value);
 			scene = Invite.scene();
+			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_INVITELIST);
 			break;
-		default:
-			Log.e("Home", "CallBack3 : Home" + value);
-			scene = Home.scene();
-			break;
+//		default:
+//			Log.e("Home", "CallBack3 : Home " + value + " scene에 임시로 저장 (불필요 할 것 같다.)");
+//			scene = Home.scene();
+//			break;
 		}
 		
 		if (value <= inviteButton) {
+			Log.e("Home", "clicked2() if (value <= inviteButton) 탔음");
 			CCDirector.sharedDirector().replaceScene(scene);
 			return;
 		}
@@ -290,6 +253,7 @@ public class Home extends CCLayer{
 		String data = (String) ((CCMenuItemImage)sender).getUserData();
 		
 		if (value == mailButton) {
+			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_ITEMLIST);
 			// 안드로이드 스크롤뷰로 교체해야됩니다.
 			new MailBox(mailBoxLayer, "11mailbox/", this);
 			
@@ -314,6 +278,7 @@ public class Home extends CCLayer{
 						}
 					}
 				} else if (value == mailcloseButton) {
+					MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_RANKLIST);
 					mailBoxLayer.removeChildByTag(999, true);
 					List<CCNode> layers = homeScene.getChildren();
 					for (CCNode ccNode : layers) { // home scene에 붙은 layer
@@ -352,9 +317,9 @@ public class Home extends CCLayer{
 				}
 	}
 	
-	private void modifyMenu(CCMenu menu, boolean enabled) {
-		for (CCNode menuItem : menu.getChildren()) {
-			((CCMenuItem) menuItem).setIsEnabled(enabled);
-		}
-	}
+//	private void modifyMenu(CCMenu menu, boolean enabled) {
+//		for (CCNode menuItem : menu.getChildren()) {
+//			((CCMenuItem) menuItem).setIsEnabled(enabled);
+//		}
+//	}
 }

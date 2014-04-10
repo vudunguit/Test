@@ -15,6 +15,10 @@ public class BackGround {
 		return CCDirector.sharedDirector().winSize();
 	}
 
+	public static CCSprite setBackground(CCNode nodeThis, String backGroundImage) {
+		return setBackground(nodeThis, CGPoint.make(0.5f, 0.5f), backGroundImage); 
+	}
+	
 	public static CCSprite setBackground(CCNode nodeThis, CGPoint anchor, String backGroundImage) {
 		CCSprite bg = CCSprite.sprite(backGroundImage);
 		nodeThis.addChild(bg);

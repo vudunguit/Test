@@ -88,28 +88,28 @@ public class MailBox {
 			buttonActive = false;
 
 			// 불투명 배경
-			CCSprite child = CCSprite.sprite(commonfolder + "opacitybg" + fileExtension);
-			child.setPosition(winsize().width/2, winsize().height/2);
+			CCSprite opacityBg = CCSprite.sprite(commonfolder + "opacitybg" + fileExtension);
+			opacityBg.setPosition(winsize().width/2, winsize().height/2);
 			
 			// 기본 배경
-			CCSprite board = CCSprite.sprite(imageFolder + "postboxbg" + fileExtension);
-			board.setPosition(child.getContentSize().width/2, child.getContentSize().height/2);
+			CCSprite postboxBg = CCSprite.sprite(imageFolder + "postboxbg" + fileExtension);
+			postboxBg.setPosition(opacityBg.getContentSize().width/2, opacityBg.getContentSize().height/2);
 			
 			// 빗자루 배경 (활성)
 			broomstickBackground1 = CCSprite.sprite(imageFolder + "broomstickBackgroundActive" + fileExtension);
-			broomstickBackground1.setPosition(board.getContentSize().width/2, board.getContentSize().height/2+18.0f);
+			broomstickBackground1.setPosition(postboxBg.getContentSize().width/2, postboxBg.getContentSize().height/2+18);
 			
 			// 빗자루 배경 (비활성)
 			broomstickBackground2 = CCSprite.sprite(imageFolder + "broomstickBackgroundInactive" + fileExtension);
-			broomstickBackground2.setPosition(board.getContentSize().width/2, board.getContentSize().height/2+18.0f);
+			broomstickBackground2.setPosition(postboxBg.getContentSize().width/2, postboxBg.getContentSize().height/2+18);
 			
 			// 선물 배경 (활성)
 			presentBackground1 = CCSprite.sprite(imageFolder + "giftBackgroundActive" + fileExtension);
-			presentBackground1.setPosition(board.getContentSize().width/2, board.getContentSize().height/2+18.0f);
+			presentBackground1.setPosition(postboxBg.getContentSize().width/2, postboxBg.getContentSize().height/2+18);
 			
 			// 선물 배경 (비활성)
 			presentBackground2 = CCSprite.sprite(imageFolder + "giftBackgroundInactive" + fileExtension);
-			presentBackground2.setPosition(board.getContentSize().width/2, board.getContentSize().height/2+18.0f);
+			presentBackground2.setPosition(postboxBg.getContentSize().width/2, postboxBg.getContentSize().height/2+18);
 			
 			//
 			// 빗자루 메뉴
@@ -307,12 +307,12 @@ public class MailBox {
 			presentBackground2.setVisible(true);
 			
 			//board.addChild(title);
-			board.addChild(broomstickBackground1, 3, 2);
-			board.addChild(broomstickBackground2, 1, 4);
-			board.addChild(presentBackground1, 4, 1);
-			board.addChild(presentBackground2, 2, 3);
-			child.addChild(board);
-			parentLayer.addChild(child,999,999);
+			postboxBg.addChild(broomstickBackground1, 3, 2);
+			postboxBg.addChild(broomstickBackground2, 1, 4);
+			postboxBg.addChild(presentBackground1, 4, 1);
+			postboxBg.addChild(presentBackground2, 2, 3);
+			opacityBg.addChild(postboxBg);
+			parentLayer.addChild(opacityBg,999,999);
 			
 		}
 

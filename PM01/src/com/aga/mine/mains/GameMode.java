@@ -44,7 +44,7 @@ public class GameMode extends CCLayer {
 				
 		//배경 그림 설정
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
-		setBackBoardMenu(commonfolder + "gamebb" + fileExtension);
+		setBackBoardMenu(commonfolder + "bb1" + fileExtension);
 		setBoardFrameMenu(commonfolder + "frameGeneral-hd" + fileExtension);
 		
 		// 상단 메뉴
@@ -87,19 +87,19 @@ public class GameMode extends CCLayer {
 	
 	// 게임 메뉴
 	private void setMainMenu(CCSprite parentSprite){
-		
+		// 싱글
 		CCMenuItemImage button1 = CCMenuItemImage.item(
 				folder + "mode-singlebutton1" + fileExtension,
 				folder + "mode-singlebutton2" + fileExtension,
 				this, "nextCallback");
 		button1.setTag(singleMode);
-		
+		// 대전
 		CCMenuItemImage button2 = CCMenuItemImage.item(
 				folder + 	"mode-randombutton1" + fileExtension,
 				folder + 	"mode-randombutton2" + fileExtension,
 				this, "nextCallback");
 		button2.setTag(randomMode);
-		
+		// 초대
 		CCMenuItemImage button3 = CCMenuItemImage.item(
 				folder + 	"mode-invitebutton1" + fileExtension,
 				folder + 	"mode-invitebutton2" + fileExtension,
@@ -107,6 +107,9 @@ public class GameMode extends CCLayer {
 		button3.setTag(inviteMode);
 		
 		CCMenu gameMenu = CCMenu.menu(button1, button2, button3);
+		gameMenu.alignItemsVertically(0);
+		gameMenu.setPosition(parentSprite.getContentSize().width / 2 - 5, parentSprite.getContentSize().height / 2 - 12);
+		parentSprite.addChild(gameMenu, 1);
 		
 		CCSprite	buttonText1 = CCSprite.sprite(
 				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "mode-singletext" + fileExtension));
@@ -122,13 +125,6 @@ public class GameMode extends CCLayer {
 				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "mode-invitetext" + fileExtension));
 		button3.addChild(buttonText3);
 		buttonText3.setPosition(button3.getContentSize().width - buttonText3.getContentSize().width/2 - 30f, button3.getContentSize().height/2);
-		
-		parentSprite.addChild(gameMenu, 1);
-		gameMenu.setPosition(parentSprite.getContentSize().width / 2 - 5, parentSprite.getContentSize().height - 58);
-		
-		button1.setPosition(0f, -button1.getContentSize().height*0.5f); // 싱글
-		button2.setPosition(0f, -button1.getContentSize().height*1.5f); // 대전
-		button3.setPosition(0f, -button1.getContentSize().height*2.5f); // 초대
 		
 		if (GameData.share().isGuestMode) {
 			//x표시 2

@@ -28,7 +28,7 @@ public class Shop extends CCLayer {
 
 	public Shop() {
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
-		setBackBoardMenu(commonfolder + "gamebb" + fileExtension);
+		setBackBoardMenu(commonfolder + "bb1" + fileExtension);
 		setBoardFrameMenu(commonfolder + "frameGeneral-hd" + fileExtension);
 		TopMenu2.setSceneMenu(this);
 		BottomImage.setBottomImage(this);
@@ -82,13 +82,16 @@ public class Shop extends CCLayer {
 				this, "button4Callback");
 		
 		CCMenu gameMenu = CCMenu.menu(button1, button2, button3, button4);
-		gameMenu.setPosition(parentSprite.getContentSize().width / 2 - 5, parentSprite.getContentSize().height - 58f);
-		parentSprite.addChild(gameMenu);
-		
-		button1.setPosition(0, -button1.getContentSize().height * 0.5f); // 골드
-		button2.setPosition(0, -button1.getContentSize().height * 1.5f); // 아이템
-		button3.setPosition(0, -button1.getContentSize().height * 2.5f); // 빗자루
-		button4.setPosition(0, -button1.getContentSize().height * 3.5f); // 이모티콘
+		gameMenu.alignItemsVertically(0);
+		gameMenu.setPosition(parentSprite.getContentSize().width / 2 - 5, parentSprite.getContentSize().height / 2 - 12);
+		parentSprite.addChild(gameMenu, 1);
+//		gameMenu.setPosition(parentSprite.getContentSize().width / 2 - 5, parentSprite.getContentSize().height - 58f);
+//		parentSprite.addChild(gameMenu);
+//		
+//		button1.setPosition(0, -button1.getContentSize().height * 0.5f); // 골드
+//		button2.setPosition(0, -button1.getContentSize().height * 1.5f); // 아이템
+//		button3.setPosition(0, -button1.getContentSize().height * 2.5f); // 빗자루
+//		button4.setPosition(0, -button1.getContentSize().height * 3.5f); // 이모티콘
 	}
 	
 	@Override

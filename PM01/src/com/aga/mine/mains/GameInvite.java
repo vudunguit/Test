@@ -64,7 +64,7 @@ public class GameInvite extends CCLayer {
 	UserData userData;
 
 	
-	static CCLayer inviteScroll = CCLayer.node();
+//	static CCLayer inviteScroll = CCLayer.node();
 	
 	public static CCScene scene() {
 //		CCScene scene = CCScene.node();
@@ -82,29 +82,29 @@ public class GameInvite extends CCLayer {
 //				layer = new Home(ccColor4B.ccc4(244, 122, 122, 0));
 	        scene.addChild(layer, gameInviteLayerTag, gameInviteLayerTag);
 	        
-	        scene.addChild(inviteScroll, gameInvitescrollLayerTag, gameInvitescrollLayerTag);
-//	        Log.e("Logo", "getContentSize : " + scene.getChildByTag(gameInvitescrollLayerTag).getContentSize());
-//	        Log.e("Logo", "getAnchorPoint: " + scene.getChildByTag(gameInvitescrollLayerTag).getAnchorPoint());
-	        scene.getChildByTag(gameInvitescrollLayerTag).setPosition(
-	        		scene.getContentSize().width / 2 - scene.getChildByTag(gameInvitescrollLayerTag).getContentSize().width / 2,
-	        		scene.getContentSize().height / 2 - scene.getChildByTag(gameInvitescrollLayerTag).getContentSize().height / 2);
-	        
-			CGPoint pf = bg.convertToWorldSpace(boardFrame.getPosition().x,boardFrame.getPosition().y);
-			scrollTopBoundery = pf.y - (boardFrame.getAnchorPoint().y * boardFrame.getContentSize().height) + 445 - (81 * friendsSize) - 5;
-			scrollBottomBoundery = pf.y - (boardFrame.getAnchorPoint().y * boardFrame.getContentSize().height) + 180;
-			
-			scene.getChildByTag(gameInvitescrollLayerTag).setPosition(86,100);
-//			scene.getChildByTag(gameInvitescrollLayerTag).setPosition(
-//	        		scene.getContentSize().width / 2 - scene.getChildByTag(gameInvitescrollLayerTag).getContentSize().width / 2, scrollTopBoundery);
+//	        scene.addChild(inviteScroll, gameInvitescrollLayerTag, gameInvitescrollLayerTag);
+////	        Log.e("Logo", "getContentSize : " + scene.getChildByTag(gameInvitescrollLayerTag).getContentSize());
+////	        Log.e("Logo", "getAnchorPoint: " + scene.getChildByTag(gameInvitescrollLayerTag).getAnchorPoint());
+//	        scene.getChildByTag(gameInvitescrollLayerTag).setPosition(
+//	        		scene.getContentSize().width / 2 - scene.getChildByTag(gameInvitescrollLayerTag).getContentSize().width / 2,
+//	        		scene.getContentSize().height / 2 - scene.getChildByTag(gameInvitescrollLayerTag).getContentSize().height / 2);
+//	        
+//			CGPoint pf = bg.convertToWorldSpace(boardFrame.getPosition().x,boardFrame.getPosition().y);
+//			scrollTopBoundery = pf.y - (boardFrame.getAnchorPoint().y * boardFrame.getContentSize().height) + 445 - (81 * friendsSize) - 5;
+//			scrollBottomBoundery = pf.y - (boardFrame.getAnchorPoint().y * boardFrame.getContentSize().height) + 180;
+//			
+//			scene.getChildByTag(gameInvitescrollLayerTag).setPosition(86,100);
+////			scene.getChildByTag(gameInvitescrollLayerTag).setPosition(
+////	        		scene.getContentSize().width / 2 - scene.getChildByTag(gameInvitescrollLayerTag).getContentSize().width / 2, scrollTopBoundery);
 	        return scene;
 	}
 	
-	static float scrollTopBoundery; 
-	static float scrollBottomBoundery; 
+//	static float scrollTopBoundery; 
+//	static float scrollBottomBoundery; 
 
-	private CGSize winsize() {
-		return CCDirector.sharedDirector().winSize();
-	}
+//	private CGSize winsize() {
+//		return CCDirector.sharedDirector().winSize();
+//	}
 
 	public static synchronized GameInvite getInstance() {
 		if (versusMatchLayer == null) {
@@ -120,24 +120,25 @@ public class GameInvite extends CCLayer {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
 		
-		inviteScroll = InviteScroll.getInstance().getLayer(this);
-		inviteScroll.setAnchorPoint(0.5f, 1);
-		inviteScroll.setPosition(
-				CCDirector.sharedDirector().winSize().width / 2 - inviteScroll.getContentSize().width / 2,
-				CCDirector.sharedDirector().winSize().height / 2 - inviteScroll.getContentSize().height + 110);
+//		inviteScroll = InviteScroll.getInstance().getLayer(this);
+//		inviteScroll.setAnchorPoint(0.5f, 1);
+//		inviteScroll.setPosition(
+//				CCDirector.sharedDirector().winSize().width / 2 - inviteScroll.getContentSize().width / 2,
+//				CCDirector.sharedDirector().winSize().height / 2 - inviteScroll.getContentSize().height + 110);
 		
-		friendsSize = userData.facebookFriendsInfo.size();
-		if (friendsSize < 4) {
-			friendsSize = 4;
-			scrollLock = true;
-		} 
+//		friendsSize = userData.facebookFriendsInfo.size();
+//		if (friendsSize < 4) {
+//			friendsSize = 4;
+//			scrollLock = true;
+//		} 
 		
-		this.mode =GameDifficulty.mode;
+		this.mode = GameDifficulty.mode;
 		
 		//배경 그림 설정
-		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg-open.png");
-	
-		setBackBoardMenu(folder + "invitematch-backboard2.png");
+//		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg-open.png");
+		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1.png");	
+//		setBackBoardMenu(folder + "invitematch-backboard2.png");
+		setBackBoardMenu(commonfolder + "bb1.png");
 		setBoardFrameMenu(commonfolder + "frameMatching-hd.png");
 		// 상단 메뉴
 		TopMenu2.setSceneMenu(this);
@@ -151,8 +152,12 @@ public class GameInvite extends CCLayer {
 //		aaa(1);
 //		setSceneMenu();
 		
-		CCTouchDispatcher.sharedDispatcher().addTargetedDelegate(this, 0, true);
-		this.setIsTouchEnabled(true);
+//		CCTouchDispatcher.sharedDispatcher().addTargetedDelegate(this, 0, true);
+//		this.setIsTouchEnabled(true);
+		
+//		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+		//display scroll view
+		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_MATCHLIST);
 	}
 	
 
@@ -165,6 +170,7 @@ public class GameInvite extends CCLayer {
 		setMainMenu(bb);
 //		setFriendInvitionMenu(bb);
 	}
+	
 	static CCSprite boardFrame;
 	// 게시판 설정
 	private void setBoardFrameMenu(String imageFullPath) {
@@ -174,7 +180,6 @@ public class GameInvite extends CCLayer {
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
 		FrameTitle2.setTitle(boardFrame, folder);
 	}
-
 	
 	// 메인 메뉴
 	private void setMainMenu(CCSprite parentSprite){
@@ -451,87 +456,91 @@ public class GameInvite extends CCLayer {
 	}
 	
 
+	// 안드로이드 스크롤 뷰 대체로 인하여 제거
+//	private void panForTranslation(CGPoint translation) {
+//		
+//		if (!scrollLock) {
+////			CGPoint pf = bg.convertToWorldSpace(boardFrame.getPosition().x,boardFrame.getPosition().y);
+//			
+//	//		int scrollBottom = 0; 
+//	//		if (friendsSize < 4) {
+//	//			scrollBottom = 4 - friendsSize;
+//	//			friendsSize = 4;
+//	//		}
+//			 
+//			
+//	//		CGPoint limit = CGPoint.ccpClamp(
+//	//				CGPoint.ccp(scene.getChildByTag(gameInvitescrollLayerTag).getPosition().x,translation.y), 
+//	//				CGPoint.ccp(scene.getChildByTag(gameInvitescrollLayerTag).getPosition().x, -130),
+//	//				CGPoint.ccp(scene.getChildByTag(gameInvitescrollLayerTag).getPosition().x, 290)
+//	//				);
+//	//		
+//	//		scene.getChildByTag(gameInvitescrollLayerTag).setPosition(
+//	//				scene.getChildByTag(gameInvitescrollLayerTag).getPosition().x,
+//	//				CGPoint.ccpAdd(scene.getChildByTag(gameInvitescrollLayerTag).getPosition(), translation).y);
+//			
+//			// **scroll top** home-profileBg-hd.getposition.bottom - ((94 * items-1) + 10) 
+//			// **scroll bottom** frameGeneral-hd.getposition.bottom + 180 
+//			scene.getChildByTag(gameInvitescrollLayerTag).setPosition(
+//					scene.getChildByTag(gameInvitescrollLayerTag).getPosition().x,
+//	//				CGPoint.clampf(CGPoint.ccpAdd(scene.getChildByTag(gameInvitescrollLayerTag).getPosition(), translation).y, 0, 290)
+//	//				CGPoint.clampf(CGPoint.ccpAdd(scene.getChildByTag(gameInvitescrollLayerTag).getPosition(), translation).y, -127, 290)
+//	
+//					
+//					CGPoint.clampf(CGPoint.ccpAdd(scene.getChildByTag(gameInvitescrollLayerTag).getPosition(), translation).y, 
+//							scrollTopBoundery, scrollBottomBoundery));
+//			
+//			//위치 테스트
+//	//		bsp.setString(" " + scene.getChildByTag(gameInvitescrollLayerTag).getPosition());
+//			
+//	//		Log.e("Home", "panForTranslation : " + scene.getChildByTag(gameInvitescrollLayerTag).getPosition());
+//					
+//	//				scene.getChildByTag(gameInvitescrollLayerTag).getPosition().x + translation.x,
+//	//				scene.getChildByTag(gameInvitescrollLayerTag).getPosition().y + translation.y);
+//	//	    if (selSprite) {
+//	//	        CGPoint newPos = ccpAdd(selSprite.position, translation);
+//	//	        selSprite.position = newPos;
+//	//	    } else {
+//	//	        CGPoint newPos = ccpAdd(self.position, translation);
+//	//	        self.position = self boundLayerPos:newPos;      
+//	//	    }  
+//		}
+//	}
 
-	private void panForTranslation(CGPoint translation) {
-		
-		if (!scrollLock) {
-//			CGPoint pf = bg.convertToWorldSpace(boardFrame.getPosition().x,boardFrame.getPosition().y);
-			
-	//		int scrollBottom = 0; 
-	//		if (friendsSize < 4) {
-	//			scrollBottom = 4 - friendsSize;
-	//			friendsSize = 4;
-	//		}
-			 
-			
-	//		CGPoint limit = CGPoint.ccpClamp(
-	//				CGPoint.ccp(scene.getChildByTag(gameInvitescrollLayerTag).getPosition().x,translation.y), 
-	//				CGPoint.ccp(scene.getChildByTag(gameInvitescrollLayerTag).getPosition().x, -130),
-	//				CGPoint.ccp(scene.getChildByTag(gameInvitescrollLayerTag).getPosition().x, 290)
-	//				);
-	//		
-	//		scene.getChildByTag(gameInvitescrollLayerTag).setPosition(
-	//				scene.getChildByTag(gameInvitescrollLayerTag).getPosition().x,
-	//				CGPoint.ccpAdd(scene.getChildByTag(gameInvitescrollLayerTag).getPosition(), translation).y);
-			
-			// **scroll top** home-profileBg-hd.getposition.bottom - ((94 * items-1) + 10) 
-			// **scroll bottom** frameGeneral-hd.getposition.bottom + 180 
-			scene.getChildByTag(gameInvitescrollLayerTag).setPosition(
-					scene.getChildByTag(gameInvitescrollLayerTag).getPosition().x,
-	//				CGPoint.clampf(CGPoint.ccpAdd(scene.getChildByTag(gameInvitescrollLayerTag).getPosition(), translation).y, 0, 290)
-	//				CGPoint.clampf(CGPoint.ccpAdd(scene.getChildByTag(gameInvitescrollLayerTag).getPosition(), translation).y, -127, 290)
+// 안드로이드 스크롤 뷰 대체로 인하여 제거
+//	@Override
+//		public boolean ccTouchesMoved(MotionEvent event) {
+////		int touch1 = event.getPointerId(0);
+////		int pointerIndex1 = event.findPointerIndex(touch1);
+//	    
+////			printSamples(event);
+//			CGPoint touchLocation = this.convertTouchToNodeSpace(event);
+////			CGPoint touchLocation = CCDirector.sharedDirector().convertToGL(	CGPoint.make(event.getX(), event.getY()));
+//			touchLocation = this.convertToNodeSpace(touchLocation);
+//					
+//			CGPoint translation = CGPoint.make(0, 0);		 
+//			 if (event.getHistorySize() > 0) {
+////					Log.e("ccTouchesMoved", "size/count : " + event.getHistorySize() +", " + event.getPointerCount() );
+//				CGPoint oldTouchLocation = CGPoint.make(
+////						event.getHistoricalX(pointerIndex1, 0), event.getHistoricalY(pointerIndex1, 0));
+//						event.getHistoricalX(0, 0), event.getHistoricalY(0, 0));
+////				Log.e("ccTouchesMoved", "oldTouchLocation1 : " + oldTouchLocation);
+//				oldTouchLocation = CCDirector.sharedDirector().convertToGL(oldTouchLocation);
+////				Log.e("ccTouchesMoved", "oldTouchLocation2 : " + oldTouchLocation);
+//				oldTouchLocation = this.convertToNodeSpace(oldTouchLocation);
+////				Log.e("ccTouchesMoved", "oldTouchLocation3 : " + oldTouchLocation);
+//				
+//				translation = CGPoint.ccpSub(touchLocation, oldTouchLocation);    
+//			}
+//			 this.panForTranslation(translation);  
+//			return super.ccTouchesMoved(event);
+//		}
 	
-					
-					CGPoint.clampf(CGPoint.ccpAdd(scene.getChildByTag(gameInvitescrollLayerTag).getPosition(), translation).y, 
-							scrollTopBoundery, scrollBottomBoundery));
-			
-			//위치 테스트
-	//		bsp.setString(" " + scene.getChildByTag(gameInvitescrollLayerTag).getPosition());
-			
-	//		Log.e("Home", "panForTranslation : " + scene.getChildByTag(gameInvitescrollLayerTag).getPosition());
-					
-	//				scene.getChildByTag(gameInvitescrollLayerTag).getPosition().x + translation.x,
-	//				scene.getChildByTag(gameInvitescrollLayerTag).getPosition().y + translation.y);
-	//	    if (selSprite) {
-	//	        CGPoint newPos = ccpAdd(selSprite.position, translation);
-	//	        selSprite.position = newPos;
-	//	    } else {
-	//	        CGPoint newPos = ccpAdd(self.position, translation);
-	//	        self.position = self boundLayerPos:newPos;      
-	//	    }  
-		}
+	// sceneCallback들 전부 여기로 옮기기
+	public void clicked(Object sender) {
+		//hide scroll view
+		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 	}
-
-
-	@Override
-		public boolean ccTouchesMoved(MotionEvent event) {
-//		int touch1 = event.getPointerId(0);
-//		int pointerIndex1 = event.findPointerIndex(touch1);
-	    
-//			printSamples(event);
-			CGPoint touchLocation = this.convertTouchToNodeSpace(event);
-//			CGPoint touchLocation = CCDirector.sharedDirector().convertToGL(	CGPoint.make(event.getX(), event.getY()));
-			touchLocation = this.convertToNodeSpace(touchLocation);
-					
-			CGPoint translation = CGPoint.make(0, 0);		 
-			 if (event.getHistorySize() > 0) {
-//					Log.e("ccTouchesMoved", "size/count : " + event.getHistorySize() +", " + event.getPointerCount() );
-				CGPoint oldTouchLocation = CGPoint.make(
-//						event.getHistoricalX(pointerIndex1, 0), event.getHistoricalY(pointerIndex1, 0));
-						event.getHistoricalX(0, 0), event.getHistoricalY(0, 0));
-//				Log.e("ccTouchesMoved", "oldTouchLocation1 : " + oldTouchLocation);
-				oldTouchLocation = CCDirector.sharedDirector().convertToGL(oldTouchLocation);
-//				Log.e("ccTouchesMoved", "oldTouchLocation2 : " + oldTouchLocation);
-				oldTouchLocation = this.convertToNodeSpace(oldTouchLocation);
-//				Log.e("ccTouchesMoved", "oldTouchLocation3 : " + oldTouchLocation);
-				
-				translation = CGPoint.ccpSub(touchLocation, oldTouchLocation);    
-			}
-			 this.panForTranslation(translation);  
-			return super.ccTouchesMoved(event);
-		}
-	
-	
 	
 	public void previousCallback(Object sender) {
 		userData.difficulty = 0;

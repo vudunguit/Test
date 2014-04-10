@@ -1,19 +1,18 @@
 ﻿package com.aga.mine.mains;
 
-import org.cocos2d.actions.grid.CCLens3D;
-import org.cocos2d.events.CCTouchDispatcher;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
+import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
-import com.aga.mine.pages.UserData;
-
 import android.content.Context;
 import android.view.MotionEvent;
+
+import com.aga.mine.pages.UserData;
 
 public class ShopEmoticon extends CCLayer {
 
@@ -45,9 +44,9 @@ public class ShopEmoticon extends CCLayer {
 		return scene;
 	}
 
-	private CGSize winsize() {
-		return CCDirector.sharedDirector().winSize();
-	}
+//	private CGSize winsize() {
+//		return CCDirector.sharedDirector().winSize();
+//	}
 	
 	public ShopEmoticon() {
 //		mContext = CCDirector.sharedDirector().getActivity();
@@ -62,17 +61,20 @@ public class ShopEmoticon extends CCLayer {
 		userData = UserData.share(mContext);
 		
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
-		setBackBoardMenu(commonfolder + "gamebb" + fileExtension);
+//		setBackBoardMenu(commonfolder + "gamebb" + fileExtension);
+		setBackBoardMenu(commonfolder + "bb1" + fileExtension);
 		setBoardFrameMenu(commonfolder + "frameGeneral-hd" + fileExtension);
 		TopMenu2.setSceneMenu(this);
 		BottomImage.setBottomImage(this);
-		this.setIsTouchEnabled(true);
+//		this.setIsTouchEnabled(true);
+		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_EMOTICONLIST);
 	}
 	
 	private void setBackBoardMenu(String imageFullPath) {
 		CCSprite bb = CCSprite.sprite(imageFullPath);
 		bg.addChild(bb);
-		bb.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
+//		bb.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
+		bb.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height / 2);
 		bb.setAnchorPoint(0.5f, 0.5f);
 		setMainMenu(bb);
 	}
@@ -103,11 +105,20 @@ public class ShopEmoticon extends CCLayer {
 		}
 	}
 
-	@Override
-	public boolean ccTouchesEnded(MotionEvent event) {
-		return super.ccTouchesEnded(event);
+	// sceneCallback들 전부 여기로 옮기기
+	public void clicked(Object sender) {
+		//hide scroll view
+		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+		
+		int value = ((CCNode) sender).getTag();
+		CCScene scene = null;
+		
+//		if (buttonActive) {
+//			CCScene scene = Shop.scene();
+//			CCDirector.sharedDirector().replaceScene(scene);
+//		}
+		
 	}
-	
 	
 	public void previousCallback(Object sender) {
 		if (buttonActive) {

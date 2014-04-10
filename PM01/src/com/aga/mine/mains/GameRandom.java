@@ -87,7 +87,7 @@ public class GameRandom extends CCLayer {
 		//배경 그림 설정
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1.png");
 		
-		setBackBoardMenu(commonfolder + "gamebb.png");
+		setBackBoardMenu(commonfolder + "bb1.png");
 		setBoardFrameMenu(commonfolder + "frameMatching-hd.png");
 		// 상단 메뉴
 		TopMenu2.setSceneMenu(this);

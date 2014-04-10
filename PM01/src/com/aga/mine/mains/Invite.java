@@ -57,9 +57,9 @@ public class Invite extends CCLayer {
 		return scene;
 	}
 
-	private CGSize winsize() {
-		return CCDirector.sharedDirector().winSize();
-	}
+//	private CGSize winsize() {
+//		return CCDirector.sharedDirector().winSize();
+//	}
 
 	public static synchronized Invite getInstance() {
 		if (inviteLayer == null) {
@@ -74,9 +74,9 @@ public class Invite extends CCLayer {
 		
 		
 		//배경 그림 설정
-		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg-invite" + fileExtension);
-		
-		setBackBoardMenu(folder + "invite-bb" + fileExtension);
+//		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg-invite" + fileExtension);
+		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);		
+		setBackBoardMenu(folder + "invite-bb2" + fileExtension);
 		setBoardFrameMenu(commonfolder + "frameGeneral-hd" + fileExtension);
 		
 		// 상단 메뉴
@@ -87,15 +87,16 @@ public class Invite extends CCLayer {
 		this.setIsTouchEnabled(true);
 	}
 
+//	String[] testNameList =  {"김 길 동","이 길 동","박 길 동","최 길 동"};
 
 	// 백 보드 설정
 	private void setBackBoardMenu(String imageFullPath) {
-		CCSprite bb = CCSprite.sprite(imageFullPath);
-		bg.addChild(bb);
-		bb.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
-		bb.setAnchorPoint(0.5f, 0.5f);
-		setMainMenu(bb);
-		friendsList(bb, aaa);
+		CCSprite backBoard = CCSprite.sprite(imageFullPath);
+		bg.addChild(backBoard);
+		backBoard.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
+		backBoard.setAnchorPoint(0.5f, 0.5f);
+		setMainMenu(backBoard);
+//		friendsList(backBoard, testNameList); // 안드로이드 리스트뷰로 대체
 	}
 	
 	// 게시판 설정
@@ -107,8 +108,6 @@ public class Invite extends CCLayer {
 		FrameTitle2.setTitle(boardFrame, folder);
 	}
 
-	String[] aaa =  {"김 길 동","이 길 동","박 길 동","최 길 동"};
-	
 	// 메인 메뉴
 	private void setMainMenu(CCSprite parentSprite){
 		CCLabel  inviteCountText = CCLabel.makeLabel("현재초대인원         명", "Arial", 25); // 현재 초대 인원 (노란색)
@@ -127,15 +126,10 @@ public class Invite extends CCLayer {
 		parentSprite.addChild(inviteText);
 		inviteText.setPosition(parentSprite.getContentSize().width/2, 160.0f);		
 
-		
-		
-
-		
-		jewelButton(parentSprite, -1.17f, 3000, 30);
-		jewelButton(parentSprite, 0.0f, 7000, 50);
-		jewelButton(parentSprite, 1.17f, 10000, 70);
-		
-		}
+		jewelButton(parentSprite, -1.1f, 3000, 30);
+		jewelButton(parentSprite, 0, 7000, 50);
+		jewelButton(parentSprite, 1.1f, 10000, 70);
+	}
 		
 	private void jewelButton(CCSprite backBoard, float position, int gold, int friends) {
 
@@ -174,82 +168,83 @@ public class Invite extends CCLayer {
 		statusPanel.addChild(statusPanelText3);
 	}
 	
-	private void friendsList(CCSprite parentSprite, String[] names) {
-
-	//	int i = 0;
-		for (int i = 0; i < names.length; i++) {
-
-			// 친구 리스트 판넬
-			CCSprite listPanel = CCSprite.sprite(folder + "invite-listPanel" + fileExtension);
-			listPanel.setPosition(
-					parentSprite.getContentSize().width / 2,
-					parentSprite.getContentSize().height - listPanel.getContentSize().height * (0.5f + i) - 50);
-
-			// 친구 이미지
-			CCSprite listPictureFrame = CCSprite.sprite(commonfolder + "frame-pictureFrame-hd" + fileExtension);
-			listPictureFrame.setPosition(50.0f, listPanel.getContentSize().height / 2);
-			listPictureFrame.setScale(0.8f);
-
-			listPanel.addChild(listPictureFrame);
-
-			//
-			CCLabel myName = CCLabel.makeLabel(names[i], "Arial", 30.0f);
-			myName.setPosition(CGPoint.make(140.0f,
-					listPanel.getContentSize().height / 2));
-
-			listPanel.addChild(myName);
-
-			// 친구초대
-			inviteButton = CCMenuItemImage.item(
-					Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button1" + fileExtension),
-					Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button1" + fileExtension), 
-					this, "timerCallback");
-
-			timerBack = CCMenuItemImage.item(folder + "blank" + fileExtension, folder + "blank" + fileExtension);
-			timerBack.setPosition(0f,0f);
-
-			CCLabel buttonName = CCLabel.makeLabel("24시간 남음", "Arial", 24.0f);
-			timerBack.addChild(buttonName);
-			buttonName.setColor(ccColor3B.ccRED);
-			buttonName.setPosition(timerBack.getContentSize().width / 2, timerBack.getContentSize().height / 2);
-
-
-
-			//CCMenuItem[] items = {inviteButton, timerBack};
-			//menu111 = CCMenu.menu(items);
-			menu111 = CCMenu.menu(inviteButton);
-			menu111.setContentSize(inviteButton.getContentSize());
-			menu111.setPosition(
-					listPanel.getContentSize().width - inviteButton.getContentSize().width / 2 - 4f,
-					listPanel.getContentSize().height / 2);
-			
-
-			//timerBack.setPosition(inviteButton.getContentSize().width/2,inviteButton.getContentSize().height/2);
-
-			listPanel.addChild(menu111);
-
-			//
-			CCSprite invite;
-			if (visible_) {
-				// 초대하기(활성화)
-				invite = CCSprite.sprite(
-						Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button1" + fileExtension)); 
-			} else {
-				// 초대하기(비활성화)
-				invite = CCSprite.sprite(
-						Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button2" + fileExtension)); 
-			}
-			invite.setPosition(
-					listPanel.getContentSize().width
-							- invite.getContentSize().width / 2 - 4f,
-					listPanel.getContentSize().height / 2);
-
-			// listPanel.addChild(invite);
-
-			//
-			parentSprite.addChild(listPanel);
-		}
-	}
+	// 안드로이드 리스트 뷰로 대체 (이미지 참고용으로 놔뒀습니다.)
+//	private void friendsList(CCSprite parentSprite, String[] names) {
+//
+//	//	int i = 0;
+//		for (int i = 0; i < names.length; i++) {
+//
+//			// 친구 리스트 판넬
+//			CCSprite listPanel = CCSprite.sprite(folder + "invite-listPanel" + fileExtension);
+//			listPanel.setPosition(
+//					parentSprite.getContentSize().width / 2,
+//					parentSprite.getContentSize().height - listPanel.getContentSize().height * (0.5f + i) - 50);
+//
+//			// 친구 이미지
+//			CCSprite listPictureFrame = CCSprite.sprite(commonfolder + "frame-pictureFrame-hd" + fileExtension);
+//			listPictureFrame.setPosition(50.0f, listPanel.getContentSize().height / 2);
+//			listPictureFrame.setScale(0.8f);
+//
+//			listPanel.addChild(listPictureFrame);
+//
+//			//
+//			CCLabel myName = CCLabel.makeLabel(names[i], "Arial", 30.0f);
+//			myName.setPosition(CGPoint.make(140.0f,
+//					listPanel.getContentSize().height / 2));
+//
+//			listPanel.addChild(myName);
+//
+//			// 친구초대
+//			inviteButton = CCMenuItemImage.item(
+//					Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button1" + fileExtension),
+//					Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button1" + fileExtension), 
+//					this, "timerCallback");
+//
+//			timerBack = CCMenuItemImage.item(folder + "blank" + fileExtension, folder + "blank" + fileExtension);
+//			timerBack.setPosition(0f,0f);
+//
+//			CCLabel buttonName = CCLabel.makeLabel("24시간 남음", "Arial", 24.0f);
+//			timerBack.addChild(buttonName);
+//			buttonName.setColor(ccColor3B.ccRED);
+//			buttonName.setPosition(timerBack.getContentSize().width / 2, timerBack.getContentSize().height / 2);
+//
+//
+//
+//			//CCMenuItem[] items = {inviteButton, timerBack};
+//			//menu111 = CCMenu.menu(items);
+//			menu111 = CCMenu.menu(inviteButton);
+//			menu111.setContentSize(inviteButton.getContentSize());
+//			menu111.setPosition(
+//					listPanel.getContentSize().width - inviteButton.getContentSize().width / 2 - 4f,
+//					listPanel.getContentSize().height / 2);
+//			
+//
+//			//timerBack.setPosition(inviteButton.getContentSize().width/2,inviteButton.getContentSize().height/2);
+//
+//			listPanel.addChild(menu111);
+//
+//			//
+//			CCSprite invite;
+//			if (visible_) {
+//				// 초대하기(활성화)
+//				invite = CCSprite.sprite(
+//						Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button1" + fileExtension)); 
+//			} else {
+//				// 초대하기(비활성화)
+//				invite = CCSprite.sprite(
+//						Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button2" + fileExtension)); 
+//			}
+//			invite.setPosition(
+//					listPanel.getContentSize().width
+//							- invite.getContentSize().width / 2 - 4f,
+//					listPanel.getContentSize().height / 2);
+//
+//			// listPanel.addChild(invite);
+//
+//			//
+//			parentSprite.addChild(listPanel);
+//		}
+//	}
 
 	@Override
 	public boolean ccTouchesEnded(MotionEvent event) {
