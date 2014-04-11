@@ -30,6 +30,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.aga.mine.view.FriendListAapter;
+import com.aga.mine.view.InviteListAapter;
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.entities.Profile;
@@ -131,8 +132,8 @@ public class MainActivity extends Activity {
 				break;
 				
 			case Constant.MSG_DISPLAY_INVITELIST:
-//				FriendListAapter inviteAdapter = new FriendListAapter(MainActivity.this);
-//				mListView.setAdapter(inviteAdapter);
+				InviteListAapter inviteAdapter = new InviteListAapter(MainActivity.this);
+				mListView.setAdapter(inviteAdapter);
 				RelativeLayout.LayoutParams inviteParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 				inviteParams.setMargins(
 						(int) (inviteListMarginLeft * scale) + nMargin, 
@@ -332,6 +333,14 @@ public class MainActivity extends Activity {
         mSimpleFacebook.getFriends(mOnFriendsListener);
     }
     
+    public void sendInvite(String friend, String message, String data) {
+    	mSimpleFacebook.invite(friend, message, mOnInviteListener, data); // 이걸로 사용하는게 맞는지 모르겠네요.
+    	// 실패(오류) - "요청 실패"라는 토스트
+    	// 취소 - "요청 취소" 라는 토스트
+    	// 성공시 resultURL을 받아서 그것으로 DB에 저장할때 씁니다. (혹시 이걸로 안쓸수도 있네요. 아이폰에서 전에 쓰던부분 주석 처리 해버렸네요. 더 찾아보겠습니다.)
+    	// 성공시 그 친구 초대버튼 비활성화
+    }
+    
     // Login listener
     private OnLoginListener mOnLoginListener = new OnLoginListener() {
 
@@ -491,6 +500,7 @@ public class MainActivity extends Activity {
         }
 
     };
+
     
     private void nextCallback(boolean facebookReady) {
         Log.e("FacebookHelper", "nextCallback");
