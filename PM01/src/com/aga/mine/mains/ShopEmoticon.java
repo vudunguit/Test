@@ -10,6 +10,7 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.aga.mine.pages.UserData;
@@ -104,33 +105,28 @@ public class ShopEmoticon extends CCLayer {
 			point.set(parentSprite.getPosition().x, parentSprite.getPosition().y - emoticon.getContentSize().height);
 		}
 	}
-
+	
+	final int previous = 501;
+	final int home= 502;
+	
 	// sceneCallback들 전부 여기로 옮기기
 	public void clicked(Object sender) {
-		//hide scroll view
+		// hide scroll view
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
-		
-		int value = ((CCNode) sender).getTag();
 		CCScene scene = null;
-		
-//		if (buttonActive) {
-//			CCScene scene = Shop.scene();
-//			CCDirector.sharedDirector().replaceScene(scene);
-//		}
-		
-	}
-	
-	public void previousCallback(Object sender) {
+		int value = ((CCNode) sender).getTag();
 		if (buttonActive) {
-			CCScene scene = Shop.scene();
+			switch (value) {
+			case previous:
+				scene = Shop.scene();
+				break;
+
+			case home:
+				scene = Home.scene();
+				break;
+			}
 			CCDirector.sharedDirector().replaceScene(scene);
 		}
 	}
 
-	public void homeCallback(Object sender) {
-		if (buttonActive) {
-			CCScene scene = Home.scene();
-			CCDirector.sharedDirector().replaceScene(scene);
-		}
-	}	
 }

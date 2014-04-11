@@ -15,6 +15,7 @@ import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
+import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.opengl.CCTexture2D;
@@ -479,49 +480,39 @@ public class GameRandom extends CCLayer {
 		});
 	}
 	
-	@Override
-	public boolean ccTouchesBegan(MotionEvent event) {
-		return true;
-	}
-
-	@Override
-	public boolean ccTouchesEnded(MotionEvent event) {
-		return super.ccTouchesEnded(event);
-	}
+	// config 파일에 나중에 옮길것
+	public static boolean buttonActive = true;
+	final int previous = 501;
+	final int home= 502;
 	
-	
-	public void previousCallback(Object sender) {
-		CCScene scene;
-		try {
+	// sceneCallback들 전부 여기로 옮기기
+	public void clicked(Object sender) {
+		CCScene scene = null;
+		int value = ((CCNode) sender).getTag();
+		if (buttonActive) {
 			userData.difficulty = 0;
-			NetworkController.getInstance().sendRequestMatch(userData.difficulty); // 난이도 주입
-//			if (this.mode == 3) {
-			scene = GameDifficulty.scene();
-//			} else if (this.mode == 4) {
-//				scene = VersusMatchLayer.scene(mContext);
-//			} else {
-//				scene = ModeSelectLayer.scene(mContext);
-//			}
+			try {
+				NetworkController.getInstance().sendRoomOwner(0); // 방장 권한 제거 (random match에서만 있음)
+				NetworkController.getInstance().sendRequestMatch(userData.difficulty); // 난이도 주입
+			} catch (IOException e) {
+				// 게임서버와 연결이 끊김.
+				// 서버 다운인지 네트워크 문제인지. 발생시 처리방법?
+				e.printStackTrace();
+			}
+
+			switch (value) {
+			case previous:
+				scene = GameDifficulty.scene();
+				break;
+
+			case home:
+				scene = Home.scene();
+				break;
+			}
 			CCDirector.sharedDirector().replaceScene(scene);
-			Log.e("CallBack", "DifficultyLayer");
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
-
-	public void homeCallback(Object sender) {
-		try {
-			userData.difficulty = 0;
-			NetworkController.getInstance().sendRoomOwner(0); // 방장 권한
-			NetworkController.getInstance().sendRequestMatch(userData.difficulty); // 난이도 주입
-			CCScene scene = Home.scene();
-			CCDirector.sharedDirector().replaceScene(scene);
-			Log.e("CallBack", "HomeLayer");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
+	
 	public void gameStart(Object sender) {
 		Log.e("gameStart", "1");
 		if(userData.getBroomstick() > 0) {

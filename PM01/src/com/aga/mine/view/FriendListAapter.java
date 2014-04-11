@@ -138,6 +138,23 @@ public class FriendListAapter extends BaseAdapter {
 				//hide scroll view
 				MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 				
+				// facebook sendRequest보낸 후
+				//sendRequest 성공시 보낸 게시물의 id를 requestID에 담아 보냅니다.
+//				long requestID = FacebookData.getinstance().getRequestID();  //test용 
+//				String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
+//				String senderID = FacebookData.getinstance().getUserInfo().getId();
+				
+//				String giftItemType = "Broomstick";
+//				int giftBroomStick = 1;
+//				String data = 
+//						"0,RequestModeMailBoxAdd" +
+//						"*22," + requestID + 
+//						"*1," + recipientID + 
+//						"*19," + senderID + 
+//						"*20," + giftItemType + 
+//						"*21," + giftBloomStick;
+//				FacebookData.getinstance().sendMail(data);
+				
 				FacebookData.getinstance().setRecipientID(gameScore.get(position).id);
 				CCScene scene = ShopBroomstick2.scene();
 				CCDirector.sharedDirector().replaceScene(scene);

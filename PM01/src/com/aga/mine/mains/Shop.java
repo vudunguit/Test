@@ -5,6 +5,7 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
@@ -99,14 +100,28 @@ public class Shop extends CCLayer {
 		return super.ccTouchesEnded(event);
 	}
 	
-	public void previousCallback(Object sender) {
-		CCScene scene = Home.scene();
-		CCDirector.sharedDirector().replaceScene(scene);
-	}
-
-	public void homeCallback(Object sender) {
-		CCScene scene = Home.scene();
-		CCDirector.sharedDirector().replaceScene(scene);
+	// config 파일에 나중에 옮길것
+	public static boolean buttonActive = true;
+	final int previous = 501;
+	final int home= 502;
+	
+	// sceneCallback들 전부 여기로 옮기기
+	public void clicked(Object sender) {
+		CCScene scene = null;
+		int value = ((CCNode) sender).getTag();
+		if (buttonActive) {
+			switch (value) {
+				case previous :
+				case home :
+					if (GameData.share().isGuestMode) { // 게스트모드는 들어올수 없기때문에 불필요한 코드지만 만약에 오류상황시 넘길수 있는 상태로 놔둠.
+						scene = Home2.scene();
+					} else {
+						scene = Home.scene();
+					}
+					break;
+			}
+			CCDirector.sharedDirector().replaceScene(scene);
+		}
 	}
 	
 	public void button1Callback(Object sender) {

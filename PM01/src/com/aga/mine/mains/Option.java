@@ -205,25 +205,29 @@ public class Option extends CCLayer {
 		Log.e("Option2", "selectButton : " + type);
 	}
 	
-
-	public void previousCallback(Object sender) {
+	
+	// config 파일에 나중에 옮길것
+	public static boolean buttonActive = true;
+	final int previous = 501;
+	final int home= 502;
+	
+	// sceneCallback들 전부 여기로 옮기기
+	public void clicked(Object sender) {
 		CCScene scene = null;
-		if (GameData.share().isGuestMode) {
-			scene = Home2.scene();
-		} else {
-			scene = Home.scene();
+		int value = ((CCNode) sender).getTag();
+		if (buttonActive) {
+			switch (value) {
+				case previous :
+				case home :
+					if (GameData.share().isGuestMode) {
+						scene = Home2.scene();
+					} else {
+						scene = Home.scene();
+					}
+					break;
+			}
+			CCDirector.sharedDirector().replaceScene(scene);
 		}
-		CCDirector.sharedDirector().replaceScene(scene);
-	}
-
-	public void homeCallback(Object sender) {
-		CCScene scene = null;
-		if (GameData.share().isGuestMode) {
-			scene = Home2.scene();
-		} else {
-			scene = Home.scene();
-		}
-		CCDirector.sharedDirector().replaceScene(scene);
 	}
 
 	public void guideCallback(Object sender) {

@@ -17,6 +17,8 @@ public class GameLoading extends CCLayer {
 	final String fileExtension = ".png";
 	
 	private GameLoading() {
+		// hide scroll view
+		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 		setBackground();
 		setMainMenu();
 		schedule("nextSceneCallback", 1.0f);

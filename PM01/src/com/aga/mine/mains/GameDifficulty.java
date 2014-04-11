@@ -119,31 +119,42 @@ public class GameDifficulty extends CCLayer {
 		buttonText3.setPosition(button3.getContentSize().width - buttonText3.getContentSize().width/2 - 30f, button3.getContentSize().height/2);
 	}
 	
-	@Override
-	public boolean ccTouchesEnded(MotionEvent event) {
-		return super.ccTouchesEnded(event);
+	// config 파일에 나중에 옮길것
+	public static boolean buttonActive = true;
+	final int previous = 501;
+	final int home= 502;
+	
+	// sceneCallback들 전부 여기로 옮기기
+	public void clicked(Object sender) {
+		CCScene scene = null;
+		int value = ((CCNode) sender).getTag();
+		if (buttonActive) {
+			switch (value) {
+			case previous:
+				scene = GameMode.scene();
+				break;
+
+			case home:
+				if (GameData.share().isGuestMode) {
+					scene = Home2.scene();
+				} else {
+					scene = Home.scene();
+				}
+				break;
+			}
+			CCDirector.sharedDirector().replaceScene(scene);
+		}
 	}
 	
-	public void previousCallback(Object sender) {
-		CCScene scene = GameMode.scene();
-		CCDirector.sharedDirector().replaceScene(scene);
-	}
-
-	public void homeCallback(Object sender) {
-		CCScene scene = null;
-		if (GameData.share().isGuestMode) {
-			scene = Home2.scene();
-		} else {
-			scene = Home.scene();
-		}
-		CCDirector.sharedDirector().replaceScene(scene);
-	}
-
 	public void nextCallback(Object sender) {
-		CCScene scene = null;
+		int difficultyNumber = ((CCNode)sender).getTag();
+		Log.e("GameMode", "tagNumber  : " + difficultyNumber);
+		userData.setGameDifficulty(difficultyNumber); // gameData로 옮겨야됨. (기존에 있음.)
 //		GameData.share().setGameDifficulty((Integer)((CCNode)sender).getUserData());
 //		switch (GameData.share().getGameMode()) {  // gameData로 옮겨야됨. (기존에 있음.)
 		Log.e("GameDifficulty", "tagNumber  : " + userData.getGameMode());
+		
+		CCScene scene = null;
 		
 		switch (userData.getGameMode()) {  // gameData로 옮겨야됨. (기존에 있음.)
 		case singleMode:

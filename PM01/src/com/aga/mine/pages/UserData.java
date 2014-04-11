@@ -534,7 +534,8 @@ public class UserData{
 	}
 
 	long nextLevelExp = 5000; // temporary
-	public int gameMode;
+	private int gameMode;
+	private int gameDifficulty;
 
 	public void addExp(long number) {
 		// 할일 : 레벨업경험치에 따른 레벨업
@@ -717,6 +718,14 @@ public class UserData{
 
 	public void setGameMode(int gameMode) {
 		this.gameMode = gameMode;
+	}
+
+	public int getGameDifficulty() {
+		return gameDifficulty;
+	}
+
+	public void setGameDifficulty(int gameDifficulty) {
+		this.gameDifficulty = gameDifficulty;
 	}
 	
 	

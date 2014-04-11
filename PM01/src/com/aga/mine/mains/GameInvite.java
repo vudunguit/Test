@@ -15,6 +15,7 @@ import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
+import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrame;
 import org.cocos2d.nodes.CCTextureCache;
@@ -43,7 +44,6 @@ public class GameInvite extends CCLayer {
 	
 	final static int gameInvitescrollLayerTag = 11;
 	final static int gameInviteLayerTag = 12;
-	
 	
 	static CCSprite bg;
 	static CCLabel player1Label;
@@ -535,32 +535,37 @@ public class GameInvite extends CCLayer {
 //			 this.panForTranslation(translation);  
 //			return super.ccTouchesMoved(event);
 //		}
+	// config 파일에 나중에 옮길것
+	public static boolean buttonActive = true;
+	final int previous = 501;
+	final int home= 502;
 	
 	// sceneCallback들 전부 여기로 옮기기
 	public void clicked(Object sender) {
-		//hide scroll view
+		// hide scroll view
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
-	}
-	
-	public void previousCallback(Object sender) {
-		userData.difficulty = 0;
-		try {
-			NetworkController.getInstance().sendRoomOwner(0);
-			CCScene scene = GameDifficulty.scene();
-			CCDirector.sharedDirector().replaceScene(scene);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+		CCScene scene = null;
+		int value = ((CCNode) sender).getTag();
+		if (buttonActive) {
+			userData.difficulty = 0;
+//			try {
+//				NetworkController.getInstance().sendRoomOwner(0); // 방장 제거
+//			} catch (IOException e) {
+//				// 게임서버와 연결이 끊김.
+//				// 서버 다운인지 네트워크 문제인지. 발생시 처리방법?
+//				e.printStackTrace();
+//			}
 
-	public void homeCallback(Object sender) {
-		userData.difficulty = 0;
-		try {
-			NetworkController.getInstance().sendRoomOwner(0);
-			CCScene scene = Home.scene();
+			switch (value) {
+			case previous:
+				scene = GameDifficulty.scene();
+				break;
+
+			case home:
+				scene = Home.scene();
+				break;
+			}
 			CCDirector.sharedDirector().replaceScene(scene);
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 	
@@ -583,10 +588,12 @@ public class GameInvite extends CCLayer {
 //		}
 
 	public void randomMatching(Object sender) {
+		// hide scroll view
+		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 		try {
 //			GameDifficulty.mode =2;
 			userData.setGameMode(randomMode);
-			NetworkController.getInstance().sendRoomOwner(1); // 방장 권한
+			NetworkController.getInstance().sendRoomOwner(1); // 방장 권한 주입 (random match에서만 있음)
 			CCScene scene = GameRandom.scene();
 			CCDirector.sharedDirector().replaceScene(scene);
 			Log.e("CallBack", "RandomMatchLayer");
@@ -598,7 +605,7 @@ public class GameInvite extends CCLayer {
 	public void gameStart(Object sender) {
 		if(userData.getBroomstick() > 0) {
 			try {
-				// Requestmatch말고 invite로 가야함.
+				// Requestmatch말고 invite로 가야함.  // 게임서버 다시 확인해서 수정할것
 				NetworkController.getInstance().sendRequestMatch(userData.difficulty);
 				//CCScene scene = GameLayer.scene(mContext);
 				CCScene scene = GameLoading.scene();

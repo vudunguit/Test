@@ -64,17 +64,17 @@ public class MainActivity extends Activity {
     // 우편함 리스트뷰 위치 (화면중심 높이 50% 기준)
     private int verticalShiftPosition = 18;
     private float itemListBackgroundHeight = 596;
-    private float itemListMarginLeft = 107;
+    private float itemListMarginLeft = 106; // 107
     private float itemListMarginTop = 131;
-    private float itemListMarginRight = 107;
+    private float itemListMarginRight = 106; // 107
     private float itemListMarginBottom = 12;
     
     // 친구초대 리스트뷰 위치 (화면중심 높이 52.5% 위치)
     private float inviteListBackgroundHeight = 580;
-    private float inviteListMarginLeft = 105;
+    private float inviteListMarginLeft = 108;
     private float inviteListMarginTop = 60;
-    private float inviteListMarginRight = 105;
-    private float inviteListMarginBottom = 215;
+    private float inviteListMarginRight = 108;
+    private float inviteListMarginBottom = 216;
     
     // 이모티콘 리스트뷰 위치 (화면중심 높이 52.5% 위치)
     private float emoticonListBackgroundHeight = 889;
@@ -82,8 +82,8 @@ public class MainActivity extends Activity {
     private float emoticonListMarginTop = 204;
     private float emoticonListMarginRight = 106;
     private float emoticonListMarginBottom = 186;
-    
-    // 친구초대 리스트뷰 위치 (화면중심 높이 52.5% 위치)
+    //
+    // 초대매치 리스트뷰 위치 (화면중심 높이 52.5% 위치)
     private float matchListBackgroundHeight = 889;
     private float matchListMarginLeft = 88;
     private float matchListMarginTop = 440;

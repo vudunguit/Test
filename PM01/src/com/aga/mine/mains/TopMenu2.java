@@ -30,18 +30,23 @@ public class TopMenu2 extends CCLayer{
 		return CCDirector.sharedDirector().winSize();
 	}
 
+	final static int previous = 501;
+	final static int home= 502;
+	
 	// 상단 메뉴 (scene 이동)
 	public static void setSceneMenu(CCNode nodeThis){
 		
 		CCMenuItemImage frameButtonBack = CCMenuItemImage.item(
 				commonfolder + "frame-buttonBack-normal-hd" + fileExtension,
 				commonfolder + "frame-buttonBack-select-hd" + fileExtension,
-				nodeThis, "previousCallback");
+				nodeThis, "clicked");
+		frameButtonBack.setTag(previous);
 		
 		CCMenuItemImage frameButtonHome = CCMenuItemImage.item(
 				commonfolder + "frame-buttonHome-normal-hd" + fileExtension,
 				commonfolder + "frame-buttonHome-select-hd" + fileExtension,
-				nodeThis,"homeCallback");
+				nodeThis,"clicked");
+		frameButtonHome.setTag(home);
 		
 		CCMenu menu = CCMenu.menu(frameButtonBack, frameButtonHome);
 		nodeThis.addChild(menu);

@@ -33,8 +33,6 @@ public class ShopItem2 extends CCLayer {
 	private Context mContext;
 	UserData userData;
 	
-	// config 파일에 나중에 옮길것
-	public static boolean buttonActive = true;
 	int attackAttribute = 1;
 	int defenseAttribute = 1;
 	int price ;
@@ -356,21 +354,25 @@ public class ShopItem2 extends CCLayer {
 		parentSprite.addChild(defenseAttributeSelected2);
 }	
 
-	@Override
-	public boolean ccTouchesEnded(MotionEvent event) {
-		return super.ccTouchesEnded(event);
-	}
-
-	public void previousCallback(Object sender) {
+	// config 파일에 나중에 옮길것
+	public static boolean buttonActive = true;
+	final int previous = 501;
+	final int home= 502;
+	
+	// sceneCallback들 전부 여기로 옮기기
+	public void clicked(Object sender) {
+		CCScene scene = null;
+		int value = ((CCNode) sender).getTag();
 		if (buttonActive) {
-			CCScene scene = Shop.scene();
-			CCDirector.sharedDirector().replaceScene(scene);
-		}
-	}
+			switch (value) {
+			case previous:
+				scene = Shop.scene();
+				break;
 
-	public void homeCallback(Object sender) {
-		if (buttonActive) {
-			CCScene scene = Home.scene();
+			case home:
+				scene = Home.scene();
+				break;
+			}
 			CCDirector.sharedDirector().replaceScene(scene);
 		}
 	}

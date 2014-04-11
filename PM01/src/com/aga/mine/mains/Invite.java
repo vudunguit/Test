@@ -246,21 +246,32 @@ public class Invite extends CCLayer {
 //		}
 //	}
 
-	@Override
-	public boolean ccTouchesEnded(MotionEvent event) {
-		return super.ccTouchesEnded(event);
+	// config 파일에 나중에 옮길것
+	public static boolean buttonActive = true;
+	final int previous = 501;
+	final int home= 502;
+	
+	// sceneCallback들 전부 여기로 옮기기
+	public void clicked(Object sender) {
+		// hide scroll view
+		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+		CCScene scene = null;
+		int value = ((CCNode) sender).getTag();
+		if (buttonActive) {
+			switch (value) {
+				case previous :
+				case home :
+					if (GameData.share().isGuestMode) { // 게스트모드는 들어올수 없기때문에 불필요한 코드지만 만약에 오류상황시 넘길수 있는 상태로 놔둠.
+						scene = Home2.scene();
+					} else {
+						scene = Home.scene();
+					}
+					break;
+			}
+			CCDirector.sharedDirector().replaceScene(scene);
+		}
 	}
 	
-	public void previousCallback(Object sender) {
-		CCScene scene = Home.scene();
-		CCDirector.sharedDirector().replaceScene(scene);
-	}
-
-	public void homeCallback(Object sender) {
-		CCScene scene = Home.scene();
-		CCDirector.sharedDirector().replaceScene(scene);
-	}
-
 	public void timerCallback(Object sender) {
 		CCNode a= (CCNode)sender;
 		a.getParent().addChild(timerBack);
