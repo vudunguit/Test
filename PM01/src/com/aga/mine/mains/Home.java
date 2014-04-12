@@ -202,119 +202,128 @@ public class Home extends CCLayer{
 
 
 	public void clicked2(Object sender) {
-		//hide scroll view
-		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
-		
+		// hide scroll view
+		MainApplication.getInstance().getActivity().mHandler
+				.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+
 		int value = ((CCNode) sender).getTag();
 		CCScene scene = null;
-		
+
 		switch (value) {
-		case broomstickButton :
+		case broomstickButton:
 			Log.e("Home", "CallBack3 : broomstick " + value);
-			FacebookData.getinstance().setRecipientID(FacebookData.getinstance().getUserInfo().getId());
+			FacebookData.getinstance().setRecipientID(
+					FacebookData.getinstance().getUserInfo().getId());
 			scene = ShopBroomstick2.scene();
 			break;
-		case goldButton :
+		case goldButton:
 			Log.e("Home", "CallBack3 : gold " + value);
-			FacebookData.getinstance().setRecipientID(FacebookData.getinstance().getUserInfo().getId());
+			FacebookData.getinstance().setRecipientID(
+					FacebookData.getinstance().getUserInfo().getId());
 			scene = ShopGold2.scene();
 			break;
-		case shopButton :
-				Log.e("Home", "CallBack3 : shop " + value);
+		case shopButton:
+			Log.e("Home", "CallBack3 : shop " + value);
 			scene = Shop.scene();
 			break;
-		case enterButton :
+		case enterButton:
 			Log.e("Home", "CallBack3 : enter " + value);
 			scene = GameMode.scene();
 			break;
-		case optionButton :
+		case optionButton:
 			Log.e("Home", "CallBack3 : option " + value);
 			scene = Option.scene();
 			break;
-		case inviteButton :
+		case inviteButton:
 			Log.e("Home", "CallBack3 : invite " + value);
 			scene = Invite.scene();
-			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_INVITELIST);
+			MainApplication.getInstance().getActivity().mHandler
+					.sendEmptyMessage(Constant.MSG_DISPLAY_INVITELIST);
 			break;
-//		default:
-//			Log.e("Home", "CallBack3 : Home " + value + " scene에 임시로 저장 (불필요 할 것 같다.)");
-//			scene = Home.scene();
-//			break;
+		// default:
+		// Log.e("Home", "CallBack3 : Home " + value +
+		// " scene에 임시로 저장 (불필요 할 것 같다.)");
+		// scene = Home.scene();
+		// break;
 		}
-		
+
 		if (value <= inviteButton) {
 			Log.e("Home", "clicked2() if (value <= inviteButton) 탔음");
 			CCDirector.sharedDirector().replaceScene(scene);
 			return;
 		}
-		
+
 		CCScene homeScene = (CCScene) this.getParent();
-		CCLayer mailBoxLayer = (CCLayer) homeScene.getChildByTag(mailBoxLayerTag);
-		String data = (String) ((CCMenuItemImage)sender).getUserData();
-		
+		CCLayer mailBoxLayer = (CCLayer) homeScene
+				.getChildByTag(mailBoxLayerTag);
+		String data = (String) ((CCMenuItemImage) sender).getUserData();
+
 		if (value == mailButton) {
-			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_ITEMLIST);
 			// 안드로이드 스크롤뷰로 교체해야됩니다.
 			new MailBox(mailBoxLayer, "11mailbox/", this);
-			
+
 			List<CCNode> layers = homeScene.getChildren();
 			for (CCNode ccNode : layers) { // home scene에 붙은 layer
 				CCLayer tempLayer = (CCLayer) ccNode;
-				if (tempLayer != mailBoxLayer) {  // layer중에 mailboxlayer만 제외
+				if (tempLayer != mailBoxLayer) { // layer중에 mailboxlayer만 제외
 					tempLayer.setIsTouchEnabled(false);
-					
-//					List<CCNode> sprites = tempLayer.getChildren();
-//					for (CCNode ccNode2 : sprites) {
-//						Log.e("Home", "CCNode " + ccNode2);
-//						if (ccNode2 instanceof CCMenu) { // layer중에 menu만 고르고
-//							Log.e("Home", "ccNode2 " + ccNode2);
-//							List<CCNode> tempMenuItems = ccNode2.getChildren(); // menu에서 버튼을 골라서
-//							for (CCNode ccNode3 : tempMenuItems) {
-//								((CCMenuItem)ccNode3).setIsEnabled(false); // 터치 잠금
-//							}
-//						} else if (ccNode2 instanceof CCMenuItem) {
-//							((CCMenuItem)ccNode2).setIsEnabled(false); // 바로 menuitem이 나오면 터치 잠금
-//
-						}
-					}
-				} else if (value == mailcloseButton) {
-					MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_RANKLIST);
-					mailBoxLayer.removeChildByTag(999, true);
-					List<CCNode> layers = homeScene.getChildren();
-					for (CCNode ccNode : layers) { // home scene에 붙은 layer
-						CCLayer tempLayer = (CCLayer) ccNode;
-							tempLayer.setIsTouchEnabled(true);
-					}
-				} else if (value == mailReceiveAllButton) {
-					String[] items = data.split(",");
-					for (String item : items) {
-						Log.e("Home", "mailReceiveAll : " + item);
-						if (!item.equals("")) {
-							DataFilter.itemEraser(item);	
-						}
-					}
-					// child sprite 제거 방식으로 수정 요함.
-					mailBoxLayer.removeChildByTag(999, true);
-					new MailBox(mailBoxLayer, "11mailbox/", this);
-				} else if (value == presentGoldButton) {
-					Log.e("Home", "presentGold : " + value);
-					String[] items = data.split(",");
-					for (String item : items) {
-							FacebookData.getinstance().setRecipientID(item);
-							scene = ShopGold2.scene();
-							CCDirector.sharedDirector().replaceScene(scene);
-					}
-				} else if (value == presentBroomstickButton) {
-					Log.e("Home", "presentBroomstick : " + value);
-					String[] items = data.split(",");
-					for (String item : items) {
-							String senderID = FacebookData.getinstance().getUserInfo().getId();
-							String sendMailData = 
-									"0,RequestModeMailBoxAdd*22," + FacebookData.getinstance().getRequestID() + 
-									"*1," + item + "*19," + senderID + "*20,Broomstick*21," + 1;
-							FacebookData.getinstance().sendMail(sendMailData);
-					}
+
+					// List<CCNode> sprites = tempLayer.getChildren();
+					// for (CCNode ccNode2 : sprites) {
+					// Log.e("Home", "CCNode " + ccNode2);
+					// if (ccNode2 instanceof CCMenu) { // layer중에 menu만 고르고
+					// Log.e("Home", "ccNode2 " + ccNode2);
+					// List<CCNode> tempMenuItems = ccNode2.getChildren(); //
+					// menu에서 버튼을 골라서
+					// for (CCNode ccNode3 : tempMenuItems) {
+					// ((CCMenuItem)ccNode3).setIsEnabled(false); // 터치 잠금
+					// }
+					// } else if (ccNode2 instanceof CCMenuItem) {
+					// ((CCMenuItem)ccNode2).setIsEnabled(false); // 바로
+					// menuitem이 나오면 터치 잠금
+					//
 				}
+			}
+		} else if (value == mailcloseButton) {
+			MainApplication.getInstance().getActivity().mHandler
+					.sendEmptyMessage(Constant.MSG_DISPLAY_RANKLIST);
+			mailBoxLayer.removeChildByTag(999, true);
+			List<CCNode> layers = homeScene.getChildren();
+			for (CCNode ccNode : layers) { // home scene에 붙은 layer
+				CCLayer tempLayer = (CCLayer) ccNode;
+				tempLayer.setIsTouchEnabled(true);
+			}
+		} else if (value == mailReceiveAllButton) {
+			String[] items = data.split(",");
+			for (String item : items) {
+				Log.e("Home", "mailReceiveAll : " + item);
+				if (!item.equals("")) {
+					DataFilter.itemEraser(item);
+				}
+			}
+			// child sprite 제거 방식으로 수정 요함.
+			mailBoxLayer.removeChildByTag(999, true);
+			new MailBox(mailBoxLayer, "11mailbox/", this);
+		} else if (value == presentGoldButton) {
+			Log.e("Home", "presentGold : " + value);
+			String[] items = data.split(",");
+			for (String item : items) {
+				FacebookData.getinstance().setRecipientID(item);
+				scene = ShopGold2.scene();
+				CCDirector.sharedDirector().replaceScene(scene);
+			}
+		} else if (value == presentBroomstickButton) {
+			Log.e("Home", "presentBroomstick : " + value);
+			String[] items = data.split(",");
+			for (String item : items) {
+				String senderID = FacebookData.getinstance().getUserInfo()
+						.getId();
+				String sendMailData = "0,RequestModeMailBoxAdd*22,"
+						+ FacebookData.getinstance().getRequestID() + "*1,"
+						+ item + "*19," + senderID + "*20,Broomstick*21," + 1;
+				FacebookData.getinstance().sendMail(sendMailData);
+			}
+		}
 	}
 	
 //	private void modifyMenu(CCMenu menu, boolean enabled) {

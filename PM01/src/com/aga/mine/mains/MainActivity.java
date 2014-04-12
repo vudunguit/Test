@@ -1,6 +1,7 @@
 ﻿package com.aga.mine.mains;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.cocos2d.layers.CCScene;
@@ -29,6 +30,8 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.aga.mine.view.Broomstick;
+import com.aga.mine.view.BroomstickListAdapter;
 import com.aga.mine.view.FriendListAapter;
 import com.aga.mine.view.InviteListAapter;
 import com.sromku.simple.fb.Permission;
@@ -50,7 +53,7 @@ public class MainActivity extends Activity {
     CCDirector director = CCDirector.sharedDirector();
     
     private RelativeLayout main;
-    private ListView mListView;
+    public ListView mListView;
 
     private int nMargin = 0;
     private float frameCenterPosition = 0.525f;
@@ -120,8 +123,9 @@ public class MainActivity extends Activity {
 				break;
 				
 			case Constant.MSG_DISPLAY_ITEMLIST:
-//				FriendListAapter itemAdapter = new FriendListAapter(MainActivity.this);
-//				mListView.setAdapter(itemAdapter);
+				ArrayList<Broomstick> broomstickList = (ArrayList<Broomstick>) msg.obj;
+				BroomstickListAdapter broomstickAdapter = new BroomstickListAdapter(MainActivity.this, broomstickList);
+				mListView.setAdapter(broomstickAdapter);
 				RelativeLayout.LayoutParams itemParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 				itemParams.setMargins(
 						(int) (itemListMarginLeft * scale) + nMargin, 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:background="@drawable/mail_postboxlist"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/broomstickProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/com_facebook_profile_default_icon" />
+
+    <TextView
+        android:id="@+id/broomstickText"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="#FFFFFFFF"
+        android:text="TextView" />
+
+    <ImageView
+        android:id="@+id/broomstickImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mail_broomstickbutton1" />
+
+</LinearLayout>
