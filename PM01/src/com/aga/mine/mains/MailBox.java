@@ -17,9 +17,10 @@ import org.cocos2d.types.ccColor3B;
 import android.os.Message;
 import android.util.Log;
 
-import com.aga.mine.view.Broomstick;
-import com.aga.mine.view.BroomstickListAdapter;
-import com.aga.mine.view.Gold;
+import com.aga.mine.view.BroomstickItem;
+import com.aga.mine.view.GoldItem;
+import com.aga.mine.view.MailItem;
+import com.aga.mine.view.MailListAdapter;
 
 public class MailBox {
 
@@ -28,6 +29,8 @@ public class MailBox {
 
 	final int mailcloseButton = 1008;
 	final int mailReceiveAllButton = 1009;
+	final int broomTab = 1012;
+	final int goldTab = 1013;
 
 	public static boolean buttonActive = true;
 
@@ -35,6 +38,9 @@ public class MailBox {
 	CCSprite broomstickBackground2;
 	CCSprite presentBackground1;
 	CCSprite presentBackground2;
+	
+	private ArrayList<MailItem> mBroomList = new ArrayList<MailItem>();
+	private ArrayList<MailItem> mGoldList = new ArrayList<MailItem>();
 
 	private CGSize winsize() {
 		return CCDirector.sharedDirector().winSize();
@@ -53,40 +59,35 @@ public class MailBox {
 		}
 		return null;
 	}
-
+	
 	public MailBox(CCLayer parentLayer, String imageFolder, CCNode nodeThis) {
-		// public void postbox() {
+		this(parentLayer, imageFolder, nodeThis, Constant.MAIL_TAB_BROOM);
+	}
 
+	public MailBox(CCLayer parentLayer, String imageFolder, CCNode nodeThis, int selectedTab) {
 		String[] mail = mailOpen();
-		ArrayList<Gold> goldList = new ArrayList<Gold>();
-		ArrayList<Broomstick> BroomstickList = new ArrayList<Broomstick>();
-
-		Log.e("MailBox", "mailSize [" + mail.length + "]");
 		for (String string : mail) {
 			Log.e("MailBox", "mailOpen [" + string + "]");
 			if (string != null && !string.equals("")) {
 				String[] mailArray = string.split("\\*");
-				// for (String string2 : mailArray) {
-				// Log.e("MailBox", "mailOpen2 : " + string2);
-				// }
-
-				if (mailArray[2].equals("Gold")) {
-					Gold gold = new Gold();
-					gold.id = mailArray[0];
-					gold.sender_id = mailArray[1];
-					gold.quantity = mailArray[3];
-					gold.date = mailArray[4];
-					goldList.add(gold);
+				
+				MailItem mailItem;
+				if (mailArray[2].equals("Broomstick")) {
+					mailItem = new BroomstickItem();
+					mailItem.id = mailArray[0];
+					mailItem.sender_id = mailArray[1];
+					mailItem.quantity = mailArray[3];
+					mailItem.date = mailArray[4];
+					mBroomList.add(mailItem);
 				} else {
-					Broomstick broomstick = new Broomstick();
-					broomstick.id = mailArray[0];
-					broomstick.sender_id = mailArray[1];
-					broomstick.quantity = mailArray[3];
-					broomstick.date = mailArray[4];
-					BroomstickList.add(broomstick);
+					mailItem = new GoldItem();
+					mailItem.id = mailArray[0];
+					mailItem.sender_id = mailArray[1];
+					mailItem.quantity = mailArray[3];
+					mailItem.date = mailArray[4];
+					mGoldList.add(mailItem);
 				}
 			}
-
 		}
 
 		buttonActive = false;
@@ -131,7 +132,8 @@ public class MailBox {
 		CCMenuItem broomstickMenu = CCMenuItemImage.item(imageFolder
 				+ "postboxBlankButton" + fileExtension, imageFolder
 				+ "postboxBlankButton" + fileExtension, nodeThis,
-				"pesterCallback");
+				"clicked2");
+		broomstickMenu.setTag(broomTab);
 
 		// 빗자루 메뉴 이름
 		CCSprite broomstickMenuTitle = CCSprite
@@ -147,7 +149,8 @@ public class MailBox {
 		CCMenuItem giftMenu = CCMenuItemImage.item(imageFolder
 				+ "postboxBlankButton" + fileExtension, imageFolder
 				+ "postboxBlankButton" + fileExtension, nodeThis,
-				"presentCallback");
+				"clicked2");
+		giftMenu.setTag(goldTab);
 
 		// 선물 메뉴 이름
 		CCSprite giftMenuTitle = CCSprite.sprite(Utility.getInstance()
@@ -157,6 +160,7 @@ public class MailBox {
 				giftMenu.getContentSize().height / 2);
 		giftMenu.addChild(giftMenuTitle);
 
+		//close menu
 		CCMenuItem close = CCMenuItemImage.item(imageFolder
 				+ "postboxCloseNormal" + fileExtension, imageFolder
 				+ "postboxClosePress" + fileExtension, nodeThis, "clicked2");
@@ -196,7 +200,7 @@ public class MailBox {
 		broomstickBackground1.addChild(postCountBack);
 
 		CCLabel postCountNumber = CCLabel.makeLabel(
-				BroomstickList.size() + " ", "Arial", 30.0f);
+				(selectedTab==Constant.MAIL_TAB_BROOM? mBroomList.size() : mGoldList) + " ", "Arial", 30.0f);
 		postCountNumber.setColor(ccColor3B.ccc3(64, 46, 1));
 		postCountNumber.setPosition(postCountBack.getContentSize().width
 				- postCountNumber.getContentSize().width / 2 - 10.0f,
@@ -217,9 +221,11 @@ public class MailBox {
 
 		// Receive All
 		String BroomstickAll = "";
-		for (Broomstick broomstick : BroomstickList) {
-			BroomstickAll += "," + broomstick.id;
+
+		for (MailItem item : (selectedTab == 1 ?  mBroomList : mGoldList)) {
+			BroomstickAll += "," + item.sender_id;
 		}
+
 
 		CCMenuItem receiveAllButton = CCMenuItemImage
 				.item(imageFolder + "receiveAllButtonNormal" + fileExtension,
@@ -253,7 +259,13 @@ public class MailBox {
 
 		//안드로이드 스크롤뷰
 		Message msg = MainApplication.getInstance().getActivity().mHandler.obtainMessage();
-		msg.obj = BroomstickList;
+		if(selectedTab == 1) {
+			msg.obj = mBroomList;
+			msg.arg1 = Constant.MAIL_TAB_BROOM;
+		} else {
+			msg.obj = mGoldList;
+			msg.arg1 = Constant.MAIL_TAB_GOLD;
+		}
 		msg.what = Constant.MSG_DISPLAY_ITEMLIST;
 		MainApplication.getInstance().getActivity().mHandler.sendMessage(msg);
 		

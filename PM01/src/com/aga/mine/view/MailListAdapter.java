@@ -12,25 +12,29 @@ import android.widget.TextView;
 import com.aga.mine.mains.R;
 import com.androidquery.AQuery;
 
-public class BroomstickListAdapter extends BaseAdapter {
-	private ArrayList<Broomstick> mBroomstickList;
+public class MailListAdapter extends BaseAdapter {
+	private ArrayList<MailItem> mMailItemList;
 	private AQuery mAq;
 	private Context mContext;
+	private int mTab;
 	
-	public BroomstickListAdapter(Context context, ArrayList<Broomstick> broomstickList) {
-		mBroomstickList = broomstickList;
+	public MailListAdapter(Context context, ArrayList<MailItem> mailItemList, int tab) {
 		mContext = context;
 		mAq = new AQuery(mContext);
+		mTab = tab;
+
+		//tab => 1:broomstick, 2:gold
+		mMailItemList = mailItemList;
 	}
 
 	@Override
 	public int getCount() {
-		return mBroomstickList.size();
+		return mMailItemList.size();
 	}
 
 	@Override
-	public Broomstick getItem(int position) {
-		return mBroomstickList.get(position);
+	public MailItem getItem(int position) {
+		return mMailItemList.get(position);
 	}
 
 	@Override
@@ -43,10 +47,10 @@ public class BroomstickListAdapter extends BaseAdapter {
 		Viewholder holder;
 		if(convertView == null) {
 			holder = new Viewholder();
-			convertView = View.inflate(mContext, R.layout.list_broomstick, null);
-			holder.profile = (ImageView) convertView.findViewById(R.id.broomstickProfile);
-			holder.text = (TextView) convertView.findViewById(R.id.broomstickText);
-			holder.image = (ImageView) convertView.findViewById(R.id.broomstickImage);
+			convertView = View.inflate(mContext, R.layout.list_mail, null);
+			holder.profile = (ImageView) convertView.findViewById(R.id.mailProfile);
+			holder.text = (TextView) convertView.findViewById(R.id.mailText);
+			holder.image = (ImageView) convertView.findViewById(R.id.mailImage);
 			convertView.setTag(holder);
 		} else {
 			holder = (Viewholder) convertView.getTag();
@@ -54,15 +58,21 @@ public class BroomstickListAdapter extends BaseAdapter {
 		
 		//set facebook profile image
 		AQuery aq = mAq.recycle(convertView);
-		String url = "https://graph.facebook.com/" + mBroomstickList.get(position).sender_id +"/picture";
+		String url = "https://graph.facebook.com/" + mMailItemList.get(position).sender_id +"/picture";
 		if(aq.shouldDelay(position, convertView, parent, url)){
 
 		}else{
 			aq.id(holder.profile).image(url, true, true);
 		}
 		
-		//set text
-		holder.text.setText("빗자루 " + mBroomstickList.get(0).quantity + "개를 받았습니다.");
+		//set text and icon
+		if(mTab == 1) {
+			holder.text.setText("빗자루 " + mMailItemList.get(0).quantity + "개를 받았습니다.");
+			holder.image.setImageResource(R.drawable.mail_broomstickbutton1);
+		} else {
+			holder.text.setText("" + mMailItemList.get(0).quantity + "골드를 받았습니다.");
+			holder.image.setImageResource(R.drawable.mail_pumkin);
+		}
 		
 		return convertView;
 	}

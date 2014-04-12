@@ -37,6 +37,8 @@ public class Home extends CCLayer{
 	final int mailReceiveAllButton = 1009;
 	final int presentGoldButton = 1010;
 	final int presentBroomstickButton = 1011;
+	final int broomTab = 1012;
+	final int goldTab = 1013;
 	
 //	static CCLayer scroll = CCLayer.node(); // 안드로이드 뷰로 인하여 제거됨.
 	
@@ -323,6 +325,12 @@ public class Home extends CCLayer{
 						+ item + "*19," + senderID + "*20,Broomstick*21," + 1;
 				FacebookData.getinstance().sendMail(sendMailData);
 			}
+		} else if (value == broomTab) {
+			mailBoxLayer.removeChildByTag(999, true);
+			new MailBox(mailBoxLayer, "11mailbox/", this, Constant.MAIL_TAB_BROOM);
+		} else if (value == goldTab) {
+			mailBoxLayer.removeChildByTag(999, true);
+			new MailBox(mailBoxLayer, "11mailbox/", this, Constant.MAIL_TAB_GOLD);
 		}
 	}
 	

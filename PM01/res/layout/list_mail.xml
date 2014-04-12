@@ -7,13 +7,13 @@
     android:orientation="horizontal" >
 
     <ImageView
-        android:id="@+id/broomstickProfile"
+        android:id="@+id/mailProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/com_facebook_profile_default_icon" />
 
     <TextView
-        android:id="@+id/broomstickText"
+        android:id="@+id/mailText"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
         android:text="TextView" />
 
     <ImageView
-        android:id="@+id/broomstickImage"
+        android:id="@+id/mailImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/mail_broomstickbutton1" />

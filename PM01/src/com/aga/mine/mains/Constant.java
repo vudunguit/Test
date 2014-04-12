@@ -8,4 +8,7 @@ public final class Constant {
 	public final static int MSG_DISPLAY_MATCHLIST = 5;
 	
 	public final static int MSG_HIDE_SCROLLVIEW = 11;
+	
+	public final static int MAIL_TAB_BROOM = 1;
+	public final static int MAIL_TAB_GOLD = 2;
 }

@@ -30,8 +30,8 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.aga.mine.view.Broomstick;
-import com.aga.mine.view.BroomstickListAdapter;
+import com.aga.mine.view.MailItem;
+import com.aga.mine.view.MailListAdapter;
 import com.aga.mine.view.FriendListAapter;
 import com.aga.mine.view.InviteListAapter;
 import com.sromku.simple.fb.Permission;
@@ -123,9 +123,10 @@ public class MainActivity extends Activity {
 				break;
 				
 			case Constant.MSG_DISPLAY_ITEMLIST:
-				ArrayList<Broomstick> broomstickList = (ArrayList<Broomstick>) msg.obj;
-				BroomstickListAdapter broomstickAdapter = new BroomstickListAdapter(MainActivity.this, broomstickList);
-				mListView.setAdapter(broomstickAdapter);
+				int tab = msg.arg1;
+				ArrayList<MailItem> broomstickList = (ArrayList<MailItem>) msg.obj;
+				MailListAdapter mailAdapter = new MailListAdapter(MainActivity.this, broomstickList, tab);
+				mListView.setAdapter(mailAdapter);
 				RelativeLayout.LayoutParams itemParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 				itemParams.setMargins(
 						(int) (itemListMarginLeft * scale) + nMargin, 

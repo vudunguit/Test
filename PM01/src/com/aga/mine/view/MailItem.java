@@ -1,6 +1,6 @@
 package com.aga.mine.view;
 
-public class Broomstick {
+public abstract class MailItem {
 
 	public String id;
 	public String sender_id;
