@@ -497,6 +497,7 @@ public class MainActivity extends Activity {
         public void onComplete(List<String> invitedFriends, String requestId) {
             //String msg = "Invitation was sent to " + invitedFriends.size() + " users, invite request=" + requestId;
             //ToDo:
+        	Log.d(TAG, "invite success");
         }
 
         @Override

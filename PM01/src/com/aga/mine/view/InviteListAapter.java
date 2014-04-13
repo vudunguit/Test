@@ -62,10 +62,10 @@ public class InviteListAapter extends BaseAdapter {
 		Viewholder holder;
 		if(convertView == null) {
 			holder = new Viewholder();
-			convertView = View.inflate(mContext, R.layout.list_friends, null);
-			holder.imgProfile = (ImageView) convertView.findViewById(R.id.imgProfile);
-			holder.imgInviteBtn = (ImageView) convertView.findViewById(R.id.imgBroomstick); // 다른 이미지로 변경
-			holder.tvFBId = (TextView) convertView.findViewById(R.id.tvFBId);
+			convertView = View.inflate(mContext, R.layout.list_invite, null);
+			holder.imgProfile = (ImageView) convertView.findViewById(R.id.inviteProfile);
+			holder.imgInviteBtn = (ImageView) convertView.findViewById(R.id.inviteButton); // 다른 이미지로 변경
+			holder.tvFBId = (TextView) convertView.findViewById(R.id.inviteId);
 			
 			convertView.setTag(holder);
 		} else {

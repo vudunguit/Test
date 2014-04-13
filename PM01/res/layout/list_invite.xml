@@ -3,29 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:background="@drawable/mail_postboxlist"
     android:orientation="horizontal" >
 
     <ImageView
-        android:id="@+id/mailProfile"
+        android:id="@+id/inviteProfile"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:scaleType="fitCenter"
         android:src="@drawable/com_facebook_profile_default_icon" />
 
     <TextView
-        android:id="@+id/mailText"
+        android:id="@+id/inviteId"
         android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_weight = "1"
+        android:layout_marginLeft="5dp"
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:textColor="#FFFFFFFF"
+        android:textStyle="bold" 
         android:text="TextView" />
 
     <ImageView
-        android:id="@+id/mailImage"
+        android:id="@+id/inviteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/mail_broomstickbutton1" />
+        android:layout_marginRight="5dp"
+		android:background="@drawable/invite_button1ko" />
 
 </LinearLayout>
