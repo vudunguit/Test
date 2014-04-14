@@ -17,9 +17,9 @@ import android.widget.TextView;
 import com.aga.mine.mains.Constant;
 import com.aga.mine.mains.FacebookData;
 import com.aga.mine.mains.GameScore;
+import com.aga.mine.mains.MainActivity;
 import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.R;
-import com.aga.mine.mains.ShopBroomstick2;
 import com.aga.mine.mains.ShopGold2;
 import com.androidquery.AQuery;
 import com.sromku.simple.fb.entities.Profile;
@@ -135,8 +135,9 @@ public class FriendListAapter extends BaseAdapter {
 		holder.imgBroomstick.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				MainActivity mMainActivity = MainApplication.getInstance().getActivity();
 				//hide scroll view
-				MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+				mMainActivity.mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 				
 				// facebook sendRequest보낸 후
 				//sendRequest 성공시 보낸 게시물의 id를 requestID에 담아 보냅니다.
@@ -155,9 +156,11 @@ public class FriendListAapter extends BaseAdapter {
 //						"*21," + giftBloomStick;
 //				FacebookData.getinstance().sendMail(data);
 				
-				FacebookData.getinstance().setRecipientID(gameScore.get(position).id);
-				CCScene scene = ShopBroomstick2.scene();
-				CCDirector.sharedDirector().replaceScene(scene);
+//				FacebookData.getinstance().setRecipientID(gameScore.get(position).id);
+//				CCScene scene = ShopBroomstick2.scene();
+//				CCDirector.sharedDirector().replaceScene(scene);
+				
+				mMainActivity.sendInvite(gameScore.get(position).id, gameScore.get(position).name + "이(가) 빗자루 하나를 보냈습니다", null);
 			}
 		});
 		

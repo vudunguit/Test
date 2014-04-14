@@ -13,6 +13,8 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
+import com.aga.mine.mains.MainActivity.InviteCallback;
+
 import android.util.Log;
 
 public class Home extends CCLayer{
@@ -52,6 +54,15 @@ public class Home extends CCLayer{
         return scene;
 	}
 	
+    public InviteCallback mInviteCallback = new InviteCallback() {
+		@Override
+		public void onInvited(String requestId) {
+			//when sending broom is successful, this callback is called.
+			Log.d("LDK", "requestId:" + requestId);
+			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_RANKLIST);
+		}
+    };
+	
 	public Home() {
 //		CCSprite backGround = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg-open" + fileExtension);
 //		setBackBoardMenu(backGround, folder + "home-backboard" + fileExtension);
@@ -59,6 +70,9 @@ public class Home extends CCLayer{
 		setBackBoardMenu(backGround, commonfolder + "bb1" + fileExtension);
 		setBoardFrameMenu(backGround, commonfolder + "frameGeneral-hd" + fileExtension);
 		this.setIsTouchEnabled(true);
+		
+		//register invite callback
+		MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
 
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 		//display scroll view

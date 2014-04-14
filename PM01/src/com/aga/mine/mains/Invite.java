@@ -67,7 +67,7 @@ public class Invite extends CCLayer {
 		@Override
 		public void onInvited(String requestId) {
 			//To Do:
-			
+			Log.d("LDK", "requestId:" + requestId);
 		}
     };
 
