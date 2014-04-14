@@ -256,8 +256,7 @@ public class Home extends CCLayer{
 		}
 
 		CCScene homeScene = (CCScene) this.getParent();
-		CCLayer mailBoxLayer = (CCLayer) homeScene
-				.getChildByTag(mailBoxLayerTag);
+		CCLayer mailBoxLayer = (CCLayer) homeScene.getChildByTag(mailBoxLayerTag);
 		String data = (String) ((CCMenuItemImage) sender).getUserData();
 
 		if (value == mailButton) {
@@ -305,7 +304,11 @@ public class Home extends CCLayer{
 			}
 			// child sprite 제거 방식으로 수정 요함.
 			mailBoxLayer.removeChildByTag(999, true);
-			new MailBox(mailBoxLayer, "11mailbox/", this);
+			//우편물 탭 상태에 따른 MAIL_TAB 새로 고침 
+			if (isBroomTab)
+				new MailBox(mailBoxLayer, "11mailbox/", this, Constant.MAIL_TAB_BROOM);
+			else
+				new MailBox(mailBoxLayer, "11mailbox/", this, Constant.MAIL_TAB_GOLD);
 		} else if (value == presentGoldButton) {
 			Log.e("Home", "presentGold : " + value);
 			String[] items = data.split(",");
@@ -326,13 +329,34 @@ public class Home extends CCLayer{
 				FacebookData.getinstance().sendMail(sendMailData);
 			}
 		} else if (value == broomTab) {
+			isBroomTab = true;
 			mailBoxLayer.removeChildByTag(999, true);
 			new MailBox(mailBoxLayer, "11mailbox/", this, Constant.MAIL_TAB_BROOM);
+			int broomstickBg2Tag = 301;
+			int presentBg2Tag = 302;
+			int broomstickBg1Tag = 303;
+			int presentBg1Tag = 304;
+			mailBoxLayer.getChildByTag(999).getChildByTag(888).getChildByTag(broomstickBg2Tag).setVisible(false);
+			mailBoxLayer.getChildByTag(999).getChildByTag(888).getChildByTag(presentBg2Tag).setVisible(true);
+			mailBoxLayer.getChildByTag(999).getChildByTag(888).getChildByTag(broomstickBg1Tag).setVisible(true);
+			mailBoxLayer.getChildByTag(999).getChildByTag(888).getChildByTag(presentBg1Tag).setVisible(false);
 		} else if (value == goldTab) {
+			isBroomTab = false;
 			mailBoxLayer.removeChildByTag(999, true);
 			new MailBox(mailBoxLayer, "11mailbox/", this, Constant.MAIL_TAB_GOLD);
+			int broomstickBg2Tag = 301;
+			int presentBg2Tag = 302;
+			int broomstickBg1Tag = 303;
+			int presentBg1Tag = 304;
+			mailBoxLayer.getChildByTag(999).getChildByTag(888).getChildByTag(broomstickBg2Tag).setVisible(true);
+			mailBoxLayer.getChildByTag(999).getChildByTag(888).getChildByTag(presentBg2Tag).setVisible(false);
+			mailBoxLayer.getChildByTag(999).getChildByTag(888).getChildByTag(broomstickBg1Tag).setVisible(false);
+			mailBoxLayer.getChildByTag(999).getChildByTag(888).getChildByTag(presentBg1Tag).setVisible(true);
 		}
 	}
+	
+	//우편물 탭 상태 저장 (임시용 나중에 모으기)
+	boolean isBroomTab = true;
 	
 //	private void modifyMenu(CCMenu menu, boolean enabled) {
 //		for (CCNode menuItem : menu.getChildren()) {

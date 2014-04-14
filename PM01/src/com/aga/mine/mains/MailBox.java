@@ -30,7 +30,12 @@ public class MailBox {
 	final int mailReceiveAllButton = 1009;
 	final int broomTab = 1012;
 	final int goldTab = 1013;
-
+	
+	int broomstickBg2Tag = 301;
+	int presentBg2Tag = 302;
+	int broomstickBg1Tag = 303;
+	int presentBg1Tag = 304;
+	
 	public static boolean buttonActive = true;
 
 	CCSprite broomstickBackground1;
@@ -159,14 +164,12 @@ public class MailBox {
 
 		CCMenuItem[] menu = { broomstickMenu, giftMenu, close };
 		CCMenu postMenu = CCMenu.menu(menu);
-		// CCMenu postMenu2 = CCMenu.menu(menu);
 
 		postMenu.setContentSize(broomstickBackground1.getContentSize().width,
 				broomstickMenu.getContentSize().height);
 		postMenu.setPosition(
-				0.0f,
-				broomstickBackground1.getContentSize().height
-						- postMenu.getContentSize().height);
+				postboxBg.getContentSize().width / 2 - postMenu.getContentSize().width / 2,
+				broomstickBackground1.getContentSize().height);
 
 		broomstickMenu.setPosition(broomstickMenu.getContentSize().width / 2,
 				broomstickMenu.getContentSize().height / 2);
@@ -180,13 +183,15 @@ public class MailBox {
 				postMenu.getContentSize().height
 						- close.getContentSize().height * 0.5f);
 
-		// 우편 수량
+		// 우편물 수량 백그라운드
 		CCSprite postCountBack = CCSprite.sprite(imageFolder
 				+ "broomstickCount.png");
+		postboxBg.addChild(postCountBack, 665,  665);
 		postCountBack.setPosition(
-				postCountBack.getContentSize().width / 2 + 10, broomstickBackground1.getContentSize().height - 100);
-		broomstickBackground1.addChild(postCountBack);
-
+				postboxBg.getContentSize().width / 2 - broomstickBackground1.getContentSize().width / 2 + postCountBack.getContentSize().width / 2  + 10, 
+				postboxBg.getContentSize().height / 2 + broomstickBackground1.getContentSize().height / 2 - 100  + 18);
+		
+		// 우편물 수량 값
 		CCLabel postCountNumber = CCLabel.makeLabel(
 				(selectedTab==Constant.MAIL_TAB_BROOM? mBroomList.size() : mGoldList.size()) + " ", "Arial", 30.0f);
 		postCountNumber.setColor(ccColor3B.ccc3(64, 46, 1));
@@ -195,50 +200,51 @@ public class MailBox {
 				postCountBack.getContentSize().height / 2);
 		postCountBack.addChild(postCountNumber);
 
+		// 우편물 보관 기간
 		CCLabel postCountText = CCLabel.makeLabel("최대 7일간 보관", "Arial", 15.0f);
 		postCountText.setColor(ccColor3B.ccc3(64, 46, 1));
 		postCountText.setAnchorPoint(0.0f, 0.5f);
 		postCountText.setPosition(
-				postCountBack.getContentSize().width / 2 + 70, broomstickBackground1.getContentSize().height - 100);
-		broomstickBackground1.addChild(postCountText);
+				postCountBack.getPosition().x + (1 - postCountBack.getAnchorPoint().x) * postCountBack.getContentSize().width + 20
+				- (postCountText.getAnchorPoint().x * postCountText.getContentSize().width), 
+				postCountBack.getPosition().y);
+		postboxBg.addChild(postCountText, 555, 555);
 
-		// Receive All
+		// Receive All (모두받기 버튼을 누르면 현재 아이템 타입의 모든 고유번호로 아이템을 삭제함)
 		String BroomstickAll = "";
 
 		for (MailItem item : (selectedTab == 1 ?  mBroomList : mGoldList)) {
 			BroomstickAll += "," + item.serial_number;
 		}
 
-
-		CCMenuItem receiveAllButton = CCMenuItemImage
-				.item(imageFolder + "receiveAllButtonNormal.png",
-						imageFolder + "receiveAllButtonPress.png",
-						nodeThis, "clicked2");
+		// 모두 받기 버튼
+		CCMenuItem receiveAllButton = CCMenuItemImage.item(
+				imageFolder + "receiveAllButtonNormal.png",
+				imageFolder + "receiveAllButtonPress.png",
+				nodeThis, "clicked2");
 		receiveAllButton.setTag(mailReceiveAllButton);
 		receiveAllButton.setUserData(BroomstickAll);
 
-		CCSprite receiveAllText = CCSprite.sprite(Utility.getInstance()
-				.getNameWithIsoCodeSuffix(
-						imageFolder + "receiveAllButton.png"));
-		receiveAllText.setPosition(receiveAllButton.getContentSize().width / 2,
+		// 모두 받기 버튼 Text
+		CCSprite receiveAllText = CCSprite.sprite(
+				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "receiveAllButton.png"));
+		receiveAllButton.addChild(receiveAllText);
+		receiveAllText.setPosition(
+				receiveAllButton.getContentSize().width / 2,
 				receiveAllButton.getContentSize().height / 2);
 
-		receiveAllButton.addChild(receiveAllText);
-
 		CCMenu receiveAllMenu = CCMenu.menu(receiveAllButton);
-
-		receiveAllMenu.setContentSize(receiveAllButton.getContentSize().width,
-				receiveAllButton.getContentSize().height);
+		postboxBg.addChild(receiveAllMenu, 444, 444);
+		receiveAllMenu.setContentSize(receiveAllButton.getContentSize().width, receiveAllButton.getContentSize().height);
 		receiveAllMenu.setPosition(
-				broomstickBackground1.getContentSize().width
-						- receiveAllMenu.getContentSize().width - 8.0f,
-				broomstickBackground1.getContentSize().height
-						- receiveAllMenu.getContentSize().height / 2 - 100.0f);
+				postboxBg.getContentSize().width / 2 + broomstickBackground1.getContentSize().width / 2
+						- receiveAllMenu.getContentSize().width - 8,
+						postCountBack.getPosition().y - receiveAllMenu.getContentSize().height / 2);
 		receiveAllButton.setPosition(
 				receiveAllMenu.getContentSize().width * 0.45f,
 				receiveAllMenu.getContentSize().height / 2);
 
-		broomstickBackground1.addChild(receiveAllMenu);
+
 
 		//안드로이드 스크롤뷰
 		Message msg = MainApplication.getInstance().getActivity().mHandler.obtainMessage();
@@ -335,21 +341,21 @@ public class MailBox {
 			broomstickBackground1.addChild(postList);
 		}*/
 
-		// broomstickBackground1에 추가한 메뉴버튼과 충돌로 visible 설정시 충돌 문제로 수정 요함.
-		// presentBackground1.addChild(postMenu2); // 문제 지점
-		broomstickBackground1.addChild(postMenu);
-
-		broomstickBackground1.setVisible(true);
-		broomstickBackground2.setVisible(false);
-		presentBackground1.setVisible(false);
-		presentBackground2.setVisible(true);
-
+		postboxBg.addChild(postMenu, 777, 777);
+		
+		if (selectedTab == Constant.MAIL_TAB_BROOM) {
+			broomstickBackground2.setVisible(false);
+			presentBackground1.setVisible(false); // 선물 비활성
+		} else {
+			broomstickBackground1.setVisible(false); // 빗자루 비활성
+			presentBackground2.setVisible(false); 
+		}
 		// board.addChild(title);
-		postboxBg.addChild(broomstickBackground1, 3, 2);
-		postboxBg.addChild(broomstickBackground2, 1, 4);
-		postboxBg.addChild(presentBackground1, 4, 1);
-		postboxBg.addChild(presentBackground2, 2, 3);
-		opacityBg.addChild(postboxBg);
+		postboxBg.addChild(broomstickBackground1, broomstickBg1Tag, broomstickBg1Tag);
+		postboxBg.addChild(broomstickBackground2, broomstickBg2Tag, broomstickBg2Tag);
+		postboxBg.addChild(presentBackground1, presentBg1Tag, presentBg1Tag);
+		postboxBg.addChild(presentBackground2, presentBg2Tag, presentBg2Tag);
+		opacityBg.addChild(postboxBg, 888, 888);
 		parentLayer.addChild(opacityBg, 999, 999);
 
 	}
