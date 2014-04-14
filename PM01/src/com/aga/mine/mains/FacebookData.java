@@ -32,6 +32,7 @@ public class FacebookData {
 	private Bitmap userPhoto = null;
 	private List<Profile> friendsInfo = new ArrayList<Profile>();
 	private List<GameScore> gameScore = new ArrayList<GameScore>();
+	private List<GameScore> notAPlayers = new ArrayList<GameScore>();
 	Map<String, String> data = new HashMap<String, String>();
 	int ranking = 0;
 	
@@ -215,6 +216,14 @@ public class FacebookData {
 
 	public void setGameScore(List<GameScore> gameScore) {
 		this.gameScore = gameScore;
+	}
+
+	public List<GameScore> getNotAPlayers() {
+		return notAPlayers;
+	}
+
+	public void setNotAPlayers(List<GameScore> notAPlayers) {
+		this.notAPlayers = notAPlayers;
 	}
 
 	

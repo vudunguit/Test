@@ -1,12 +1,10 @@
 package com.aga.mine.view;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.cocos2d.layers.CCScene;
-import org.cocos2d.nodes.CCDirector;
-
 import android.content.Context;
-import android.graphics.Color;
+import android.provider.Telephony.Mms.Addr;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,42 +12,60 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.aga.mine.mains.Constant;
 import com.aga.mine.mains.FacebookData;
 import com.aga.mine.mains.GameScore;
 import com.aga.mine.mains.MainActivity;
 import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.R;
-import com.aga.mine.mains.ShopBroomstick2;
-import com.aga.mine.mains.ShopGold2;
 import com.androidquery.AQuery;
 import com.sromku.simple.fb.entities.Profile;
 
 public class InviteListAapter extends BaseAdapter {
 	private Context mContext;
-	private Profile user;
-	private List<Profile> friends;
-	private List<GameScore> gameScore;
+	private List<Profile> notAPlayers; // GameScore로 변환
+	private List<GameScore> friends;
 	private AQuery mAq;
 	
 	public InviteListAapter(Context context) {
+//		List<GameScore> adfa = new ArrayList<GameScore>(); // 수정중
 		mContext = context;
-		user = FacebookData.getinstance().getUserInfo();
-		friends = FacebookData.getinstance().getFriendsInfo();
-		gameScore = FacebookData.getinstance().getGameScore();
-		Log.d("LDK", "adpater, friends size:" + friends.size());
+		List<Profile> friends = FacebookData.getinstance().getFriendsInfo();
+		List<GameScore> gameScore = FacebookData.getinstance().getGameScore();
+		notAPlayers = friends;
+		
+//		GameScore game; // 수정중
+//		for (Profile friend : friends) {
+//			game = new GameScore();
+//			game.setId(friend.getId());
+//			game.setName(friend.getName());
+//			adfa.add(game);
+//		}
+		
+		for (GameScore player : gameScore) {
+			for (int i = 0; i < friends.size(); i++) {
+				if (friends.get(i).getId().equals(player.id)) {
+					notAPlayers.remove(i);
+					break;
+				}
+			}
+		}
+		Log.d("LDK", "adpater, notAPlayers size:" + notAPlayers.size());
 		mAq = new AQuery(mContext);
+	}
+	
+	public InviteListAapter(MainActivity mainActivity, ArrayList<GameScore> matchList) {
+		friends = matchList;
 	}
 
 	@Override
 	public int getCount() {
 		// friends.getid()에서 gameScore.id를 뺀후 남는 친구만 리스트에 넣습니다.
-		return friends.size();
+		return notAPlayers.size();
 	}
 
 	@Override
 	public String getItem(int position) {
-		return friends.get(position).getId();
+		return notAPlayers.get(position).getId();
 	}
 	
 	@Override
@@ -72,14 +88,14 @@ public class InviteListAapter extends BaseAdapter {
 			holder = (Viewholder) convertView.getTag();
 		}
 		
-		holder.tvFBId.setText(friends.get(position).getName());
+		holder.tvFBId.setText(notAPlayers.get(position).getName());
 		
 		//초대버튼 클릭 이벤트 처리
 		holder.imgInviteBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 			    MainActivity mMainActivity = MainApplication.getInstance().getActivity();
-				String friend = friends.get(position).getId();
+				String friend = notAPlayers.get(position).getId();
 				//	mMainActivity.mSimpleFacebook.invite(friend, "I invite you to use this app", onInviteListener, "secret data");
 				// 메시지가 정확하게 전달 되는지는 모르겠네요.
 				
@@ -94,7 +110,7 @@ public class InviteListAapter extends BaseAdapter {
 		
 		AQuery aq = mAq.recycle(convertView);
 		
-		String url = "https://graph.facebook.com/" + friends.get(position).getId() +"/picture";
+		String url = "https://graph.facebook.com/" + notAPlayers.get(position).getId() +"/picture";
 		
 		if(aq.shouldDelay(position, convertView, parent, url)){
 		}else{

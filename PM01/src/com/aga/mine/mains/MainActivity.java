@@ -30,10 +30,10 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.aga.mine.view.MailItem;
-import com.aga.mine.view.MailListAdapter;
 import com.aga.mine.view.FriendListAapter;
 import com.aga.mine.view.InviteListAapter;
+import com.aga.mine.view.MailItem;
+import com.aga.mine.view.MailListAdapter;
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.entities.Profile;
@@ -161,8 +161,10 @@ public class MainActivity extends Activity {
 				break;
 				
 			case Constant.MSG_DISPLAY_MATCHLIST:
-//				FriendListAapter matchAdapter = new FriendListAapter(MainActivity.this);
-//				mListView.setAdapter(matchAdapter);
+//				ArrayList<GameScore> matchList = (ArrayList<GameScore>) FacebookData.getinstance().getGameScore();
+//				InviteListAapter matchAdapter = new InviteListAapter(MainActivity.this, matchList); // 수정중
+				InviteListAapter matchAdapter = new InviteListAapter(MainActivity.this);
+				mListView.setAdapter(matchAdapter);
 				RelativeLayout.LayoutParams matchParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 				matchParams.setMargins(
 						(int) (matchListMarginLeft * scale) + nMargin, 

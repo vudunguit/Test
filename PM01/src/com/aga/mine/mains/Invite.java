@@ -16,6 +16,7 @@ import org.cocos2d.types.ccColor3B;
 import com.aga.mine.pages.UserData;
 
 import android.content.Context;
+import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -268,6 +269,7 @@ public class Invite extends CCLayer {
 					}
 					break;
 			}
+
 			CCDirector.sharedDirector().replaceScene(scene);
 		}
 	}

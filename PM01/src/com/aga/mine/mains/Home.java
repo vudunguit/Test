@@ -239,8 +239,7 @@ public class Home extends CCLayer{
 		case inviteButton:
 			Log.e("Home", "CallBack3 : invite " + value);
 			scene = Invite.scene();
-			MainApplication.getInstance().getActivity().mHandler
-					.sendEmptyMessage(Constant.MSG_DISPLAY_INVITELIST);
+			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_INVITELIST);
 			break;
 		// default:
 		// Log.e("Home", "CallBack3 : Home " + value +
