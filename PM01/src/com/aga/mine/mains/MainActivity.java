@@ -313,6 +313,17 @@ public class MainActivity extends Activity {
         CCDirector.sharedDirector().setScreenSize(deviceWidth, deviceHeight);
     }
     
+    //invite callback--------------------------------------------------------------------------
+    public InviteCallback mInviteCallback;
+    
+    interface InviteCallback {
+    	public void onInvited(String requestId);
+    }
+    
+    public void setInviteCallback(InviteCallback callback) {
+    	mInviteCallback = callback;
+    }
+    
     //facebook setting--------------------------------------------------------------------------
     private void showDialog(String title, String message) {
         mProgress = ProgressDialog.show(this, title, message, true);
@@ -500,6 +511,10 @@ public class MainActivity extends Activity {
             //String msg = "Invitation was sent to " + invitedFriends.size() + " users, invite request=" + requestId;
             //ToDo:
         	Log.d(TAG, "invite success");
+
+    		if(mInviteCallback != null) {
+    			mInviteCallback.onInvited(requestId);
+    		}
         }
 
         @Override

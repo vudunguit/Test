@@ -13,6 +13,7 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
+import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.pages.UserData;
 
 import android.content.Context;
@@ -61,6 +62,14 @@ public class Invite extends CCLayer {
 //	private CGSize winsize() {
 //		return CCDirector.sharedDirector().winSize();
 //	}
+	
+    public InviteCallback mInviteCallback = new InviteCallback() {
+		@Override
+		public void onInvited(String requestId) {
+			//To Do:
+			
+		}
+    };
 
 	public static synchronized Invite getInstance() {
 		if (inviteLayer == null) {
@@ -73,6 +82,8 @@ public class Invite extends CCLayer {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
 		
+		//when invitation is successful, this callback is called.
+		MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
 		
 		//배경 그림 설정
 //		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg-invite" + fileExtension);
