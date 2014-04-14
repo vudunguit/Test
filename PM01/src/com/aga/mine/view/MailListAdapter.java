@@ -67,10 +67,10 @@ public class MailListAdapter extends BaseAdapter {
 		
 		//set text and icon
 		if(mTab == 1) {
-			holder.text.setText("빗자루 " + mMailItemList.get(0).quantity + "개를 받았습니다.");
+			holder.text.setText("빗자루 " + mMailItemList.get(position).quantity + "개를 받았습니다.");
 			holder.image.setImageResource(R.drawable.mail_broomstickbutton1);
 		} else {
-			holder.text.setText("" + mMailItemList.get(0).quantity + "골드를 받았습니다.");
+			holder.text.setText("" + mMailItemList.get(position).quantity + "골드를 받았습니다.");
 			holder.image.setImageResource(R.drawable.mail_pumkin);
 		}
 		
