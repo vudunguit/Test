@@ -25,7 +25,6 @@ import com.aga.mine.view.MailListAdapter;
 public class MailBox {
 
 	final String commonfolder = "00common/";
-	final String fileExtension = ".png";
 
 	final int mailcloseButton = 1008;
 	final int mailReceiveAllButton = 1009;
@@ -48,10 +47,11 @@ public class MailBox {
 
 	public String[] mailOpen() {
 		try {
-			return DataFilter.mailFilter(new DataController().execute(
-					"0,RequestModeMailBoxRead*1,"
-							+ FacebookData.getinstance().getUserInfo().getId())
-					.get());
+			// 정렬후 String[]로 리턴
+			return DataFilter.mailFilter(
+					// 메일을 읽어 
+					new DataController().execute(
+							"0,RequestModeMailBoxRead*1," + FacebookData.getinstance().getUserInfo().getId()).get());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
@@ -74,14 +74,14 @@ public class MailBox {
 				MailItem mailItem;
 				if (mailArray[2].equals("Broomstick")) {
 					mailItem = new BroomstickItem();
-					mailItem.id = mailArray[0];
+					mailItem.serial_number = mailArray[0];
 					mailItem.sender_id = mailArray[1];
 					mailItem.quantity = mailArray[3];
 					mailItem.date = mailArray[4];
 					mBroomList.add(mailItem);
 				} else {
 					mailItem = new GoldItem();
-					mailItem.id = mailArray[0];
+					mailItem.serial_number = mailArray[0];
 					mailItem.sender_id = mailArray[1];
 					mailItem.quantity = mailArray[3];
 					mailItem.date = mailArray[4];
@@ -93,77 +93,68 @@ public class MailBox {
 		buttonActive = false;
 
 		// 불투명 배경
-		CCSprite opacityBg = CCSprite.sprite(commonfolder + "opacitybg"
-				+ fileExtension);
+		CCSprite opacityBg = CCSprite.sprite(commonfolder + "opacitybg.png");
 		opacityBg.setPosition(winsize().width / 2, winsize().height / 2);
 
 		// 기본 배경
-		CCSprite postboxBg = CCSprite.sprite(imageFolder + "postboxbg"
-				+ fileExtension);
+		CCSprite postboxBg = CCSprite.sprite(imageFolder + "postboxbg.png");
 		postboxBg.setPosition(opacityBg.getContentSize().width / 2,
 				opacityBg.getContentSize().height / 2);
 
 		// 빗자루 배경 (활성)
-		broomstickBackground1 = CCSprite.sprite(imageFolder
-				+ "broomstickBackgroundActive" + fileExtension);
+		broomstickBackground1 = CCSprite.sprite(imageFolder + "broomstickBackgroundActive.png");
 		broomstickBackground1.setPosition(postboxBg.getContentSize().width / 2,
 				postboxBg.getContentSize().height / 2 + 18);
 
 		// 빗자루 배경 (비활성)
-		broomstickBackground2 = CCSprite.sprite(imageFolder
-				+ "broomstickBackgroundInactive" + fileExtension);
+		broomstickBackground2 = CCSprite.sprite(imageFolder + "broomstickBackgroundInactive.png");
 		broomstickBackground2.setPosition(postboxBg.getContentSize().width / 2,
 				postboxBg.getContentSize().height / 2 + 18);
 
 		// 선물 배경 (활성)
-		presentBackground1 = CCSprite.sprite(imageFolder
-				+ "giftBackgroundActive" + fileExtension);
+		presentBackground1 = CCSprite.sprite(imageFolder + "giftBackgroundActive.png");
 		presentBackground1.setPosition(postboxBg.getContentSize().width / 2,
 				postboxBg.getContentSize().height / 2 + 18);
 
 		// 선물 배경 (비활성)
-		presentBackground2 = CCSprite.sprite(imageFolder
-				+ "giftBackgroundInactive" + fileExtension);
+		presentBackground2 = CCSprite.sprite(imageFolder + "giftBackgroundInactive.png");
 		presentBackground2.setPosition(postboxBg.getContentSize().width / 2,
 				postboxBg.getContentSize().height / 2 + 18);
 
 		//
 		// 빗자루 메뉴
 		CCMenuItem broomstickMenu = CCMenuItemImage.item(imageFolder
-				+ "postboxBlankButton" + fileExtension, imageFolder
-				+ "postboxBlankButton" + fileExtension, nodeThis,
+				+ "postboxBlankButton.png", imageFolder
+				+ "postboxBlankButton.png", nodeThis,
 				"clicked2");
 		broomstickMenu.setTag(broomTab);
 
 		// 빗자루 메뉴 이름
-		CCSprite broomstickMenuTitle = CCSprite
-				.sprite(Utility.getInstance().getNameWithIsoCodeSuffix(
-						imageFolder + "postboxBroomstickTitle" + fileExtension));
-		broomstickMenuTitle.setPosition(
-				broomstickMenu.getContentSize().width / 2,
-				broomstickMenu.getContentSize().height / 2);
+		CCSprite broomstickMenuTitle = CCSprite.sprite(
+				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "postboxBroomstickTitle.png"));
+		broomstickMenuTitle.setPosition(broomstickMenu.getContentSize().width / 2, broomstickMenu.getContentSize().height / 2);
 		broomstickMenu.addChild(broomstickMenuTitle);
 
 		//
 		// 선물 메뉴
-		CCMenuItem giftMenu = CCMenuItemImage.item(imageFolder
-				+ "postboxBlankButton" + fileExtension, imageFolder
-				+ "postboxBlankButton" + fileExtension, nodeThis,
-				"clicked2");
+		CCMenuItem giftMenu = CCMenuItemImage.item(
+				imageFolder + "postboxBlankButton.png", 
+				imageFolder + "postboxBlankButton.png", 
+				nodeThis, "clicked2");
 		giftMenu.setTag(goldTab);
 
 		// 선물 메뉴 이름
 		CCSprite giftMenuTitle = CCSprite.sprite(Utility.getInstance()
 				.getNameWithIsoCodeSuffix(
-						imageFolder + "postboxGiftTitle" + fileExtension));
+						imageFolder + "postboxGiftTitle.png"));
 		giftMenuTitle.setPosition(giftMenu.getContentSize().width / 2,
 				giftMenu.getContentSize().height / 2);
 		giftMenu.addChild(giftMenuTitle);
 
 		//close menu
 		CCMenuItem close = CCMenuItemImage.item(imageFolder
-				+ "postboxCloseNormal" + fileExtension, imageFolder
-				+ "postboxClosePress" + fileExtension, nodeThis, "clicked2");
+				+ "postboxCloseNormal.png", imageFolder
+				+ "postboxClosePress.png", nodeThis, "clicked2");
 		close.setTag(mailcloseButton);
 
 		CCMenuItem[] menu = { broomstickMenu, giftMenu, close };
@@ -191,52 +182,44 @@ public class MailBox {
 
 		// 우편 수량
 		CCSprite postCountBack = CCSprite.sprite(imageFolder
-				+ "broomstickCount" + fileExtension);
+				+ "broomstickCount.png");
 		postCountBack.setPosition(
-				postCountBack.getContentSize().width / 2 + 10.0f,
-				// broomstickBackground.getContentSize().height +
-				// postCountBack.getContentSize().height / 2 - 120.0f);
-				broomstickBackground1.getContentSize().height - 100.0f);
+				postCountBack.getContentSize().width / 2 + 10, broomstickBackground1.getContentSize().height - 100);
 		broomstickBackground1.addChild(postCountBack);
 
 		CCLabel postCountNumber = CCLabel.makeLabel(
-				(selectedTab==Constant.MAIL_TAB_BROOM? mBroomList.size() : mGoldList) + " ", "Arial", 30.0f);
+				(selectedTab==Constant.MAIL_TAB_BROOM? mBroomList.size() : mGoldList.size()) + " ", "Arial", 30.0f);
 		postCountNumber.setColor(ccColor3B.ccc3(64, 46, 1));
 		postCountNumber.setPosition(postCountBack.getContentSize().width
 				- postCountNumber.getContentSize().width / 2 - 10.0f,
 				postCountBack.getContentSize().height / 2);
 		postCountBack.addChild(postCountNumber);
 
-		// CCLabel postCountText = CCLabel.makeLabel("최대 50개까지 수신 가능", "Arial",
-		// 15.0f);
 		CCLabel postCountText = CCLabel.makeLabel("최대 7일간 보관", "Arial", 15.0f);
 		postCountText.setColor(ccColor3B.ccc3(64, 46, 1));
 		postCountText.setAnchorPoint(0.0f, 0.5f);
 		postCountText.setPosition(
-				postCountBack.getContentSize().width / 2 + 70f,
-				// broomstickBackground.getContentSize().height +
-				// postCountText.getContentSize().height / 2 - 110.0f);
-				broomstickBackground1.getContentSize().height - 100.0f);
+				postCountBack.getContentSize().width / 2 + 70, broomstickBackground1.getContentSize().height - 100);
 		broomstickBackground1.addChild(postCountText);
 
 		// Receive All
 		String BroomstickAll = "";
 
 		for (MailItem item : (selectedTab == 1 ?  mBroomList : mGoldList)) {
-			BroomstickAll += "," + item.sender_id;
+			BroomstickAll += "," + item.serial_number;
 		}
 
 
 		CCMenuItem receiveAllButton = CCMenuItemImage
-				.item(imageFolder + "receiveAllButtonNormal" + fileExtension,
-						imageFolder + "receiveAllButtonPress" + fileExtension,
+				.item(imageFolder + "receiveAllButtonNormal.png",
+						imageFolder + "receiveAllButtonPress.png",
 						nodeThis, "clicked2");
 		receiveAllButton.setTag(mailReceiveAllButton);
 		receiveAllButton.setUserData(BroomstickAll);
 
 		CCSprite receiveAllText = CCSprite.sprite(Utility.getInstance()
 				.getNameWithIsoCodeSuffix(
-						imageFolder + "receiveAllButton" + fileExtension));
+						imageFolder + "receiveAllButton.png"));
 		receiveAllText.setPosition(receiveAllButton.getContentSize().width / 2,
 				receiveAllButton.getContentSize().height / 2);
 
@@ -328,8 +311,8 @@ public class MailBox {
 											.getAnchorPoint().y)));
 
 			// CCMenuItem getButton = CCMenuItemImage.item(
-			// imageFolder + "broomstickButton1" + fileExtension,
-			// imageFolder + "broomstickButton2" + fileExtension,
+			// imageFolder + "broomstickButton1.png",
+			// imageFolder + "broomstickButton2.png",
 			// nodeThis, "clicked");
 			// // getButton.setUserData("");
 			// getButton.setUserData(Broomstick.get(0)[0]);
