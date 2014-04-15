@@ -211,33 +211,4 @@ public class HomeMiddle {
 		profileBg.addChild(level);
 	}
 	
-
-	// Callback Method
-//	public void mailCallback(Object sender) {
-////			MailBox mail =	new MailBox(this, "11mailbox/", nodeThis);
-//			MailBox mail =	new MailBox(null, "11mailbox/", nodeThis);
-////			 broomstickBackground1 = mail.getBroomstickBackground1();
-////			 broomstickBackground2 = mail.getBroomstickBackground2();
-////			 presentBackground1 = mail.getPresentBackground1();
-////			 presentBackground2 = mail.getPresentBackground2();
-//	}
-	
-	public void pesterCallback(Object sender) {
-//		broomstickBackground1.setVisible(true);
-//		broomstickBackground2.setVisible(false);
-//		presentBackground1.setVisible(false);
-//		presentBackground2.setVisible(true);
-	}
-
-	public void presentCallback(Object sender) {
-//		broomstickBackground1.setVisible(false);
-//		broomstickBackground2.setVisible(true);
-//		presentBackground1.setVisible(true);
-//		presentBackground2.setVisible(false);
-	}
-	
-//	public void mailboxCloseCallback(Object sender) {
-////		this.removeChildByTag(999, true);
-//		nodeThis.removeChildByTag(999, true);
-//	}
 }

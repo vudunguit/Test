@@ -55,10 +55,25 @@ public class Home extends CCLayer{
 	}
 	
     public InviteCallback mInviteCallback = new InviteCallback() {
+    	
 		@Override
-		public void onInvited(String requestId) {
+		public void onInvited(List<String> invitedFriends, String requestId) {
 			//when sending broom is successful, this callback is called.
+			Log.e("Invite", "Callback_7 - onInvited" );
 			Log.d("LDK", "requestId:" + requestId);
+			for (String string : invitedFriends) {
+				Log.e("Invite", "invitedFriend : " + string);
+				String requestID = requestId;
+				String recipientID = FacebookData.getinstance().getUserInfo().getId();
+				String senderID = "1";
+				String sendMailData = 
+						"0,RequestModeMailBoxAdd" +
+						"*22," + requestID + 
+						"*1," + recipientID + 
+						"*19," + senderID + 
+						"*20,Broomstick*21," + 1;
+				FacebookData.getinstance().sendMail(sendMailData);
+			}
 			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_RANKLIST);
 		}
     };

@@ -101,7 +101,8 @@ public class InviteListAapter extends BaseAdapter {
 				
 				// 로그인 안되어 있을 경우 '취소'처리(이런경우가 없는데...) 
 				// 
-				mMainActivity.sendInvite(friend, "이(가) 귀하를 초대합니다.(test)", null);
+				Log.e("InviteListAapter", "Callback_3 - imgInviteBtn.setOnClickListener()");
+				mMainActivity.sendInvite(friend, "이(가) 귀하를 초대합니다. _test", null);
 				// 이(가) 귀하를 초대합니다.
 				// 이(가) 빗자루 하나를 보냈습니다.
 				// 이(가) xxxx 골드를 보냈습니다.

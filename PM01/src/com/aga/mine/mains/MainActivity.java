@@ -30,6 +30,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.aga.mine.view.EmoticonAdapter;
 import com.aga.mine.view.FriendListAapter;
 import com.aga.mine.view.InviteListAapter;
 import com.aga.mine.view.MailItem;
@@ -149,8 +150,8 @@ public class MainActivity extends Activity {
 				break;
 				
 			case Constant.MSG_DISPLAY_EMOTICONLIST:
-//				FriendListAapter emoticonAdapter = new FriendListAapter(MainActivity.this);
-//				mListView.setAdapter(emoticonAdapter);
+				EmoticonAdapter emoticonAdapter = new EmoticonAdapter(MainActivity.this);
+				mListView.setAdapter(emoticonAdapter);
 				RelativeLayout.LayoutParams emoticonParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 				emoticonParams.setMargins(
 						(int) (emoticonListMarginLeft * scale) + nMargin, 
@@ -317,10 +318,11 @@ public class MainActivity extends Activity {
     public InviteCallback mInviteCallback;
     
     interface InviteCallback {
-    	public void onInvited(String requestId);
+    	public void onInvited(List<String> invitedFriends, String requestId);
     }
     
     public void setInviteCallback(InviteCallback callback) {
+    	Log.e("MainActivity", "Callback_2 - setInviteCallback");
     	mInviteCallback = callback;
     }
     
@@ -352,6 +354,7 @@ public class MainActivity extends Activity {
     }
     
     public void sendInvite(String friend, String message, String data) {
+    	Log.e("MainActivity", "Callback_4 - sendInvite()");
     	mSimpleFacebook.invite(friend, message, mOnInviteListener, data); // 이걸로 사용하는게 맞는지 모르겠네요.
     	// 실패(오류) - "요청 실패"라는 토스트
     	// 취소 - "요청 취소" 라는 토스트
@@ -510,10 +513,14 @@ public class MainActivity extends Activity {
         public void onComplete(List<String> invitedFriends, String requestId) {
             //String msg = "Invitation was sent to " + invitedFriends.size() + " users, invite request=" + requestId;
             //ToDo:
-        	Log.d(TAG, "invite success");
-
+//        	Log.e("MainActivity", "Callback_5 - onComplete()");
+//        	for (String string : invitedFriends) {
+//            	Log.e("MainActivity", "friends : " + string);
+//			}
+        	
     		if(mInviteCallback != null) {
-    			mInviteCallback.onInvited(requestId);
+    			Log.e("MainActivity", "Callback_6 - mInviteCallback != null");
+    			mInviteCallback.onInvited(invitedFriends, requestId);
     		}
         }
 

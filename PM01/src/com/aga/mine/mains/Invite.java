@@ -1,5 +1,7 @@
 ﻿package com.aga.mine.mains;
 
+import java.util.List;
+
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
@@ -64,10 +66,25 @@ public class Invite extends CCLayer {
 //	}
 	
     public InviteCallback mInviteCallback = new InviteCallback() {
+
 		@Override
-		public void onInvited(String requestId) {
+		public void onInvited(List<String> invitedFriends, String requestId) {
 			//To Do:
+			Log.e("Invite", "Callback_7 - onInvited" );
 			Log.d("LDK", "requestId:" + requestId);
+			for (String string : invitedFriends) {
+				Log.e("Invite", "invitedFriend : " + string);
+				String requestID = requestId;
+				String recipientID = FacebookData.getinstance().getUserInfo().getId();
+				String senderID = "1";
+				String sendMailData = 
+						"0,RequestModeMailBoxAdd" +
+						"*22," + requestID + 
+						"*1," + recipientID + 
+						"*19," + senderID + 
+						"*20,Broomstick*21," + 1;
+				FacebookData.getinstance().sendMail(sendMailData);
+			}
 		}
     };
 
@@ -83,6 +100,7 @@ public class Invite extends CCLayer {
 		userData = UserData.share(mContext);
 		
 		//when invitation is successful, this callback is called.
+    	Log.e("Invite", "Callback_1 - setInviteCallback()");
 		MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
 		
 		//배경 그림 설정
@@ -179,84 +197,6 @@ public class Invite extends CCLayer {
 		statusPanel.addChild(statusPanelText2);
 		statusPanel.addChild(statusPanelText3);
 	}
-	
-	// 안드로이드 리스트 뷰로 대체 (이미지 참고용으로 놔뒀습니다.)
-//	private void friendsList(CCSprite parentSprite, String[] names) {
-//
-//	//	int i = 0;
-//		for (int i = 0; i < names.length; i++) {
-//
-//			// 친구 리스트 판넬
-//			CCSprite listPanel = CCSprite.sprite(folder + "invite-listPanel" + fileExtension);
-//			listPanel.setPosition(
-//					parentSprite.getContentSize().width / 2,
-//					parentSprite.getContentSize().height - listPanel.getContentSize().height * (0.5f + i) - 50);
-//
-//			// 친구 이미지
-//			CCSprite listPictureFrame = CCSprite.sprite(commonfolder + "frame-pictureFrame-hd" + fileExtension);
-//			listPictureFrame.setPosition(50.0f, listPanel.getContentSize().height / 2);
-//			listPictureFrame.setScale(0.8f);
-//
-//			listPanel.addChild(listPictureFrame);
-//
-//			//
-//			CCLabel myName = CCLabel.makeLabel(names[i], "Arial", 30.0f);
-//			myName.setPosition(CGPoint.make(140.0f,
-//					listPanel.getContentSize().height / 2));
-//
-//			listPanel.addChild(myName);
-//
-//			// 친구초대
-//			inviteButton = CCMenuItemImage.item(
-//					Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button1" + fileExtension),
-//					Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button1" + fileExtension), 
-//					this, "timerCallback");
-//
-//			timerBack = CCMenuItemImage.item(folder + "blank" + fileExtension, folder + "blank" + fileExtension);
-//			timerBack.setPosition(0f,0f);
-//
-//			CCLabel buttonName = CCLabel.makeLabel("24시간 남음", "Arial", 24.0f);
-//			timerBack.addChild(buttonName);
-//			buttonName.setColor(ccColor3B.ccRED);
-//			buttonName.setPosition(timerBack.getContentSize().width / 2, timerBack.getContentSize().height / 2);
-//
-//
-//
-//			//CCMenuItem[] items = {inviteButton, timerBack};
-//			//menu111 = CCMenu.menu(items);
-//			menu111 = CCMenu.menu(inviteButton);
-//			menu111.setContentSize(inviteButton.getContentSize());
-//			menu111.setPosition(
-//					listPanel.getContentSize().width - inviteButton.getContentSize().width / 2 - 4f,
-//					listPanel.getContentSize().height / 2);
-//			
-//
-//			//timerBack.setPosition(inviteButton.getContentSize().width/2,inviteButton.getContentSize().height/2);
-//
-//			listPanel.addChild(menu111);
-//
-//			//
-//			CCSprite invite;
-//			if (visible_) {
-//				// 초대하기(활성화)
-//				invite = CCSprite.sprite(
-//						Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button1" + fileExtension)); 
-//			} else {
-//				// 초대하기(비활성화)
-//				invite = CCSprite.sprite(
-//						Utility.getInstance().getNameWithIsoCodeSuffix(folder + "invite-button2" + fileExtension)); 
-//			}
-//			invite.setPosition(
-//					listPanel.getContentSize().width
-//							- invite.getContentSize().width / 2 - 4f,
-//					listPanel.getContentSize().height / 2);
-//
-//			// listPanel.addChild(invite);
-//
-//			//
-//			parentSprite.addChild(listPanel);
-//		}
-//	}
 
 	// config 파일에 나중에 옮길것
 	public static boolean buttonActive = true;
@@ -283,24 +223,6 @@ public class Invite extends CCLayer {
 
 			CCDirector.sharedDirector().replaceScene(scene);
 		}
-	}
-	
-	public void timerCallback(Object sender) {
-		CCNode a= (CCNode)sender;
-		a.getParent().addChild(timerBack);
-		a.removeFromParentAndCleanup(true);
-		Log.e("Invite", "timerCallback : " + a.getUserData());
-
-		long requestID = FacebookData.getinstance().getRequestID();  //test용 
-		String recipientID = FacebookData.getinstance().getUserInfo().getId();
-		String senderID = "1";
-		String sendMailData = 
-				"0,RequestModeMailBoxAdd" +
-				"*22," + requestID + 
-				"*1," + recipientID + 
-				"*19," + senderID + 
-				"*20,Broomstick*21," + 1;
-		FacebookData.getinstance().sendMail(sendMailData);
 	}
 	
 }

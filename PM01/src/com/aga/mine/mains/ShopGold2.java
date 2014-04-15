@@ -16,6 +16,7 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
+import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.pages.UserData;
 
 import android.content.Context;
@@ -211,7 +212,9 @@ public class ShopGold2 extends CCLayer {
 				}
 			}
 		}
-
+		
+		// 자신에게 invite 가능한가요??
+		
 //		double requestID = Math.random() * 9223372036854775807L;  //facebook 알림글번호로 대체할 것
 		long requestID = FacebookData.getinstance().getRequestID();  //test용 
 		String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
@@ -219,6 +222,7 @@ public class ShopGold2 extends CCLayer {
 		String data = 
 				"0,RequestModeMailBoxAdd*22," + requestID + 
 				"*1," + recipientID + "*19," + senderID + "*20,Gold*21," + gold;
+		
 		FacebookData.getinstance().sendMail(data);
 //		Passport.SKU = Product;
 //		Log.e("ShopGold2", "buttonCallback(usd) : " + usd);
