@@ -2,9 +2,11 @@ package com.aga.mine.view;
 
 import java.util.ArrayList;
 
+import com.aga.mine.mains.FacebookData;
 import com.aga.mine.mains.R;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,9 +15,11 @@ import android.widget.ImageView;
 public class EmoticonAdapter extends BaseAdapter {
 	private Context mContext;
 	private ArrayList<Item> mItemList = new ArrayList<Item>();
-	
+	private String[] emoticons; 
 	public EmoticonAdapter(Context context) {
 		mContext = context;
+		// 이모티콘 ","로 구분된 String을 잘라서 String배열에 저장
+		emoticons = FacebookData.getinstance().getDBData("Emoticons").split(",");
 		
 		for(int i=0; i<48; i++) {
 			Item item = new Item();
@@ -53,6 +57,20 @@ public class EmoticonAdapter extends BaseAdapter {
 			holder = (Viewholder) convertView.getTag();
 		}
 		
+		Log.e("EmoticonAdapter", "position[" + position + "]");
+		
+		// 자신의 이모티콘 목록을 현재 포지션과 비교(몇번째 배열에 저장되어있는지 몰라서 for문 돌립니다.)
+		// list로 키값 같이 넣어서 돌리는건 어떨까요? (없는것은 키는 순서대로, 값은 0으로)
+		for (String emoticonData : emoticons) {
+			// 하나하나 비교. (비교 방식이 좋지 않은것 같네요.. ㅠㅠ)
+			if (Integer.parseInt(emoticonData) == position + 1) {
+				holder.checked.setVisibility(View.VISIBLE);
+				break;
+			} else {
+				holder.checked.setVisibility(View.INVISIBLE);
+			}
+		}
+
 		holder.emoticon.setImageResource(mItemList.get(position).emoticon);
 		
 		return convertView;
