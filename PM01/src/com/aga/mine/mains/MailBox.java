@@ -184,8 +184,13 @@ public class MailBox {
 						- close.getContentSize().height * 0.5f);
 
 		// 우편물 수량 백그라운드
-		CCSprite postCountBack = CCSprite.sprite(imageFolder
-				+ "broomstickCount.png");
+		String postCountBackStr = imageFolder;
+		if (selectedTab == Constant.MAIL_TAB_BROOM) {
+			postCountBackStr += "broomstickCount.png";
+		} else {
+			postCountBackStr += "giftCount.png";
+		}
+		CCSprite postCountBack = CCSprite.sprite(postCountBackStr);
 		postboxBg.addChild(postCountBack, 665,  665);
 		postCountBack.setPosition(
 				postboxBg.getContentSize().width / 2 - broomstickBackground1.getContentSize().width / 2 + postCountBack.getContentSize().width / 2  + 10, 

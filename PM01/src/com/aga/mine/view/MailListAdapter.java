@@ -2,6 +2,9 @@ package com.aga.mine.view;
 
 import java.util.ArrayList;
 
+import org.cocos2d.layers.CCScene;
+import org.cocos2d.nodes.CCDirector;
+
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +12,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aga.mine.mains.Constant;
+import com.aga.mine.mains.DataFilter;
+import com.aga.mine.mains.FacebookData;
+import com.aga.mine.mains.MailBox;
+import com.aga.mine.mains.MainActivity;
+import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.R;
+import com.aga.mine.mains.ShopGold2;
 import com.androidquery.AQuery;
 
 public class MailListAdapter extends BaseAdapter {
@@ -43,7 +53,7 @@ public class MailListAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		Viewholder holder;
 		if(convertView == null) {
 			holder = new Viewholder();
@@ -55,6 +65,23 @@ public class MailListAdapter extends BaseAdapter {
 		} else {
 			holder = (Viewholder) convertView.getTag();
 		}
+		
+		//아이템 받기 클릭 이벤트 처리
+		holder.image.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// 일반 버튼같이 down상태에서는 이미지 변경이 가능할까요?
+				String serialNumber = mMailItemList.get(position).serial_number;
+				if (!serialNumber.equals("")) {
+					DataFilter.itemEraser(serialNumber);
+					if (mTab == Constant.MAIL_TAB_BROOM) {
+						// 빗자루 화면 갱신  
+					} else {
+						// 골드 화면 갱신
+					}
+				}
+			}
+		});
 		
 		//set facebook profile image
 		AQuery aq = mAq.recycle(convertView);
@@ -71,7 +98,7 @@ public class MailListAdapter extends BaseAdapter {
 			holder.image.setImageResource(R.drawable.mail_broomstickbutton1);
 		} else {
 			holder.text.setText("" + mMailItemList.get(position).quantity + "골드를 받았습니다.");
-			holder.image.setImageResource(R.drawable.mail_pumkin);
+			holder.image.setImageResource(R.drawable.mail_giftbutton1);
 		}
 		
 		return convertView;
