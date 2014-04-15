@@ -122,7 +122,12 @@ public class MainActivity extends Activity {
 						(int) (height * frameCenterPosition + (rankListFrameBottomPosition - frameGeneralHeight * 0.5f) * scale) + nMargin);
 				//MainActivity.this.addContentView(listview, params);
 				
-				main.addView(mListView, params);
+				if(mListView.getParent() != null) {
+					main.removeView(mListView);
+					main.addView(mListView, params);
+				} else {
+					main.addView(mListView, params);
+				}
 				break;
 				
 			case Constant.MSG_DISPLAY_ITEMLIST:

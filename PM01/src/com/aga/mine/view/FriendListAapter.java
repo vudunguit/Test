@@ -21,6 +21,7 @@ import com.aga.mine.mains.MainActivity;
 import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.R;
 import com.aga.mine.mains.ShopGold2;
+import com.aga.mine.util.Util;
 import com.androidquery.AQuery;
 import com.sromku.simple.fb.entities.Profile;
 
@@ -131,13 +132,19 @@ public class FriendListAapter extends BaseAdapter {
 			}
 		});
 		
+		//빗자루 disable 처리
+		if(!Util.canSendBroom(gameScore.get(position).id)) {
+			holder.imgBroomstick.setImageResource(R.drawable.home_broomstickbigoff_hd);
+			holder.imgBroomstick.setEnabled(false);
+		}
+		
 		//빗자루 클릭 이벤트 처리
 		holder.imgBroomstick.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				MainActivity mMainActivity = MainApplication.getInstance().getActivity();
 				//hide scroll view
-				mMainActivity.mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+				//mMainActivity.mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 				
 				// facebook sendRequest보낸 후
 				//sendRequest 성공시 보낸 게시물의 id를 requestID에 담아 보냅니다.

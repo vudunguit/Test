@@ -14,6 +14,7 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
 import com.aga.mine.mains.MainActivity.InviteCallback;
+import com.aga.mine.util.Util;
 
 import android.util.Log;
 
@@ -73,6 +74,9 @@ public class Home extends CCLayer{
 						"*19," + senderID + 
 						"*20,Broomstick*21," + 1;
 				FacebookData.getinstance().sendMail(sendMailData);
+				
+				//save date to shared pref
+				Util.setBroom(string);
 			}
 			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_RANKLIST);
 		}
