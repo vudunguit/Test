@@ -15,15 +15,21 @@ import android.widget.ImageView;
 public class EmoticonAdapter extends BaseAdapter {
 	private Context mContext;
 	private ArrayList<Item> mItemList = new ArrayList<Item>();
-	private String[] emoticons; 
+	
 	public EmoticonAdapter(Context context) {
 		mContext = context;
 		// 이모티콘 ","로 구분된 String을 잘라서 String배열에 저장
-		emoticons = FacebookData.getinstance().getDBData("Emoticons").split(",");
+		String[] emoticons = FacebookData.getinstance().getDBData("Emoticons").split(",");
+		ArrayList<String> emoticonList = new ArrayList<String>();
+		for(String emoticonData : emoticons) {
+			emoticonList.add(emoticonData);
+			Log.d("LDK", "checked emoticon: " + emoticonData);
+		}
 		
 		for(int i=0; i<48; i++) {
 			Item item = new Item();
 			item.emoticon = R.drawable.emoticon_01 + i;
+			item.checked = emoticonList.contains(String.valueOf(i+1)) ? true : false;
 			mItemList.add(item);
 		}
 	}
@@ -56,28 +62,31 @@ public class EmoticonAdapter extends BaseAdapter {
 		} else {
 			holder = (Viewholder) convertView.getTag();
 		}
-		
-		Log.e("EmoticonAdapter", "position[" + position + "]");
-		
-		// 자신의 이모티콘 목록을 현재 포지션과 비교(몇번째 배열에 저장되어있는지 몰라서 for문 돌립니다.)
-		// list로 키값 같이 넣어서 돌리는건 어떨까요? (없는것은 키는 순서대로, 값은 0으로)
-		for (String emoticonData : emoticons) {
-			// 하나하나 비교. (비교 방식이 좋지 않은것 같네요.. ㅠㅠ)
-			if (Integer.parseInt(emoticonData) == position + 1) {
-				holder.checked.setVisibility(View.VISIBLE);
-				break;
-			} else {
-				holder.checked.setVisibility(View.INVISIBLE);
-			}
-		}
 
 		holder.emoticon.setImageResource(mItemList.get(position).emoticon);
+		
+		if(mItemList.get(position).checked) {
+			holder.checked.setVisibility(View.VISIBLE);
+			holder.emoticon.setEnabled(false);
+		} else {
+			holder.checked.setVisibility(View.INVISIBLE);
+			holder.emoticon.setEnabled(true);
+		}
+		
+		holder.emoticon.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO 
+				
+			}
+		});
 		
 		return convertView;
 	}
 	
 	class Item {
 		int emoticon;
+		boolean checked;
 	}
 	
 	class Viewholder {

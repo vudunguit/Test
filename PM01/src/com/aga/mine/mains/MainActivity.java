@@ -23,9 +23,11 @@ import android.os.Message;
 import android.os.Process;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.GridView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -55,6 +57,7 @@ public class MainActivity extends Activity {
     
     private RelativeLayout main;
     public ListView mListView;
+    public GridView mGridView;
 
     private int nMargin = 0;
     private float frameCenterPosition = 0.525f;
@@ -105,7 +108,6 @@ public class MainActivity extends Activity {
 			
 			switch(msg.what) {
 			case Constant.MSG_DISPLAY_RANKLIST:
-				//API 콜 : 
 				FriendListAapter adapter = new FriendListAapter(MainActivity.this);
 				mListView.setAdapter(adapter);
 				mListView.setCacheColorHint(Color.alpha(0));
@@ -151,14 +153,14 @@ public class MainActivity extends Activity {
 				
 			case Constant.MSG_DISPLAY_EMOTICONLIST:
 				EmoticonAdapter emoticonAdapter = new EmoticonAdapter(MainActivity.this);
-				mListView.setAdapter(emoticonAdapter);
+				mGridView.setAdapter(emoticonAdapter);
 				RelativeLayout.LayoutParams emoticonParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 				emoticonParams.setMargins(
 						(int) (emoticonListMarginLeft * scale) + nMargin, 
 						(int) (height * (1 - frameCenterPosition) + (emoticonListMarginTop - emoticonListBackgroundHeight * 0.5f) * scale) + nMargin, 
 						(int) (emoticonListMarginRight * scale) + nMargin, 
 						(int) (height * frameCenterPosition + (emoticonListMarginBottom - emoticonListBackgroundHeight * 0.5f) * scale) + nMargin);
-				main.addView(mListView, emoticonParams);
+				main.addView(mGridView, emoticonParams);
 				break;
 				
 			case Constant.MSG_DISPLAY_MATCHLIST:
@@ -177,6 +179,7 @@ public class MainActivity extends Activity {
 				
 			case Constant.MSG_HIDE_SCROLLVIEW:
 				main.removeView(mListView);
+				main.removeView(mGridView);
 				break;
 			}
 		}
@@ -201,6 +204,9 @@ public class MainActivity extends Activity {
         main = (RelativeLayout) findViewById(R.id.main);
         main.addView(mGLSurfaceView);
         mListView = new ListView(this);
+        mGridView = new GridView(this);
+        mGridView.setNumColumns(4);
+        mGridView.setGravity(Gravity.CENTER);
 
         director.attachInView(mGLSurfaceView);
 
