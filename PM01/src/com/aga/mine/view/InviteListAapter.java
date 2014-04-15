@@ -17,6 +17,7 @@ import com.aga.mine.mains.GameScore;
 import com.aga.mine.mains.MainActivity;
 import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.R;
+import com.aga.mine.util.Util;
 import com.androidquery.AQuery;
 import com.sromku.simple.fb.entities.Profile;
 
@@ -89,6 +90,12 @@ public class InviteListAapter extends BaseAdapter {
 		}
 		
 		holder.tvFBId.setText(notAPlayers.get(position).getName());
+		
+		//초대버튼 disable 처리
+		if(!Util.canInvite(notAPlayers.get(position).getId())) {
+			holder.imgInviteBtn.setImageResource(R.drawable.invite_button2ko);
+			holder.imgInviteBtn.setEnabled(false);
+		}
 		
 		//초대버튼 클릭 이벤트 처리
 		holder.imgInviteBtn.setOnClickListener(new View.OnClickListener() {

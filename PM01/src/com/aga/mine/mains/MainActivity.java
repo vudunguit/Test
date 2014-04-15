@@ -141,7 +141,12 @@ public class MainActivity extends Activity {
 						(int) (height / 2 + (itemListMarginTop - itemListBackgroundHeight * 0.5f - verticalShiftPosition) * scale) + nMargin, 
 						(int) (itemListMarginRight * scale) + nMargin, 
 						(int) (height / 2 + (itemListMarginBottom - itemListBackgroundHeight * 0.5f + verticalShiftPosition) * scale) + nMargin);
-				main.addView(mListView, itemParams);
+				if(mListView.getParent() != null) {
+					main.removeView(mListView);
+					main.addView(mListView, itemParams);
+				} else {
+					main.addView(mListView, itemParams);
+				}
 				break;
 				
 			case Constant.MSG_DISPLAY_INVITELIST:
@@ -153,7 +158,12 @@ public class MainActivity extends Activity {
 						(int) (height * (1 - frameCenterPosition) + (inviteListMarginTop - inviteListBackgroundHeight * 0.5f) * scale) + nMargin, 
 						(int) (inviteListMarginRight * scale) + nMargin, 
 						(int) (height * frameCenterPosition + (inviteListMarginBottom - inviteListBackgroundHeight * 0.5f) * scale) + nMargin);
-				main.addView(mListView, inviteParams);
+				if(mListView.getParent() != null) {
+					main.removeView(mListView);
+					main.addView(mListView, inviteParams);
+				} else {
+					main.addView(mListView, inviteParams);
+				}
 				break;
 				
 			case Constant.MSG_DISPLAY_EMOTICONLIST:
@@ -165,7 +175,12 @@ public class MainActivity extends Activity {
 						(int) (height * (1 - frameCenterPosition) + (emoticonListMarginTop - emoticonListBackgroundHeight * 0.5f) * scale) + nMargin, 
 						(int) (emoticonListMarginRight * scale) + nMargin, 
 						(int) (height * frameCenterPosition + (emoticonListMarginBottom - emoticonListBackgroundHeight * 0.5f) * scale) + nMargin);
-				main.addView(mGridView, emoticonParams);
+				if(mGridView.getParent() != null) {
+					main.removeView(mGridView);
+					main.addView(mGridView, emoticonParams);
+				} else {
+					main.addView(mGridView, emoticonParams);
+				}
 				break;
 				
 			case Constant.MSG_DISPLAY_MATCHLIST:
@@ -179,7 +194,12 @@ public class MainActivity extends Activity {
 						(int) (height * (1 - frameCenterPosition) + (matchListMarginTop - matchListBackgroundHeight * 0.5f) * scale) + nMargin, 
 						(int) (matchListMarginRight * scale) + nMargin, 
 						(int) (height * frameCenterPosition + (matchListMarginBottom - matchListBackgroundHeight * 0.5f) * scale) + nMargin);
-				main.addView(mListView, matchParams);
+				if(mListView.getParent() != null) {
+					main.removeView(mListView);
+					main.addView(mListView, matchParams);
+				} else {
+					main.addView(mListView, matchParams);
+				}
 				break;
 				
 			case Constant.MSG_HIDE_SCROLLVIEW:

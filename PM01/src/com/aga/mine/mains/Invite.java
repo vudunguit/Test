@@ -17,6 +17,7 @@ import org.cocos2d.types.ccColor3B;
 
 import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.pages.UserData;
+import com.aga.mine.util.Util;
 
 import android.content.Context;
 import android.os.Message;
@@ -84,7 +85,12 @@ public class Invite extends CCLayer {
 						"*19," + senderID + 
 						"*20,Broomstick*21," + 1;
 				FacebookData.getinstance().sendMail(sendMailData);
+				
+				//save date to shared pref
+				Util.setInvite(string);
 			}
+			//refresh invite scrollview
+			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_INVITELIST);
 		}
     };
 
