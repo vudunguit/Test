@@ -92,16 +92,15 @@ public class DataController extends AsyncTask<String, Void, String>{
 		String[] paramSplitStr1 = param.split("\\*");
 		for (String string : paramSplitStr1) {
 			String[] splitStr2 = new String[2];
-			if (string.indexOf("23") != 0) {
-				splitStr2 = string.split(",");	
-			} else {
+			if (string.indexOf("23") == 0 || string.indexOf("16") == 0) {
 				splitStr2[0] = string.substring(0, 2);
 				splitStr2[1] = string.substring(3);
+			} else {
+				splitStr2 = string.split(",");	
 			}
-			for (String string2 : splitStr2) {
-				Log.e("DataController", "makeHttpPost [" + string2 + "]");			
-			}
-			
+//			for (String string2 : splitStr2) {
+//				Log.e("DataController", "makeHttpPost [" + string2 + "]");			
+//			}
 			nameValue.add(new BasicNameValuePair(
 					keys[Integer.parseInt(splitStr2[0])], splitStr2[1]));
 		}

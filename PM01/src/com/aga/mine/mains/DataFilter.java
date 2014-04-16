@@ -198,7 +198,7 @@ public class DataFilter {
 	
 	public static String getUserDBData(String facebookID) {
 		String getData = getUserDBData1(facebookID);
-		if (!readFilter(getData)) { // 해당 ID 데이터 초기화시 true (test용)
+		if (!readFilter(getData)) { // 정상작동은 false ,해당 ID 데이터 초기화시 true (test용)
 			Log.e("DataFilter", "getUserDBData() 새로운 아이디 생성 또는 기존 아이디 초기화");
 			setUserDBData(facebookID);
 			getData = getUserDBData1(facebookID);
