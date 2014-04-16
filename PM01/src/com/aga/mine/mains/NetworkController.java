@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.cocos2d.nodes.CCDirector;
 
@@ -113,15 +115,17 @@ public class NetworkController extends Activity {
 	final static String kServerHost = "211.110.139.226"; // cafe24 상용서버
 	final static int kServerPort = 8007;
 
-	public static OutputStream outStream_;
-	public static InputStream inStream_;
-	public static ByteBuffer inBuffer_; // , outBuffer_;
+	public OutputStream outStream_;
+	public InputStream inStream_;
+	public ByteBuffer inBuffer_; // , outBuffer_;
 
-	private static Socket socket;
+	private Socket socket;
 	
 	private static NetworkController androidClient;
 	Context mContext;
 	UserData userData;
+	
+	private ExecutorService mExecutorService;
 	
 	public static synchronized NetworkController getInstance() {
 		if (androidClient == null) {
@@ -148,12 +152,15 @@ public class NetworkController extends Activity {
 //		Log.e("NetworkController", "UserData.share(this).facebookUserInfo.getUsername() : " + UserData.share(this).facebookUserInfo.getUsername());
 		// this.setState(state);
 		// connect(kServerHost, kServerPort);
-		(new Thread() {
+		
+		//네트웍 write 쓰레드를 순서대로 실행하기 위해서 1개의 큐를 가지는 쓰레드 서비스 생성
+		mExecutorService = Executors.newFixedThreadPool(1);
+		
+		//Read Thread
+		new Thread(new Runnable() {
+			@Override
 			public void run() {
-				try {
-					connect(kServerHost, kServerPort);
-				} catch (Exception e) {
-				}
+				connect(kServerHost, kServerPort);
 			}
 		}).start();
 	}
@@ -165,7 +172,7 @@ public class NetworkController extends Activity {
 	//	}
 	
 	// 도우미 sharedController
-	public static Socket getSocket() throws IOException {
+	public Socket getSocket() throws IOException {
 	
 		if (socket == null)
 			socket = new Socket();
@@ -175,7 +182,7 @@ public class NetworkController extends Activity {
 		return socket;
 	}
 
-	public static void closeSocket() throws IOException {
+	public void closeSocket() throws IOException {
 		if (socket != null)
 			socket.close();
 	}
@@ -197,7 +204,7 @@ public class NetworkController extends Activity {
 //		}	
 //	}
 	
-	private static void setMessage(int state, int mode) {
+	private void setMessage(int state, int mode) {
 		if (delegate != null) {
 			if (mode == kModeSent) {
 				delegate.messageSent(state);
@@ -208,7 +215,7 @@ public class NetworkController extends Activity {
 	}
 	
 // 수신된 메시지 처리
-	private static void checkForMessages() throws IOException {
+	private void checkForMessages() throws IOException {
 		Log.e("NetworkController / checkForMessages", "in");
 		inBuffer_.order(ByteOrder.nativeOrder());
 		// lim = post, pos = 0
@@ -227,18 +234,7 @@ public class NetworkController extends Activity {
 			final byte[] read = new byte[inBuffer_.remaining()];
  			inBuffer_.get(read);
  			
- 			
- 			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
-				public void run() {
-					try {
-						processMessage(read);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			});
-
+			processMessage(read);
 	
 			inBuffer_.compact();
 			break;
@@ -247,7 +243,7 @@ public class NetworkController extends Activity {
 		}
 	}
 	
-	private static void processMessage(byte[] data) throws IOException {
+	private void processMessage(byte[] data) throws IOException {
 		MessageReader reader = new MessageReader(data);
 		final byte messageType = reader.readByte();		
 
@@ -523,14 +519,11 @@ public class NetworkController extends Activity {
 			// socket.close();
 			
 		} catch (ConnectException e) {
-			System.out
-					.println(e.getMessage()
-							+ "\nConnection refused = 서버가 닫혀있다.\n서버가 on 상태인지, 입력한 ip 또는 port number가 올바른지 확인하시오.");
+			System.out.println(e.getMessage() 
+					+ "\nConnection refused = 서버가 닫혀있다.\n서버가 on 상태인지, 입력한 ip 또는 port number가 올바른지 확인하시오.");
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -560,16 +553,24 @@ public class NetworkController extends Activity {
 		return false;
 	}
 	
-	private static void sendData(byte[] data) throws IOException {
+	private void sendData(byte[] data) {
 		int dataLength = data.length;
 
-		MessageWriter message = new MessageWriter();
+		final MessageWriter message = new MessageWriter();
 		message.writeInt(dataLength);
 		message.writeBytes(data);
 
-		outStream_.write(message.data_);
-		//Log.e("NetworkController", "sendData() called !");
-		Log.e("sendData()","called !");
+		mExecutorService.execute(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					outStream_.write(message.data_);
+					Log.e("sendData()","called !");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	/******************* 서버 보내기 메소드들 ********************/
@@ -603,7 +604,7 @@ public class NetworkController extends Activity {
 	}
 	
 	// 서버 접속시 서버에 보냄
-	private static void sendPlayerInformation() throws IOException {
+	private void sendPlayerInformation() throws IOException {
 		Log.e("NetworkController", "sending player information ......");
 		MessageWriter message = new MessageWriter();
 		message.writeByte((byte) kMessagePlayerInformation);
@@ -625,7 +626,7 @@ public class NetworkController extends Activity {
 //		sendData(message.data_);
 //	}
 //	
-	public static void sendRequestIsPlayerConnected(String facebookId) throws IOException {
+	public void sendRequestIsPlayerConnected(String facebookId) throws IOException {
 		Log.e("NetworkController", "send Request Is Player Connected ......");
 		MessageWriter message = new MessageWriter();
 		message.writeByte((byte) kMessageRequestIsPlayerConnected);
@@ -634,8 +635,8 @@ public class NetworkController extends Activity {
 		setMessage(kMessageRequestIsPlayerConnected, kModeSent);
 	}
 	
-	static boolean owner = false;
-	public static void sendRoomOwner(int Boolean) throws IOException {
+	boolean owner = false;
+	public void sendRoomOwner(int Boolean) throws IOException {
 		Log.e("NetworkController", "sending sendRoomOwner ......");
 		MessageWriter message = new MessageWriter();
 		message.writeByte((byte) kMessageInRoomOwner);
@@ -666,7 +667,7 @@ public class NetworkController extends Activity {
 //		Log.e("NetworkController", "sendRequestMatch");
 //	}
 	
-	public static void sendRequestMatch(int difficulty) throws IOException {
+	public void sendRequestMatch(int difficulty) throws IOException {
 		Log.e("NetworkController", "sending request match ......");
 		MessageWriter message = new MessageWriter();
 		message.writeByte((byte) kMessageRequestMatch);
