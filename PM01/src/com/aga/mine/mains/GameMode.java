@@ -53,16 +53,15 @@ public class GameMode extends CCLayer {
 		BottomImage.setBottomImage(this);
 		
 		this.setIsTouchEnabled(true);
-/*//		String score = "" + ((int) ((Math.random() - 0.5f) * 1024));
 		
-		int scoreValue = (int) (Math.random() * 200);
-		if (scoreValue < 0) {
-			scoreValue = 0;
+		if (!GameData.share().isGuestMode) {
+			// 게임 점수 테스트용 (0~ 200 랜덤 점수 얻음), 마이너스 점수도 가능(패배시)
+			int scoreValue = (int) (Math.random() * 201);
+			if (scoreValue < 0) 
+				scoreValue = 0;
+			Log.e("GameMode", "score : " + DataFilter.addGameScore("" + scoreValue));
+			Log.e("GameMode", "score : " + scoreValue + "점 증가");			
 		}
-//		String scoreStr = "" + ((int) (Math.random() * 200));
-		
-		Log.e("GameMode", "score[" + scoreValue + "]");
-		Log.e("GameMode", "score : " + DataFilter.addGameScore("" + scoreValue));*/
 	}
 	
 	// 백 보드 설정

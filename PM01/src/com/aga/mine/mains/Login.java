@@ -1,6 +1,6 @@
 ﻿package com.aga.mine.mains;
 
-import org.cocos2d.layers.CCColorLayer;
+//import org.cocos2d.layers.CCColorLayer; // 이게 왜 들어가있지??
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
@@ -9,10 +9,7 @@ import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
-import org.cocos2d.types.ccColor4B;
-
-import android.content.Intent;
-import android.view.MotionEvent;
+//import org.cocos2d.types.ccColor4B; // 이게 왜 들어가있지??
 
 public class Login extends CCLayer{
 	
@@ -23,10 +20,11 @@ public class Login extends CCLayer{
 
 	public static CCScene scene() {
 		CCScene scene = CCScene.node();
-		CCLayer layer = CCColorLayer.node(new ccColor4B(255, 0, 255, 0));
+//		CCLayer layer = CCColorLayer.node(new ccColor4B(255, 0, 255, 0)); // 이게 왜 들어가있지??
 		Login layer2 = new Login();
-		scene.addChild(layer);
-		layer.addChild(layer2);
+//		scene.addChild(layer); // 이게 왜 들어가있지??
+		scene.addChild(layer2);
+//		layer.addChild(layer2); // 이게 왜 들어가있지??
 		return scene;	
 	}
 
@@ -34,9 +32,7 @@ public class Login extends CCLayer{
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0), folder + "appload-bg" + fileExtension);
 		setMain();
 		setForeground();
-		this.setIsTouchEnabled(true);		
 	}
-
 	
 	private void setMain() {
 		//게임이름
@@ -94,15 +90,8 @@ public class Login extends CCLayer{
 		facebook.setPosition(loginMenu.getContentSize().width/2, facebook.getContentSize().height*2.70f);
 		guest.setPosition(loginMenu.getContentSize().width/2, guest.getContentSize().height *1.55f);			
 	}
-
-	@Override
-	public boolean ccTouchesEnded(MotionEvent event) {
-		return super.ccTouchesEnded(event);
-	}
 	
 	public void facebookCallback(Object sender){
-//		Intent task1 = new Intent(CCDirector.sharedDirector().getActivity(), FacebookHelper.class);
-//    	CCDirector.sharedDirector().getActivity().startActivity(task1);
 		MainApplication.getInstance().getActivity().loginFaceBook();
 	}
 

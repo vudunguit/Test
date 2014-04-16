@@ -33,13 +33,14 @@ public class DataFilter {
 		return true;
 	}
 	
-	public static void dailyFilter(CCDirector director, String RequestModeDailyCheck) {
+	public static void dailyFilter(CCDirector director, String facebookID) {
+		String requestModeDailyCheck = getDailyData(facebookID);
 		CCScene scene = CCScene.node();
-		if (RequestModeDailyCheck.equals("not once a day")) {
+		if (requestModeDailyCheck.equals("not once a day")) {
 			scene = Home.scene();
-		} else if (0 < Integer.parseInt(RequestModeDailyCheck) % 31) {
+		} else if (0 < Integer.parseInt(requestModeDailyCheck) % 31) {
 //		RequestModeDailyCheck = "1"; // 테스트용
-			scene.addChild(Daily.scene(Integer.parseInt(RequestModeDailyCheck) % 31));
+			scene.addChild(Daily.scene(Integer.parseInt(requestModeDailyCheck) % 31));
 		} else {
 //			new Process();
 //			Process.killProcess(Process.myPid()); // 문의 넣기 메시지 출력 후 종료
@@ -78,27 +79,6 @@ public class DataFilter {
 		if (Integer.parseInt(headerEraser(source, "Rows=")) == 1)
 			return true;
 		return false;
-	}
-	
-	public static String getUserDBData(String facebookID) {
-		try {
-			String getData = new DataController().execute("0,RequestModeRead*1," + facebookID).get();
-			if (!DataFilter.readFilter(getData)) { // 맞는것
-//			if (DataFilter.readFilter(getData)) { // 강제로 생성 test용
-				Log.e("DataFilter", "getUserDBData() 새로운 아이디 생성");
-				DailyBeckoner.setUserDBData(facebookID);
-				getData = new DataController().execute("0,RequestModeRead*1," + facebookID).get();
-			}
-
-			Log.e("DataFilter", "getUserDBData : " + getData);
-			return getData;
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-		return null;
-
 	}
 
 	public static String itemEraser(String requestIDs) {
@@ -191,4 +171,103 @@ public class DataFilter {
 		return null;
 	}
 	
+	
+	
+	public static String getGameVersionData() {
+			try {
+				return new DataController().execute("0,RequestModeIsServerOk*24,0").get();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+		return null;
+	}
+	
+	public static String getUserDBData1(String facebookID) {
+		try {
+			return new DataController().execute("0,RequestModeRead*1," + facebookID).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
+	public static String getUserDBData(String facebookID) {
+		String getData = getUserDBData1(facebookID);
+		if (!readFilter(getData)) { // 해당 ID 데이터 초기화시 true (test용)
+			Log.e("DataFilter", "getUserDBData() 새로운 아이디 생성 또는 기존 아이디 초기화");
+			setUserDBData(facebookID);
+			getData = getUserDBData1(facebookID);
+		}
+		Log.e("DataFilter", "getUserDBData : " + getData);
+		return getData;
+	}
+
+	
+	public static void setUserDBData(String facebookID) {
+		Log.e("Daily", "setUserDBData");
+		try {
+			String userDataCreate = new DataController()
+					.execute("0,RequestModeUpdate" +
+							"*1,"  + facebookID + 
+							"*2," +DBuser.level +
+							"*3," +DBuser.sphere +
+							"*4," +DBuser.exp +
+							"*5," +DBuser.gold +
+							"*6," +DBuser.gameScore +
+							"*7," +DBuser.win +
+							"*8," +DBuser.lose +
+							"*9," +DBuser.broomstick +
+							"*10," +DBuser.fireLevel +
+							"*11," +DBuser.windLevel +
+							"*12," +DBuser.cloudLevel +
+							"*13," +DBuser.divineLevel +
+							"*14," +DBuser.earthLevel +
+							"*15," +DBuser.mirrorLevel +
+							"*16," +DBuser.emoticons +
+							"*17," +DBuser.invite).get();
+			Log.e("Daily", "setUserDBData : " + userDataCreate);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
+
+	
+	public static String getDailyData(String facebookID) {
+		try {
+			return new DataController().execute(
+					"0,RequestModeDailyCheck*1," + facebookID).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		return "error";
+	}
+	
+	
+	class DBuser {
+		final static int level = 1;
+		final static int sphere = 2;
+		final static int exp = 0;
+		final static int gold = 0;
+		final static int gameScore = 0;
+		final static int win = 0;
+		final static int lose = 0;
+		final static int broomstick = 10;
+		final static int fireLevel = 1;
+		final static int windLevel = 1;
+		final static int cloudLevel = 1;
+		final static int divineLevel = 0;
+		final static int earthLevel = 0;
+		final static int mirrorLevel = 0;
+		final static String emoticons = "1,2,3";
+		final static int invite = 0; 
+	}
 }

@@ -572,11 +572,6 @@ public class MainActivity extends Activity {
         	//3) 데이터 로딩 후 로딩바 해제
         	//4) 화면 이동
         	
-        	//안드로이드 뷰로 대체
-/*            HomeScroll.getInstance().setData(
-                    DataFilter.getRanking(FacebookData.getinstance().getUserInfo(),FacebookData.getinstance().getFriendsInfo())
-            );*/
-        	
         	// 게임 모드 설정
         	Log.e("Main", "isGuestMode_B : " + GameData.share().isGuestMode);
 			GameData.share().isGuestMode = false;
@@ -587,7 +582,8 @@ public class MainActivity extends Activity {
         	
             // daily(출석부)는 1일 1회만 호출하므로 DailyBeckoner에서 체크 후 이동하게 됨.(이미 1회이상 접속시 home scene으로 이동) 
             // DailyBeckoner 호출시 facebook 정보들을 가지고 있어야됩니다.
-            new DailyBeckoner();
+//    		new DailyBeckoner();
+    		DataFilter.dailyFilter(director, FacebookData.getinstance().getUserInfo().getId());
         }
     }
 
