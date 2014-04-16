@@ -1,6 +1,7 @@
 ﻿package com.aga.mine.mains;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -12,10 +13,8 @@ import android.util.Log;
 
 import com.sromku.simple.fb.entities.Profile;
 
-
 public class DataFilter {
-	
-	
+		
 	private static String headerEraser(String source, String filterStr) {
 		if (source.indexOf(filterStr) < 0) {
 			return source;
@@ -33,45 +32,19 @@ public class DataFilter {
 		return true;
 	}
 	
-	public static void dailyFilter(CCDirector director, String facebookID) {
-		String requestModeDailyCheck = getDailyData(facebookID);
-		CCScene scene = CCScene.node();
-		if (requestModeDailyCheck.equals("not once a day")) {
-			scene = Home.scene();
-		} else if (0 < Integer.parseInt(requestModeDailyCheck) % 31) {
-//		RequestModeDailyCheck = "1"; // 테스트용
-			scene.addChild(Daily.scene(Integer.parseInt(requestModeDailyCheck) % 31));
-		} else {
-//			new Process();
-//			Process.killProcess(Process.myPid()); // 문의 넣기 메시지 출력 후 종료
-			director.getActivity().finish(); // 문의 넣기 메시지 출력 후 종료
-		}
-		director.runWithScene(scene);
-	}
-	
-	public static String[] mailFilter(String source) {
-		return headerEraser(source, "data=").split(",");
-	}
-	
 	public static String[] userDBFilter(String source) {
 		return headerEraser(source, "***").split("-");
 	}
-	
-	//	private ArrayList<String> scoreFilter(String[][] source) {
-//		String[][] strArray1 = source;
-//		String[][] temp = new String[strArray1.length][];
-//		Arrays.sort(strArray1);
-//		for (String[] strings : strArray1) {
-//			Log.e("", "");
-//		}
-//		return null;
-//	}
-	
-	public static String userScoreFilter(String source) {
+
+	public static String gameScoreFilter(String source) {
 		if (!headerEraser(source, "isQuerySuccess=YES").equals(source)) {
 			return "complete";
 		};
 		return "false";
+	}
+
+	public static String[] mailFilter(String source) {
+		return headerEraser(source, "data=").split(",");
 	}
 	
 	public static boolean sendMailFilter(String source) {
@@ -81,9 +54,40 @@ public class DataFilter {
 		return false;
 	}
 
-	public static String itemEraser(String requestIDs) {
+	public static void dailyFilter(CCDirector director, String facebookID) {
+			String requestModeDailyCheck = getDailyData(facebookID);
+			CCScene scene = CCScene.node();
+			if (requestModeDailyCheck.equals("not once a day")) {
+				scene = Home.scene();
+			} else if (0 < Integer.parseInt(requestModeDailyCheck) % 31) {
+	//		RequestModeDailyCheck = "1"; // 테스트용
+				scene.addChild(Daily.scene(Integer.parseInt(requestModeDailyCheck) % 31));
+			} else {
+	//			new Process();
+	//			Process.killProcess(Process.myPid()); // 문의 넣기 메시지 출력 후 종료
+				director.getActivity().finish(); // 문의 넣기 메시지 출력 후 종료
+			}
+			director.runWithScene(scene);
+		}
+
+	/***********************************************************/
+	
+	// 1
+	public static String getGameVersionData() {
+			try {
+				return new DataController().execute("0,RequestModeIsServerOk*24,0").get();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+		return null;
+	}
+	
+	// 2
+	public static String getUserDBData(String facebookID) {
 		try {
-			return new DataController().execute("0,RequestModeMailBoxDelete*22,"+ requestIDs).get();
+			return new DataController().execute("0,RequestModeRead*1," + facebookID).get();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
@@ -91,7 +95,50 @@ public class DataFilter {
 		}
 		return null;
 	}
+	
+	public static String checkUserDBData(String facebookID) {
+		String getData = getUserDBData(facebookID);
+		if (!readFilter(getData)) { // 정상작동은 false ,해당 ID 데이터 초기화시 true (test용)
+			Log.e("DataFilter", "getUserDBData() 새로운 아이디 생성 또는 기존 아이디 초기화");
+			setUserDBData(facebookID);
+			getData = getUserDBData(facebookID);
+		}
+		Log.e("DataFilter", "getUserDBData : " + getData);
+		return getData;
+	}
 
+	// 3
+	public static void setUserDBData(String facebookID) {
+		Log.e("Daily", "setUserDBData");
+		try {
+			String userDataCreate = new DataController()
+					.execute("0,RequestModeUpdate" +
+							"*1,"  + facebookID + 
+							"*2," +DefaultUserData.level +
+							"*3," +DefaultUserData.sphere +
+							"*4," +DefaultUserData.exp +
+							"*5," +DefaultUserData.gold +
+							"*6," +DefaultUserData.gameScore +
+							"*7," +DefaultUserData.win +
+							"*8," +DefaultUserData.lose +
+							"*9," +DefaultUserData.broomstick +
+							"*10," +DefaultUserData.fireLevel +
+							"*11," +DefaultUserData.windLevel +
+							"*12," +DefaultUserData.cloudLevel +
+							"*13," +DefaultUserData.divineLevel +
+							"*14," +DefaultUserData.earthLevel +
+							"*15," +DefaultUserData.mirrorLevel +
+							"*16," +DefaultUserData.emoticons +
+							"*17," +DefaultUserData.invite).get();
+			Log.e("Daily", "setUserDBData : " + userDataCreate);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// 4
 	public static String addGameScore(String score) {
 		try {
 			return new DataController().execute(
@@ -106,7 +153,48 @@ public class DataFilter {
 		return null;
 	}
 	
-	public static ArrayList<GameScore> getRanking() {
+	// 5
+	public static boolean sendMail(String data) {
+			try {
+				return DataFilter.sendMailFilter(new DataController().execute(data).get());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+			return false;
+	}
+	
+	// 6
+	public static String[] readMail() {
+		try {
+			// 정렬후 String[]로 리턴
+			return DataFilter.mailFilter(
+					// 메일을 읽어 
+					new DataController().execute(
+							"0,RequestModeMailBoxRead*1," + FacebookData.getinstance().getUserInfo().getId()).get());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	// 7
+	public static String deleteMail(String requestIDs) {
+		try {
+			return new DataController().execute("0,RequestModeMailBoxDelete*22,"+ requestIDs).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	// 8
+	public static ArrayList<GameScore> getGameRank() {
 		// 페이스북 아이디 받기
 		Profile user = FacebookData.getinstance().getUserInfo();		
 		List<Profile> friends = FacebookData.getinstance().getFriendsInfo();
@@ -171,74 +259,20 @@ public class DataFilter {
 		return null;
 	}
 	
-	
-	
-	public static String getGameVersionData() {
-			try {
-				return new DataController().execute("0,RequestModeIsServerOk*24,0").get();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				e.printStackTrace();
-			}
-		return null;
-	}
-	
-	public static String getUserDBData1(String facebookID) {
+	// 9
+	public static long getInitTime() {
 		try {
-			return new DataController().execute("0,RequestModeRead*1," + facebookID).get();
+			return Calendar.getInstance().getTimeInMillis() + (1000 * Long.parseLong(
+					new DataController().execute("0,RequestModeGetWeeklyLeftTime").get()));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return -10;
 	}
 	
-	
-	public static String getUserDBData(String facebookID) {
-		String getData = getUserDBData1(facebookID);
-		if (!readFilter(getData)) { // 정상작동은 false ,해당 ID 데이터 초기화시 true (test용)
-			Log.e("DataFilter", "getUserDBData() 새로운 아이디 생성 또는 기존 아이디 초기화");
-			setUserDBData(facebookID);
-			getData = getUserDBData1(facebookID);
-		}
-		Log.e("DataFilter", "getUserDBData : " + getData);
-		return getData;
-	}
-
-	
-	public static void setUserDBData(String facebookID) {
-		Log.e("Daily", "setUserDBData");
-		try {
-			String userDataCreate = new DataController()
-					.execute("0,RequestModeUpdate" +
-							"*1,"  + facebookID + 
-							"*2," +DBuser.level +
-							"*3," +DBuser.sphere +
-							"*4," +DBuser.exp +
-							"*5," +DBuser.gold +
-							"*6," +DBuser.gameScore +
-							"*7," +DBuser.win +
-							"*8," +DBuser.lose +
-							"*9," +DBuser.broomstick +
-							"*10," +DBuser.fireLevel +
-							"*11," +DBuser.windLevel +
-							"*12," +DBuser.cloudLevel +
-							"*13," +DBuser.divineLevel +
-							"*14," +DBuser.earthLevel +
-							"*15," +DBuser.mirrorLevel +
-							"*16," +DBuser.emoticons +
-							"*17," +DBuser.invite).get();
-			Log.e("Daily", "setUserDBData : " + userDataCreate);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-	}
-
-	
+	// 10
 	public static String getDailyData(String facebookID) {
 		try {
 			return new DataController().execute(
@@ -252,7 +286,7 @@ public class DataFilter {
 	}
 	
 	
-	class DBuser {
+	class DefaultUserData {
 		final static int level = 1;
 		final static int sphere = 2;
 		final static int exp = 0;

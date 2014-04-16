@@ -49,28 +49,13 @@ public class MailBox {
 	private CGSize winsize() {
 		return CCDirector.sharedDirector().winSize();
 	}
-
-	public String[] mailOpen() {
-		try {
-			// 정렬후 String[]로 리턴
-			return DataFilter.mailFilter(
-					// 메일을 읽어 
-					new DataController().execute(
-							"0,RequestModeMailBoxRead*1," + FacebookData.getinstance().getUserInfo().getId()).get());
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 	
 	public MailBox(CCLayer parentLayer, String imageFolder, CCNode nodeThis) {
 		this(parentLayer, imageFolder, nodeThis, Constant.MAIL_TAB_BROOM);
 	}
 
 	public MailBox(CCLayer parentLayer, String imageFolder, CCNode nodeThis, int selectedTab) {
-		String[] mail = mailOpen();
+		String[] mail = DataFilter.readMail();
 		for (String string : mail) {
 			Log.e("MailBox", "mailOpen [" + string + "]");
 			if (string != null && !string.equals("")) {

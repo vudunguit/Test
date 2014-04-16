@@ -84,7 +84,7 @@ public class Invite extends CCLayer {
 						"*1," + recipientID + 
 						"*19," + senderID + 
 						"*20,Broomstick*21," + 1;
-				FacebookData.getinstance().sendMail(sendMailData);
+				DataFilter.sendMail(sendMailData);
 				
 				//save date to shared pref
 				Util.setInvite(string);

@@ -73,7 +73,7 @@ public class Home extends CCLayer{
 						"*1," + recipientID + 
 						"*19," + senderID + 
 						"*20,Broomstick*21," + 1;
-				FacebookData.getinstance().sendMail(sendMailData);
+				DataFilter.sendMail(sendMailData);
 				
 				//save date to shared pref
 				Util.setBroom(string);
@@ -203,7 +203,7 @@ public class Home extends CCLayer{
 			String[] items = data.split(",");
 			for (String item : items) {
 				Log.e("Home", "mailReceiveAll : " + item);
-				DataFilter.itemEraser(item);
+				DataFilter.deleteMail(item);
 			}
 			// child sprite 제거 방식으로 수정 요함.
 			mailBoxLayer.removeChildByTag(999, true);
@@ -227,7 +227,7 @@ public class Home extends CCLayer{
 					String sendMailData = 
 							"0,RequestModeMailBoxAdd*22," + FacebookData.getinstance().getRequestID() + 
 							"*1," + item + "*19," + senderID + "*20,Broomstick*21," + 1;
-					FacebookData.getinstance().sendMail(sendMailData);
+					DataFilter.sendMail(sendMailData);
 				}
 			}
 		}
@@ -331,7 +331,7 @@ public class Home extends CCLayer{
 			for (String item : items) {
 				Log.e("Home", "mailReceiveAll : " + item);
 				if (!item.equals("")) {
-					DataFilter.itemEraser(item);
+					DataFilter.deleteMail(item);
 				}
 			}
 			// child sprite 제거 방식으로 수정 요함.
@@ -358,7 +358,7 @@ public class Home extends CCLayer{
 				String sendMailData = "0,RequestModeMailBoxAdd*22,"
 						+ FacebookData.getinstance().getRequestID() + "*1,"
 						+ item + "*19," + senderID + "*20,Broomstick*21," + 1;
-				FacebookData.getinstance().sendMail(sendMailData);
+				DataFilter.sendMail(sendMailData);
 			}
 		} else if (value == broomTab) {
 			isBroomTab = true;

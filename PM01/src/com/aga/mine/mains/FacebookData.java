@@ -51,31 +51,6 @@ public class FacebookData {
 	public static void initialize() {
 		facebookData = null;
 	}
-
-	
-	public boolean sendMail(String data) {
-			try {
-				return DataFilter.sendMailFilter(new DataController().execute(data).get());
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				e.printStackTrace();
-			}
-			return false;
-	}
-	
-	
-	public long getInitTime() {
-		try {
-			return Calendar.getInstance().getTimeInMillis() + (1000 * Long.parseLong(
-							new DataController().execute("0,RequestModeGetWeeklyLeftTime").get()));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-		return -10;
-	}
 	
 	public String getDBData(String key) {
 	return data.get(key); 
@@ -129,7 +104,7 @@ public class FacebookData {
 		this.userInfo = userInfo;
 		//userPhoto = getBitmapFromURL("https://graph.facebook.com/" + userInfo.getUsername() +"/picture");
 		userPhoto = BitmapFactory.decodeResource(MainApplication.getInstance().getActivity().getResources(), R.drawable.ic_launcher);
-		setDBData(DataFilter.getUserDBData(userInfo.getId()));		
+		setDBData(DataFilter.checkUserDBData(userInfo.getId()));		
 		if (userPhoto != null && userPhoto.getRowBytes() < 100) {
 			try {	
 				AssetManager am = CCDirector.sharedDirector().getActivity().getResources().getAssets();

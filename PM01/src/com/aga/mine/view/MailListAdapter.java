@@ -73,7 +73,7 @@ public class MailListAdapter extends BaseAdapter {
 				// 일반 버튼같이 down상태에서는 이미지 변경이 가능할까요?
 				String serialNumber = mMailItemList.get(position).serial_number;
 				if (!serialNumber.equals("")) {
-					DataFilter.itemEraser(serialNumber);
+					DataFilter.deleteMail(serialNumber);
 					if (mTab == Constant.MAIL_TAB_BROOM) {
 						// 빗자루 화면 갱신  
 					} else {

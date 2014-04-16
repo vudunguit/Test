@@ -60,21 +60,21 @@ public class HomeMiddle {
 		
 		//
 		
-		CCSprite userImage = null;
-		
-//		Bitmap userBMP =null;
-		String imageUrl = "https://graph.facebook.com/" + FacebookData.getinstance().getUserInfo().getUsername() +"/picture";
-		try {
-			Bitmap userBMP = new DownloadImageTask().execute(imageUrl).get();
-			userImage = CCSprite.sprite(userBMP); // 프로필 사진
-			profilePicture.addChild(userImage);
-			userImage.setAnchorPoint(0.5f, 0.5f);
-			userImage.setPosition(profilePicture.getContentSize().width / 2, profilePicture.getContentSize().height / 2);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		} catch (ExecutionException e1) {
-			e1.printStackTrace();
-		}
+//		CCSprite userImage = null;
+//		
+////		Bitmap userBMP =null;
+//		String imageUrl = "https://graph.facebook.com/" + FacebookData.getinstance().getUserInfo().getUsername() +"/picture";
+//		try {
+//			Bitmap userBMP = new DownloadImageTask().execute(imageUrl).get();
+//			userImage = CCSprite.sprite(userBMP); // 프로필 사진
+//			profilePicture.addChild(userImage);
+//			userImage.setAnchorPoint(0.5f, 0.5f);
+//			userImage.setPosition(profilePicture.getContentSize().width / 2, profilePicture.getContentSize().height / 2);
+//		} catch (InterruptedException e1) {
+//			e1.printStackTrace();
+//		} catch (ExecutionException e1) {
+//			e1.printStackTrace();
+//		}
 		
 //		CCSprite userImage = CCSprite.sprite(commonfolder + "noPicture" + fileExtension); // 프로필 사진
 		

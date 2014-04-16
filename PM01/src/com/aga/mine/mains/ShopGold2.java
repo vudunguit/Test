@@ -223,7 +223,7 @@ public class ShopGold2 extends CCLayer {
 				"0,RequestModeMailBoxAdd*22," + requestID + 
 				"*1," + recipientID + "*19," + senderID + "*20,Gold*21," + gold;
 		
-		FacebookData.getinstance().sendMail(data);
+		DataFilter.sendMail(data);
 //		Passport.SKU = Product;
 //		Log.e("ShopGold2", "buttonCallback(usd) : " + usd);
 		

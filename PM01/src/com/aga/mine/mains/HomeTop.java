@@ -137,7 +137,7 @@ public class HomeTop extends CCLayer{
 		Calendar calendar1 = Calendar.getInstance();
 		long aa = (deadLineTime - calendar1.getTimeInMillis()) / 1000;
 		if (deadLineTime - calendar1.getTimeInMillis() < 990) {
-			deadLineTime = FacebookData.getinstance().getInitTime();
+			deadLineTime = DataFilter.getInitTime();
 			aa = (deadLineTime - calendar1.getTimeInMillis()) / 1000;
 		}
 

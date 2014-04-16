@@ -208,7 +208,7 @@ public class ShopBroomstick2 extends CCLayer {
 		String data = 
 				"0,RequestModeMailBoxAdd*22," + requestID + 
 				"*1," + recipientID + "*19," + senderID + "*20,Broomstick*21," + value[1];
-		FacebookData.getinstance().sendMail(data);
+		DataFilter.sendMail(data);
 
 		
 	}
