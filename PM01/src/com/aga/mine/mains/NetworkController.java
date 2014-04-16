@@ -41,30 +41,31 @@ public class NetworkController extends Activity {
 	final static int kNetworkStateMatchCompleted = 8;
 	final static int kNetworkStateMatchFailed = 9;
 	/*******************************************/
-	// 매치서버와 통신하는 메시지
-	final static int kMessageConnectionCompletedServerConfirm = 0; // 서버로 부터 접속 알람
-	final static int kMessagePlayerInformation = 1; // 유저 정보 보내기
-	final static int kMessageRequestMatch = 2; // 대전 매칭 시도
-	final static int kMessageMatchCompleted = 3; // 매칭 성공
-	final static int kMessageMatchFailed = 4; // 매칭 실패
-	final static int kMessagePlayData = 5; // 게임 데이터
-	final static int kMessageGameOver = 6; // 사용않는다, 플레이데이타 게임오버 사용
-	final static int kMessageDisconnected = 7; // 연결 끊김???
-	final static int kMessageInManagement = 8; // 중복 메시지, 사용안함. 그러나 삭제해선 안됨, 131128
-	final static int kMessageOpponentConnectionLost = 9; // 상대방 연결 실패
-	final static int kMessageRequestIsPlayerConnected = 10; // 요청한 유저에게 응답
-	final static int kMessageRequestMatchInvite = 11; // 초대 대전 모드
-	final static int kMessageInSystemManagement = 12; // 점검중?
-	final static int kMessageInRoomOwner = 13; // 방장인지 확인
-	final static int kMessageRequestGameOver = 14; // 게임종료	
-	final static int kMessageRequestScore = 15; // 게임종료	
-	final static int kMessageGameReady = 16; // 게임 준비 완료메시지 (서버로 보내는 메시지)
-	final static int kMessageGameStart = 17; // 게임 시작 (서버로부터 받는 메시지)
-	final static int kMessageRequestInvite = 18; // 초대 매치용 요청 메시지
-	final static int kMessageResponseMatchInvite = 19; // 초대 대전 응답
-	final static int kMessageResponseInvite = 20; // 초대 매치용 응답 메시지
-	final static int kMessageWillYouAcceptInvite = 21; // 초대 매치 요청 메시지
-	final static int kMessageWillYouAcceptInviteOK = 22; // 초대 매치 응답 메시지
+	// 매치서버와 통신하는 메시지 (S :서버가 보내는 메시지, C : 클라이언트가 보내는 메시지 A : 모두 쓰는 메시지) 
+	final static int kMessageConnectionCompletedServerConfirm = 0; // S_접속 성공
+	final static int kMessagePlayerInformation = 1; // C_플레이어 정보
+	final static int kMessageRequestMatch = 2; // C_랜덤 매치 요청
+	final static int kMessageMatchCompleted = 3; // S_매치 성공
+	final static int kMessageMatchFailed = 4; // S_매치 실패
+	final static int kMessagePlayData = 5; // A_게임 데이터
+	final static int kMessageGameOver = 6; // A_게임 오버시 점수와 함께 보낸다
+	final static int kMessageDisconnected = 7; // 연결 끊김??? (사용안함)
+	final static int kMessageInManagement = 8; // 중복 메시지, (사용안함) 그러나 삭제해선 안됨, 131128
+	final static int kMessageOpponentConnectionLost = 9; // S_상대방 연결 실패
+	final static int kMessageRequestIsPlayerConnected = 10; // A_유저의 접속 체크
+	final static int kMessageRequestMatchInvite = 11; // C_초대 매치 요청
+	final static int kMessageInSystemManagement = 12; // 점검중? (사용안함)
+	final static int kMessageInRoomOwner = 13; // C_방장 권한 부여
+	final static int kMessageRequestGameOver = 14; // A_게임 종료 (내 점수를 함께 보낸다)	
+	final static int kMessageRequestScore = 15; // S_게임 종료
+	final static int kMessageGameReady = 16; // C_게임 준비 완료메시지
+	final static int kMessageGameStart = 17; // S_게임 시작 (서버가 보내는 메시지)
+	final static int kMessageRequestInvite = 18; // 초대 매치용 요청 메시지 (사용안함)
+	final static int kMessageResponseMatchInvite = 19; // 초대 대전 응답 (사용안함)
+	final static int kMessageResponseInvite = 20; // 초대 매치용 응답 메시지 (사용안함)
+	final static int kMessageWillYouAcceptInvite = 21; // S_초대 매치 요청 메시지
+	final static int kMessageWillYouAcceptInviteOK = 22; // C_초대 매치 응답 메시지
+	final static int kMessagePlayerIdle = 23; // (사용안함)
 	/*******************************************/
 	// 플레이 데이타 (플레이 중 발생되는 매치 데이타) 분류 코드
 	final static int kPlayDataCellOpen = 0;
@@ -344,9 +345,20 @@ public class NetworkController extends Activity {
 //			GameMinimap.getInstance().receivePlayData(data);
 //			GameMinimap.getInstance().receivePlayData(reader.readByte(), reader.readInt());
 			break;
-			
+
 		case kMessageOpponentConnectionLost:
 			Log.e("NetworkController", "kMessageOpponentConnectionLost");
+			break;			
+			
+		case kMessageRequestIsPlayerConnected:
+			Log.e("NetworkController", "kMessageRequestIsPlayerConnected");
+			Log.e("Network", "data 크기 : " + data.length);
+			Log.e("Network", "상대방 ID : " + reader.readString());
+			Log.e("Network", "접속여부 : " + reader.readByte());
+			break;
+
+		case kMessageRequestMatchInvite:
+			Log.e("NetworkController", "kMessageRequestMatchInvite");
 		break;
 //			
 //		case kMessageGameOver:
@@ -621,6 +633,7 @@ public class NetworkController extends Activity {
 		sendData(message.data_);
 		setMessage(kMessageRequestIsPlayerConnected, kModeSent);
 	}
+	
 	static boolean owner = false;
 	public static void sendRoomOwner(int Boolean) throws IOException {
 		Log.e("NetworkController", "sending sendRoomOwner ......");
