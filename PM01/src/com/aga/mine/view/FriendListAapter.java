@@ -70,9 +70,6 @@ public class FriendListAapter extends BaseAdapter {
 			holder.tvFBId = (TextView) convertView.findViewById(R.id.tvFBId);
 			holder.tvScore = (TextView) convertView.findViewById(R.id.tvScore);
 			
-//			Log.e("FriendListAapter", "size : " + gameScore.size());
-//			Log.e("FriendListAapter", "position : " + position + ", rankingID : " +gameScore.get(position).id + ", userID : " + user.getId());
-			
 			convertView.setTag(holder);
 		} else {
 			holder = (Viewholder) convertView.getTag();
@@ -81,36 +78,30 @@ public class FriendListAapter extends BaseAdapter {
 		//1-3등: 금은동 아이콘, 4등~ : no image 처리
 		switch(position) {
 		case 0: 
-//			Log.e("FriendListAapter", "Gold : " + position);
 			holder.imgNumber.setImageResource(R.drawable.home_circlegold_hd);
 			holder.imgNumber.setVisibility(View.VISIBLE);
 			holder.tvRanking.setTextColor(Color.BLACK);
 			break;
 		case 1:
-//			Log.e("FriendListAapter", "Silver : " + position);
 			holder.imgNumber.setImageResource(R.drawable.home_circlesilver_hd);
 			holder.imgNumber.setVisibility(View.VISIBLE);
 			holder.tvRanking.setTextColor(Color.BLACK);
 			break;
 		case 2:
-//			Log.e("FriendListAapter", "Bronze : " + position);
 			holder.imgNumber.setImageResource(R.drawable.home_circlebronze_hd);
 			holder.imgNumber.setVisibility(View.VISIBLE);
 			holder.tvRanking.setTextColor(Color.WHITE);
 			break;
 		default:
-//			Log.e("FriendListAapter", "noMedal : " + position);
 			holder.imgNumber.setVisibility(View.INVISIBLE);
 			holder.tvRanking.setTextColor(Color.WHITE);
 			break;
 		}
 		
 		if (gameScore.get(position).id.equals(user.getId())) {
-//			Log.e("FriendListAapter", "INVISIBLE : " + position);
 			holder.imgGift.setVisibility(View.INVISIBLE);
 			holder.imgBroomstick.setVisibility(View.INVISIBLE);
 		} else {
-//			Log.e("FriendListAapter", "VISIBLE : " + position);
 			holder.imgGift.setVisibility(View.VISIBLE);
 			holder.imgBroomstick.setVisibility(View.VISIBLE);
 		}
@@ -143,30 +134,6 @@ public class FriendListAapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				MainActivity mMainActivity = MainApplication.getInstance().getActivity();
-				//hide scroll view
-				//mMainActivity.mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
-				
-				// facebook sendRequest보낸 후
-				//sendRequest 성공시 보낸 게시물의 id를 requestID에 담아 보냅니다.
-//				long requestID = FacebookData.getinstance().getRequestID();  //test용 
-//				String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
-//				String senderID = FacebookData.getinstance().getUserInfo().getId();
-				
-//				String giftItemType = "Broomstick";
-//				int giftBroomStick = 1;
-//				String data = 
-//						"0,RequestModeMailBoxAdd" +
-//						"*22," + requestID + 
-//						"*1," + recipientID + 
-//						"*19," + senderID + 
-//						"*20," + giftItemType + 
-//						"*21," + giftBloomStick;
-//				FacebookData.getinstance().sendMail(data);
-				
-//				FacebookData.getinstance().setRecipientID(gameScore.get(position).id);
-//				CCScene scene = ShopBroomstick2.scene();
-//				CCDirector.sharedDirector().replaceScene(scene);
-				
 				mMainActivity.sendInvite(gameScore.get(position).id, gameScore.get(position).name + "이(가) 빗자루 하나를 보냈습니다", null);
 			}
 		});

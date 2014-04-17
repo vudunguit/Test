@@ -73,11 +73,12 @@ public class Invite extends CCLayer {
 			//To Do:
 			Log.e("Invite", "Callback_7 - onInvited" );
 			Log.d("LDK", "requestId:" + requestId);
+			String myID = FacebookData.getinstance().getUserInfo().getId();
 			for (String string : invitedFriends) {
 				Log.e("Invite", "invitedFriend : " + string);
 				String requestID = requestId;
-				String recipientID = FacebookData.getinstance().getUserInfo().getId();
-				String senderID = "1";
+				String recipientID = myID;
+				String senderID = myID;
 				String sendMailData = 
 						"0,RequestModeMailBoxAdd" +
 						"*22," + requestID + 

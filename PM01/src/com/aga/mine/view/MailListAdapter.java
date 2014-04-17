@@ -2,9 +2,6 @@ package com.aga.mine.view;
 
 import java.util.ArrayList;
 
-import org.cocos2d.layers.CCScene;
-import org.cocos2d.nodes.CCDirector;
-
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +11,7 @@ import android.widget.TextView;
 
 import com.aga.mine.mains.Constant;
 import com.aga.mine.mains.DataFilter;
-import com.aga.mine.mains.FacebookData;
-import com.aga.mine.mains.MailBox;
-import com.aga.mine.mains.MainActivity;
-import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.R;
-import com.aga.mine.mains.ShopGold2;
 import com.androidquery.AQuery;
 
 public class MailListAdapter extends BaseAdapter {
@@ -59,7 +51,9 @@ public class MailListAdapter extends BaseAdapter {
 			holder = new Viewholder();
 			convertView = View.inflate(mContext, R.layout.list_mail, null);
 			holder.profile = (ImageView) convertView.findViewById(R.id.mailProfile);
-			holder.text = (TextView) convertView.findViewById(R.id.mailText);
+			holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
+			holder.tvDate = (TextView) convertView.findViewById(R.id.tvDate);
+			holder.text = (TextView) convertView.findViewById(R.id.mailMessage);
 			holder.image = (ImageView) convertView.findViewById(R.id.mailImage);
 			convertView.setTag(holder);
 		} else {
@@ -83,13 +77,27 @@ public class MailListAdapter extends BaseAdapter {
 			}
 		});
 		
+		String senderID = mMailItemList.get(position).sender_id;
+		final int pumpkinMine = 1; 
+
+		holder.tvDate.setText(mMailItemList.get(position).date);
+		
 		//set facebook profile image
 		AQuery aq = mAq.recycle(convertView);
-		String url = "https://graph.facebook.com/" + mMailItemList.get(position).sender_id +"/picture";
-		if(aq.shouldDelay(position, convertView, parent, url)){
-
-		}else{
-			aq.id(holder.profile).image(url, true, true);
+		
+		// id대신 name을 얻어야 되네요.(친구가 아닐 수 있습니다.)
+		if (senderID.equals(String.valueOf(pumpkinMine))) {
+			holder.tvName.setText("Pumpkin Mine");	
+			aq.id(holder.profile).image(R.drawable.mail_pumkin);
+		} else {
+			holder.tvName.setText(mMailItemList.get(position).sender_id);
+			String url = "https://graph.facebook.com/" + senderID +"/picture";
+			if(aq.shouldDelay(position, convertView, parent, url)){
+	
+			}else{
+				aq.id(holder.profile).image(url, true, true);
+			}
+		
 		}
 		
 		//set text and icon
@@ -106,6 +114,8 @@ public class MailListAdapter extends BaseAdapter {
 	
 	class Viewholder {
 		ImageView profile;
+		TextView tvName;
+		TextView tvDate;
 		TextView text;
 		ImageView image;
 	}
