@@ -139,13 +139,13 @@ public class NetworkController extends Activity {
 	private NetworkController() {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
-		if (FacebookData.getinstance().getUserInfo() != null) {
+//		if (FacebookData.getinstance().getUserInfo() != null) {
 			kTempFacebookId  = FacebookData.getinstance().getUserInfo().getId();
 			kTempName  = FacebookData.getinstance().getUserInfo().getName();
 //		if (userData.facebookUserInfo != null) {
 //			kTempFacebookId  = userData.facebookUserInfo.getId();
 //			kTempName = userData.facebookUserInfo.getName();			
-		}
+//		}
 		
 		
 //		Log.e("NetworkController", "UserData.share(this).facebookUserInfo.getId() : " + UserData.share(this).facebookUserInfo.getId());

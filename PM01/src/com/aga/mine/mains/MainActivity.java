@@ -248,17 +248,6 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
-            public void run() {
-                Log.e("Daily", "onStart");
-                NetworkController.getInstance();
-            }
-        });
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
         Log.d(TAG, "onPause");
@@ -573,6 +562,9 @@ public class MainActivity extends Activity {
         	//3) 데이터 로딩 후 로딩바 해제
         	//4) 화면 이동
         	
+        	// facebook에 접속후 id와 name을 받아와야 게임서버에 자신의 계정으로 접속 가능.
+            NetworkController.getInstance();
+        	
         	// 게임 모드 설정
         	Log.e("Main", "isGuestMode_B : " + GameData.share().isGuestMode);
 			GameData.share().isGuestMode = false;
@@ -581,9 +573,6 @@ public class MainActivity extends Activity {
         	// 게임스코어 받아오기
     		FacebookData.getinstance().setGameScore(DataFilter.getGameRank());
         	
-            // daily(출석부)는 1일 1회만 호출하므로 DailyBeckoner에서 체크 후 이동하게 됨.(이미 1회이상 접속시 home scene으로 이동) 
-            // DailyBeckoner 호출시 facebook 정보들을 가지고 있어야됩니다.
-//    		new DailyBeckoner();
     		DataFilter.dailyFilter(director, FacebookData.getinstance().getUserInfo().getId());
         }
     }
