@@ -3,7 +3,9 @@
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.cocos2d.layers.CCScene;
@@ -14,6 +16,34 @@ import android.util.Log;
 import com.sromku.simple.fb.entities.Profile;
 
 public class DataFilter {
+	
+	static String[] keys = {
+			"RequestMode",
+			"FacebookId",
+			"LevelCharacter", // 1
+			"SphereNumber", // 2 
+			"Exp", // 3
+			"Gold", // 4
+			"Point", // 5 사용 안함
+			"HistoryWin", // 6 
+			"HistoryLose", // 7
+			"ReceivedBroomstick", // 8
+			"LevelFire",  //9
+			"LevelWind", // 10
+			"LevelCloud", // 11 
+			"LevelDivine", // 12
+			"LevelEarth", // 13
+			"LevelMirror", // 14
+			"Emoticons", // 15
+			"InviteNumber", // 16
+			"Score",
+			"SenderFacebookId",
+			"Category",
+			"Amount",
+			"RequestId", // facebook 알림 글 번호로 받아오는 것 같다.
+			"FacebookIdList",
+			"DeviceType"
+	};
 		
 	private static String headerEraser(String source, String filterStr) {
 		if (source.indexOf(filterStr) < 0) {
@@ -109,10 +139,11 @@ public class DataFilter {
 
 	// 3
 	public static void setUserDBData(String facebookID) {
-		Log.e("Daily", "setUserDBData");
-		try {
-			String userDataCreate = new DataController()
-					.execute("0,RequestModeUpdate" +
+		Log.e("DataFilter", "setUserDBData");
+//		try {
+//			String userDataCreate = 
+					new DataController().execute(
+							"0,RequestModeUpdate" +
 							"*1,"  + facebookID + 
 							"*2," +DefaultUserData.level +
 							"*3," +DefaultUserData.sphere +
@@ -129,13 +160,34 @@ public class DataFilter {
 							"*14," +DefaultUserData.earthLevel +
 							"*15," +DefaultUserData.mirrorLevel +
 							"*16," +DefaultUserData.emoticons +
-							"*17," +DefaultUserData.invite).get();
-			Log.e("Daily", "setUserDBData : " + userDataCreate);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
+							"*17," +DefaultUserData.invite)
+//							.get()
+							;
+//			Log.e("DataFilter", "setUserDBData : " + userDataCreate);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		} catch (ExecutionException e) {
+//			e.printStackTrace();
+//		}
+	}
+	
+	public static void setUserDBData(Map<String, String> mapData) {
+	    Iterator<String> iterator = mapData.keySet().iterator();
+	    String sendData = "0,RequestModeUpdate";
+//	    String sendData = null;
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			for (int i = 0; i < keys.length; i++) {
+				if (key.equals(keys[i])) {
+					sendData += "*" + i;
+					break;
+				}
+			}
+			// sendData += "*" + key;
+			sendData += "," + mapData.get(key);
 		}
+		Log.e("DataFilter", "sendData [" + sendData + "]");
+	   new DataController().execute(sendData);
 	}
 
 	// 4

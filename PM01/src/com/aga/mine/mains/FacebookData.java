@@ -57,10 +57,11 @@ public class FacebookData {
 	}
 	
 	public void modDBData(String key, String value) {
-		String data2 = data.get(key);
-//		if (data2 != null && !data2.equals(""))
-		if (data2 != null)
-			data.put(key, value);
+		if (key == null || value == null || key.equals("") || value.equals("")) {
+			return;
+		}
+		data.put(key, value);
+		DataFilter.setUserDBData(data);
 	}
 	
 	public void setDBData(String data) {

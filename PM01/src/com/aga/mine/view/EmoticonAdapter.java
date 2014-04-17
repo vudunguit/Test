@@ -50,7 +50,7 @@ public class EmoticonAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		Viewholder holder;
 		if(convertView == null) {
 			holder = new Viewholder();
@@ -77,7 +77,11 @@ public class EmoticonAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				// TODO 
-				
+				String emoticons = FacebookData.getinstance().getDBData("Emoticons");
+				Log.e("EmoticonAdapter", "emoticons [" +emoticons + "] + " + (position+1));
+				emoticons += "," + (position+1);
+				Log.e("EmoticonAdapter", "emoticons : " + emoticons);
+				FacebookData.getinstance().modDBData("Emoticons", emoticons);
 			}
 		});
 		
