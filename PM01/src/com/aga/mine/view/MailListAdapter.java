@@ -46,7 +46,7 @@ public class MailListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		Viewholder holder;
+		final Viewholder holder;
 		if(convertView == null) {
 			holder = new Viewholder();
 			convertView = View.inflate(mContext, R.layout.list_mail, null);
@@ -70,8 +70,14 @@ public class MailListAdapter extends BaseAdapter {
 					DataFilter.deleteMail(serialNumber);
 					if (mTab == Constant.MAIL_TAB_BROOM) {
 						// 빗자루 화면 갱신  
+						holder.image.setImageResource(R.drawable.mail_broomstickbutton2);
+						mMailItemList.remove(position);
+						MailListAdapter.this.notifyDataSetChanged();
 					} else {
 						// 골드 화면 갱신
+						holder.image.setImageResource(R.drawable.mail_giftbutton2);
+						mMailItemList.remove(position);
+						MailListAdapter.this.notifyDataSetChanged();
 					}
 				}
 			}
