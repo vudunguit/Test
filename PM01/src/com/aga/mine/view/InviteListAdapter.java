@@ -1,10 +1,8 @@
 package com.aga.mine.view;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.provider.Telephony.Mms.Addr;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +22,7 @@ import com.sromku.simple.fb.entities.Profile;
 public class InviteListAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<Profile> notAPlayers; // GameScore로 변환
-	private List<GameScore> friends;
+//	private List<GameScore> friends;
 	private AQuery mAq;
 	
 	public InviteListAdapter(Context context) {
@@ -54,9 +52,9 @@ public class InviteListAdapter extends BaseAdapter {
 		mAq = new AQuery(mContext);
 	}
 	
-	public InviteListAdapter(MainActivity mainActivity, ArrayList<GameScore> matchList) {
-		friends = matchList;
-	}
+//	public InviteListAdapter(MainActivity mainActivity, ArrayList<GameScore> matchList) {
+//		friends = matchList;
+//	}
 
 	@Override
 	public int getCount() {
@@ -92,6 +90,7 @@ public class InviteListAdapter extends BaseAdapter {
 		holder.tvFBId.setText(notAPlayers.get(position).getName());
 		
 		//초대버튼 disable 처리
+		Log.d("LDK", "id: " + notAPlayers.get(position).getId() + ",초대상태:" + Util.canInvite(notAPlayers.get(position).getId())) ;
 		if(!Util.canInvite(notAPlayers.get(position).getId())) {
 			holder.imgInviteBtn.setImageResource(R.drawable.invite_button2ko);
 			holder.imgInviteBtn.setEnabled(false);
