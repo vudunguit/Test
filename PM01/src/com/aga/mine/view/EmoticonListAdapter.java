@@ -82,6 +82,9 @@ public class EmoticonListAdapter extends BaseAdapter {
 				emoticons += "," + (position+1);
 				Log.e("EmoticonAdapter", "emoticons : " + emoticons);
 				FacebookData.getinstance().modDBData("Emoticons", emoticons);
+				//상태변경
+				mItemList.get(position).checked = true;
+				EmoticonListAdapter.this.notifyDataSetChanged();
 			}
 		});
 		
