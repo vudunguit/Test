@@ -1,9 +1,14 @@
 package com.aga.mine.util;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
+import android.R.bool;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+import android.util.SparseArray;
 
 import com.aga.mine.mains.MainApplication;
 
@@ -63,4 +68,22 @@ public final class Util {
 			return true;
 		}
 	}
+
+	static Map<String, Boolean> join = new HashMap<String, Boolean>();
+	
+	public static void setJoin(String id, byte joinValue) {
+		Log.e("Util", "set id : " + id + ", " + joinValue);
+		if (joinValue > 0)
+			join.put(id, true);
+		else
+			join.put(id, false);
+	}
+	
+	public static boolean getJoin(String id) {
+		Log.e("Util", "get id : " + id);
+		if (id == null || join.get(id) == null)
+			return false;
+		return join.get(id);
+	}
+	
 }

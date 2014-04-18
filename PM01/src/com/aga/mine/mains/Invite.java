@@ -6,23 +6,19 @@ import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
-import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
-import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
+
+import android.content.Context;
+import android.util.Log;
 
 import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.pages.UserData;
 import com.aga.mine.util.Util;
-
-import android.content.Context;
-import android.os.Message;
-import android.util.Log;
-import android.view.MotionEvent;
 
 public class Invite extends CCLayer {
 	
@@ -61,10 +57,6 @@ public class Invite extends CCLayer {
 //		scene.addChild(InvitationReceiver.getInstance().getInvitationPopup());
 		return scene;
 	}
-
-//	private CGSize winsize() {
-//		return CCDirector.sharedDirector().winSize();
-//	}
 	
     public InviteCallback mInviteCallback = new InviteCallback() {
 
@@ -111,7 +103,6 @@ public class Invite extends CCLayer {
 		MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
 		
 		//배경 그림 설정
-//		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg-invite" + fileExtension);
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);		
 		setBackBoardMenu(folder + "invite-bb2" + fileExtension);
 		setBoardFrameMenu(commonfolder + "frameGeneral-hd" + fileExtension);
@@ -124,8 +115,6 @@ public class Invite extends CCLayer {
 		this.setIsTouchEnabled(true);
 	}
 
-//	String[] testNameList =  {"김 길 동","이 길 동","박 길 동","최 길 동"};
-
 	// 백 보드 설정
 	private void setBackBoardMenu(String imageFullPath) {
 		CCSprite backBoard = CCSprite.sprite(imageFullPath);
@@ -133,7 +122,6 @@ public class Invite extends CCLayer {
 		backBoard.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		backBoard.setAnchorPoint(0.5f, 0.5f);
 		setMainMenu(backBoard);
-//		friendsList(backBoard, testNameList); // 안드로이드 리스트뷰로 대체
 	}
 	
 	// 게시판 설정

@@ -32,12 +32,12 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.aga.mine.view.EmoticonAdapter;
-import com.aga.mine.view.FriendListAapter;
-import com.aga.mine.view.InviteListAapter;
+import com.aga.mine.view.EmoticonListAdapter;
+import com.aga.mine.view.FriendListAdapter;
+import com.aga.mine.view.InviteListAdapter;
 import com.aga.mine.view.MailItem;
 import com.aga.mine.view.MailListAdapter;
-import com.aga.mine.view.MatchListAapter;
+import com.aga.mine.view.MatchListAdapter;
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.entities.Profile;
@@ -109,7 +109,7 @@ public class MainActivity extends Activity {
 			
 			switch(msg.what) {
 			case Constant.MSG_DISPLAY_RANKLIST:
-				FriendListAapter adapter = new FriendListAapter(MainActivity.this);
+				FriendListAdapter adapter = new FriendListAdapter(MainActivity.this);
 				mListView.setAdapter(adapter);
 				mListView.setCacheColorHint(Color.alpha(0));
 				RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -151,7 +151,7 @@ public class MainActivity extends Activity {
 				break;
 				
 			case Constant.MSG_DISPLAY_INVITELIST:
-				InviteListAapter inviteAdapter = new InviteListAapter(MainActivity.this);
+				InviteListAdapter inviteAdapter = new InviteListAdapter(MainActivity.this);
 				mListView.setAdapter(inviteAdapter);
 				RelativeLayout.LayoutParams inviteParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 				inviteParams.setMargins(
@@ -168,7 +168,7 @@ public class MainActivity extends Activity {
 				break;
 				
 			case Constant.MSG_DISPLAY_EMOTICONLIST:
-				EmoticonAdapter emoticonAdapter = new EmoticonAdapter(MainActivity.this);
+				EmoticonListAdapter emoticonAdapter = new EmoticonListAdapter(MainActivity.this);
 				mGridView.setAdapter(emoticonAdapter);
 				RelativeLayout.LayoutParams emoticonParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 				emoticonParams.setMargins(
@@ -186,7 +186,7 @@ public class MainActivity extends Activity {
 				
 			case Constant.MSG_DISPLAY_MATCHLIST:
 				ArrayList<GameScore> matchList = (ArrayList<GameScore>) FacebookData.getinstance().getGameScore();
-				MatchListAapter matchAdapter = new MatchListAapter(MainActivity.this, matchList); // 수정중
+				MatchListAdapter matchAdapter = new MatchListAdapter(MainActivity.this, matchList); // 수정중
 //				InviteListAapter matchAdapter = new InviteListAapter(MainActivity.this);
 				mListView.setAdapter(matchAdapter);
 				RelativeLayout.LayoutParams matchParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -346,7 +346,6 @@ public class MainActivity extends Activity {
     	Log.e("MainActivity", "Callback_2 - setInviteCallback");
     	mInviteCallback = callback;
     }
-    
     //facebook setting--------------------------------------------------------------------------
     private void showDialog(String title, String message) {
         mProgress = ProgressDialog.show(this, title, message, true);

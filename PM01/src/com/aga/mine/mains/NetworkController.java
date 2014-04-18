@@ -16,11 +16,14 @@ import org.cocos2d.nodes.CCDirector;
 
 import android.app.Activity;
 import android.content.Context;
+import android.hardware.Camera.Size;
 import android.util.Log;
 
+import com.aga.mine.mains.MainActivity.MatchCallback;
 import com.aga.mine.pages.Game;
 import com.aga.mine.pages.GameMinimap;
 import com.aga.mine.pages.UserData;
+import com.aga.mine.util.Util;
 
 //import com.aga.mine.layers.GameInvite;
 //import com.aga.mine.layers.GameRandom;
@@ -314,6 +317,7 @@ public class NetworkController extends Activity {
 			int count = 0;
 			while (reader.buffer_.hasRemaining()) {
 				GameMinimap.getInstance().receivePlayData(reader.readByte(), reader.readInt());
+				// kMessageRequestIsPlayerConnected와 같이 수정해도 될듯
 				if (reader.buffer_.hasRemaining()) {
 					count++;
 					reader.buffer_.position(1 + 10 * count);
@@ -347,10 +351,27 @@ public class NetworkController extends Activity {
 			break;			
 			
 		case kMessageRequestIsPlayerConnected:
-			Log.e("NetworkController", "kMessageRequestIsPlayerConnected");
-			Log.e("Network", "data 크기 : " + data.length);
-			Log.e("Network", "상대방 ID : " + reader.readString());
-			Log.e("Network", "접속여부 : " + reader.readByte());
+//			Log.e("NetworkController", "kMessageRequestIsPlayerConnected");
+//			byte[] tempData = data;
+//			Log.e("Network", "data 크기 : " + tempData.length);
+//			for (byte b : tempData) {
+//				Log.e("Network", "내용 [" + b + "]");
+//			}
+			while (reader.buffer_.hasRemaining()) {
+//				Log.e("NetworkController", "position before : " + reader.buffer_.position());
+				String id = reader.readString();
+				byte joinValue = reader.readByte();
+				Util.setJoin(id, joinValue);
+//				Log.e("NetworkController", "id.lenght : " + id.length());
+				if (reader.buffer_.hasRemaining()) {
+//					Log.e("NetworkController", "position after : " + reader.buffer_.position());
+					reader.readInt(); // dataSize
+					reader.readByte(); // connenct_dataType // or
+//					reader.buffer_.position(reader.buffer_.position() + 5); // or
+//					reader.buffer_.position(1 + (dataSize + 5) * count1); 
+//					Log.e("NetworkController", "dataSize : " + dataSize + ", connenct_dataType : " + connenct_dataType );
+				}
+			}
 			break;
 
 		case kMessageRequestMatchInvite:
@@ -801,4 +822,5 @@ public class NetworkController extends Activity {
 		public void setDetails(String message);
 		
 	}
+	
 }

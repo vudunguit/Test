@@ -25,14 +25,14 @@ import com.aga.mine.util.Util;
 import com.androidquery.AQuery;
 import com.sromku.simple.fb.entities.Profile;
 
-public class FriendListAapter extends BaseAdapter {
+public class FriendListAdapter extends BaseAdapter {
 	private Context mContext;
 	private Profile user;
 	private List<Profile> friends;
 	private List<GameScore> gameScore;
 	private AQuery mAq;
 	
-	public FriendListAapter(Context context) {
+	public FriendListAdapter(Context context) {
 		mContext = context;
 		user = FacebookData.getinstance().getUserInfo();
 		friends = FacebookData.getinstance().getFriendsInfo();

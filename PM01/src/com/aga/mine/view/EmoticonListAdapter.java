@@ -12,11 +12,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-public class EmoticonAdapter extends BaseAdapter {
+public class EmoticonListAdapter extends BaseAdapter {
 	private Context mContext;
 	private ArrayList<Item> mItemList = new ArrayList<Item>();
 	
-	public EmoticonAdapter(Context context) {
+	public EmoticonListAdapter(Context context) {
 		mContext = context;
 		// 이모티콘 ","로 구분된 String을 잘라서 String배열에 저장
 		String[] emoticons = FacebookData.getinstance().getDBData("Emoticons").split(",");

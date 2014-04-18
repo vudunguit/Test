@@ -21,13 +21,13 @@ import com.aga.mine.util.Util;
 import com.androidquery.AQuery;
 import com.sromku.simple.fb.entities.Profile;
 
-public class InviteListAapter extends BaseAdapter {
+public class InviteListAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<Profile> notAPlayers; // GameScore로 변환
 	private List<GameScore> friends;
 	private AQuery mAq;
 	
-	public InviteListAapter(Context context) {
+	public InviteListAdapter(Context context) {
 //		List<GameScore> adfa = new ArrayList<GameScore>(); // 수정중
 		mContext = context;
 		List<Profile> friends = FacebookData.getinstance().getFriendsInfo();
@@ -54,7 +54,7 @@ public class InviteListAapter extends BaseAdapter {
 		mAq = new AQuery(mContext);
 	}
 	
-	public InviteListAapter(MainActivity mainActivity, ArrayList<GameScore> matchList) {
+	public InviteListAdapter(MainActivity mainActivity, ArrayList<GameScore> matchList) {
 		friends = matchList;
 	}
 
