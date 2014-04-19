@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.interval.CCAnimate;
 import org.cocos2d.actions.interval.CCRotateBy;
@@ -1175,23 +1176,16 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 						// 닫혀있는 셀 누르면
 					} else {
 						// 지정된 셀을 열어준다.(tile의 fg를 제거)
-
-						CCDirector.sharedDirector().getActivity()
-								.runOnUiThread(new Runnable() {
-									public void run() {
-										android.os.Process
-												.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-										try {
-											Thread.sleep(300);
-											cell.open();
-										} catch (InterruptedException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}
-
-									}
-								});
-
+						Log.d("LDK", "cell open before");
+						schedule(new UpdateCallback() {
+							
+							@Override
+							public void update(float d) {
+								cell.open();
+								unschedule(this);
+								Log.d("LDK", "cell open after");
+							}
+						}, 0.3f);
 					}
 					break;
 					// k = size;
@@ -1675,8 +1669,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 					SoundEngine.sharedEngine().playEffect(this.mContext,
 							R.raw.game_pumpkin); // hit
 				} else {
-					SoundEngine.sharedEngine().playEffect(this.mContext,
-							R.raw.game_open2); // pickup
+					SoundEngine.sharedEngine().playEffect(this.mContext, R.raw.game_open2); // pickup
 					// Log.e("Game / removeTile", "getFg : " + getFg());
 					// Log.e("Game / removeTile", "tileCoord : " + tileCoord);
 					// 자주 문제 발생 stack over flow Error (thread 오버)
@@ -1689,8 +1682,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			}
 		} else {
 			// Log.e("Game / removeTile", "properties - tile empty");
-			SoundEngine.sharedEngine().playEffect(this.mContext,
-					R.raw.game_open2); // pickup
+			SoundEngine.sharedEngine().playEffect(this.mContext, R.raw.game_open2); // pickup
 			// 에러 stack over flow error
 			this.getFg().removeTileAt(tileCoord);
 		}
@@ -2246,64 +2238,34 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 					Utility.getInstance().animationMagicianAction(this);
 					magician.setVisible(false);
 					final CCNode layer = this;
-					CCDirector.sharedDirector().getActivity()
-							.runOnUiThread(new Runnable() {
-								public void run() {
-									android.os.Process
-											.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-									try {
-										Thread.sleep(400);
-										magician.setVisible(true);
-										layer.removeChildByTag(888, true);
-										//
-										// 아이템수를 감소시키고
-										// 라벨 디스플레이를 업데이트 시키고
-										// 버튼 클릭 효과
+					
+					schedule(new UpdateCallback() {
+						@Override
+						public void update(float d) {
+							magician.setVisible(true);
+							layer.removeChildByTag(888, true);
+							//
+							// 아이템수를 감소시키고
+							// 라벨 디스플레이를 업데이트 시키고
+							// 버튼 클릭 효과
 
-										// 디펜스와 어택 구분 필요 이유????
-										if (GameData.share().isMultiGame) {
-											try {
-												NetworkController
-														.getInstance()
-														.sendPlayDataMagicAttack(
-																((CCMenuItem) button)
-																		.getTag());
-											} catch (IOException e) {
-												e.printStackTrace();
-											}
-										}
-
-										GameData.share().decreaseItemByType(
-												((CCMenuItem) button).getTag());
-										updateSphereItemNumber();
-										clickEffect(((CCMenuItem) button)
-												.getTag());
-										/*
-										 * // 발동 이펙트 (기본 확인 취소 경고창)
-										 * AlertDialog.Builder builder = new
-										 * AlertDialog
-										 * .Builder(CCDirector.sharedDirector
-										 * ().getActivity()); builder
-										 * //.setMessage(alertText + " 발동")
-										 * .setTitle(alertText + " 발동")
-										 * .setPositiveButton( "확인",new
-										 * DialogInterface.OnClickListener() {
-										 * public void onClick(DialogInterface
-										 * dialog, int id) { // your Code here
-										 * dialog.cancel(); } }); AlertDialog
-										 * alert = builder.create();
-										 * alert.show();
-										 */
-
-									} catch (InterruptedException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-
+							// 디펜스와 어택 구분 필요 이유????
+							if (GameData.share().isMultiGame) {
+								try {
+									NetworkController.getInstance().sendPlayDataMagicAttack(((CCMenuItem) button).getTag());
+								} catch (IOException e) {
+									e.printStackTrace();
 								}
-							});
+							}
 
-					/**************/
+							GameData.share().decreaseItemByType(((CCMenuItem) button).getTag());
+							updateSphereItemNumber();
+							clickEffect(((CCMenuItem) button).getTag());
+							
+							unschedule(this);
+						}
+					}, 0.4f);
+
 				}
 			}
 		}
@@ -2426,7 +2388,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		}
 
 		// public static void abc(int messageType){
-		public static void abc(byte[] messageType) {
+		public void abc(byte[] messageType) {
 			// final int aaa = messageType;
 			byte[] aaa = messageType;
 			Log.e("Game / abc", "in");
@@ -2435,17 +2397,16 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 				aaaa = aaaa + b + ",";
 			}
 			final String result = aaaa;
-			CCDirector.sharedDirector().getActivity()
-					.runOnUiThread(new Runnable() {
-						public void run() {
-							android.os.Process
-									.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-							if (result != null) {
-								testText.setString("message type : " + result);
-							}
-
-						}
-					});
+			
+			schedule(new UpdateCallback() {
+				@Override
+				public void update(float d) {
+					if (result != null) {
+						testText.setString("message type : " + result);
+					}
+					unschedule(this);
+				}
+			});
 
 			Log.e("Game / abc", "out");
 		}
