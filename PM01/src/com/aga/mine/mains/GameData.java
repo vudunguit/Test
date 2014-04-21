@@ -82,32 +82,30 @@ public class GameData {
 	
 	//---------------------------------------------------------------//
 
-    //
-    // 게임설정 스프레드쉬트를 읽어들인다.
-   final int maxMineNumber = getMaxMineNumber(getGameDifficulty());
+//   int maxMineNumber = 0;
+//   public void getMineNumber() {
+//	   getMaxMineNumber(getGameDifficulty());
+//}
+
    
 	private void initGameData() {
-	
-		    
-		    //
-		    // 초기값으로 지정한다.
-		   this.data = new HashMap<String, Integer>();
-		   
-		   // value 꺼낼때는 형변환 해줘야됨.
-		   data.put("HeartNumber", 3);	 // 생명수
-		   data.put("MineNumber", maxMineNumber);	 // 남아있는 지뢰수
-		   data.put("Seconds", 900); 		// 15 min, 남은 게임 진행시간 // Game에서 다시 값을 넣어서 무의미 하다.
-		   data.put("ItemFire", 0);				// 획득한 수정구, 불	
-		   data.put("ItemWind", 0);			// 획득한 수정구, 바람	
-		   data.put("ItemCloud", 0);			// 획득한 수정구, 구름
-		   data.put("ItemDivine", 0);			// 획득한 수정구, 신성
-		   data.put("ItemEarth", 0);			// 획득한 수정구, 대지
-		   data.put("ItemMirror", 0);			// 획득한 수정구, 반사
-		   data.put("GameDifficulty", 1);	// 게임 난이도 // 임시로 1
-		   
-		   data.put("GameMode", 1);		// 게임 모드 // 임시로 1
-		   
-		   currentMine = 0;
+	    // 초기값으로 지정한다.
+	   this.data = new HashMap<String, Integer>();
+	   
+	   // value 꺼낼때는 형변환 해줘야됨.
+	   data.put("GameDifficulty", 1);	// 게임 난이도 // 임시로 1
+	   data.put("GameMode", 1);		// 게임 모드 // 임시로 1
+	   data.put("MineNumber", 0);	 // 남아있는 지뢰수
+	   data.put("HeartNumber", 3);	 // 생명수
+	   data.put("Seconds", 900); 		// 15 min, 남은 게임 진행시간 // Game에서 다시 값을 넣어서 무의미 하다.
+	   data.put("ItemFire", 0);				// 획득한 수정구, 불	
+	   data.put("ItemWind", 0);			// 획득한 수정구, 바람	
+	   data.put("ItemCloud", 0);			// 획득한 수정구, 구름
+	   data.put("ItemDivine", 0);			// 획득한 수정구, 신성
+	   data.put("ItemEarth", 0);			// 획득한 수정구, 대지
+	   data.put("ItemMirror", 0);			// 획득한 수정구, 반사
+	   
+	   currentMine = 0;
 	}
 
 	// #pragma mark - data methods
@@ -228,9 +226,11 @@ public class GameData {
 	}
 
 	public int getGameData(String key) {
-		// 임시로
-		//
 		return data.get(key);
+	}
+	
+	public void setGameData(String key, int value) {
+		data.put(key, value);
 	}
 
 	public void setItemNumberByType(int sphereType, int number){
@@ -258,14 +258,12 @@ public class GameData {
 	
 	// 난이도
 	public int getGameDifficulty(){
-		//Log.e("get", ""+getGameData("GameDifficulty"));  // log로 확인
-		return 1; // 임시로 expert
-		//return getGameData("GameDifficulty");
+		return getGameData("GameDifficulty");
 	}
 	
 	public void setGameDifficulty(int difficulty) {
+		setGameData("GameDifficulty", difficulty);
 		Log.e("GameData / setGameDifficulty", "Difficulty : "+ getGameData("GameDifficulty"));  // log로 확인
-		this.setGameData("GameDifficulty", difficulty);
 	}
 
 	//GameMode
@@ -278,9 +276,7 @@ public class GameData {
 	}
 
 
-	public void setGameData(String key, int value) {
-		data.put(key, value);
-	}
+
 	
 }
 // end

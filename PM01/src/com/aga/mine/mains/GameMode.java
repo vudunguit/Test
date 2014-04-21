@@ -55,12 +55,9 @@ public class GameMode extends CCLayer {
 		this.setIsTouchEnabled(true);
 		
 		if (!GameData.share().isGuestMode) {
-			// 게임 점수 테스트용 (0~ 200 랜덤 점수 얻음), 마이너스 점수도 가능(패배시)
-			int scoreValue = (int) (Math.random() * 201);
-			if (scoreValue < 0) 
-				scoreValue = 0;
-			Log.e("GameMode", "score : " + DataFilter.addGameScore("" + scoreValue));
-			Log.e("GameMode", "score : " + scoreValue + "점 증가");			
+			// 게임 점수 테스트용 (50점 얻음)
+			DataFilter.addGameScore("50");
+			Log.e("GameMode", "score 50점 증가");			
 		}
 	}
 	

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aga.mine.mains.FacebookData;
+import com.aga.mine.mains.GameData;
 import com.aga.mine.mains.GameScore;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.R;
@@ -90,7 +91,13 @@ public class MatchListAdapter extends BaseAdapter {
 		holder.imgInviteBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+				try {
+					NetworkController.getInstance().sendRequestMatchInvite(
+							GameData.share().getGameDifficulty(), 
+							mGameScore.get(position).getId());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		

@@ -26,6 +26,10 @@ public class GameDifficulty extends CCLayer {
 	final int randomMode = 2;
 	final int inviteMode = 3;
 	
+	final int easy = 1;
+	final int normal = 2;
+	final int expert = 3;
+	
 	CCSprite bg;
 	
 	public static int mode;
@@ -84,19 +88,19 @@ public class GameDifficulty extends CCLayer {
 				folder + "difficulty-easybutton1" + fileExtension,
 				folder + "difficulty-easybutton2" + fileExtension,
 				this, "nextCallback");
-		button1.setUserData(1);
+		button1.setTag(easy);
 		// 중급
 		CCMenuItemImage button2 = CCMenuItemImage.item(
 				folder + 	"difficulty-normalbutton1" + fileExtension,
 				folder + 	"difficulty-normalbutton2" + fileExtension,
 				this, "nextCallback");
-		button2.setUserData(2);
+		button2.setTag(normal);
 		// 상급
 		CCMenuItemImage button3 = CCMenuItemImage.item(
 				folder + 	"difficulty-hardbutton1" + fileExtension,
 				folder + 	"difficulty-hardbutton2" + fileExtension,
 				this, "nextCallback");
-		button3.setUserData(3);
+		button3.setTag(expert);
 		
 		CCMenu gameMenu = CCMenu.menu(button1, button2, button3);
 		gameMenu.alignItemsVertically(0);
@@ -149,7 +153,7 @@ public class GameDifficulty extends CCLayer {
 	public void nextCallback(Object sender) {
 		int difficultyNumber = ((CCNode)sender).getTag();
 		Log.e("GameMode", "tagNumber  : " + difficultyNumber);
-		userData.setGameDifficulty(difficultyNumber); // gameData로 옮겨야됨. (기존에 있음.)
+		GameData.share().setGameDifficulty(difficultyNumber); // gameData로 옮겨야됨. (기존에 있음.)
 //		GameData.share().setGameDifficulty((Integer)((CCNode)sender).getUserData());
 //		switch (GameData.share().getGameMode()) {  // gameData로 옮겨야됨. (기존에 있음.)
 		Log.e("GameDifficulty", "tagNumber  : " + userData.getGameMode());

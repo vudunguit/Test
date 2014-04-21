@@ -16,10 +16,8 @@ import org.cocos2d.nodes.CCDirector;
 
 import android.app.Activity;
 import android.content.Context;
-import android.hardware.Camera.Size;
 import android.util.Log;
 
-import com.aga.mine.mains.MainActivity.MatchCallback;
 import com.aga.mine.pages.Game;
 import com.aga.mine.pages.GameMinimap;
 import com.aga.mine.pages.UserData;
@@ -374,9 +372,6 @@ public class NetworkController extends Activity {
 			}
 			break;
 
-		case kMessageRequestMatchInvite:
-			Log.e("NetworkController", "kMessageRequestMatchInvite");
-		break;
 //			
 //		case kMessageGameOver:
 //			Log.e("NetworkController", "kMessageGameOver");
@@ -461,6 +456,7 @@ public class NetworkController extends Activity {
 			result = reader.readByte();
 			matchedOppenentFacebookId = reader.readString();			
 			Log.e("NetworkController", "초대 요청 난이도 & ID /" + result + " : " + matchedOppenentFacebookId);
+			RequestMatch.inviteMatch(matchedOppenentFacebookId, result);
 			break;
 			
 		default:
