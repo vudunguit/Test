@@ -15,12 +15,19 @@
         android:layout_height="wrap_content"
         android:background="@drawable/emoticon_01"
         android:layout_gravity="center" />
-
+    
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/emoticon_goldbackground"
+        android:layout_gravity="center" />
+    
     <TextView
         android:id="@+id/tvPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="2dp"
+        android:layout_marginBottom="2dp"
         android:text="100 Gold"
         android:textColor="#FFCBA135"
         android:textSize="9dp"

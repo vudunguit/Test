@@ -1,0 +1,163 @@
+﻿package com.aga.mine.mains;
+
+import java.io.IOException;
+
+import org.cocos2d.actions.base.CCFiniteTimeAction;
+import org.cocos2d.actions.interval.CCMoveTo;
+import org.cocos2d.actions.interval.CCSequence;
+import org.cocos2d.layers.CCLayer;
+import org.cocos2d.menus.CCMenu;
+import org.cocos2d.menus.CCMenuItem;
+import org.cocos2d.menus.CCMenuItemImage;
+import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.nodes.CCLabel;
+import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.types.CGPoint;
+import org.cocos2d.types.CGSize;
+import org.cocos2d.types.ccColor3B;
+
+import com.sromku.simple.fb.entities.Profile;
+
+import android.util.Log;
+
+public class RequestMatch extends CCLayer{
+
+	final String commonfolder = "00common/";
+	final String folder = "11mailbox/";
+	final String fileExtension = ".png";
+	
+	static String oppenentPlayerID = "";
+	boolean isEmoticonPanelOn;
+
+	static CGPoint basePositionOn;
+	CGPoint basePositionOff;
+	
+	static CCSprite base;
+	static CCLabel message1;
+	static CCLabel message2;
+	
+	public RequestMatch() {
+		layout();
+	}
+
+	private void layout() {
+		CGSize winSize = CCDirector.sharedDirector().winSize();
+		isEmoticonPanelOn = false;
+		
+		// 초대 창
+		base = CCSprite.sprite(commonfolder + "popup-bg" + fileExtension);
+		this.addChild(base);
+		
+		// 초대 메시지
+		message1 = CCLabel.makeLabel("초대함", "Arial", 26);
+		message1.setColor(ccColor3B.ccBLACK);
+		message1.setPosition(base.getContentSize().width / 2 , base.getContentSize().height * 0.82f);
+		base.addChild(message1);
+		message2 = CCLabel.makeLabel("초대함", "Arial", 26);
+		message2.setColor(ccColor3B.ccBLACK);
+		message2.setPosition(message1.getPosition().x , message1.getPosition().y - (message2.getContentSize().height * 1.1f));
+		base.addChild(message2);
+		
+		// 초대 응답 버튼
+		CCMenuItem accept = CCMenuItemImage.item(
+				folder + "receiveAllButtonNormal" + fileExtension,
+				folder + "receiveAllButtonPress" + fileExtension, 
+				this, "clicked");
+		accept.setTag(1);
+		CCLabel textAccept = CCLabel.makeLabel("Accept", "Arial", 24);
+//		textAccept.setColor(ccColor3B.ccc3(64,	46, 1));
+		textAccept.setColor(ccColor3B.ccBLACK);
+		textAccept.setPosition(accept.getContentSize().width / 2, accept.getContentSize().height / 2);
+		accept.addChild(textAccept);
+		CCMenu acceptMenu = CCMenu.menu(accept);
+		acceptMenu.setContentSize(accept.getContentSize());
+		acceptMenu.setPosition(base.getContentSize().width * 0.28f, base.getContentSize().height / 3);
+		base.addChild(acceptMenu);
+		
+		// 초대 거부 버튼
+		CCMenuItem reject = CCMenuItemImage.item(
+				folder + "receiveAllButtonNormal" + fileExtension,
+				folder + "receiveAllButtonPress" + fileExtension, 
+				this, "clicked");
+		reject.setTag(2);
+		CCLabel textReject = CCLabel.makeLabel("Reject", "Arial", 24);
+		textReject.setColor(ccColor3B.ccBLACK);
+		textReject.setPosition(accept.getContentSize().width / 2, accept.getContentSize().height / 2);
+		reject.addChild(textReject);
+		CCMenu rejectMenu = CCMenu.menu(reject);
+		rejectMenu.setContentSize(reject.getContentSize());
+		rejectMenu.setPosition(base.getContentSize().width * 0.72f, base.getContentSize().height / 3);
+		base.addChild(rejectMenu);
+		
+		
+		basePositionOff = CGPoint.ccp(
+				winSize.width / 2 + ((base.getAnchorPoint().x - 0.5f) * base.getContentSize().width), 
+				winSize.height + (base.getAnchorPoint().y * base.getContentSize().height));
+		basePositionOn = CGPoint.ccp(basePositionOff.x, basePositionOff.y - base.getContentSize().height);
+		
+		base.setPosition(GameConfig.share().isEmoticonPanelOn ? basePositionOn : basePositionOff);
+	}
+
+	public void clicked(Object sender) {
+		Log.e("RequestMatch", "clicked");
+		// 초대창 애니메이션 오프
+		CCFiniteTimeAction moveOff = CCMoveTo.action(GameConfig.share().kEmoticonPanelMoveTime, basePositionOff);
+		base.runAction(CCSequence.actions(moveOff));
+		
+		switch (((CCMenuItem)sender).getTag()) {
+		case 1:
+			try {
+				NetworkController.getInstance().sendRoomOwner(0);
+				NetworkController.getInstance().sendResponseMatchInvite(1, oppenentPlayerID);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+			
+		case 2:
+			Log.e("RequestMatch", "거절");
+			break;
+		}
+
+	}
+
+	
+	public static void inviteMatch(String id, int result) {
+		String name = null;
+		String gameLevel = null;
+		final int easy = 1;
+		final int normal = 2;
+		final int hard = 3;
+
+		for (Profile friend : FacebookData.getinstance().getFriendsInfo()) {
+			if (friend.getId().equals(id)) {
+				name = friend.getName();
+				oppenentPlayerID = id;
+				break;
+			}
+		}
+		
+		switch (result) {
+		case easy:
+			gameLevel = "초급";
+			break;
+		case normal:
+			gameLevel = "중급";
+			break;
+		case hard:
+			gameLevel = "상급";
+			break;
+		}
+
+		message1.setString(name + "님이 ");
+		message2.setString(gameLevel + "난이도의 대전을 신청하였습니다.");
+		
+		if (base.getContentSize().width * 0.8f < message2.getContentSize().width) {
+			message2.setScaleX((base.getContentSize().width * 0.8f)  / message2.getContentSize().width);
+		}
+		
+		// 초대창 애니메이션 온
+		CCFiniteTimeAction moveOn = CCMoveTo.action(GameConfig.share().kEmoticonPanelMoveTime, basePositionOn);
+		base.runAction(CCSequence.actions(moveOn));
+	}
+}

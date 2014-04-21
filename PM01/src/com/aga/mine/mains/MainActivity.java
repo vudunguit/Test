@@ -153,6 +153,7 @@ public class MainActivity extends Activity {
 			case Constant.MSG_DISPLAY_INVITELIST:
 				InviteListAdapter inviteAdapter = new InviteListAdapter(MainActivity.this);
 				mListView.setAdapter(inviteAdapter);
+//				mListView.setDivider(null);
 				RelativeLayout.LayoutParams inviteParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 				inviteParams.setMargins(
 						(int) (inviteListMarginLeft * scale) + nMargin, 

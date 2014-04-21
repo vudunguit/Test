@@ -92,7 +92,9 @@ public class Home extends CCLayer{
 		
 		//register invite callback
 		MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
-
+		
+		this.addChild(new RequestMatch());
+		
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 		//display scroll view
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_RANKLIST);
