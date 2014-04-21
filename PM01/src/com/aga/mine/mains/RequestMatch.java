@@ -108,7 +108,8 @@ public class RequestMatch extends CCLayer{
 		case 1:
 			try {
 				NetworkController.getInstance().sendRoomOwner(0);
-				NetworkController.getInstance().sendResponseMatchInvite(1, oppenentPlayerID);
+//				NetworkController.getInstance().sendResponseMatchInvite(1, oppenentPlayerID);
+				NetworkController.getInstance().sendWillYouAcceptInviteOk(oppenentPlayerID);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

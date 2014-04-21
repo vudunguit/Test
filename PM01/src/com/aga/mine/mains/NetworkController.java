@@ -729,8 +729,20 @@ public class NetworkController extends Activity {
 		this.sendData(message.data_);
 		this.setMessage(kMessageResponseMatchInvite, kModeSent);
 		Log.e("NetworkController", "kMessageResponseMatchInvite");
+	}
+	
+	public void sendWillYouAcceptInviteOk(String facebookID) throws IOException{
+		MessageWriter message = new MessageWriter();
+		
+		message.writeByte((byte) kMessageWillYouAcceptInviteOK);
+		message. writeString(facebookID);
+		
+		this.sendData(message.data_);
+		this.setMessage(kMessageWillYouAcceptInviteOK, kModeSent);
+		Log.e("NetworkController", "kMessageWillYouAcceptInviteOK");
 
 	}
+	 
 	
 	
 	
