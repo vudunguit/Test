@@ -1,12 +1,13 @@
 package com.aga.mine.view;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.cocos2d.nodes.CCDirector;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -29,7 +30,9 @@ public class MatchListAdapter extends BaseAdapter {
    
 	public MatchListAdapter(Context context, List<GameScore> gameScore) {
 		mContext = context;
-		mGameScore = 	gameScore;
+		mGameScore = new ArrayList<GameScore>();
+		mGameScore.addAll(gameScore);
+		
 		final String myID = FacebookData.getinstance().getUserInfo().getId();
 //		Log.e("MatchListAdapter", "mGameScore.size() before1 : " + mGameScore.size());
 		for (int i = 0; i < mGameScore.size(); i++) {
