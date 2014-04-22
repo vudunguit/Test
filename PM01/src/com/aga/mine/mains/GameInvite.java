@@ -7,19 +7,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cocos2d.actions.base.CCRepeatForever;
-import org.cocos2d.actions.instant.CCCallFunc;
-import org.cocos2d.actions.interval.CCAnimate;
-import org.cocos2d.actions.interval.CCDelayTime;
-import org.cocos2d.actions.interval.CCRotateBy;
-import org.cocos2d.actions.interval.CCSequence;
-import org.cocos2d.events.CCTouchDispatcher;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
-import org.cocos2d.menus.CCMenu;
-import org.cocos2d.menus.CCMenuItem;
-import org.cocos2d.menus.CCMenuItemImage;
-import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
@@ -27,14 +16,11 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrame;
 import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
-import org.cocos2d.types.CGSize;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.widget.Toast;
 
 import com.aga.mine.pages.UserData;
 import com.sromku.simple.fb.entities.Profile;
@@ -42,34 +28,27 @@ import com.sromku.simple.fb.entities.Profile;
 public class GameInvite extends CCLayer {
 	
 	final String commonfolder = "00common/";
-	final String invitefolder = "30invite/";	
-	final String randomfolder = "52random/";
 	final String folder = "53invite/";
-	
-	final int singleMode = 1;
-	final int randomMode = 2;
-	final int inviteMode = 3;
-	
-	final static int gameInvitescrollLayerTag = 11;
-	final static int gameInviteLayerTag = 12;
-	
-	static CCSprite bg;
-	static CCSprite backboard;
-	static CCLabel player1Label;
-	static CCLabel player2Label;
-	CCSprite inviteButtonOff;
-	CCMenuItem inviteButton;
-	
-	static int friendsSize;
-	boolean scrollLock = false;
 	
 	public boolean isOwner = false;
 	
+	static CCSprite backboard;
+	static CCLabel player1Label;
+	static CCLabel player2Label;
+
     private static CCScene scene;
-    
-	private Context mContext;
-	private static GameInvite versusMatchLayer;
-	UserData userData;
+	private static GameInvite gameInvite;
+	
+	final int singleMode = 1; // ???
+	final int randomMode = 2; // ???
+	final int inviteMode = 3; // ???
+	
+	final static int gameInviteLayerTag = 12; // ???
+	
+	static CCSprite bg; // ??
+
+	private Context mContext; // 불필요 할듯
+	UserData userData; // 불필요 할듯
 
 	public static CCScene scene() {
 		scene = CCScene.node();
@@ -79,19 +58,14 @@ public class GameInvite extends CCLayer {
 	}
 	
 	public static synchronized GameInvite getInstance() {
-		if (versusMatchLayer == null) {
-			versusMatchLayer = new GameInvite();
-			Log.e("GameInvite", "new Instance");
-		} else {
-			Log.e("GameInvite", "get Instance");
-		}
-		return versusMatchLayer;
-	}
+		if (gameInvite == null)
+			gameInvite = new GameInvite();
+		return gameInvite;
+	} // 불필요 할듯
 
 	private GameInvite() {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
-		
 		
 		//배경 그림 설정
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1.png");	
@@ -108,7 +82,6 @@ public class GameInvite extends CCLayer {
 		//display scroll view
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_MATCHLIST);
 	}
-	
 
 	// 백 보드 설정
 	private void setBackBoardMenu(String imageFullPath) {
@@ -269,11 +242,5 @@ public class GameInvite extends CCLayer {
 			e.printStackTrace();
 		}
 	}
-	
-//	public void gameStart(Object sender) {
-//		CCScene scene = GameLoading.scene();
-//		CCDirector.sharedDirector().replaceScene(scene);
-//	}
-
 	
 }

@@ -10,40 +10,25 @@ import java.util.List;
 import org.cocos2d.events.CCTouchDispatcher;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
-import org.cocos2d.menus.CCMenu;
-import org.cocos2d.menus.CCMenuItem;
-import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
-import org.cocos2d.nodes.CCSpriteFrameCache;
-import org.cocos2d.opengl.CCTexture2D;
 import org.cocos2d.types.CGPoint;
-import org.cocos2d.types.CGSize;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.widget.Toast;
 
-import com.aga.mine.mains.NetworkController;
-import com.aga.mine.pages.UserData;
-import com.facebook.model.GraphUser;
 import com.sromku.simple.fb.entities.Profile;
 
 public class GameRandom extends CCLayer {
-	int mode = 0;
-	int count = 5;
 	
 	public boolean isOwner = false;
 
 	static CCSprite bg;
 	static CCLabel player1Label;
 	static CCLabel player2Label;
-	public String aaaa = " "; 
 	
 	final String commonfolder = "00common/";
 	final String folder = "52random/";
@@ -51,16 +36,8 @@ public class GameRandom extends CCLayer {
 	CCSprite sprite1;
 	CCSprite sprite2;
 	CCSprite illust;
-	CCSprite countdownNumber1; 
-	CCSprite countdownNumber2; 
-	CCSprite countdownNumber3; 
-	CCSprite countdownNumber4; 
-	CCSprite countdownNumber5; 
 	
-	private Context mContext;
-	UserData userData;
-	
-	private static GameRandom randomMatchLayer;
+	private static GameRandom gameRandom;
 	
 	public static CCScene scene() {
 		CCScene scene = CCScene.node();
@@ -71,19 +48,12 @@ public class GameRandom extends CCLayer {
 	}
 	
 	 public static synchronized GameRandom getInstance() {
-		if (randomMatchLayer == null) {
-			randomMatchLayer = new GameRandom();
-			Log.e("GameRandom", "new Instance");
-		} else {
-			Log.e("GameRandom", "get Instance");
-		}
-		return randomMatchLayer;
-	}
+		if (gameRandom == null)
+			gameRandom = new GameRandom();
+		return gameRandom;
+	} // 불필요 할듯
 
 	private GameRandom() {
-		mContext = CCDirector.sharedDirector().getActivity();
-		userData = UserData.share(mContext);
-		this.mode =GameDifficulty.mode;
 		
 		//배경 그림 설정
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1.png");
@@ -100,7 +70,7 @@ public class GameRandom extends CCLayer {
 		CCTouchDispatcher.sharedDispatcher().addTargetedDelegate(this, 0, true);
 		this.setIsTouchEnabled(true);
 		try {
-			NetworkController.getInstance().sendRequestMatch(userData.difficulty); // 난이도 주입
+			NetworkController.getInstance().sendRequestMatch(GameData.share().getGameDifficulty()); // 난이도 주입
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -179,29 +149,6 @@ public class GameRandom extends CCLayer {
 		parentSprite.addChild(illust);
 		illust.setPosition(parentSprite.getContentSize().width / 2, illust.getContentSize().height / 2);
 
-		countdownNumber1 = CCSprite.sprite(folder + "n01.png");
-		countdownNumber2 = CCSprite.sprite(folder + "n02.png");
-		countdownNumber3 = CCSprite.sprite(folder + "n03.png");
-		countdownNumber4 = CCSprite.sprite(folder + "n04.png");
-		countdownNumber5 = CCSprite.sprite(folder + "n05.png");
-
-		illust.addChild(countdownNumber1);
-		illust.addChild(countdownNumber2);
-		illust.addChild(countdownNumber3);
-		illust.addChild(countdownNumber4);
-		illust.addChild(countdownNumber5);
-		
-		countdownNumber1.setVisible(false);
-		countdownNumber2.setVisible(false);
-		countdownNumber3.setVisible(false);
-		countdownNumber4.setVisible(false);
-		countdownNumber5.setVisible(true);
-		
-		countdownNumber1.setPosition(illust.getContentSize().width / 2 , illust.getContentSize().height / 2);
-		countdownNumber2.setPosition(countdownNumber1.getPosition());
-		countdownNumber3.setPosition(countdownNumber1.getPosition());
-		countdownNumber4.setPosition(countdownNumber1.getPosition());
-		countdownNumber5.setPosition(countdownNumber1.getPosition());
 	}
 	
 //	//	배경 그림 설정 (frameMatching)
@@ -485,15 +432,17 @@ public class GameRandom extends CCLayer {
 	final int previous = 501;
 	final int home= 502;
 	
+	
+	int empty = 0;
 	// sceneCallback들 전부 여기로 옮기기
 	public void clicked(Object sender) {
 		CCScene scene = null;
 		int value = ((CCNode) sender).getTag();
 		if (buttonActive) {
-			userData.difficulty = 0;
+			GameData.share().setGameDifficulty(empty);
 			try {
 				NetworkController.getInstance().sendRoomOwner(0); // 방장 권한 제거 (random match에서만 있음)
-				NetworkController.getInstance().sendRequestMatch(userData.difficulty); // 난이도 주입
+				NetworkController.getInstance().sendRequestMatch(GameData.share().getGameDifficulty()); // 난이도 주입
 			} catch (IOException e) {
 				// 게임서버와 연결이 끊김.
 				// 서버 다운인지 네트워크 문제인지. 발생시 처리방법?
@@ -514,75 +463,9 @@ public class GameRandom extends CCLayer {
 	}
 	
 	public void gameStart(Object sender) {
-		Log.e("gameStart", "1");
-		if(userData.getBroomstick() > 0) {
-			Log.e("gameStart", "2");
-			schedule("count", 1.0f);
-			Log.e("gameStart", "3");
-		} else {
-			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
-				public void run() {
-					Toast.makeText(mContext, "빗자루가 부족합니다.", Toast.LENGTH_SHORT)
-							.show();
-				}
-			});
-		}
-		Log.e("CallBack", "GameLayer");
 	}
 	
-	// 시간도 없으니 그냥 막코딩함.
 	public void count(float dt) {
-		
-//		Log.e("count", "" + count);
-		CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
-			public void run() {
-		switch (count) {
-
-//		case 1:
-//			countdownNumber1.setVisible(true);
-//			countdownNumber2.setVisible(false);
-//			countdownNumber3.setVisible(false);
-//			countdownNumber4.setVisible(false);
-//			countdownNumber5.setVisible(false);
-//			break;
-//		case 2:
-//			countdownNumber1.setVisible(false);
-//			countdownNumber2.setVisible(true);
-//			countdownNumber3.setVisible(false);
-//			countdownNumber4.setVisible(false);
-//			countdownNumber5.setVisible(false);
-//			break;
-//		case 3:
-//			countdownNumber1.setVisible(false);
-//			countdownNumber2.setVisible(false);
-//			countdownNumber3.setVisible(true);
-//			countdownNumber4.setVisible(false);
-//			countdownNumber5.setVisible(false);
-//			break;
-//		case 4:
-//			countdownNumber1.setVisible(false);
-//			countdownNumber2.setVisible(false);
-//			countdownNumber3.setVisible(false);
-//			countdownNumber4.setVisible(true);
-//			countdownNumber5.setVisible(false);
-//			break;
-//		case 5:
-//			countdownNumber1.setVisible(false);
-//			countdownNumber2.setVisible(false);
-//			countdownNumber3.setVisible(false);
-//			countdownNumber4.setVisible(false);
-//			countdownNumber5.setVisible(true);
-//			break;
-
-		default:
-			CCScene scene = GameLoading.scene();
-			CCDirector.sharedDirector().replaceScene(scene);
-			break;
-			
-		}
-			}
-		});
-		count--;
 	}
 	
 }
