@@ -1682,7 +1682,8 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			}
 		} else {
 			// Log.e("Game / removeTile", "properties - tile empty");
-			SoundEngine.sharedEngine().playEffect(this.mContext, R.raw.game_open2); // pickup
+			SoundEngine.sharedEngine().stopEffect(mContext, R.raw.game_open2);
+			SoundEngine.sharedEngine().playEffect(mContext, R.raw.game_open2); // pickup
 			// 에러 stack over flow error
 			this.getFg().removeTileAt(tileCoord);
 		}
