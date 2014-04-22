@@ -113,7 +113,8 @@ public class MainActivity extends Activity {
 				mListView.setAdapter(adapter);
 				mListView.setCacheColorHint(Color.alpha(0));
 				RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-				
+				//mListView.setDivider(getResources().getDrawable(R.drawable.friend_list_divider));
+				//mListView.setDividerHeight(10);
 				// assets의 frameGeneral-hd.png, frameMatching-hd.png파일의 width, height을 받아와서 작업을 해야되는데
 				// inputstream을 해야되고 핸들러에서 작업 하기에는 문제가 있어 이미지 크기를 상수로 정의하여 작업했습니다.
 				params.setMargins(
