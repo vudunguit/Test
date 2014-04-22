@@ -127,6 +127,9 @@ public class FriendListAdapter extends BaseAdapter {
 		if(!Util.canSendBroom(gameScore.get(position).id)) {
 			holder.imgBroomstick.setImageResource(R.drawable.home_broomstickbigoff_hd);
 			holder.imgBroomstick.setEnabled(false);
+		} else {
+			holder.imgBroomstick.setImageResource(R.drawable.home_broomstickbig_hd);
+			holder.imgBroomstick.setEnabled(true);
 		}
 		
 		//빗자루 클릭 이벤트 처리
