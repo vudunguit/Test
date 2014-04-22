@@ -43,6 +43,8 @@ public class MailBox {
 	CCSprite presentBackground1;
 	CCSprite presentBackground2;
 	
+	public static CCLabel postNumber = null;
+	
 	private ArrayList<MailItem> mBroomList = new ArrayList<MailItem>();
 	private ArrayList<MailItem> mGoldList = new ArrayList<MailItem>();
 
@@ -182,13 +184,13 @@ public class MailBox {
 				postboxBg.getContentSize().height / 2 + broomstickBackground1.getContentSize().height / 2 - 100  + 18);
 		
 		// 우편물 수량 값
-		CCLabel postCountNumber = CCLabel.makeLabel(
+		postNumber = CCLabel.makeLabel(
 				(selectedTab==Constant.MAIL_TAB_BROOM? mBroomList.size() : mGoldList.size()) + " ", "Arial", 30.0f);
-		postCountNumber.setColor(ccColor3B.ccc3(64, 46, 1));
-		postCountNumber.setPosition(postCountBack.getContentSize().width
-				- postCountNumber.getContentSize().width / 2 - 10.0f,
+		postNumber.setColor(ccColor3B.ccc3(64, 46, 1));
+		postNumber.setPosition(postCountBack.getContentSize().width
+				- postNumber.getContentSize().width / 2 - 10.0f,
 				postCountBack.getContentSize().height / 2);
-		postCountBack.addChild(postCountNumber);
+		postCountBack.addChild(postNumber);
 
 		// 우편물 보관 기간
 		CCLabel postCountText = CCLabel.makeLabel("최대 7일간 보관", "Arial", 15.0f);
@@ -389,5 +391,5 @@ public class MailBox {
 	public void setPresentBackground2(CCSprite presentBackground2) {
 		this.presentBackground2 = presentBackground2;
 	}
-
+	
 }

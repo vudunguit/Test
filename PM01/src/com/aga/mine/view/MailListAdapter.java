@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.aga.mine.mains.Constant;
 import com.aga.mine.mains.DataFilter;
+import com.aga.mine.mains.MailBox;
 import com.aga.mine.mains.R;
 import com.androidquery.AQuery;
 
@@ -72,11 +73,13 @@ public class MailListAdapter extends BaseAdapter {
 						// 빗자루 화면 갱신  
 						holder.image.setImageResource(R.drawable.mail_broomstickbutton2);
 						mMailItemList.remove(position);
+						MailBox.postNumber.setString(mMailItemList.size() + " ");
 						MailListAdapter.this.notifyDataSetChanged();
 					} else {
 						// 골드 화면 갱신
 						holder.image.setImageResource(R.drawable.mail_giftbutton2);
 						mMailItemList.remove(position);
+						MailBox.postNumber.setString(mMailItemList.size() + " ");
 						MailListAdapter.this.notifyDataSetChanged();
 					}
 				}
