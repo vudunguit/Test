@@ -3,6 +3,8 @@ package com.aga.mine.view;
 import java.io.IOException;
 import java.util.List;
 
+import org.cocos2d.nodes.CCDirector;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aga.mine.mains.FacebookData;
 import com.aga.mine.mains.GameData;
@@ -91,13 +94,22 @@ public class MatchListAdapter extends BaseAdapter {
 		holder.imgInviteBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				try {
-					NetworkController.getInstance().sendRequestMatchInvite(
-							GameData.share().getGameDifficulty(), 
-							mGameScore.get(position).getId());
-				} catch (IOException e) {
-					e.printStackTrace();
+				
+				if (Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick")) < 1) {
+					CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+								public void run() {
+									Toast.makeText(mContext, "빗자루가 부족합니다.", Toast.LENGTH_SHORT).show();
+								}
+							});
+				} else {
+					try {
+						NetworkController.getInstance().sendRequestMatchInvite(
+								GameData.share().getGameDifficulty(), mGameScore.get(position).getId());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
+				
 			}
 		});
 		

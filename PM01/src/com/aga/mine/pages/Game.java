@@ -40,6 +40,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.aga.mine.mains.Config;
+import com.aga.mine.mains.GameLoading;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.R;
 import com.aga.mine.mains.Utility;
@@ -451,6 +452,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		// 게임시간 초기화
 		GameData.share().setSeconds(900);
 		UserData.share(mContext).myBroomstick();
+		this.removeChildByTag(10, true);
 	}
 	// 생성자Game end
 	
@@ -539,7 +541,9 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 //	public CCScene scene() {
 	public static CCScene scene() {
 		// 기존에는 static으로 멤버 변수로 선언하였었음. 이상시 원래 대로 바꿀것
-		scene = CCScene.node();
+//		scene = CCScene.node();
+		// 로딩 레이어
+		scene = GameLoading.scene();		
 		
 		// 게임 레이어
 //		Game game = Game.getInstance();		

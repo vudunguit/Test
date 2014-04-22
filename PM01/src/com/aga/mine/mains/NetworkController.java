@@ -12,7 +12,11 @@ import java.nio.ByteOrder;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.cocos2d.actions.base.CCRepeatForever;
+import org.cocos2d.actions.interval.CCRotateBy;
+import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.nodes.CCSprite;
 
 import android.app.Activity;
 import android.content.Context;
@@ -412,12 +416,11 @@ public class NetworkController extends Activity {
 			Log.e("NetworkController - kMessageMatchCompleted", "ID & Name /" + matchedOppenentFacebookId + " : " + matchedOppenentName);
 			Log.e("NetworkController - kMessageMatchCompleted", "owner : " + owner);
 			
+			// 받으면 상대방 사진 및 이름 표시하고 게임 시작 카운터 돌리기
+			count(GameInvite.backboard);
+			
 //			if (owner) {
-			
-			
 //				GameRandom.matchNameReceiver(kTempName, matchedOppenentFacebookId); // gamerandom 임시로 막음
-			
-			
 //			} else {
 //				GameRandom.getInstance().matchNameReceiver(matchedOppenentFacebookId, kTempName);	
 //			}
@@ -582,7 +585,7 @@ public class NetworkController extends Activity {
 			public void run() {
 				try {
 					outStream_.write(message.data_);
-					Log.e("sendData()","called !");
+					Log.e("NetworkController / sendData","called !");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -829,6 +832,51 @@ public class NetworkController extends Activity {
 		// 세부사항을 설정 하도록 한다.
 		public void setDetails(String message);
 		
+	}
+	
+
+	final String randomfolder = "52random/";
+	CCSprite counter = null;
+	int count  = 5;
+	private void count(CCSprite parentSprite){
+		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+		CCSprite tornado = CCSprite.sprite(randomfolder + "Tornado.png");
+//		tornado.setAnchorPoint(0.5f, 0.5f);
+		tornado.setPosition(parentSprite.getContentSize().width/2, parentSprite.getContentSize().height * 0.28f);
+		parentSprite.addChild(tornado);
+		CCRepeatForever repeat = CCRepeatForever.action(CCRotateBy.action(16, 360));
+		tornado.runAction(repeat);
+		
+		counter = CCSprite.sprite(randomfolder + "n05.png");
+		counter.setPosition(tornado.getPosition());
+		parentSprite.addChild(counter);
+
+		MainApplication.getInstance().mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run() {countdown(1000);
+			}
+		}, 1000);
+	}
+	
+	public void countdown(long time) {
+		try {
+			boolean isLoop = true;
+			while (isLoop) {
+				Thread.sleep(time);
+				count--;
+				if (count > 0) {
+					CCSprite counterNumber = CCSprite.sprite(randomfolder
+							+ "n0" + count + ".png");
+					counter.setTexture(counterNumber.getTexture());
+				} else {
+					isLoop = false;
+				}
+			}
+			// 작업하지않는 다른 패키지 이지만 잘 붙는지만 확인하는 것입니다.
+			CCDirector.sharedDirector().replaceScene(Game.scene());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

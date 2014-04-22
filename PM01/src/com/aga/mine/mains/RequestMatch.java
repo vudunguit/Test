@@ -6,6 +6,7 @@ import org.cocos2d.actions.base.CCFiniteTimeAction;
 import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
+import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
@@ -108,8 +109,11 @@ public class RequestMatch extends CCLayer{
 		case 1:
 			try {
 				NetworkController.getInstance().sendRoomOwner(0);
-//				NetworkController.getInstance().sendResponseMatchInvite(1, oppenentPlayerID);
 				NetworkController.getInstance().sendWillYouAcceptInviteOk(oppenentPlayerID);
+				CCScene scene = GameInvite.scene();
+				MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+				CCDirector.sharedDirector().replaceScene(scene);
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
