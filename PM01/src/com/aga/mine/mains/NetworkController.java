@@ -36,6 +36,8 @@ import com.aga.mine.util.Util;
 
 public class NetworkController extends Activity {
 	
+	boolean owner = false;
+	
 	// 네트워크 상황
 	final static int kNetworkStateNotAvailable = 0;
 	final static int kNetworkStateTryingStreamOpen = 1;
@@ -417,6 +419,8 @@ public class NetworkController extends Activity {
 			Log.e("NetworkController - kMessageMatchCompleted", "owner : " + owner);
 			
 			// 받으면 상대방 사진 및 이름 표시하고 게임 시작 카운터 돌리기
+			// 되긴 하는데 코드가 지저분해지는것 같네요...
+			Util.setEntry(matchedOppenentFacebookId, matchedOppenentName, owner, GameInvite.backboard.getChildren());
 			count(GameInvite.backboard);
 			
 //			if (owner) {
@@ -655,7 +659,8 @@ public class NetworkController extends Activity {
 		setMessage(kMessageRequestIsPlayerConnected, kModeSent);
 	}
 	
-	boolean owner = false;
+
+	
 	public void sendRoomOwner(int Boolean) throws IOException {
 		Log.e("NetworkController", "sending sendRoomOwner ......");
 		MessageWriter message = new MessageWriter();
@@ -856,6 +861,7 @@ public class NetworkController extends Activity {
 			public void run() {countdown(1000);
 			}
 		}, 1000);
+		
 	}
 	
 	public void countdown(long time) {

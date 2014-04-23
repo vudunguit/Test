@@ -1,7 +1,6 @@
 ﻿package com.aga.mine.mains;
 
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
@@ -13,9 +12,9 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.ccColor3B;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.aga.mine.mains.ImageDownloader.ImageLoaderListener;
 import com.aga.mine.pages.UserData;
 
 public class HomeMiddle {
@@ -29,6 +28,8 @@ public class HomeMiddle {
 	
 	Context mContext;
 	UserData userData;
+
+	private ImageDownloader mDownloader;
 	
 	public HomeMiddle(CCSprite parentSprite, String imageFolder, CCNode nodeThis) {
 		mContext = CCDirector.sharedDirector().getActivity();
@@ -45,11 +46,10 @@ public class HomeMiddle {
 				parentSprite.getContentSize().width / 2, 
 				parentSprite.getContentSize().height - profileBg.getContentSize().height / 2 - 40.0f);
 		
-		
 		CCSprite profilePicture= CCSprite.sprite(commonfolder + "frame-pictureFrame-hd" + fileExtension); // 프로필 사진 틀
 		profilePicture.setPosition(
 				profilePicture.getContentSize().width / 2 + 85, 
-				profileBg.getContentSize().height-60.0f);
+				profileBg.getContentSize().height - 60);
 		
 		CCMenuItem post = CCMenuItemImage.item(  // 우편
 				imageFolder + "home-mail-hd" + fileExtension, 
@@ -58,25 +58,21 @@ public class HomeMiddle {
 		post.setTag(mailButton);
 		post.setAnchorPoint(1.0f, 0.5f);
 		
-		//
+		final CCSprite userImage = CCSprite.sprite(commonfolder + "noPicture" + fileExtension); // 프로필 사진
+		userImage.setAnchorPoint(0.5f, 0.5f);
+		userImage.setPosition(profilePicture.getContentSize().width / 2, profilePicture.getContentSize().height / 2);
+		profilePicture.addChild(userImage);
 		
-//		CCSprite userImage = null;
-//		
-////		Bitmap userBMP =null;
-//		String imageUrl = "https://graph.facebook.com/" + FacebookData.getinstance().getUserInfo().getUsername() +"/picture";
-//		try {
-//			Bitmap userBMP = new DownloadImageTask().execute(imageUrl).get();
-//			userImage = CCSprite.sprite(userBMP); // 프로필 사진
-//			profilePicture.addChild(userImage);
-//			userImage.setAnchorPoint(0.5f, 0.5f);
-//			userImage.setPosition(profilePicture.getContentSize().width / 2, profilePicture.getContentSize().height / 2);
-//		} catch (InterruptedException e1) {
-//			e1.printStackTrace();
-//		} catch (ExecutionException e1) {
-//			e1.printStackTrace();
-//		}
+		// facebook 이미지 다운로드 및 교체
+		String etUrl = "https://graph.facebook.com/" + FacebookData.getinstance().getUserInfo().getId() +"/picture";
+		mDownloader = new ImageDownloader(etUrl, new ImageLoaderListener() {
+			@Override
+			public void onImageDownloaded(CCSprite profile) {
+				userImage.setTexture(profile.getTexture());
+			}
+		});
+		mDownloader.execute();
 		
-//		CCSprite userImage = CCSprite.sprite(commonfolder + "noPicture" + fileExtension); // 프로필 사진
 		
 		CCSprite newIcon = CCSprite.sprite(imageFolder + "home-mailNew-hd01" + fileExtension); // 새로운 우편
 		newIcon.setPosition(

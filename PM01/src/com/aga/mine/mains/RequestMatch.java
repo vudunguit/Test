@@ -110,7 +110,7 @@ public class RequestMatch extends CCLayer{
 			try {
 				NetworkController.getInstance().sendRoomOwner(0);
 				NetworkController.getInstance().sendWillYouAcceptInviteOk(oppenentPlayerID);
-				CCScene scene = GameInvite.scene();
+				CCScene scene = GameInvite.scene(null, null, false);
 				MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 				CCDirector.sharedDirector().replaceScene(scene);
 

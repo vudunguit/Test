@@ -2,14 +2,20 @@ package com.aga.mine.util;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import android.R.bool;
+import org.cocos2d.nodes.CCLabel;
+import org.cocos2d.nodes.CCNode;
+import org.cocos2d.nodes.CCSprite;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.util.SparseArray;
 
+import com.aga.mine.mains.FacebookData;
+import com.aga.mine.mains.ImageDownloader;
+import com.aga.mine.mains.ImageDownloader.ImageLoaderListener;
 import com.aga.mine.mains.MainApplication;
 
 public final class Util {
@@ -69,8 +75,9 @@ public final class Util {
 		}
 	}
 
-	static Map<String, Boolean> join = new HashMap<String, Boolean>();
 	
+	static Map<String, Boolean> join = new HashMap<String, Boolean>();
+	// 게임 접속자들 체크
 	public static void setJoin(String id, byte joinValue) {
 		Log.e("Util", "set id : " + id + ", " + joinValue);
 		if (joinValue > 0)
@@ -84,6 +91,46 @@ public final class Util {
 		if (id == null || join.get(id) == null)
 			return false;
 		return join.get(id);
+	}
+	
+
+
+	public static ImageDownloader mDownloader;
+	
+	// 대전하는 사람 이미지 및 이름 설정 (random, invite match용)
+	// 이렇게 써먹기는 범용성이 떨어짐..
+	public static void setEntry(String id, String name, boolean owner, List<CCNode> matchingPanel) {
+		boolean _owner = owner;
+		for (final CCNode panel : matchingPanel) {
+
+			if (_owner) {
+				((CCLabel)panel.getChildByTag(103)).setString(FacebookData.getinstance().getUserInfo().getName());
+				String etUrl = "https://graph.facebook.com/" + FacebookData.getinstance().getUserInfo().getId() +"/picture";
+				mDownloader = new ImageDownloader(etUrl, new ImageLoaderListener() {
+					@Override
+					public void onImageDownloaded(CCSprite profile) {
+						((CCSprite)panel.getChildByTag(102)).setTexture(profile.getTexture());
+					}
+				});
+				mDownloader.execute();
+
+			} else {
+				if (id != null && name != null) {
+					((CCLabel)panel.getChildByTag(103)).setString(name);
+					String etUrl = "https://graph.facebook.com/" + id +"/picture";
+					mDownloader = new ImageDownloader(etUrl, new ImageLoaderListener() {
+						@Override
+						public void onImageDownloaded(CCSprite profile) {
+							((CCSprite)panel.getChildByTag(102)).setTexture(profile.getTexture());
+						}
+					});
+					mDownloader.execute();
+					
+				}
+			}
+			_owner = !_owner;
+			
+		}
 	}
 	
 }

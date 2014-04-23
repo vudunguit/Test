@@ -11,12 +11,11 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
-import org.cocos2d.types.CGSize;
+
+import android.util.Log;
 
 import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.util.Util;
-
-import android.util.Log;
 
 public class Home extends CCLayer{
 		
