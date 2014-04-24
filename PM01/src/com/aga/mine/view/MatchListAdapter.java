@@ -91,6 +91,9 @@ public class MatchListAdapter extends BaseAdapter {
 		if(!Util.getJoin(mGameScore.get(position).getId())) {
 			holder.imgInviteBtn.setImageResource(R.drawable.invite_button2ko);
 			holder.imgInviteBtn.setEnabled(false);
+		} else {
+			holder.imgInviteBtn.setImageResource(R.drawable.invite_button1ko);
+			holder.imgInviteBtn.setEnabled(true);
 		}
 		
 		//초대버튼 클릭 이벤트 처리
