@@ -311,11 +311,10 @@ public class DataFilter {
 		return null;
 	}
 	
-	// 9
-	public static long getInitTime() {
+	// 남은 시간을 초로 리턴
+	public static float getInitTime() {
 		try {
-			return Calendar.getInstance().getTimeInMillis() + (1000 * Long.parseLong(
-					new DataController().execute("0,RequestModeGetWeeklyLeftTime").get()));
+			return Float.parseFloat(new DataController().execute("0,RequestModeGetWeeklyLeftTime").get());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {

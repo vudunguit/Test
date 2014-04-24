@@ -2,12 +2,14 @@
 
 import java.util.List;
 
+import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
@@ -41,6 +43,8 @@ public class Home extends CCLayer{
 	final int presentBroomstickButton = 1011;
 	final int broomTab = 1012;
 	final int goldTab = 1013;
+	
+	private HomeTop mHomeTop;
 	
 //	static CCLayer scroll = CCLayer.node(); // 안드로이드 뷰로 인하여 제거됨.
 	
@@ -113,10 +117,20 @@ public class Home extends CCLayer{
 	// 게시판 설정
 	private CCSprite setBoardFrameMenu(CCSprite parent, String imageFullPath) {
 		CCSprite boardFrame = setHomeMenu(parent, imageFullPath);	
-		new HomeTop(boardFrame, folder, this);
+		mHomeTop = new HomeTop(boardFrame, folder, this);
+		schedule(new UpdateCallback() {
+			@Override
+			public void update(float d) {
+				refreshLeftTime(d);
+			}
+		});
 //		new HomeBottom(boardFrame, folder, this);
 		return boardFrame;
 	}
+
+	 public void refreshLeftTime(float dt) {
+		mHomeTop.setLeftTime(dt);
+	 }
 	
 	private CCSprite setHomeMenu(CCSprite parent, String imageFullPath) {
 		CCSprite sprite = CCSprite.sprite(imageFullPath);
