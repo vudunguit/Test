@@ -6,7 +6,6 @@ import org.cocos2d.actions.base.CCFiniteTimeAction;
 import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
-import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
@@ -17,44 +16,42 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
-import com.sromku.simple.fb.entities.Profile;
-
 import android.util.Log;
 
+import com.sromku.simple.fb.entities.Profile;
+
 public class RequestMatch extends CCLayer{
-
-	final String commonfolder = "00common/";
-	final String folder = "11mailbox/";
-	final String fileExtension = ".png";
 	
-	static String oppenentPlayerID = "";
-	boolean isEmoticonPanelOn;
-
-	static CGPoint basePositionOn;
-	CGPoint basePositionOff;
+	static String oppenentPlayerID = ""; // networkController에서만 저장해둬도 될듯
 	
 	static CCSprite base;
 	static CCLabel message1;
 	static CCLabel message2;
 	
+	static CGPoint basePositionOn;
+	CGPoint basePositionOff;
+
 	public RequestMatch() {
 		layout();
 	}
 
 	private void layout() {
 		CGSize winSize = CCDirector.sharedDirector().winSize();
-		isEmoticonPanelOn = false;
+		
+		String commonfolder = "00common/";
+		String folder = "11mailbox/";
+		String fileExtension = ".png";
 		
 		// 초대 창
 		base = CCSprite.sprite(commonfolder + "popup-bg" + fileExtension);
 		this.addChild(base);
 		
 		// 초대 메시지
-		message1 = CCLabel.makeLabel("초대함", "Arial", 26);
+		message1 = CCLabel.makeLabel("이름", "Arial", 26);
 		message1.setColor(ccColor3B.ccBLACK);
 		message1.setPosition(base.getContentSize().width / 2 , base.getContentSize().height * 0.82f);
 		base.addChild(message1);
-		message2 = CCLabel.makeLabel("초대함", "Arial", 26);
+		message2 = CCLabel.makeLabel("난이도", "Arial", 26);
 		message2.setColor(ccColor3B.ccBLACK);
 		message2.setPosition(message1.getPosition().x , message1.getPosition().y - (message2.getContentSize().height * 1.1f));
 		base.addChild(message2);
@@ -66,7 +63,6 @@ public class RequestMatch extends CCLayer{
 				this, "clicked");
 		accept.setTag(1);
 		CCLabel textAccept = CCLabel.makeLabel("Accept", "Arial", 24);
-//		textAccept.setColor(ccColor3B.ccc3(64,	46, 1));
 		textAccept.setColor(ccColor3B.ccBLACK);
 		textAccept.setPosition(accept.getContentSize().width / 2, accept.getContentSize().height / 2);
 		accept.addChild(textAccept);
@@ -99,6 +95,45 @@ public class RequestMatch extends CCLayer{
 		base.setPosition(GameConfig.share().isEmoticonPanelOn ? basePositionOn : basePositionOff);
 	}
 
+	public static void inviteMatch(String id, int result) {
+		String name = null;
+		String gameLevel = null;
+		final int easy = 1;
+		final int normal = 2;
+		final int hard = 3;
+	
+		for (Profile friend : FacebookData.getinstance().getFriendsInfo()) {
+			if (friend.getId().equals(id)) {
+				name = friend.getName();
+				oppenentPlayerID = id;
+				break;
+			}
+		}
+		
+		switch (result) {
+		case easy:
+			gameLevel = "초급자";
+			break;
+		case normal:
+			gameLevel = "중급자";
+			break;
+		case hard:
+			gameLevel = "상급자";
+			break;
+		}
+	
+		message1.setString(name + "님이 ");
+		message2.setString(gameLevel + " 난이도의 대전을 신청하였습니다.");
+		
+		if (base.getContentSize().width * 0.8f < message2.getContentSize().width) {
+			message2.setScaleX((base.getContentSize().width * 0.8f)  / message2.getContentSize().width);
+		}
+		
+		// 초대창 애니메이션 온
+		CCFiniteTimeAction moveOn = CCMoveTo.action(GameConfig.share().kEmoticonPanelMoveTime, basePositionOn);
+		base.runAction(CCSequence.actions(moveOn));
+	}
+
 	public void clicked(Object sender) {
 		Log.e("RequestMatch", "clicked");
 		// 초대창 애니메이션 오프
@@ -110,10 +145,6 @@ public class RequestMatch extends CCLayer{
 			try {
 				NetworkController.getInstance().sendRoomOwner(0);
 				NetworkController.getInstance().sendWillYouAcceptInviteOk(oppenentPlayerID);
-				CCScene scene = GameInvite.scene(null, null, false);
-				MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
-				CCDirector.sharedDirector().replaceScene(scene);
-
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -125,44 +156,5 @@ public class RequestMatch extends CCLayer{
 		}
 
 	}
-
 	
-	public static void inviteMatch(String id, int result) {
-		String name = null;
-		String gameLevel = null;
-		final int easy = 1;
-		final int normal = 2;
-		final int hard = 3;
-
-		for (Profile friend : FacebookData.getinstance().getFriendsInfo()) {
-			if (friend.getId().equals(id)) {
-				name = friend.getName();
-				oppenentPlayerID = id;
-				break;
-			}
-		}
-		
-		switch (result) {
-		case easy:
-			gameLevel = "초급";
-			break;
-		case normal:
-			gameLevel = "중급";
-			break;
-		case hard:
-			gameLevel = "상급";
-			break;
-		}
-
-		message1.setString(name + "님이 ");
-		message2.setString(gameLevel + "난이도의 대전을 신청하였습니다.");
-		
-		if (base.getContentSize().width * 0.8f < message2.getContentSize().width) {
-			message2.setScaleX((base.getContentSize().width * 0.8f)  / message2.getContentSize().width);
-		}
-		
-		// 초대창 애니메이션 온
-		CCFiniteTimeAction moveOn = CCMoveTo.action(GameConfig.share().kEmoticonPanelMoveTime, basePositionOn);
-		base.runAction(CCSequence.actions(moveOn));
-	}
 }

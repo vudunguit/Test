@@ -51,7 +51,7 @@ public class ImageDownloader extends AsyncTask<Void, Integer, Void> {
 		super.onPostExecute(result);
 	}
 
-	public static Bitmap getBitmapFromURL(String link) {
+	public Bitmap getBitmapFromURL(String link) {
 		try {
 			URL url = new URL(link);
 			HttpURLConnection connection = (HttpURLConnection) url

@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -22,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.pages.Game;
 import com.aga.mine.pages.GameMinimap;
 import com.aga.mine.pages.UserData;
@@ -37,7 +39,7 @@ import com.aga.mine.util.Util;
 public class NetworkController extends Activity {
 	
 	boolean owner = false;
-	
+	int matchMode = 0;
 	// 네트워크 상황
 	final static int kNetworkStateNotAvailable = 0;
 	final static int kNetworkStateTryingStreamOpen = 1;
@@ -415,13 +417,41 @@ public class NetworkController extends Activity {
 			Log.e("NetworkController", "kNetworkStateMatchCompleted");
 			matchedOppenentFacebookId = reader.readString();
 			matchedOppenentName = reader.readString();
-			Log.e("NetworkController - kMessageMatchCompleted", "ID & Name /" + matchedOppenentFacebookId + " : " + matchedOppenentName);
-			Log.e("NetworkController - kMessageMatchCompleted", "owner : " + owner);
+//			Log.e("NetworkController - kMessageMatchCompleted", "ID & Name /" + matchedOppenentFacebookId + " : " + matchedOppenentName);
+//			Log.e("NetworkController - kMessageMatchCompleted", "owner : " + owner);
 			
-			// 받으면 상대방 사진 및 이름 표시하고 게임 시작 카운터 돌리기
-			// 되긴 하는데 코드가 지저분해지는것 같네요...
-			Util.setEntry(matchedOppenentFacebookId, matchedOppenentName, owner, GameInvite.backboard.getChildren());
-			count(GameInvite.backboard);
+			
+			// 랜덤 매치 or 초대매치 && 방장 or 손님 
+//			int matchMode = 0;
+			final int randomOwner = 1;
+			final int randomGuest = 2;
+			final int inviteOwner = 3;
+			final int inviteGuest= 4;
+//			
+			switch (matchMode) {
+			case randomOwner:
+    			Log.e("NetworkController", "1");
+				break;
+			case randomGuest:
+    			Log.e("NetworkController", "2");
+				break;
+			case inviteOwner: // ok!
+	    		if(mMatchCallback != null) {
+	    			Log.e("NetworkController", "Callback_6 - mInviteCallback != null");
+	    			mMatchCallback.onMatch(matchedOppenentFacebookId, matchedOppenentName, owner);
+	    		} else {
+	    			Log.e("NetworkController", "실패");
+	    		}
+				break;
+			case inviteGuest:
+    			CCScene scene = GameInvite.scene(matchedOppenentFacebookId, matchedOppenentName, owner);
+    			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+    			CCDirector.sharedDirector().replaceScene(scene);
+				break;
+			}
+//			// 받으면 상대방 사진 및 이름 표시하고 게임 시작 카운터 돌리기
+//			// 되긴 하는데 코드가 지저분해지는것 같네요...
+//			Util.setEntry(matchedOppenentFacebookId, matchedOppenentName, owner, GameInvite.backboard);
 			
 //			if (owner) {
 //				GameRandom.matchNameReceiver(kTempName, matchedOppenentFacebookId); // gamerandom 임시로 막음
@@ -723,6 +753,8 @@ public class NetworkController extends Activity {
 		this.sendData(message.data_);
 		this.setMessage(kMessageRequestMatchInvite, kModeSent);
 		Log.e("NetworkController", "send Request Match Invite");
+		owner = true;
+		matchMode = 3;
 	}
 	
 
@@ -748,7 +780,8 @@ public class NetworkController extends Activity {
 		this.sendData(message.data_);
 		this.setMessage(kMessageWillYouAcceptInviteOK, kModeSent);
 		Log.e("NetworkController", "kMessageWillYouAcceptInviteOK");
-
+		owner = false;
+		matchMode = 4;
 	}
 	 
 	
@@ -839,50 +872,15 @@ public class NetworkController extends Activity {
 		
 	}
 	
-
-	final String randomfolder = "52random/";
-	CCSprite counter = null;
-	int count  = 5;
-	private void count(CCSprite parentSprite){
-		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
-		CCSprite tornado = CCSprite.sprite(randomfolder + "Tornado.png");
-//		tornado.setAnchorPoint(0.5f, 0.5f);
-		tornado.setPosition(parentSprite.getContentSize().width/2, parentSprite.getContentSize().height * 0.28f);
-		parentSprite.addChild(tornado);
-		CCRepeatForever repeat = CCRepeatForever.action(CCRotateBy.action(16, 360));
-		tornado.runAction(repeat);
-		
-		counter = CCSprite.sprite(randomfolder + "n05.png");
-		counter.setPosition(tornado.getPosition());
-		parentSprite.addChild(counter);
-
-		MainApplication.getInstance().mHandler.postDelayed(new Runnable() {
-			@Override
-			public void run() {countdown(1000);
-			}
-		}, 1000);
-		
-	}
-	
-	public void countdown(long time) {
-		try {
-			boolean isLoop = true;
-			while (isLoop) {
-				Thread.sleep(time);
-				count--;
-				if (count > 0) {
-					CCSprite counterNumber = CCSprite.sprite(randomfolder
-							+ "n0" + count + ".png");
-					counter.setTexture(counterNumber.getTexture());
-				} else {
-					isLoop = false;
-				}
-			}
-			// 작업하지않는 다른 패키지 이지만 잘 붙는지만 확인하는 것입니다.
-			CCDirector.sharedDirector().replaceScene(Game.scene());
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-	
+    //match callback--------------------------------------------------------------------------
+    public MatchCallback mMatchCallback;
+    
+    interface MatchCallback {
+    	public void onMatch(String matchedOppenentFacebookId, String matchedOppenentName, boolean owner);
+    }
+    
+    public void setMatchCallback(MatchCallback callback) {
+    	Log.e("NetworkController", "Callback_2 - setMatchCallback");
+    	mMatchCallback = callback;
+    }
 }
