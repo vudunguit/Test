@@ -30,6 +30,7 @@ public class HomeTop extends CCLayer{
 	final int inviteButton = 1006;
 	
 	private float mLeftSecond;
+	private long mInitialSecond; //단위는 ms
 	private CCLabel periodText;
 	
 	private CGSize winsize() {
@@ -39,6 +40,7 @@ public class HomeTop extends CCLayer{
 	public HomeTop(CCSprite parentSprite, String imageFolder, CCNode nodeThis) {
 		setTopMenu(parentSprite, imageFolder, nodeThis);
 		mLeftSecond = DataFilter.getInitTime();
+		mInitialSecond = System.currentTimeMillis();
 		setTitle(parentSprite, imageFolder);
 		setBottomMenu(parentSprite, imageFolder, nodeThis);
 	}
@@ -139,8 +141,10 @@ public class HomeTop extends CCLayer{
 	}
 	
 	public void setLeftTime(float dt) {
-		mLeftSecond -= dt;
-		periodText.setString(String.valueOf(displayLeftTime(mLeftSecond)));
+		//mLeftSecond -= dt;
+		long pastTimeMilli = System.currentTimeMillis() - mInitialSecond;
+		//mLeftSecond = mLeftSecond - pastTimeMilli/1000f;
+		periodText.setString(String.valueOf(displayLeftTime(mLeftSecond - pastTimeMilli/1000f)));
 	}
 	
 	private String displayLeftTime(float secondOfFloat) {
@@ -148,6 +152,7 @@ public class HomeTop extends CCLayer{
 		
 		if(secondOfFloat < 0) {
 			mLeftSecond = DataFilter.getInitTime();
+			mInitialSecond = System.currentTimeMillis();
 			secondOfInt = (int) mLeftSecond;
 		} else {
 			secondOfInt = (int) secondOfFloat;
