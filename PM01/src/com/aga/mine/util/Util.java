@@ -83,6 +83,38 @@ public final class Util {
 			return true;
 		}
 	}
+	
+	public static void setBroomstickTime() {
+		Context context = MainApplication.getInstance().getApplicationContext();
+		SharedPreferences pref = context.getSharedPreferences("mine", 0);
+		SharedPreferences.Editor edit = pref.edit();
+
+		edit.putLong("BroomstickTime", System.currentTimeMillis());
+		edit.commit();
+	}
+	
+	public static void setBroomstickTime(long leftTime) {
+		Context context = MainApplication.getInstance().getApplicationContext();
+		SharedPreferences pref = context.getSharedPreferences("mine", 0);
+		SharedPreferences.Editor edit = pref.edit();
+
+		edit.putLong("BroomstickTime", System.currentTimeMillis() - leftTime);
+		edit.commit();
+	}
+	
+	public static long getBroomstickTime() {
+		Context context = MainApplication.getInstance().getApplicationContext();
+		SharedPreferences pref = context.getSharedPreferences("mine",0);
+		
+		long BroomstickTime = pref.getLong("BroomstickTime", 0);
+		long nowTime = System.currentTimeMillis();
+		
+		if(BroomstickTime == 0) {
+			return 0;
+		} else {
+			return nowTime - BroomstickTime;
+		}
+	}
 
 	
 	static Map<String, Boolean> join = new HashMap<String, Boolean>();

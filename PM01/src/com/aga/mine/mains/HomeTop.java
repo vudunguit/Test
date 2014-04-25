@@ -15,10 +15,13 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
+import com.aga.mine.util.Util;
+
 import android.util.Log;
 
 public class HomeTop extends CCLayer{
 
+	public final int BROOMSTICK_REFRESH_TIME = 900; //900초(15분)
 	final String commonfolder = "00common/";
 	final String fileExtension = ".png";
 	
@@ -29,15 +32,35 @@ public class HomeTop extends CCLayer{
 	final int optionButton = 1005;
 	final int inviteButton = 1006;
 	
+	//주간 순위 갱신 변수
 	private float mLeftSecond;
 	private long mInitialSecond; //단위는 ms
 	private CCLabel periodText;
+	
+	//빗자루 갱신 변수
+	private int mBroomstickCount;
+	private long mLeftTime;
+	private CCLabel broomstickTime;
 	
 	private CGSize winsize() {
 		return CCDirector.sharedDirector().winSize();
 	}
 	
 	public HomeTop(CCSprite parentSprite, String imageFolder, CCNode nodeThis) {
+		//빗자루 수량 초기화
+		mBroomstickCount = Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick"));
+		//mBroomstickCount = 2; //test
+		long pastTime = Util.getBroomstickTime();
+		int broomCount = (int)(pastTime/(BROOMSTICK_REFRESH_TIME * 1000));
+		if(mBroomstickCount + broomCount >= 6) {
+			mBroomstickCount = 6;
+		} else {
+			mBroomstickCount += broomCount;
+			mLeftTime = pastTime%(BROOMSTICK_REFRESH_TIME*1000);
+			Util.setBroomstickTime(mLeftTime);
+		}
+		FacebookData.getinstance().modDBData("ReceivedBroomstick", String.valueOf(mBroomstickCount));
+		
 		setTopMenu(parentSprite, imageFolder, nodeThis);
 		mLeftSecond = DataFilter.getInitTime();
 		mInitialSecond = System.currentTimeMillis();
@@ -84,7 +107,7 @@ public class HomeTop extends CCLayer{
 		
 
 		// 지팡이 수량
-		CCLabel broomstickEA = CCLabel.makeLabel("+" + FacebookData.getinstance().getDBData("ReceivedBroomstick"), "Arial", 24.0f); // 지팡이 수량
+		CCLabel broomstickEA = CCLabel.makeLabel("+" + mBroomstickCount, "Arial", 24.0f); // 지팡이 수량
 		broomstickBg.addChild(broomstickEA);
 		broomstickEA.setAnchorPoint(0, 0.5f);
 		broomstickEA.setPosition(
@@ -92,7 +115,7 @@ public class HomeTop extends CCLayer{
 				broomstickBg.getContentSize().height - broomstickEA.getContentSize().height / 2 - 5.0f);
 
 		 // 지팡이 수량 증가 (카운트 다운)
-		CCLabel broomstickTime = CCLabel.makeLabel("Loading...", "Arial", 20.0f);
+		broomstickTime = CCLabel.makeLabel("Loading...", "Arial", 20.0f);
 		broomstickBg.addChild(broomstickTime, 0, 2);
 		broomstickTime.setPosition(
 				broomstickBg.getContentSize().width - 10.0f,
@@ -141,10 +164,17 @@ public class HomeTop extends CCLayer{
 	}
 	
 	public void setLeftTime(float dt) {
-		//mLeftSecond -= dt;
+		//주간 순위 마감 시간 갱신
 		long pastTimeMilli = System.currentTimeMillis() - mInitialSecond;
-		//mLeftSecond = mLeftSecond - pastTimeMilli/1000f;
 		periodText.setString(String.valueOf(displayLeftTime(mLeftSecond - pastTimeMilli/1000f)));
+		
+		//빗자루 갱신 시간 갱신
+		if(mBroomstickCount < 6) {
+			long broomTime = BROOMSTICK_REFRESH_TIME * 1000 - (mLeftTime + pastTimeMilli);
+			broomstickTime.setString(String.valueOf(displayBroomTime(broomTime/1000f)));
+		} else {
+			broomstickTime.setString("00:00");
+		}
 	}
 	
 	private String displayLeftTime(float secondOfFloat) {
@@ -171,6 +201,29 @@ public class HomeTop extends CCLayer{
 		if (min > 0) 
 			deadlineText += min + "분 ";
 		deadlineText += sec + "초 후 마감";
+		return deadlineText;
+	}
+	
+	private String displayBroomTime(float secondOfFloat) {
+		int secondOfInt;
+		
+		if(secondOfFloat < 0) {
+			secondOfInt = 0;
+			mLeftTime = 0;
+			mBroomstickCount++;
+			Util.setBroomstickTime();
+			FacebookData.getinstance().modDBData("ReceivedBroomstick", String.valueOf(mBroomstickCount));
+		} else {
+			secondOfInt = (int) secondOfFloat;
+		}
+		
+		long min = (secondOfInt % (60 * 60)) / 60;
+		long sec = secondOfInt % 60;
+
+		String deadlineText = "";
+		if (min > 0) 
+			deadlineText += min + "분 ";
+		deadlineText += sec + "초";
 		return deadlineText;
 	}
 	
