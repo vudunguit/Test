@@ -36,6 +36,11 @@ public class GameProgressBar extends CCLayer {
 	//CCLabelTTFWithStroke progressedTime;
 	CCLabel progressedTime;
 	GameProgressBarDelegate delegate;
+	
+	private long mInitialTime;
+	private long mPastTime;
+	private long mGameTime;
+	private long mLeftTime;
 
 	public GameProgressBar(Context context) {
 		mContext = context;
@@ -105,7 +110,9 @@ public class GameProgressBar extends CCLayer {
 		Log.e("progressBar / startTime", "hudLayer : " + hudLayer);
 		Log.e("progressBar / startTime", "this.hudLayer : " + this.hudLayer);
 
-		this.schedule("tick", 1.0f);
+		mInitialTime = System.currentTimeMillis();
+		mGameTime = GameData.share().getSeconds();
+		this.schedule("tick");
 	}
 
 	void stopTime() {
@@ -114,9 +121,12 @@ public class GameProgressBar extends CCLayer {
 
 	//private void tick(ccTime dt) {
 	public void tick(float dt) {
+		mPastTime = System.currentTimeMillis() - mInitialTime;
+		mLeftTime = mGameTime * 1000 - mPastTime;
 		//Log.e("progressBar / tick", "progressBar in");
-		int seconds = GameData.share().getSeconds();
-		seconds --;
+		//int seconds = GameData.share().getSeconds();
+		//seconds --;
+		int seconds = (int)(mLeftTime/1000f);
 		seconds = seconds < 0 ? 0 : seconds; // 음수값 방지
 		GameData.share().setSeconds(seconds);
 		String[] time = {"" + (seconds / 60), "" + (seconds % 60)};
@@ -135,7 +145,7 @@ public class GameProgressBar extends CCLayer {
 
 		//
 		// 게임시간이 종료하면 타이머를 멈추고 게임종료 메서드 호출한다.
-		if (seconds < 1) {
+		if (seconds <= 0) {
 			this.stopTime();
 			gameover();
 			
