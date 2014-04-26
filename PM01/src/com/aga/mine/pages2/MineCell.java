@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.nodes.CCDirector;
@@ -440,19 +441,12 @@ public class MineCell extends CCLayer{
 		// 지뢰 없는 곳과 수정구까지 열어주기
 		//if (numberOfMine == 0) {
 			for (final MineCell cell : getRoundCells()) {
-//				CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
-//					public void run() {
-//						android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-//						try {
-//							Thread.sleep(30);
-							cell.open();
-//						} catch (InterruptedException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-//				
-//					}
-//				});
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				cell.open();
 			}
 		}
 		return numberOfMine;

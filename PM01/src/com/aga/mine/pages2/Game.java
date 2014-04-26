@@ -1176,16 +1176,12 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 						// 닫혀있는 셀 누르면
 					} else {
 						// 지정된 셀을 열어준다.(tile의 fg를 제거)
-						Log.d("LDK", "cell open before");
-						schedule(new UpdateCallback() {
-							
+						new Thread(new Runnable() {
 							@Override
-							public void update(float d) {
+							public void run() {
 								cell.open();
-								unschedule(this);
-								Log.d("LDK", "cell open after");
 							}
-						}, 0.3f);
+						}).start();
 					}
 					break;
 					// k = size;
@@ -1682,7 +1678,6 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			}
 		} else {
 			// Log.e("Game / removeTile", "properties - tile empty");
-			SoundEngine.sharedEngine().stopEffect(mContext, R.raw.game_open2);
 			SoundEngine.sharedEngine().playEffect(mContext, R.raw.game_open2); // pickup
 			// 에러 stack over flow error
 			this.getFg().removeTileAt(tileCoord);
