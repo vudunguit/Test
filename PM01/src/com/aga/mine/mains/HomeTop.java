@@ -222,11 +222,9 @@ public class HomeTop extends CCLayer{
 		
 		long min = (secondOfInt % (60 * 60)) / 60;
 		long sec = secondOfInt % 60;
+		
+		String deadlineText = String.format("%02d:%02d", min, sec);
 
-		String deadlineText = "";
-		if (min > 0) 
-			deadlineText += min + "분 ";
-		deadlineText += sec + "초";
 		return deadlineText;
 	}
 	
