@@ -223,7 +223,7 @@ public class HomeTop extends CCLayer{
 		long min = (secondOfInt % (60 * 60)) / 60;
 		long sec = secondOfInt % 60;
 		
-		String deadlineText = String.format("%02d:%02d", min, sec);
+		String deadlineText = String.format("%02d:%02d", (int)min, (int)sec);
 
 		return deadlineText;
 	}
