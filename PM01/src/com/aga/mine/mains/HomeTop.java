@@ -33,13 +33,13 @@ public class HomeTop extends CCLayer{
 	final int inviteButton = 1006;
 	
 	//주간 순위 갱신 변수
-	private float mLeftSecond;
-	private long mInitialSecond; //단위는 ms
+	private float mSecondToRefreshWeek; //단위는 sec, 주간순위를 갱신하기까지 남은 시간
+	private long mInitialSecond; //단위는 ms, 최초 시간
 	private CCLabel periodText;
 	
 	//빗자루 갱신 변수
-	private int mBroomstickCount;
-	private long mLeftTime;
+	private int mBroomstickCount; //빗자루 수량
+	private long mMiliToRefreshBroom; //단위는 ms, 빗자루를 갱신하기까지 남은 시간
 	private CCLabel broomstickTime;
 	
 	private CGSize winsize() {
@@ -50,20 +50,23 @@ public class HomeTop extends CCLayer{
 		//빗자루 수량 초기화
 		mBroomstickCount = Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick"));
 		//mBroomstickCount = 2; //test
-		long pastTime = Util.getBroomstickTime();
-		int broomCount = (int)(pastTime/(BROOMSTICK_REFRESH_TIME * 1000));
+		long pastTime = Util.getBroomstickTime(); //경과 시간(ms), 
+		int broomCount = (int)(pastTime/(BROOMSTICK_REFRESH_TIME * 1000)); //15분 경과시 1개로 빗자루 수량 계산
 		if(mBroomstickCount + broomCount >= 6) {
 			mBroomstickCount = 6;
 		} else {
 			mBroomstickCount += broomCount;
-			mLeftTime = pastTime%(BROOMSTICK_REFRESH_TIME*1000);
-			Util.setBroomstickTime(mLeftTime);
+			mMiliToRefreshBroom = pastTime%(BROOMSTICK_REFRESH_TIME*1000); //빗자루 수량과 남은시간 계산후 다시 pref에 세팅
+			Util.setBroomstickTime(mMiliToRefreshBroom);
 		}
-		FacebookData.getinstance().modDBData("ReceivedBroomstick", String.valueOf(mBroomstickCount));
+		FacebookData.getinstance().modDBData("ReceivedBroomstick", String.valueOf(mBroomstickCount)); //DB에 빗자루 수량 insert
 		
 		setTopMenu(parentSprite, imageFolder, nodeThis);
-		mLeftSecond = DataFilter.getInitTime();
+		
+		//주간순위 시간 초기화
+		mSecondToRefreshWeek = DataFilter.getInitTime();
 		mInitialSecond = System.currentTimeMillis();
+		
 		setTitle(parentSprite, imageFolder);
 		setBottomMenu(parentSprite, imageFolder, nodeThis);
 	}
@@ -154,7 +157,7 @@ public class HomeTop extends CCLayer{
 		banner.setPosition(titlePanel.getContentSize().width / 2, 10);
 
 		// 주간순위 마감 남은 시간
-		periodText = CCLabel.makeLabel(displayLeftTime(mLeftSecond) + " ", "Arial", 20);
+		periodText = CCLabel.makeLabel(displayLeftTime(mSecondToRefreshWeek) + " ", "Arial", 20);
 		banner.addChild(periodText);
 		periodText.setColor(ccColor3B.ccYELLOW);
 		periodText.setAnchorPoint(0.5f, 0.5f);
@@ -165,12 +168,12 @@ public class HomeTop extends CCLayer{
 	
 	public void setLeftTime(float dt) {
 		//주간 순위 마감 시간 갱신
-		long pastTimeMilli = System.currentTimeMillis() - mInitialSecond;
-		periodText.setString(String.valueOf(displayLeftTime(mLeftSecond - pastTimeMilli/1000f)));
+		long pastTimeMilli = System.currentTimeMillis() - mInitialSecond; //경과 시간 계산
+		periodText.setString(String.valueOf(displayLeftTime(mSecondToRefreshWeek - pastTimeMilli/1000f)));
 		
-		//빗자루 갱신 시간 갱신
+		//빗자루 갱신 시간 갱신 : 수량이 6이하일때만 계산
 		if(mBroomstickCount < 6) {
-			long broomTime = BROOMSTICK_REFRESH_TIME * 1000 - (mLeftTime + pastTimeMilli);
+			long broomTime = BROOMSTICK_REFRESH_TIME * 1000 - (mMiliToRefreshBroom + pastTimeMilli); //15분까지 남은 시간 계산
 			broomstickTime.setString(String.valueOf(displayBroomTime(broomTime/1000f)));
 		} else {
 			broomstickTime.setString("00:00");
@@ -181,9 +184,9 @@ public class HomeTop extends CCLayer{
 		int secondOfInt;
 		
 		if(secondOfFloat < 0) {
-			mLeftSecond = DataFilter.getInitTime();
+			mSecondToRefreshWeek = DataFilter.getInitTime();
 			mInitialSecond = System.currentTimeMillis();
-			secondOfInt = (int) mLeftSecond;
+			secondOfInt = (int) mSecondToRefreshWeek;
 		} else {
 			secondOfInt = (int) secondOfFloat;
 		}
@@ -209,7 +212,7 @@ public class HomeTop extends CCLayer{
 		
 		if(secondOfFloat < 0) {
 			secondOfInt = 0;
-			mLeftTime = 0;
+			mMiliToRefreshBroom = 0;
 			mBroomstickCount++;
 			Util.setBroomstickTime();
 			FacebookData.getinstance().modDBData("ReceivedBroomstick", String.valueOf(mBroomstickCount));
