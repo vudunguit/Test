@@ -9,12 +9,7 @@ import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
-import android.content.Context;
 import android.util.Log;
-import android.view.MotionEvent;
-
-import com.aga.mine.mains.Utility;
-import com.aga.mine.pages.UserData;
 
 public class GameMode extends CCLayer {
 	
@@ -28,9 +23,6 @@ public class GameMode extends CCLayer {
 	
 	CCSprite bg;
 	
-	Context mContext;
-	UserData userData;
-	
 	static CCScene scene() {
 		CCScene scene = CCScene.node();
 		CCLayer layer = new GameMode();
@@ -39,8 +31,6 @@ public class GameMode extends CCLayer {
 	}
 
 	public GameMode() {
-		mContext = CCDirector.sharedDirector().getActivity();
-		userData = UserData.share(mContext);
 				
 		//배경 그림 설정
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
@@ -55,9 +45,9 @@ public class GameMode extends CCLayer {
 		this.setIsTouchEnabled(true);
 		
 		if (!GameData.share().isGuestMode) {
-			// 게임 점수 테스트용 (50점 얻음)
-			DataFilter.addGameScore("50");
-			Log.e("GameMode", "score 50점 증가");			
+			// 게임 점수 테스트용 (20점 얻음)
+			DataFilter.addGameScore("20");
+			Log.e("GameMode", "score 20점 증가");			
 		}
 	}
 	
@@ -167,8 +157,8 @@ public class GameMode extends CCLayer {
 
 	public void nextCallback(Object sender) {
 		int tagNumber = ((CCNode)sender).getTag();
-		Log.e("GameMode", "tagNumber  : " + tagNumber);
-		userData.setGameMode(tagNumber); // gameData로 옮겨야됨. (기존에 있음.)
+		Log.e("GameMode", "selectButton  : " + tagNumber);
+		GameData.share().setGameMode(tagNumber); // gameData로 옮겨야됨. (기존에 있음.)
 		CCScene scene = GameDifficulty.scene();
 		CCDirector.sharedDirector().replaceScene(scene);
 	}

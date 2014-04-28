@@ -9,24 +9,18 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.cocos2d.actions.base.CCRepeatForever;
-import org.cocos2d.actions.interval.CCRotateBy;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
-import org.cocos2d.nodes.CCSprite;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
-import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.pages.Game;
 import com.aga.mine.pages.GameMinimap;
-import com.aga.mine.pages.UserData;
 import com.aga.mine.util.Util;
 
 //import com.aga.mine.layers.GameInvite;
@@ -137,7 +131,6 @@ public class NetworkController extends Activity {
 	
 	private static NetworkController androidClient;
 	Context mContext;
-	UserData userData;
 	
 	private ExecutorService mExecutorService;
 	
@@ -152,7 +145,6 @@ public class NetworkController extends Activity {
 	// 초기화
 	private NetworkController() {
 		mContext = CCDirector.sharedDirector().getActivity();
-		userData = UserData.share(mContext);
 //		if (FacebookData.getinstance().getUserInfo() != null) {
 			kTempFacebookId  = FacebookData.getinstance().getUserInfo().getId();
 			kTempName  = FacebookData.getinstance().getUserInfo().getName();
@@ -318,7 +310,7 @@ public class NetworkController extends Activity {
 			
 		case kMessageMatchFailed:
 			Log.e("NetworkController", "kMessageMatchFailed");
-			sendRoomOwner(1); // 방장 권한
+			mMatchCallback.setEntry(null, null, sendRoomOwner(1));
 			matchMode = randomOwner;
 			break;
 			
@@ -422,52 +414,30 @@ public class NetworkController extends Activity {
 			Log.e("NetworkController", "kNetworkStateMatchCompleted");
 			matchedOppenentFacebookId = reader.readString();
 			matchedOppenentName = reader.readString();
-//			Log.e("NetworkController - kMessageMatchCompleted", "ID & Name /" + matchedOppenentFacebookId + " : " + matchedOppenentName);
-//			Log.e("NetworkController - kMessageMatchCompleted", "owner : " + owner);
 			
 			CCScene scene;
 			// 랜덤 매치 or 초대매치 && 방장 or 손님 
 //			int matchMode = standby;		
 			switch (matchMode) {
 			case randomOwner:
+			case inviteOwner: // ok!
     			Log.e("NetworkController", "randomOwner");
+    			Log.e("NetworkController", "inviteOwner");
 	    		if(mMatchCallback != null) {
 	    			Log.e("NetworkController", "Callback_6 - mInviteCallback != null");
-	    			mMatchCallback.onMatch(matchedOppenentFacebookId, matchedOppenentName, owner);
+	    			mMatchCallback.setEntry(matchedOppenentFacebookId, matchedOppenentName, owner);
 	    		} else {
 	    			Log.e("NetworkController", "실패");
 	    		}
 				break;
 			case randomGuest:
-    			Log.e("NetworkController", "randomGuest");
-    			scene = GameInvite.scene(matchedOppenentFacebookId, matchedOppenentName, owner);
-    			CCDirector.sharedDirector().replaceScene(scene);
-				break;
-			case inviteOwner: // ok!
-    			Log.e("NetworkController", "inviteOwner");
-	    		if(mMatchCallback != null) {
-	    			Log.e("NetworkController", "Callback_6 - mInviteCallback != null");
-	    			mMatchCallback.onMatch(matchedOppenentFacebookId, matchedOppenentName, owner);
-	    		} else {
-	    			Log.e("NetworkController", "실패");
-	    		}
-				break;
 			case inviteGuest:
+    			Log.e("NetworkController", "randomGuest");
     			Log.e("NetworkController", "inviteGuest");
-    			scene = GameInvite.scene(matchedOppenentFacebookId, matchedOppenentName, owner);
-    			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+    			scene = GameInvite.scene(matchedOppenentFacebookId, matchedOppenentName, sendRoomOwner(0));
     			CCDirector.sharedDirector().replaceScene(scene);
 				break;
 			}
-//			// 받으면 상대방 사진 및 이름 표시하고 게임 시작 카운터 돌리기
-//			// 되긴 하는데 코드가 지저분해지는것 같네요...
-//			Util.setEntry(matchedOppenentFacebookId, matchedOppenentName, owner, GameInvite.backboard);
-			
-//			if (owner) {
-//				GameRandom.matchNameReceiver(kTempName, matchedOppenentFacebookId); // gamerandom 임시로 막음
-//			} else {
-//				GameRandom.getInstance().matchNameReceiver(matchedOppenentFacebookId, kTempName);	
-//			}
 			
 			break;
 			
@@ -701,7 +671,7 @@ public class NetworkController extends Activity {
 	
 
 	
-	public void sendRoomOwner(int Boolean) throws IOException {
+	public boolean sendRoomOwner(int Boolean) throws IOException {
 		Log.e("NetworkController", "sending sendRoomOwner ......");
 		MessageWriter message = new MessageWriter();
 		message.writeByte((byte) kMessageInRoomOwner);
@@ -720,6 +690,7 @@ public class NetworkController extends Activity {
 		sendData(message.data_);
 		setMessage(kMessageInRoomOwner, kModeSent);
 		Log.e("NetworkController", "sendRoomOwner");
+		return owner;
 	}
 	
 //	public static void sendRequestMatchInvite(int difficulty, String facebookID) {
@@ -738,7 +709,11 @@ public class NetworkController extends Activity {
 		message.writeByte((byte) kMessageRequestMatch);
 		message.writeByte((byte) difficulty);
 		sendData(message.data_);
-		matchMode = randomGuest;
+		if (owner == true)
+			matchMode = randomOwner;
+		else
+			matchMode = randomGuest;	
+		
 		Log.e("NetworkController", "sendRequestMatch");
 	}
 	
@@ -883,11 +858,15 @@ public class NetworkController extends Activity {
 		
 	}
 	
+	public void setStandBy() {
+		matchMode = standby;
+	}
+	
     //match callback--------------------------------------------------------------------------
     public MatchCallback mMatchCallback;
     
     interface MatchCallback {
-    	public void onMatch(String matchedOppenentFacebookId, String matchedOppenentName, boolean owner);
+    	public void setEntry(String matchedOppenentFacebookId, String matchedOppenentName, boolean owner);
     }
     
     public void setMatchCallback(MatchCallback callback) {

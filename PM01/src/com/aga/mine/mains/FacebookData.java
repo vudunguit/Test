@@ -6,11 +6,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 import org.cocos2d.nodes.CCDirector;
 
@@ -19,7 +17,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.facebook.Session;
-import com.facebook.model.GraphUser;
 import com.sromku.simple.fb.entities.Profile;
 
 

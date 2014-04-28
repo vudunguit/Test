@@ -42,9 +42,12 @@ public class GameInvite extends CCLayer {
     private static CCScene scene;
 //	private static GameInvite gameInvite;
 	
-	public static CCScene scene() {
+	final int random = 1;
+	final int invite = 2;
+    
+	public static CCScene scene(int gameMode) {
 		scene = CCScene.node();
-		CCLayer layer = new GameInvite();
+		CCLayer layer = new GameInvite(gameMode);
 		scene.addChild(layer);
 		return scene;
 	}
@@ -62,6 +65,35 @@ public class GameInvite extends CCLayer {
 //		return gameInvite;
 //	} // 불필요 할듯
 
+	private GameInvite(int gameMode) {
+		NetworkController.getInstance().setMatchCallback(mMatchCallback);
+		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1.png");	
+		setBackBoardMenu(commonfolder + "bb1.png");
+		setBoardFrameMenu(commonfolder + "frameMatching-hd.png");
+
+		if (gameMode == random) {
+			FrameTitle2.setTitle(boardFrame, "52random/");
+			TopMenu2.setSceneMenu(this);
+			BottomImage.setBottomImage(this);
+			try {
+				NetworkController.getInstance().sendRequestMatch(GameData.share().getGameDifficulty()); // 난이도 주입
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if (gameMode == invite) {
+			FrameTitle2.setTitle(boardFrame, "53invite/");
+			TopMenu2.setSceneMenu(this);
+			BottomMenu3.setBottomMenu(null, folder, this);
+			mMatchCallback.setEntry(null, null, true);
+			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_MATCHLIST);
+		}
+		
+		isOwner = NetworkController.getInstance().owner;
+//		NetworkController.getInstance().matchMode;
+		
+	}
+	
+	
 	private GameInvite() {
 		isOwner = NetworkController.getInstance().owner;
 		
@@ -86,6 +118,7 @@ public class GameInvite extends CCLayer {
 	
 	String oppenentId;
 	String oppenentName;
+	
 	private GameInvite(String id, String name, boolean owner) {
 		oppenentId = id;
 		oppenentName = name;
@@ -94,16 +127,11 @@ public class GameInvite extends CCLayer {
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1.png");	
 		setBackBoardMenu(commonfolder + "bb1.png");
 		setBoardFrameMenu(commonfolder + "frameMatching-hd.png");
-//		Util.setEntry(id, name, owner, backboard);
-		// 상단 메뉴
 		TopMenu2.setSceneMenu(this);
-		
-		// 하단 이미지
 		BottomMenu3.setBottomMenu(null, folder, this); 
+		mMatchCallback.setEntry(id, name, owner);
 	}
 	
-	
-
 	// 백 보드 설정
 	private void setBackBoardMenu(String imageFullPath) {
 		backboard = CCSprite.sprite(imageFullPath);
@@ -120,24 +148,9 @@ public class GameInvite extends CCLayer {
 		bg.addChild(boardFrame);
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
-		FrameTitle2.setTitle(boardFrame, folder);
+//		FrameTitle2.setTitle(boardFrame, folder);
 	}
 	
-	// 중복코드 제거용으로 만들었지만 잘 안되서 사용 안함.
-//	private CCSprite spriteSetTexture(String id) {
-//		final CCSprite _picture = null;
-//		String etUrl = "https://graph.facebook.com/" + id + "/picture";
-//		mDownloader = new ImageDownloader(etUrl, new ImageLoaderListener() {
-//			@Override
-//			public void onImageDownloaded(CCSprite profile) {
-//				_picture.setTexture(profile.getTexture());
-//			}
-//		});
-//		mDownloader.execute();
-//		return _picture;
-//	}
-	
-//	List<CCNode> matchingPanel = null;
 	// 메인 메뉴
 	private void setMainMenu(CCSprite parentSprite){
 		
@@ -145,93 +158,29 @@ public class GameInvite extends CCLayer {
 		matchingPanel.add(CCSprite.sprite(commonfolder + "matchPanelMe.png")); 
 		matchingPanel.add(CCSprite.sprite(commonfolder + "matchPanelOther.png")); 
 				
-		int count = 1;
-		for (CCNode panel : matchingPanel) {
-			String name;
-
-			parentSprite.addChild(panel, 0, count);
-			panel.setPosition(
+		for (int k = 0; k < matchingPanel.size(); k++) {
+			int value = k + 1;
+			CCNode _node = matchingPanel.get(k);
+			parentSprite.addChild(_node, 0, value);
+			_node.setPosition(
 					parentSprite.getContentSize().width / 2, 
-					parentSprite.getContentSize().height - panel.getContentSize().height * (count * 1.05f + 0.1f));
+					parentSprite.getContentSize().height - _node.getContentSize().height * (value * 1.05f + 0.1f));
 			
 			// 이미지
-			final CCSprite _picture = CCSprite.sprite(commonfolder + "noPicture.png"); // 프로필 사진		
+			final CCSprite _picture = CCSprite.sprite(commonfolder + "noPicture.png");		
 			_picture.setAnchorPoint(0.5f, 0.5f);
-			_picture.setPosition(_picture.getContentSize().width * 2.7f, panel.getContentSize().height / 2);
-			panel.addChild(_picture, 0, 102);
-			
-			if (isOwner) {
-				name = FacebookData.getinstance().getUserInfo().getName();
-				String etUrl = "https://graph.facebook.com/" + FacebookData.getinstance().getUserInfo().getId() + "/picture";
-				mDownloader = new ImageDownloader(etUrl, new ImageLoaderListener() {
-					@Override
-					public void onImageDownloaded(CCSprite profile) {
-						_picture.setTexture(profile.getTexture());
-					}
-				});
-				mDownloader.execute();
-			} else if (oppenentId != null && oppenentName != null) {
-				Util.count(backboard); // 이미지 로드전에 카운트다운부터 도는게 맞는데 이미지가 로드가 안되네... 흠.
-				name = oppenentName;
-				String etUrl = "https://graph.facebook.com/" + oppenentId + "/picture";
-				mDownloader = new ImageDownloader(etUrl, new ImageLoaderListener() {
-					@Override
-					public void onImageDownloaded(CCSprite profile) {
-						Log.e("GameInvite", "onImageDownloaded - MainThread");
-						_picture.setTexture(profile.getTexture());
-					}
-				});
-				mDownloader.execute();
-//				Util.count(backboard);
-			} else {
-				name = "Player" + count;
-			}
-			
+			_picture.setPosition(_picture.getContentSize().width * 2.7f, _node.getContentSize().height / 2);
+			_node.addChild(_picture, 0, 102);
 
-			
-//			if (oppenentId != null && oppenentName != null) {
-//				name = oppenentName;
-//				String etUrl = "https://graph.facebook.com/" + oppenentId + "/picture";
-//				mDownloader = new ImageDownloader(etUrl, new ImageLoaderListener() {
-//					@Override
-//					public void onImageDownloaded(CCSprite profile) {
-//						Log.e("GameInvite", "onImageDownloaded - MainThread");
-//						_picture.setTexture(profile.getTexture());
-//					}
-//				});
-//				mDownloader.execute();
-//				isOwner = false;
-//				oppenentId = null;
-//				oppenentName = null;
-//			} else {
-//				name = "Player" + count;
-//			}
-//			
-//			if (isOwner) {
-//				name = FacebookData.getinstance().getUserInfo().getName();
-//				String etUrl = "https://graph.facebook.com/" + FacebookData.getinstance().getUserInfo().getId() + "/picture";
-//				mDownloader = new ImageDownloader(etUrl, new ImageLoaderListener() {
-//					@Override
-//					public void onImageDownloaded(CCSprite profile) {
-//						_picture.setTexture(profile.getTexture());
-//					}
-//				});
-//				mDownloader.execute();
-//			}
-			
 			// 이름
-			CCLabel _name = CCLabel.makeLabel(name, "Arial", 30.0f);
+			CCLabel _name = CCLabel.makeLabel("Player" + value, "Arial", 30.0f);
 			_name.setAnchorPoint(0, 0.5f);
 			_name.setPosition(
 					_picture.getPosition().x + ((1.3f - _picture.getAnchorPoint().x) * _picture.getContentSize().width), 
 					_picture.getPosition().y);
-			panel.addChild(_name, 0, 103);
-			count ++;
-			isOwner = !isOwner;
+			_node.addChild(_name, 0, 103);
 		}
 	}
-		
-
 	
 	// sceneCallback들 전부 여기로 옮기기
 	public void clicked(Object sender) {
@@ -245,11 +194,11 @@ public class GameInvite extends CCLayer {
 			switch (value) {
 			case previous:
 				scene = GameDifficulty.scene();
-				
 				break;
 
 			case home:
 				scene = Home.scene();
+				GameData.share().setGameMode(0);
 				break;
 			}
 			try {
@@ -265,25 +214,10 @@ public class GameInvite extends CCLayer {
 	public void randomMatch(Object sender) {
 		// hide scroll view
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
-//		try {
-////			GameDifficulty.mode =2;
-//			GameData.share().setGameMode(randomMode);
-//			NetworkController.getInstance().sendRoomOwner(1); // 방장 권한 주입 (random match에서만 있음)
-//			CCScene scene = GameRandom.scene();
-//			CCDirector.sharedDirector().replaceScene(scene);
-//			Log.e("CallBack", "RandomMatchLayer");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 		try {
-			NetworkController.getInstance().sendRequestMatch(GameData.share().getGameDifficulty()); // 난이도 주입
-			NetworkController.getInstance().sendRoomOwner(0);
+			NetworkController.getInstance().sendRequestMatch(GameData.share().getGameDifficulty());
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		
-		for (CCNode child : this.getChildren()) {
-			Log.e("GameInvite", child.toString());
 		}
 	}
 	
@@ -292,31 +226,38 @@ public class GameInvite extends CCLayer {
 	public MatchCallback mMatchCallback = new MatchCallback() {
 
 		@Override
-		public void onMatch(String matchedOppenentFacebookId, String matchedOppenentName, boolean owner) {
-			Util.count(backboard); // 상대방이 방장(나를 초대한 사람)일시 이미지가 로드가 잘 안됨
-			final CCSprite picture;
-			CCLabel name;
+		public void setEntry(String matchedOppenentFacebookId, String matchedOppenentName, boolean owner) {
+			int[] location = {0,1};
+			String[] urls = {FacebookData.getinstance().getUserInfo().getId(), matchedOppenentFacebookId}; 
+			String[] names = {FacebookData.getinstance().getUserInfo().getName(), matchedOppenentName};
+			int loop = 2;
 			
-			if (!owner) {
-				picture = (CCSprite) backboard.getChildren().get(0).getChildByTag(102);
-				name = (CCLabel) backboard.getChildren().get(0).getChildByTag(103);
-			} else {
-				picture = (CCSprite) backboard.getChildren().get(1).getChildByTag(102);
-				name = (CCLabel) backboard.getChildren().get(1).getChildByTag(103);
-			}
+			if (!owner)
+				location = new int[] {1,0};
+			if (matchedOppenentFacebookId == null || matchedOppenentName == null)
+				loop = 1;
 			
-			String etUrl = "https://graph.facebook.com/" + matchedOppenentFacebookId + "/picture";
-			name.setString(matchedOppenentName);
-			
-			mDownloader = new ImageDownloader(etUrl, new ImageLoaderListener() {
-				@Override
-				public void onImageDownloaded(CCSprite profile) {
-					picture.setTexture(profile.getTexture());
+			for (int i = 0; i < loop ; i++) {
+				List<CCNode> entry = backboard.getChildren();
+				final CCSprite tempPicture = (CCSprite) entry.get(location[i]).getChildByTag(102);
+				CCLabel tempName = (CCLabel) entry.get(location[i]).getChildByTag(103);
+				
+				String etUrl = "https://graph.facebook.com/" + urls[i] + "/picture";
+				mDownloader = new ImageDownloader(etUrl, new ImageLoaderListener() {
+					@Override
+					public void onImageDownloaded(CCSprite profile) {
+						tempPicture.setTexture(profile.getTexture());
+					}
+				});
+				mDownloader.execute();
+				tempName.setString(names[i]);
+				
+				if (location[i] == 1) {
+					Util.count(backboard);
 				}
-			});
-			mDownloader.execute();
-//			Util.count(backboard);
+			}
 		}
+
 		
 	};
 	
