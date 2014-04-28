@@ -15,7 +15,6 @@ import org.cocos2d.types.CGPoint;
 import android.util.Log;
 
 import com.aga.mine.mains.ImageDownloader.ImageLoaderListener;
-import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.mains.NetworkController.MatchCallback;
 import com.aga.mine.util.Util;
 
@@ -316,6 +315,33 @@ public class GameInvite extends CCLayer {
 			});
 			mDownloader.execute();
 //			Util.count(backboard);
+		}
+
+		@Override
+		public void setOwner() {
+			List<CCNode> entry = backboard.getChildren();
+			CCSprite tempPicture = null;
+			CCLabel tempName = null;
+			
+			int count = entry.size();
+			for (CCNode ccNode : entry) {
+				if (count > 0) {
+					CCNode temp = entry.get(count);
+					
+					tempPicture = (CCSprite) ccNode.getChildByTag(102);
+					((CCSprite) ccNode.getChildByTag(102)).setTexture(((CCSprite) temp.getChildByTag(102)).getTexture());
+					
+					tempName = (CCLabel) ccNode.getChildByTag(103);
+					((CCLabel) ccNode.getChildByTag(103)).setString(((CCLabel) temp.getChildByTag(103)).getString());					
+				} else {
+					((CCSprite) ccNode.getChildByTag(102)).setTexture(tempPicture.getTexture());
+					
+					tempName = (CCLabel) ccNode.getChildByTag(103);
+					((CCLabel) ccNode.getChildByTag(103)).setString(tempName.getString());				
+				}
+				count--;
+			}
+			
 		}
 		
 	};

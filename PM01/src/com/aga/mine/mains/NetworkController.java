@@ -318,6 +318,7 @@ public class NetworkController extends Activity {
 			
 		case kMessageMatchFailed:
 			Log.e("NetworkController", "kMessageMatchFailed");
+			mMatchCallback.setOwner();
 			sendRoomOwner(1); // 방장 권한
 			matchMode = randomOwner;
 			break;
@@ -888,6 +889,8 @@ public class NetworkController extends Activity {
     
     interface MatchCallback {
     	public void onMatch(String matchedOppenentFacebookId, String matchedOppenentName, boolean owner);
+    	
+    	public void setOwner();
     }
     
     public void setMatchCallback(MatchCallback callback) {

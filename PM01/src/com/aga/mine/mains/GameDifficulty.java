@@ -11,11 +11,9 @@ import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
-import com.aga.mine.pages.UserData;
-
+import android.R.integer;
 import android.content.Context;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.widget.Toast;
 
 public class GameDifficulty extends CCLayer {
@@ -36,8 +34,6 @@ public class GameDifficulty extends CCLayer {
 	
 	public static int mode;
 	
-	private Context mContext;
-	UserData userData;
 
 	static CCScene scene() {
 		CCScene scene = CCScene.node();
@@ -47,8 +43,6 @@ public class GameDifficulty extends CCLayer {
 	}
 
 	public GameDifficulty() {
-		mContext = CCDirector.sharedDirector().getActivity();
-		userData = UserData.share(mContext);
 		
 		//배경 그림 설정
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
@@ -158,11 +152,11 @@ public class GameDifficulty extends CCLayer {
 		GameData.share().setGameDifficulty(difficultyNumber); // gameData로 옮겨야됨. (기존에 있음.)
 //		GameData.share().setGameDifficulty((Integer)((CCNode)sender).getUserData());
 //		switch (GameData.share().getGameMode()) {  // gameData로 옮겨야됨. (기존에 있음.)
-		Log.e("GameDifficulty", "tagNumber  : " + userData.getGameMode());
+		Log.e("GameDifficulty", "tagNumber  : " + GameData.share().getGameMode());
 		
 		CCScene scene = null;
 		
-		switch (userData.getGameMode()) {  // gameData로 옮겨야됨. (기존에 있음.)
+		switch (GameData.share().getGameMode()) {  // gameData로 옮겨야됨. (기존에 있음.)
 		case singleMode:
 			scene = GameLoading.scene();
 			single(scene);
@@ -193,11 +187,11 @@ public class GameDifficulty extends CCLayer {
 	}
 
 	private void single(CCScene scene) {
-		if (userData.getBroomstick() < 1) {
+		if (Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick")) < 1) {
 			scene = GameDifficulty.scene();
 			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
 						public void run() {
-							Toast.makeText(mContext, "빗자루가 부족합니다.", Toast.LENGTH_SHORT).show();
+							Toast.makeText(MainApplication.getInstance().getApplicationContext(), "빗자루가 부족합니다.", Toast.LENGTH_SHORT).show();
 						}
 					});
 		}
