@@ -11,8 +11,6 @@ import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
-import android.R.integer;
-import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -34,6 +32,8 @@ public class GameDifficulty extends CCLayer {
 	
 	public static int mode;
 	
+//	private Context mContext;
+//	UserData userData;
 
 	static CCScene scene() {
 		CCScene scene = CCScene.node();
@@ -43,6 +43,8 @@ public class GameDifficulty extends CCLayer {
 	}
 
 	public GameDifficulty() {
+//		mContext = CCDirector.sharedDirector().getActivity();
+//		userData = UserData.share(mContext);
 		
 		//배경 그림 설정
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
@@ -140,6 +142,7 @@ public class GameDifficulty extends CCLayer {
 				} else {
 					scene = Home.scene();
 				}
+				GameData.share().setGameMode(0);
 				break;
 			}
 			CCDirector.sharedDirector().replaceScene(scene);
@@ -147,6 +150,9 @@ public class GameDifficulty extends CCLayer {
 	}
 	
 	public void nextCallback(Object sender) {
+		final int random = 1;
+		final int invite = 2;
+		
 		int difficultyNumber = ((CCNode)sender).getTag();
 		Log.e("GameMode", "tagNumber  : " + difficultyNumber);
 		GameData.share().setGameDifficulty(difficultyNumber); // gameData로 옮겨야됨. (기존에 있음.)
@@ -163,24 +169,23 @@ public class GameDifficulty extends CCLayer {
 			break;
 			
 		case randomMode:
-//			scene = GameRandom.scene();
-			scene = GameInvite.scene();
-			try {
-				NetworkController.getInstance().sendRequestMatch(GameData.share().getGameDifficulty()); // 난이도 주입
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			scene = GameInvite.scene(random);
+//			try {
+//				NetworkController.getInstance().sendRequestMatch(GameData.share().getGameDifficulty()); // 난이도 주입
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 			break;
 			
 		case inviteMode:
-			scene = GameInvite.scene();
+			scene = GameInvite.scene(invite);
 			try {
 				NetworkController.getInstance().sendRoomOwner(1);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			//display scroll view
-			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_MATCHLIST);
+//			//display scroll view
+//			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_MATCHLIST);
 			break;
 		}
 		CCDirector.sharedDirector().replaceScene(scene);
