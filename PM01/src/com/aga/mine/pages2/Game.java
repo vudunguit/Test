@@ -109,7 +109,6 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	static int unopenedTile;
 	
 	//Tile animation
-	private CCSprite mTile;
 	private CCAnimate mOpenAction;
 
 	public CCTMXTiledMap getTileMap() {
@@ -187,7 +186,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		//
 		// 사운드 (로드)
 		SoundEngine.sharedEngine().preloadEffect(this.mContext,
-				R.raw.game_open2); // 이펙트 (효과음) // (타일)pickup
+				R.raw.lo_01); // 이펙트 (효과음) // (타일)pickup
 		SoundEngine.sharedEngine().preloadEffect(this.mContext,
 				R.raw.game_pumpkin); // 이펙트 (효과음) // (호박)hit
 		SoundEngine.sharedEngine().preloadEffect(this.mContext,
@@ -499,15 +498,11 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		UserData.share(mContext).myBroomstick();
 		
 		//타일 오픈 애니메이션 초기화
-		mTile = CCSprite.sprite("60game/01.png");
-		addChild(mTile, 100);
-		mTile.setPosition(CGPoint.ccp(0, 0));
-		mTile.setVisible(false);
 		CCAnimation animation = CCAnimation.animation("dance");
 		for( int i=1;i<=7;i++) {
 			animation.addFrame(String.format("60game/%02d.png", i));
 		}
-		mOpenAction = CCAnimate.action(0.5f, animation, false);
+		mOpenAction = CCAnimate.action(0.25f, animation, false);
 	}
 
 	// 생성자Game end
@@ -1663,7 +1658,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 
 	//
 	// MineCell Delegate
-	public void removeTile(CGPoint tileCoord) {
+	public void removeTile(CGPoint tileCoord, int depth) {
 		// Global ID // Globally unique IDentifier
 		int tileGid = this.meta.tileGIDAt(tileCoord);
 		tileGid = CCFormatter.swapIntToLittleEndian(tileGid); // 뭔지 아직 모르겠음.
@@ -1696,19 +1691,22 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			this.getFg().removeTileAt(tileCoord);
 			
 			//타일 오픈 애니메이션
-			mTile.setVisible(true);
-			mTile.setPosition(tileCoord);
-			Log.d("LDK", "tileCoord:" + tileCoord.x + "," + tileCoord.y);
+			CCSprite tile = CCSprite.sprite("60game/01.png");
+			addChild(tile, 5);
+			tile.setPosition(CGPoint.ccp(tileCoord.x * tileSize.width + tileSize.width / 2, 
+					mapSize.height - (tileCoord.y * tileSize.height + tileSize.height / 2)));
 			
-			mTile.runAction(CCSequence.actions(mOpenAction, CCCallFuncN.action(this, "removeTileAni")));
+			tile.runAction(CCSequence.actions(mOpenAction, CCCallFuncN.action(this, "removeTileAni")));
 			
-			SoundEngine.sharedEngine().playEffect(mContext, R.raw.lo_01); // pickup
+			//if(depth > 22) depth = 22;
+			//SoundEngine.sharedEngine().playEffect(mContext, R.raw.lo_01 + (depth -1));
+			SoundEngine.sharedEngine().playEffect(mContext, R.raw.lo_01);
 		}
 	}
 	
 	public void removeTileAni(Object sender) {
 		CCSprite obj = (CCSprite)sender;
-		obj.setVisible(false);
+		obj.removeFromParentAndCleanup(true);
 	}
 
 	@Override

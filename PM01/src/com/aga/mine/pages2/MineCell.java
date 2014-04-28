@@ -27,7 +27,7 @@ public class MineCell extends CCLayer{
 	public interface MineCellDelegate{
 		boolean updateHeart();
 		void displayMineNumber(int a, CGPoint b, int c);
-		void removeTile(CGPoint tileCoord);
+		void removeTile(CGPoint tileCoord, int depth);
 		void gameOver();
 		
 		//public void removeTile(CGPoint tileCoord) {}
@@ -264,51 +264,6 @@ public class MineCell extends CCLayer{
 		}
 		return numberOfMine;
 	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/*****************************************************/
 	/** 문제지점 
@@ -325,15 +280,12 @@ public class MineCell extends CCLayer{
 	 * 
 	 * @return
 	 */
+	
 	public int open() {
-		
-//		CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
-//			public void run() {
-//				
-//			}
-//		});
-		
-		
+		return open (1);
+	}
+	
+	public int open(int depth) {
 		// 셀주변의 지뢰 갯수를 구한다.
 		int numberOfMine = this.getNumberOfMineAround();
 		// numberOfMine : 타일에 적히는 숫자
@@ -364,7 +316,7 @@ public class MineCell extends CCLayer{
 		/*** 그냥 이해 안되도 적당히 포트중... 나중에 안돌아갈것같음. ***/
 		/*** 너무 심각해서 어디가 문제인지 못찾을까봐 심히 걱정됨 ***/
 		/*** 일단 얼추 수정됨 ***/
-		this.delegate.removeTile(this.tileCoord);
+		this.delegate.removeTile(this.tileCoord, depth);
 		//NetworkController.getInstance().send
 		Game.unopenedTile --;
 		
@@ -442,11 +394,11 @@ public class MineCell extends CCLayer{
 		//if (numberOfMine == 0) {
 			for (final MineCell cell : getRoundCells()) {
 				try {
-					Thread.sleep(4);
+					Thread.sleep(3);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				cell.open();
+				cell.open(depth++);
 			}
 		}
 		return numberOfMine;
