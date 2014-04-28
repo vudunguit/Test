@@ -93,21 +93,15 @@ public class MailListAdapter extends BaseAdapter {
 		
 		//set facebook profile image
 		AQuery aq = mAq.recycle(convertView);
+		String url = "https://graph.facebook.com/" + senderID +"/picture";
+		if(aq.shouldDelay(position, convertView, parent, url)){
+			
+		}else{
+			aq.id(holder.profile).image(url, true, true);
+		}
 		
 		// id대신 name을 얻어야 되네요.(친구가 아닐 수 있습니다.)
-		if (senderID.equals(String.valueOf(pumpkinMine))) {
-			holder.tvName.setText("Pumpkin Mine");	
-			aq.id(holder.profile).image(R.drawable.mail_pumkin);
-		} else {
-			holder.tvName.setText(mMailItemList.get(position).sender_id);
-			String url = "https://graph.facebook.com/" + senderID +"/picture";
-			if(aq.shouldDelay(position, convertView, parent, url)){
-	
-			}else{
-				aq.id(holder.profile).image(url, true, true);
-			}
-		
-		}
+		holder.tvName.setText(mMailItemList.get(position).sender_name);
 		
 		//set text and icon
 		if(mTab == 1) {

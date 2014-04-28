@@ -70,6 +70,7 @@ public class MailBox {
 					mailItem.sender_id = mailArray[1];
 					mailItem.quantity = mailArray[3];
 					mailItem.date = mailArray[4];
+					mailItem.sender_name = FacebookData.getinstance().getUserInfo().getName();
 					mBroomList.add(mailItem);
 				} else {
 					mailItem = new GoldItem();
@@ -77,6 +78,7 @@ public class MailBox {
 					mailItem.sender_id = mailArray[1];
 					mailItem.quantity = mailArray[3];
 					mailItem.date = mailArray[4];
+					mailItem.sender_name = FacebookData.getinstance().getUserInfo().getName();
 					mGoldList.add(mailItem);
 				}
 			}
