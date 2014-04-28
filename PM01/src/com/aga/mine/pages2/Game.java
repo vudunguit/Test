@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.actions.base.CCRepeatForever;
+import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.interval.CCAnimate;
 import org.cocos2d.actions.interval.CCRotateBy;
 import org.cocos2d.actions.interval.CCSequence;
@@ -106,6 +107,10 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	CCLabel center3;
 
 	static int unopenedTile;
+	
+	//Tile animation
+	private CCSprite mTile;
+	private CCAnimate mOpenAction;
 
 	public CCTMXTiledMap getTileMap() {
 		return tileMap;
@@ -492,6 +497,17 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// 게임시간 초기화
 		GameData.share().setSeconds(900);
 		UserData.share(mContext).myBroomstick();
+		
+		//타일 오픈 애니메이션 초기화
+		mTile = CCSprite.sprite("60game/01.png");
+		addChild(mTile, 100);
+		mTile.setPosition(CGPoint.ccp(0, 0));
+		mTile.setVisible(false);
+		CCAnimation animation = CCAnimation.animation("dance");
+		for( int i=1;i<=7;i++) {
+			animation.addFrame(String.format("60game/%02d.png", i));
+		}
+		mOpenAction = CCAnimate.action(0.5f, animation, false);
 	}
 
 	// 생성자Game end
@@ -1677,11 +1693,22 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 				// Log.e("Game / removeTile", "properties - boom empty");
 			}
 		} else {
-			// Log.e("Game / removeTile", "properties - tile empty");
-			SoundEngine.sharedEngine().playEffect(mContext, R.raw.game_open2); // pickup
-			// 에러 stack over flow error
 			this.getFg().removeTileAt(tileCoord);
+			
+			//타일 오픈 애니메이션
+			mTile.setVisible(true);
+			mTile.setPosition(tileCoord);
+			Log.d("LDK", "tileCoord:" + tileCoord.x + "," + tileCoord.y);
+			
+			mTile.runAction(CCSequence.actions(mOpenAction, CCCallFuncN.action(this, "removeTileAni")));
+			
+			SoundEngine.sharedEngine().playEffect(mContext, R.raw.lo_01); // pickup
 		}
+	}
+	
+	public void removeTileAni(Object sender) {
+		CCSprite obj = (CCSprite)sender;
+		obj.setVisible(false);
 	}
 
 	@Override

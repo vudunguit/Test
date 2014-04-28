@@ -442,7 +442,7 @@ public class MineCell extends CCLayer{
 		//if (numberOfMine == 0) {
 			for (final MineCell cell : getRoundCells()) {
 				try {
-					Thread.sleep(10);
+					Thread.sleep(4);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
