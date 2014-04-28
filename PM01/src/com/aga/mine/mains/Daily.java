@@ -179,7 +179,7 @@ public class Daily extends CCLayer {
 	public void onEnter() {
 		super.onEnter();
 		
-		CCScaleTo actionTo = CCScaleTo.action(1, 0.23f);
+		CCScaleTo actionTo = CCScaleTo.action(0.25f, 0.23f);
 		stamp.runAction(actionTo);
 	}
 
