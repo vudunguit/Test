@@ -90,7 +90,7 @@ public class DataFilter {
 			if (requestModeDailyCheck.equals("not once a day")) {
 				scene = Home.scene();
 			} else if (0 < Integer.parseInt(requestModeDailyCheck) % 31) {
-	//		RequestModeDailyCheck = "1"; // 테스트용
+//			requestModeDailyCheck = "13"; // 테스트용
 				scene.addChild(Daily.scene(Integer.parseInt(requestModeDailyCheck) % 31));
 			} else {
 	//			new Process();

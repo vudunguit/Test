@@ -1,5 +1,7 @@
 ﻿package com.aga.mine.mains;
 
+import java.io.IOException;
+
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
@@ -167,11 +169,24 @@ public class GameDifficulty extends CCLayer {
 			break;
 			
 		case randomMode:
-			scene = GameRandom.scene();
+//			scene = GameRandom.scene();
+			scene = GameInvite.scene();
+			try {
+				NetworkController.getInstance().sendRequestMatch(GameData.share().getGameDifficulty()); // 난이도 주입
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			break;
 			
 		case inviteMode:
 			scene = GameInvite.scene();
+			try {
+				NetworkController.getInstance().sendRoomOwner(1);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			//display scroll view
+			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_MATCHLIST);
 			break;
 		}
 		CCDirector.sharedDirector().replaceScene(scene);

@@ -39,7 +39,12 @@ import com.aga.mine.util.Util;
 public class NetworkController extends Activity {
 	
 	boolean owner = false;
-	int matchMode = 0;
+	final int standby = 0;
+	final int randomOwner = 1;
+	final int randomGuest = 2;
+	final int inviteOwner = 3;
+	final int inviteGuest= 4;
+	int matchMode = standby;
 	// 네트워크 상황
 	final static int kNetworkStateNotAvailable = 0;
 	final static int kNetworkStateTryingStreamOpen = 1;
@@ -313,8 +318,8 @@ public class NetworkController extends Activity {
 			
 		case kMessageMatchFailed:
 			Log.e("NetworkController", "kMessageMatchFailed");
-//			NetworkController.getInstance().sendRoomOwner(1); // 방장 권한
 			sendRoomOwner(1); // 방장 권한
+			matchMode = randomOwner;
 			break;
 			
 			
@@ -420,22 +425,26 @@ public class NetworkController extends Activity {
 //			Log.e("NetworkController - kMessageMatchCompleted", "ID & Name /" + matchedOppenentFacebookId + " : " + matchedOppenentName);
 //			Log.e("NetworkController - kMessageMatchCompleted", "owner : " + owner);
 			
-			
+			CCScene scene;
 			// 랜덤 매치 or 초대매치 && 방장 or 손님 
-//			int matchMode = 0;
-			final int randomOwner = 1;
-			final int randomGuest = 2;
-			final int inviteOwner = 3;
-			final int inviteGuest= 4;
-//			
+//			int matchMode = standby;		
 			switch (matchMode) {
 			case randomOwner:
-    			Log.e("NetworkController", "1");
+    			Log.e("NetworkController", "randomOwner");
+	    		if(mMatchCallback != null) {
+	    			Log.e("NetworkController", "Callback_6 - mInviteCallback != null");
+	    			mMatchCallback.onMatch(matchedOppenentFacebookId, matchedOppenentName, owner);
+	    		} else {
+	    			Log.e("NetworkController", "실패");
+	    		}
 				break;
 			case randomGuest:
-    			Log.e("NetworkController", "2");
+    			Log.e("NetworkController", "randomGuest");
+    			scene = GameInvite.scene(matchedOppenentFacebookId, matchedOppenentName, owner);
+    			CCDirector.sharedDirector().replaceScene(scene);
 				break;
 			case inviteOwner: // ok!
+    			Log.e("NetworkController", "inviteOwner");
 	    		if(mMatchCallback != null) {
 	    			Log.e("NetworkController", "Callback_6 - mInviteCallback != null");
 	    			mMatchCallback.onMatch(matchedOppenentFacebookId, matchedOppenentName, owner);
@@ -444,7 +453,8 @@ public class NetworkController extends Activity {
 	    		}
 				break;
 			case inviteGuest:
-    			CCScene scene = GameInvite.scene(matchedOppenentFacebookId, matchedOppenentName, owner);
+    			Log.e("NetworkController", "inviteGuest");
+    			scene = GameInvite.scene(matchedOppenentFacebookId, matchedOppenentName, owner);
     			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
     			CCDirector.sharedDirector().replaceScene(scene);
 				break;
@@ -728,6 +738,7 @@ public class NetworkController extends Activity {
 		message.writeByte((byte) kMessageRequestMatch);
 		message.writeByte((byte) difficulty);
 		sendData(message.data_);
+		matchMode = randomGuest;
 		Log.e("NetworkController", "sendRequestMatch");
 	}
 	
@@ -754,7 +765,7 @@ public class NetworkController extends Activity {
 		this.setMessage(kMessageRequestMatchInvite, kModeSent);
 		Log.e("NetworkController", "send Request Match Invite");
 		owner = true;
-		matchMode = 3;
+		matchMode = inviteOwner;
 	}
 	
 
@@ -781,7 +792,7 @@ public class NetworkController extends Activity {
 		this.setMessage(kMessageWillYouAcceptInviteOK, kModeSent);
 		Log.e("NetworkController", "kMessageWillYouAcceptInviteOK");
 		owner = false;
-		matchMode = 4;
+		matchMode = inviteGuest;
 	}
 	 
 	

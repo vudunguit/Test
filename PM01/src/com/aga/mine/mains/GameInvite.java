@@ -40,7 +40,7 @@ public class GameInvite extends CCLayer {
 	static CCSprite backboard;
 
     private static CCScene scene;
-	private static GameInvite gameInvite;
+//	private static GameInvite gameInvite;
 	
 	public static CCScene scene() {
 		scene = CCScene.node();
@@ -56,23 +56,15 @@ public class GameInvite extends CCLayer {
 		return scene;
 	}
 	
-	
-	
-	public static synchronized GameInvite getInstance() {
-		if (gameInvite == null)
-			gameInvite = new GameInvite();
-		return gameInvite;
-	} // 불필요 할듯
+//	public static synchronized GameInvite getInstance() {
+//		if (gameInvite == null)
+//			gameInvite = new GameInvite();
+//		return gameInvite;
+//	} // 불필요 할듯
 
 	private GameInvite() {
-		try {
-			NetworkController.getInstance().sendRoomOwner(1);
-			isOwner = NetworkController.getInstance().owner;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		isOwner = NetworkController.getInstance().owner;
 		
-
 		//when invitation is successful, this callback is called.
     	Log.e("Invite", "Callback_1 - setInviteCallback()");
 //		MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
@@ -84,15 +76,12 @@ public class GameInvite extends CCLayer {
 //		Util.setEntry(null, null, true, backboard);
 		// 상단 메뉴
 		TopMenu2.setSceneMenu(this);
-		
 		// 하단 이미지
 		BottomMenu3.setBottomMenu(null, folder, this); 
 		
-		
-		
-//		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
-		//display scroll view
-		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_MATCHLIST);
+////		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+//		//display scroll view
+//		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_MATCHLIST);
 	}
 	
 	String oppenentId;
@@ -111,10 +100,6 @@ public class GameInvite extends CCLayer {
 		
 		// 하단 이미지
 		BottomMenu3.setBottomMenu(null, folder, this); 
-		
-//		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
-		//display scroll view
-		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_MATCHLIST);
 	}
 	
 	
@@ -138,18 +123,19 @@ public class GameInvite extends CCLayer {
 		FrameTitle2.setTitle(boardFrame, folder);
 	}
 	
-	private CCSprite asdasd(String id) {
-		final CCSprite _picture = null;
-		String etUrl = "https://graph.facebook.com/" + id + "/picture";
-		mDownloader = new ImageDownloader(etUrl, new ImageLoaderListener() {
-			@Override
-			public void onImageDownloaded(CCSprite profile) {
-				_picture.setTexture(profile.getTexture());
-			}
-		});
-		mDownloader.execute();
-		return _picture;
-	}
+	// 중복코드 제거용으로 만들었지만 잘 안되서 사용 안함.
+//	private CCSprite spriteSetTexture(String id) {
+//		final CCSprite _picture = null;
+//		String etUrl = "https://graph.facebook.com/" + id + "/picture";
+//		mDownloader = new ImageDownloader(etUrl, new ImageLoaderListener() {
+//			@Override
+//			public void onImageDownloaded(CCSprite profile) {
+//				_picture.setTexture(profile.getTexture());
+//			}
+//		});
+//		mDownloader.execute();
+//		return _picture;
+//	}
 	
 //	List<CCNode> matchingPanel = null;
 	// 메인 메뉴
@@ -185,6 +171,7 @@ public class GameInvite extends CCLayer {
 				});
 				mDownloader.execute();
 			} else if (oppenentId != null && oppenentName != null) {
+				Util.count(backboard); // 이미지 로드전에 카운트다운부터 도는게 맞는데 이미지가 로드가 안되네... 흠.
 				name = oppenentName;
 				String etUrl = "https://graph.facebook.com/" + oppenentId + "/picture";
 				mDownloader = new ImageDownloader(etUrl, new ImageLoaderListener() {
@@ -195,6 +182,7 @@ public class GameInvite extends CCLayer {
 					}
 				});
 				mDownloader.execute();
+//				Util.count(backboard);
 			} else {
 				name = "Player" + count;
 			}
@@ -277,15 +265,25 @@ public class GameInvite extends CCLayer {
 	public void randomMatch(Object sender) {
 		// hide scroll view
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+//		try {
+////			GameDifficulty.mode =2;
+//			GameData.share().setGameMode(randomMode);
+//			NetworkController.getInstance().sendRoomOwner(1); // 방장 권한 주입 (random match에서만 있음)
+//			CCScene scene = GameRandom.scene();
+//			CCDirector.sharedDirector().replaceScene(scene);
+//			Log.e("CallBack", "RandomMatchLayer");
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		try {
-//			GameDifficulty.mode =2;
-			GameData.share().setGameMode(randomMode);
-			NetworkController.getInstance().sendRoomOwner(1); // 방장 권한 주입 (random match에서만 있음)
-			CCScene scene = GameRandom.scene();
-			CCDirector.sharedDirector().replaceScene(scene);
-			Log.e("CallBack", "RandomMatchLayer");
+			NetworkController.getInstance().sendRequestMatch(GameData.share().getGameDifficulty()); // 난이도 주입
+			NetworkController.getInstance().sendRoomOwner(0);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		
+		for (CCNode child : this.getChildren()) {
+			Log.e("GameInvite", child.toString());
 		}
 	}
 	
@@ -295,6 +293,7 @@ public class GameInvite extends CCLayer {
 
 		@Override
 		public void onMatch(String matchedOppenentFacebookId, String matchedOppenentName, boolean owner) {
+			Util.count(backboard); // 상대방이 방장(나를 초대한 사람)일시 이미지가 로드가 잘 안됨
 			final CCSprite picture;
 			CCLabel name;
 			
@@ -316,7 +315,7 @@ public class GameInvite extends CCLayer {
 				}
 			});
 			mDownloader.execute();
-
+//			Util.count(backboard);
 		}
 		
 	};
