@@ -394,11 +394,11 @@ public class MineCell extends CCLayer{
 		//if (numberOfMine == 0) {
 			for (final MineCell cell : getRoundCells()) {
 				try {
-					Thread.sleep(3);
+					Thread.sleep(4);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				cell.open(depth++);
+				cell.open(++depth);
 			}
 		}
 		return numberOfMine;
