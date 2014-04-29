@@ -379,13 +379,17 @@ public class ShopItem2 extends CCLayer {
 
 	public void SphereCallback(Object sender) {
 		int sphereNumber = Integer.parseInt(FacebookData.getinstance().getDBData("SphereNumber"));
+		int spherePrice = userData.buySphere[sphereNumber - 3];
+		
 		if (sphereNumber < 9) {
+			String gold = FacebookData.getinstance().getDBData("Gold");
+			FacebookData.getinstance().modDBData("Gold", "" + (Integer.parseInt(gold) - spherePrice));
 			FacebookData.getinstance().modDBData("SphereNumber", "" + (sphereNumber + 1));
 			
 			sphereNumber = Integer.parseInt(FacebookData.getinstance().getDBData("SphereNumber"));
 			
 			if (sphereNumber < 9) {
-				int spherePrice = userData.buySphere[sphereNumber - 3];
+				spherePrice = userData.buySphere[sphereNumber - 3];
 				sphereNumber1.setString(new NumberComma().numberComma(spherePrice));	
 			} else {
 				sphereNumber1.setString("MAX");
@@ -415,8 +419,11 @@ public class ShopItem2 extends CCLayer {
 		
 		String magicType = itemType[magicNumber];
 		int magicLevel = Integer.parseInt(FacebookData.getinstance().getDBData(magicType));
+		int price = userData.magicPrice[magicNumber][magicLevel];
 		
 		if (magicLevel < 20) {
+			String gold = FacebookData.getinstance().getDBData("Gold");
+			FacebookData.getinstance().modDBData("Gold", "" + (Integer.parseInt(gold) - price));
 			FacebookData.getinstance().modDBData(magicType, "" + (magicLevel + 1));
 			magicLevel = Integer.parseInt(FacebookData.getinstance().getDBData(magicType));
 			String levelStr = "Lv" + magicLevel;
@@ -448,7 +455,7 @@ public class ShopItem2 extends CCLayer {
 			}
 			
 			if (magicLevel < 20) {
-				int price = userData.magicPrice[magicNumber][magicLevel];
+				price = userData.magicPrice[magicNumber][magicLevel];
 				magicLabel1.setString(new NumberComma().numberComma(price));	
 			} else {
 				magicLabel1.setString("MAX");

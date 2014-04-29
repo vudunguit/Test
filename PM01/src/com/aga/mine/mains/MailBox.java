@@ -93,6 +93,7 @@ public class MailBox {
 					mailItem = new BroomstickItem();
 					mailItem.serial_number = mailArray[0];
 					mailItem.sender_id = mailArray[1];
+					mailItem.category = mailArray[2];
 					mailItem.quantity = mailArray[3];
 					mailItem.date = mailArray[4];
 					// 친구가 아닌사람이 우편물을 보낼 경우 aquery로 사용하여 얻어올려고 했으나 final처리에 막혀 pass하였음.
@@ -102,6 +103,7 @@ public class MailBox {
 					mailItem = new GoldItem();
 					mailItem.serial_number = mailArray[0];
 					mailItem.sender_id = mailArray[1];
+					mailItem.category = mailArray[2];
 					mailItem.quantity = mailArray[3];
 					mailItem.date = mailArray[4];
 					mailItem.sender_name = getFacebookName(mailItem.sender_id);

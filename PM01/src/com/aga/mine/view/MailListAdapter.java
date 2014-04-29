@@ -2,18 +2,24 @@ package com.aga.mine.view;
 
 import java.util.ArrayList;
 
+import org.cocos2d.nodes.CCDirector;
+
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aga.mine.mains.Constant;
 import com.aga.mine.mains.DataFilter;
+import com.aga.mine.mains.FacebookData;
 import com.aga.mine.mains.MailBox;
+import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.R;
 import com.androidquery.AQuery;
+import com.facebook.android.Facebook;
 
 public class MailListAdapter extends BaseAdapter {
 	private ArrayList<MailItem> mMailItemList;
@@ -67,21 +73,44 @@ public class MailListAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				// 일반 버튼같이 down상태에서는 이미지 변경이 가능할까요?
 				String serialNumber = mMailItemList.get(position).serial_number;
+
 				if (!serialNumber.equals("")) {
-					DataFilter.deleteMail(serialNumber);
-					if (mTab == Constant.MAIL_TAB_BROOM) {
-						// 빗자루 화면 갱신  
-						holder.image.setImageResource(R.drawable.mail_broomstickbutton2);
-						mMailItemList.remove(position);
-						MailBox.postNumber.setString(mMailItemList.size() + " ");
-						MailListAdapter.this.notifyDataSetChanged();
+					long value;
+					boolean goldLimit = true;
+					if (mMailItemList.get(position).category.equals("Gold")) {
+						value = Long.parseLong(FacebookData.getinstance().getDBData("Gold")) + Long.parseLong(mMailItemList.get(position).quantity);
+						if (value > 16777215) {
+							goldLimit = false;
+							CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									Toast.makeText(MainApplication.getInstance().getApplicationContext(), "골드가 넘칩니다.", Toast.LENGTH_LONG).show();
+								}
+							});
+						} else {
+							FacebookData.getinstance().modDBData("Gold", "" + value);	
+						}
 					} else {
-						// 골드 화면 갱신
-						holder.image.setImageResource(R.drawable.mail_giftbutton2);
-						mMailItemList.remove(position);
-						MailBox.postNumber.setString(mMailItemList.size() + " ");
-						MailListAdapter.this.notifyDataSetChanged();
+						value = Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick")) + Integer.parseInt(mMailItemList.get(position).quantity);
+						FacebookData.getinstance().modDBData("ReceivedBroomstick", "" + value);
 					}
+					if (goldLimit) {
+						DataFilter.deleteMail(serialNumber);
+						if (mTab == Constant.MAIL_TAB_BROOM) {
+							// 빗자루 화면 갱신  
+							holder.image.setImageResource(R.drawable.mail_broomstickbutton2);
+							mMailItemList.remove(position);
+							MailBox.postNumber.setString(mMailItemList.size() + " ");
+							MailListAdapter.this.notifyDataSetChanged();
+						} else {
+							// 골드 화면 갱신
+							holder.image.setImageResource(R.drawable.mail_giftbutton2);
+							mMailItemList.remove(position);
+							MailBox.postNumber.setString(mMailItemList.size() + " ");
+							MailListAdapter.this.notifyDataSetChanged();
+						}
+					}
+					
 				}
 			}
 		});
@@ -93,11 +122,15 @@ public class MailListAdapter extends BaseAdapter {
 		
 		//set facebook profile image
 		AQuery aq = mAq.recycle(convertView);
-		String url = "https://graph.facebook.com/" + senderID +"/picture";
-		if(aq.shouldDelay(position, convertView, parent, url)){
-			
-		}else{
-			aq.id(holder.profile).image(url, true, true);
+		if (Long.parseLong(senderID) < 2) {
+			aq.id(holder.profile).image(R.drawable.mail_pumkin);
+		} else {
+			String url = "https://graph.facebook.com/" + senderID +"/picture";
+			if(aq.shouldDelay(position, convertView, parent, url)){
+				
+			}else{
+				aq.id(holder.profile).image(url, true, true);
+			}
 		}
 		
 		// id대신 name을 얻어야 되네요.(친구가 아닐 수 있습니다.)

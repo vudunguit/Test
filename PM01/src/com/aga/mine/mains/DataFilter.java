@@ -140,8 +140,6 @@ public class DataFilter {
 	// 3
 	public static void setUserDBData(String facebookID) {
 		Log.e("DataFilter", "setUserDBData");
-//		try {
-//			String userDataCreate = 
 					new DataController().execute(
 							"0,RequestModeUpdate" +
 							"*1,"  + facebookID + 
@@ -160,15 +158,7 @@ public class DataFilter {
 							"*14," +DefaultUserData.earthLevel +
 							"*15," +DefaultUserData.mirrorLevel +
 							"*16," +DefaultUserData.emoticons +
-							"*17," +DefaultUserData.invite)
-//							.get()
-							;
-//			Log.e("DataFilter", "setUserDBData : " + userDataCreate);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		} catch (ExecutionException e) {
-//			e.printStackTrace();
-//		}
+							"*17," +DefaultUserData.invite);
 	}
 	
 	public static void setUserDBData(Map<String, String> mapData) {
@@ -335,7 +325,6 @@ public class DataFilter {
 		}
 		return "error";
 	}
-	
 	
 	class DefaultUserData {
 		final static int level = 1;
