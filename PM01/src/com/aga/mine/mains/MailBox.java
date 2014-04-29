@@ -1,7 +1,7 @@
 ﻿package com.aga.mine.mains;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
+import java.util.Iterator;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.menus.CCMenu;
@@ -13,17 +13,23 @@ import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.aga.mine.view.BroomstickItem;
 import com.aga.mine.view.GoldItem;
 import com.aga.mine.view.MailItem;
-import com.aga.mine.view.MailListAdapter;
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxCallback;
+import com.androidquery.callback.AjaxStatus;
+import com.sromku.simple.fb.entities.Profile;
 
 public class MailBox {
-
+	
 	final String commonfolder = "00common/";
 
 	final int mailcloseButton = 1008;
@@ -56,6 +62,25 @@ public class MailBox {
 		this(parentLayer, imageFolder, nodeThis, Constant.MAIL_TAB_BROOM);
 	}
 
+	private String getFacebookName(String id) {
+		if (id.equals("0")) {
+//			return "보상";
+			return "reward";
+		} else if (id.equals("1")) {
+//			return "호박을찾아라";
+			return "PumpkinMines";
+		} else if (FacebookData.getinstance().getUserInfo().getId().equals(id)) {
+//			return FacebookData.getinstance().getUserInfo().getName();
+			return "구 매";
+		} else {
+			for (Profile friend : FacebookData.getinstance().getFriendsInfo()) {
+				if (friend.getId().equals(id)) {
+					return friend.getName();
+				}
+			}
+		}
+		return "unknown";
+	}
 	public MailBox(CCLayer parentLayer, String imageFolder, CCNode nodeThis, int selectedTab) {
 		String[] mail = DataFilter.readMail();
 		for (String string : mail) {
@@ -70,7 +95,8 @@ public class MailBox {
 					mailItem.sender_id = mailArray[1];
 					mailItem.quantity = mailArray[3];
 					mailItem.date = mailArray[4];
-					mailItem.sender_name = FacebookData.getinstance().getUserInfo().getName();
+					// 친구가 아닌사람이 우편물을 보낼 경우 aquery로 사용하여 얻어올려고 했으나 final처리에 막혀 pass하였음.
+					mailItem.sender_name = getFacebookName(mailItem.sender_id);
 					mBroomList.add(mailItem);
 				} else {
 					mailItem = new GoldItem();
@@ -78,7 +104,7 @@ public class MailBox {
 					mailItem.sender_id = mailArray[1];
 					mailItem.quantity = mailArray[3];
 					mailItem.date = mailArray[4];
-					mailItem.sender_name = FacebookData.getinstance().getUserInfo().getName();
+					mailItem.sender_name = getFacebookName(mailItem.sender_id);
 					mGoldList.add(mailItem);
 				}
 			}
