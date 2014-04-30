@@ -581,9 +581,9 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 
 		ending = new GameEnding();
 		// scene.addChild(ending, GameConfig.share().kDepthPopup);
-		hudLayer.addChild(ending, GameConfig.share().kDepthPopup, 1234);
-		ending.setVisible(false);
-		ending.setIsTouchEnabled(false);
+//		hudLayer.addChild(ending, GameConfig.share().kDepthPopup, 1234);
+//		ending.setVisible(false);
+//		ending.setIsTouchEnabled(false);
 		// game.hud.gameEnding = ending;
 		// game.hud.controlHudLayer = hudLayer;
 		/*
