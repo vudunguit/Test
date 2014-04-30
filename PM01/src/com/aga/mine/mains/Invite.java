@@ -36,6 +36,7 @@ public class Invite extends CCLayer {
 	CCSprite boardFrame;
 	CCSprite sprite1;
 	CCSprite sprite2;
+	CCLabel  inviteQuantity;
 	
 	public static float displayLeft;
 	public static float displayRight;
@@ -64,13 +65,13 @@ public class Invite extends CCLayer {
 		public void onInvited(List<String> invitedFriends, String requestId) {
 			//To Do:
 			Log.e("Invite", "Callback_7 - onInvited" );
-			Log.d("LDK", "requestId:" + requestId);
-			String myID = FacebookData.getinstance().getUserInfo().getId();
+//			Log.d("LDK", "requestId:" + requestId);
+			int inviteCount = 	Integer.parseInt(FacebookData.getinstance().getDBData("InviteNumber"));
 			for (String string : invitedFriends) {
-				Log.e("Invite", "invitedFriend : " + string);
+//				Log.e("Invite", "invitedFriend : " + string);
 				String requestID = requestId;
-				String recipientID = myID;
-				String senderID = myID;
+				String recipientID = FacebookData.getinstance().getUserInfo().getId();
+				String senderID = "1";
 				String sendMailData = 
 						"0,RequestModeMailBoxAdd" +
 						"*22," + requestID + 
@@ -81,7 +82,11 @@ public class Invite extends CCLayer {
 				
 				//save date to shared pref
 				Util.setInvite(string);
+				inviteCount++;
+				
 			}
+			FacebookData.getinstance().modDBData("InviteNumber", String.valueOf(inviteCount));
+			inviteQuantity.setString(String.valueOf(inviteCount));
 			//refresh invite scrollview
 			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_INVITELIST);
 		}
@@ -141,11 +146,11 @@ public class Invite extends CCLayer {
 		inviteCountText.setPosition(parentSprite.getContentSize().width / 2, 187);
 		
 		String app_Invite = FacebookData.getinstance().getDBData("InviteNumber");
-		CCLabel  inviteCount = CCLabel.makeLabel(
+		inviteQuantity = CCLabel.makeLabel(
 				new NumberComma().numberComma(app_Invite), "Arial", 35); // 현재 초대 인원 (노란색)
-		parentSprite.addChild(inviteCount);
-		inviteCount.setColor(ccColor3B.ccYELLOW);
-		inviteCount.setPosition(parentSprite.getContentSize().width/2 + 60, 190);
+		parentSprite.addChild(inviteQuantity);
+		inviteQuantity.setColor(ccColor3B.ccYELLOW);
+		inviteQuantity.setPosition(parentSprite.getContentSize().width/2 + 60, 190);
 
 		CCLabel inviteText = CCLabel.makeLabel("초대는 하루 20명까지 가능 합니다.", "Arial", 20); // 흰색
 		parentSprite.addChild(inviteText);

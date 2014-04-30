@@ -89,7 +89,7 @@ public class MailListAdapter extends BaseAdapter {
 								}
 							});
 						} else {
-							FacebookData.getinstance().modDBData("Gold", "" + value);	
+							FacebookData.getinstance().modDBData("Gold", String.valueOf(value));
 						}
 					} else {
 						value = Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick")) + Integer.parseInt(mMailItemList.get(position).quantity);
@@ -107,13 +107,13 @@ public class MailListAdapter extends BaseAdapter {
 							// 빗자루 화면 갱신  
 							holder.image.setImageResource(R.drawable.mail_broomstickbutton2);
 							mMailItemList.remove(position);
-							MailBox.postNumber.setString(mMailItemList.size() + " ");
+							MailBox.postNumber.setString(String.valueOf(mMailItemList.size()));
 							MailListAdapter.this.notifyDataSetChanged();
 						} else {
 							// 골드 화면 갱신
 							holder.image.setImageResource(R.drawable.mail_giftbutton2);
 							mMailItemList.remove(position);
-							MailBox.postNumber.setString(mMailItemList.size() + " ");
+							MailBox.postNumber.setString(String.valueOf(mMailItemList.size()));
 							MailListAdapter.this.notifyDataSetChanged();
 						}
 					}

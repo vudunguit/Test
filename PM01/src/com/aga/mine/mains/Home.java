@@ -45,6 +45,7 @@ public class Home extends CCLayer{
 	final int goldTab = 1013;
 	
 	private HomeTop mHomeTop;
+	private HomeMiddle mHomeMiddle;
 	
 //	static CCLayer scroll = CCLayer.node(); // 안드로이드 뷰로 인하여 제거됨.
 	
@@ -64,12 +65,12 @@ public class Home extends CCLayer{
 		public void onInvited(List<String> invitedFriends, String requestId) {
 			//when sending broom is successful, this callback is called.
 			Log.e("Invite", "Callback_7 - onInvited" );
-			Log.d("LDK", "requestId:" + requestId);
+//			Log.d("LDK", "requestId:" + requestId);
 			for (String string : invitedFriends) {
-				Log.e("Invite", "invitedFriend : " + string);
+//				Log.e("Invite", "invitedFriend : " + string);
 				String requestID = requestId;
-				String recipientID = FacebookData.getinstance().getUserInfo().getId();
-				String senderID = "1";
+				String recipientID = string;
+				String senderID = FacebookData.getinstance().getUserInfo().getId();
 				String sendMailData = 
 						"0,RequestModeMailBoxAdd" +
 						"*22," + requestID + 
@@ -110,7 +111,7 @@ public class Home extends CCLayer{
 	// 백 보드 설정
 	private CCSprite setBackBoardMenu(CCSprite parent, String imageFullPath) {
 		CCSprite backBoard = setHomeMenu(parent, imageFullPath);
-		new HomeMiddle(backBoard, folder, this);
+		mHomeMiddle = new HomeMiddle(backBoard, folder, this);
 		return backBoard;
 	}
 
@@ -234,17 +235,17 @@ public class Home extends CCLayer{
 				}
 			}
 		} else if (value == presentBroomstick) {
-			Log.e("Home", "presentBroomstick : " + value);
-			String[] items = data.split(",");
-			for (String item : items) {
-				if (!item.equals("presentBroomstick")) {
-					String senderID = FacebookData.getinstance().getUserInfo().getId();
-					String sendMailData = 
-							"0,RequestModeMailBoxAdd*22," + FacebookData.getinstance().getRequestID() + 
-							"*1," + item + "*19," + senderID + "*20,Broomstick*21," + 1;
-					DataFilter.sendMail(sendMailData);
-				}
-			}
+//			Log.e("Home", "presentBroomstick : " + value);
+//			String[] items = data.split(",");
+//			for (String item : items) {
+//				if (!item.equals("presentBroomstick")) {
+//					String senderID = FacebookData.getinstance().getUserInfo().getId();
+//					String sendMailData = 
+//							"0,RequestModeMailBoxAdd*22," + FacebookData.getinstance().getRequestID() + 
+//							"*1," + item + "*19," + senderID + "*20,Broomstick*21," + 1;
+//					DataFilter.sendMail(sendMailData);
+//				}
+//			}
 		}
 
 	}
@@ -365,16 +366,16 @@ public class Home extends CCLayer{
 				CCDirector.sharedDirector().replaceScene(scene);
 			}
 		} else if (value == presentBroomstickButton) {
-			Log.e("Home", "presentBroomstick : " + value);
-			String[] items = data.split(",");
-			for (String item : items) {
-				String senderID = FacebookData.getinstance().getUserInfo()
-						.getId();
-				String sendMailData = "0,RequestModeMailBoxAdd*22,"
-						+ FacebookData.getinstance().getRequestID() + "*1,"
-						+ item + "*19," + senderID + "*20,Broomstick*21," + 1;
-				DataFilter.sendMail(sendMailData);
-			}
+//			Log.e("Home", "presentBroomstick : " + value);
+//			String[] items = data.split(",");
+//			for (String item : items) {
+//				String senderID = FacebookData.getinstance().getUserInfo()
+//						.getId();
+//				String sendMailData = "0,RequestModeMailBoxAdd*22,"
+//						+ FacebookData.getinstance().getRequestID() + "*1,"
+//						+ item + "*19," + senderID + "*20,Broomstick*21," + 1;
+//				DataFilter.sendMail(sendMailData);
+//			}
 		} else if (value == broomTab) {
 			isBroomTab = true;
 			mailBoxLayer.removeChildByTag(999, true);

@@ -18,6 +18,7 @@ import org.cocos2d.types.ccColor3B;
 
 import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.pages.UserData;
+import com.aga.mine.util.Util;
 
 import android.content.Context;
 import android.util.Log;
@@ -48,9 +49,29 @@ public class ShopGold2 extends CCLayer {
 		return scene;
 	}
 
+	int gold;
+	public InviteCallback mInviteCallback = new InviteCallback() {
+
+		@Override
+		public void onInvited(List<String> invitedFriends, String requestId) {
+			//To Do:
+			String senderID = FacebookData.getinstance().getUserInfo().getId();
+			
+			for (String recipientID : invitedFriends) {
+				Log.e("ShopGold2", "recipientID : " + recipientID);
+				String data = 
+						"0,RequestModeMailBoxAdd*22," + requestId + "*1," + recipientID + "*19," + senderID + "*20,Gold*21," + gold;				
+				DataFilter.sendMail(data);
+			}
+			
+		}
+    };
+	
 	public ShopGold2() {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
+		
+		MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
 		
 		// BackGround 파일
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
@@ -193,7 +214,7 @@ public class ShopGold2 extends CCLayer {
 		String Product = "gold";
 		float bonus = 1.2f;
 		double usd = (Double)((CCNode)sender).getUserData();
-		int gold = 5000;
+		gold = 5000;
 		
 		for (int i = 0; i < goldArray.length; i++) {
 			if (usd == goldArray[i][0]) {
@@ -215,18 +236,24 @@ public class ShopGold2 extends CCLayer {
 		
 		// 자신에게 invite 가능한가요??
 		
-//		double requestID = Math.random() * 9223372036854775807L;  //facebook 알림글번호로 대체할 것
-		long requestID = FacebookData.getinstance().getRequestID();  //test용 
-		String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
-		String senderID = FacebookData.getinstance().getUserInfo().getId();
-		String data = 
-				"0,RequestModeMailBoxAdd*22," + requestID + 
-				"*1," + recipientID + "*19," + senderID + "*20,Gold*21," + gold;
 		
-		DataFilter.sendMail(data);
+//		double requestID = Math.random() * 9223372036854775807L;  //facebook 알림글번호로 대체할 것
+//		String senderID = FacebookData.getinstance().getUserInfo().getId();
+		
+				String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
+				MainApplication.getInstance().getActivity().sendInvite(recipientID, "우편물 발송", null);
+//				FacebookData.getinstance().getRequestID(recipientID);  //test용 
+
+//		
+//		String data = 
+//				"0,RequestModeMailBoxAdd*22," + requestID + 
+//				"*1," + recipientID + "*19," + senderID + "*20,Gold*21," + gold;
+//		
+//		DataFilter.sendMail(data);
+		
+		
 //		Passport.SKU = Product;
 //		Log.e("ShopGold2", "buttonCallback(usd) : " + usd);
-		
 		
 //		inAppBilling();
 	}

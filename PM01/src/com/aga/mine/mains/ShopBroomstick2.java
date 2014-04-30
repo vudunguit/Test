@@ -16,6 +16,7 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
+import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.pages.UserData;
 
 import android.content.Context;
@@ -44,10 +45,30 @@ public class ShopBroomstick2 extends CCLayer {
 //		scene.addChild(InvitationReceiver.getInstance().getInvitationPopup());
 		return scene;
 	}
+	
+	double quantity;
+	public InviteCallback mInviteCallback = new InviteCallback() {
+
+		@Override
+		public void onInvited(List<String> invitedFriends, String requestId) {
+			//To Do:
+			String senderID = FacebookData.getinstance().getUserInfo().getId();
+			
+			for (String recipientID : invitedFriends) {
+				Log.e("ShopBroomstick2", "recipientID : " + recipientID);
+				String data = 
+						"0,RequestModeMailBoxAdd*22," + requestId + "*1," + recipientID + "*19," + senderID + "*20,Broomstick*21," + quantity;				
+				DataFilter.sendMail(data);
+			}
+			
+		}
+    };
 
 	public ShopBroomstick2() {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
+		
+		MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
 		
 		// BackGround 파일
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
@@ -195,20 +216,24 @@ public class ShopBroomstick2 extends CCLayer {
 	
 	public void buttonCallback(Object sender) {
 		double[] value = (double[]) ((CCNode)sender).getUserData();
-		
+		quantity = value[1];
 		// 로그용
 		for (double d : value) {
 			Log.e("ShopBroomstick2", "buttonCallback : " + (int)d);
 		}
 		
-//		double requestID = Math.random() * 9223372036854775807L;  //facebook 알림글번호로 대체할 것
-		long requestID = FacebookData.getinstance().getRequestID();  //test용 
-		String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
-		String senderID = FacebookData.getinstance().getUserInfo().getId();
-		String data = 
-				"0,RequestModeMailBoxAdd*22," + requestID + 
-				"*1," + recipientID + "*19," + senderID + "*20,Broomstick*21," + value[1];
-		DataFilter.sendMail(data);
+				String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
+				MainApplication.getInstance().getActivity().sendInvite(recipientID, "우편물 발송", null);
+//				FacebookData.getinstance().getRequestID(recipientID);  //test용 
+		
+////		double requestID = Math.random() * 9223372036854775807L;  //facebook 알림글번호로 대체할 것
+//		long requestID = FacebookData.getinstance().getRequestID();  //test용 
+//		String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
+//		String senderID = FacebookData.getinstance().getUserInfo().getId();
+//		String data = 
+//				"0,RequestModeMailBoxAdd*22," + requestID + 
+//				"*1," + recipientID + "*19," + senderID + "*20,Broomstick*21," + value[1];
+//		DataFilter.sendMail(data);
 
 		
 	}
