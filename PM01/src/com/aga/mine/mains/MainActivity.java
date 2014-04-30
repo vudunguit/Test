@@ -377,6 +377,7 @@ public class MainActivity extends Activity {
     
     public void sendInvite(String friend, String message, String data) {
     	Log.e("MainActivity", "Callback_4 - sendInvite()");
+    	Log.e("MainActivity", "친구초대를 제외한 나머지에서는 확인안누르고 되야함");
     	mSimpleFacebook.invite(friend, message, mOnInviteListener, data); // 이걸로 사용하는게 맞는지 모르겠네요.
     	// 실패(오류) - "요청 실패"라는 토스트
     	// 취소 - "요청 취소" 라는 토스트

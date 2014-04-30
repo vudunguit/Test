@@ -543,7 +543,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// 뻗어버림...
 	}
 
-	static GameEnding ending = null;
+	static GameEnding ending;
 
 	//
 	// public static boolean getEnding() {
@@ -583,6 +583,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// scene.addChild(ending, GameConfig.share().kDepthPopup);
 		hudLayer.addChild(ending, GameConfig.share().kDepthPopup, 1234);
 		ending.setVisible(false);
+		ending.setIsTouchEnabled(false);
 		// game.hud.gameEnding = ending;
 		// game.hud.controlHudLayer = hudLayer;
 		/*
@@ -2362,6 +2363,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			}
 			
 			Game.ending.setVisible(true);
+			Game.ending.setIsTouchEnabled(true);
 			GameData.share().isMultiGame = true;
 			// GameEnding ending = GameEnding.share(this.mContext);
 			// this.addChild(ending, GameConfig.share().kDepthPopup);

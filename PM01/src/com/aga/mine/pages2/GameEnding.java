@@ -11,6 +11,7 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
+import com.aga.mine.mains.FacebookData;
 import com.aga.mine.mains.GameData;
 import com.aga.mine.mains.Home;
 import com.aga.mine.mains.Home2;
@@ -21,6 +22,11 @@ public class GameEnding extends CCLayer {
 	String folder = "70game_ending/";
 	
 	CGSize winSize = CCDirector.sharedDirector().winSize();
+	String myName;
+	String myID;
+	int myScore;
+	int myGold;
+	int myExp;
 
 //	public static CCScene scene() {
 //		CCScene scene = CCScene.node();
@@ -35,6 +41,11 @@ public class GameEnding extends CCLayer {
 	}
 
 	public GameEnding() {
+		myName = FacebookData.getinstance().getUserInfo().getName();
+		myID = FacebookData.getinstance().getUserInfo().getId();
+		myGold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
+		myExp = Integer.parseInt(FacebookData.getinstance().getDBData("Exp"));
+		myScore = (int) (Math.random() * 1000) + 1;
 		mainMenu();
 		setpoint();
 	}
@@ -46,9 +57,7 @@ public class GameEnding extends CCLayer {
 	private void mainMenu() {
 		
 		String userColor = "";
-		int facebookID = 1231251551;
 		int randomPoint = (int) (Math.random() * 1000) + 1;
-		int[] values = {randomPoint, (int)(randomPoint / 5.0f), (int)(randomPoint * 1.5f)};
 		
 		CCSprite bg = CCSprite.sprite("00common/" + "opacitybg.png");
 		this.addChild(bg);
@@ -73,24 +82,24 @@ public class GameEnding extends CCLayer {
 		picture.setScale(1.4f);
 		picture.setPosition(240, backboard.getContentSize().height - 195);
 		
-		CCLabel name = CCLabel.makeLabel("홍길동", "Arial", 30);
+		CCLabel name = CCLabel.makeLabel(myName, "Arial", 30);
 		backboard.addChild(name);
 		name.setAnchorPoint(0, 0.5f);
 		name.setPosition(
 				picture.getPosition().x + (picture.getContentSize().width * (1 - picture.getAnchorPoint().x))
 				+ (picture.getScale() * 20), picture.getPosition().y);
 		
-		CCLabel point = CCLabel.makeLabel(values[0] + " ", "Arial", 30);
+		CCLabel point = CCLabel.makeLabel(String.valueOf(myScore), "Arial", 30);
 		backboard.addChild(point);
 		point.setAnchorPoint(1, 0.5f);
 		point.setPosition(460, backboard.getContentSize().height - 280);
 		
-		CCLabel gold = CCLabel.makeLabel(values[1] + " ", "Arial", 30);
+		CCLabel gold = CCLabel.makeLabel(String.valueOf(myGold), "Arial", 30);
 		backboard.addChild(gold);
 		gold.setAnchorPoint(1, 0.5f);
 		gold.setPosition(460, backboard.getContentSize().height - 338); // 340
 		
-		CCLabel exp = CCLabel.makeLabel(values[2] + " ", "Arial", 30);
+		CCLabel exp = CCLabel.makeLabel(String.valueOf(myExp), "Arial", 30);
 		backboard.addChild(exp);
 		exp.setAnchorPoint(1, 0.5f);
 		exp.setPosition(460, backboard.getContentSize().height - 396); //400
@@ -99,7 +108,7 @@ public class GameEnding extends CCLayer {
 		// 경험치 바
 		CCSprite expbg = null;
 		// 경험치가 0일때 true로 사용할 것
-		if (values[2] < 500) {
+		if (myExp < 500) {
 			expbg = base;	
 		} else {
 			expbg = CCSprite.sprite(folder + "ending-exp01.png");
@@ -146,7 +155,7 @@ public class GameEnding extends CCLayer {
 				folder + "ending-button1.png",
 				folder + "ending-button2.png",
 				this, "clicked");
-		buttonL.setUserData(values[2] / 10);
+		buttonL.setUserData(myScore / 10); // GameScore 손실 대신 gold로 대체 
 		CCSprite textL = CCSprite.sprite(Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-defense.png"));
 		buttonL.addChild(textL);
 		textL.setPosition(buttonL.getContentSize().width / 2, buttonL.getContentSize().height / 2);
@@ -193,11 +202,9 @@ public class GameEnding extends CCLayer {
 		return childSprite;
 	}
 	
-	
-	int gamePoint = 1000;
 	CCLabel myPoint = null;
 	private void setpoint() {
-		myPoint = CCLabel.makeLabel("Gold : " + gamePoint, "Arial", 30);
+		myPoint = CCLabel.makeLabel("Gold : " + myScore, "Arial", 30);
 		this.addChild(myPoint, 2);
 		myPoint.setPosition(winSize.width / 2, (winSize.height / 5) * 4);
 	}
@@ -216,8 +223,9 @@ public class GameEnding extends CCLayer {
 			CCDirector.sharedDirector().replaceScene(scene);
 		} else {
 			if (buttonActive) {
-				gamePoint -= value;
-				myPoint.setString("Gold : " + gamePoint);
+				myGold -= value;
+				myPoint.setString("Gold : " + myGold);
+
 				buttonActive = false;
 			}
 		}
