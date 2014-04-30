@@ -32,6 +32,9 @@ public class HomeTop extends CCLayer{
 	final int optionButton = 1005;
 	final int inviteButton = 1006;
 	
+	private CCLabel broomstickEA;
+	private CCLabel gold;
+			
 	//주간 순위 갱신 변수
 	private float mSecondToRefreshWeek; //단위는 sec, 주간순위를 갱신하기까지 남은 시간
 	private long mInitialSecond; //단위는 ms, 최초 시간
@@ -118,7 +121,7 @@ public class HomeTop extends CCLayer{
 		
 
 		// 지팡이 수량
-		CCLabel broomstickEA = CCLabel.makeLabel("+" + mBroomstickCount, "Arial", 24.0f); // 지팡이 수량
+		broomstickEA = CCLabel.makeLabel("+" + mBroomstickCount, "Arial", 24.0f); // 지팡이 수량
 		broomstickBg.addChild(broomstickEA);
 		broomstickEA.setAnchorPoint(0, 0.5f);
 		broomstickEA.setPosition(
@@ -134,7 +137,7 @@ public class HomeTop extends CCLayer{
 		broomstickTime.setAnchorPoint(1.0f, 0.5f);
 
 		// 골드
-		CCLabel gold = CCLabel.makeLabel(
+		gold = CCLabel.makeLabel(
 				new NumberComma().numberComma(FacebookData.getinstance().getDBData("Gold")), "Arial", 22.0f);
 		goldBg.addChild(gold);
 		gold.setPosition(goldBg.getContentSize().width - 10.0f, gold.getContentSize().height / 2 + 5.0f);
@@ -172,6 +175,12 @@ public class HomeTop extends CCLayer{
 		periodText.setPosition(
 				banner.getContentSize().width / 2, 
 				banner.getContentSize().height / 2);
+	}
+	
+	public void getDBData() {
+		mBroomstickCount = Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick"));
+		broomstickEA.setString(String.valueOf(mBroomstickCount));
+		gold.setString(new NumberComma().numberComma(FacebookData.getinstance().getDBData("Gold")));
 	}
 	
 	public void setLeftTime(float dt) {

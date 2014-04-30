@@ -1,5 +1,6 @@
 ﻿package com.aga.mine.mains;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.cocos2d.menus.CCMenu;
@@ -40,6 +41,10 @@ public class HomeMiddle {
 	}
 	
 	private void userInfo(CCSprite parentSprite, String imageFolder, CCNode nodeThis) {
+		String userIdStr = FacebookData.getinstance().getUserInfo().getId();
+		String userNameStr = FacebookData.getinstance().getUserInfo().getName();
+		List<GameScore> gameScores = FacebookData.getinstance().getGameScore();
+		
 		CCSprite profileBg = CCSprite.sprite(imageFolder + "home-profileBg-hd" + fileExtension); // 프로필 백그
 		parentSprite.addChild(profileBg, 10, 10);
 		profileBg.setPosition(
@@ -64,7 +69,7 @@ public class HomeMiddle {
 		profilePicture.addChild(userImage);
 		
 		// facebook 이미지 다운로드 및 교체
-		String etUrl = "https://graph.facebook.com/" + FacebookData.getinstance().getUserInfo().getId() +"/picture";
+		String etUrl = "https://graph.facebook.com/" + userIdStr +"/picture";
 		mDownloader = new ImageDownloader(etUrl, new ImageLoaderListener() {
 			@Override
 			public void onImageDownloaded(CCSprite profile) {
@@ -93,8 +98,6 @@ public class HomeMiddle {
 		levelProgressBar.setPosition(
 				profileBg.getContentSize().width/2+10f,
 				levelProgressBar.getContentSize().height/2+25.0f);
-		
-		
 		
 		int levelValue = Integer.parseInt(FacebookData.getinstance().getDBData("LevelCharacter"));
 		float expValue = Float.parseFloat(FacebookData.getinstance().getDBData("Exp"));
@@ -126,42 +129,50 @@ public class HomeMiddle {
 				levelProgressBar.getContentSize().width/2,
 				levelProgressBar.getContentSize().height/2);
 		
-		
-		String rankingStr = "" + FacebookData.getinstance().ranking;
-		Log.e("HomeMiddle", "ranking : " + rankingStr);
-//		String rankingStr = "0";
-//		String[][] rankingArray = DataFilter.getRanking("(" + FacebookData.getinstance().getUserInfo().getId() + ")");
-//		for (String[] strings : rankingArray) {
-//			if (strings[0].equals(FacebookData.getinstance().getUserInfo().getId())) {
-//				rankingStr = strings[0];
-//			}
-//		}
-
-		CCLabel  ranking = CCLabel.makeLabel(rankingStr, "Arial", 30); // 순위
-		ranking.setPosition(
-				ranking.getContentSize().width/2+55.0f, 
+		CCLabel userRanking = CCLabel.makeLabel("0", "Arial", 30); // 순위
+		userRanking.setPosition(
+				userRanking.getContentSize().width/2+55.0f, 
 				profileBg.getContentSize().height-60.0f);
 		
-		CCLabel userName;
-		
-		if (FacebookData.getinstance().getUserInfo() != null) {
-			userName = CCLabel.makeLabel(FacebookData.getinstance().getUserInfo().getName(), "Arial", 30); // 이름
-		} else {
-			userName = CCLabel.makeLabel("이름 불러오지 못함.", "Arial", 30); // 이름
-		}
+		CCLabel userName = CCLabel.makeLabel(userNameStr, "Arial", 30); // 이름
 		userName.setPosition(
-				profilePicture.getPosition().x + ((1 - profilePicture.getAnchorPoint().x) * profilePicture.getContentSize().width) + 12, 
-				profileBg.getContentSize().height - userName.getContentSize().height / 2 - 20);
+				profilePicture.getPosition().x
+						+ ((1 - profilePicture.getAnchorPoint().x) * profilePicture
+								.getContentSize().width) + 12,
+				profileBg.getContentSize().height
+						- userName.getContentSize().height / 2 - 20);
 		userName.setAnchorPoint(0.0f, 0.5f);
 
-		CCLabel  score = CCLabel.makeLabel(
-				new NumberComma().numberComma(FacebookData.getinstance().getDBData("Point")),
+		CCLabel score = CCLabel.makeLabel(new NumberComma()
+				.numberComma(FacebookData.getinstance().getDBData("Point")),
 				"Arial", 30); // 최고 점수
-		score.setPosition(
-				userName.getPosition().x, 
-				profileBg.getContentSize().height- score.getContentSize().height / 2 - 60.0f);
-				score.setAnchorPoint(0.0f, 0.5f);
+		score.setPosition(userName.getPosition().x,
+				profileBg.getContentSize().height
+						- score.getContentSize().height / 2 - 60.0f);
+		score.setAnchorPoint(0.0f, 0.5f);
+		
+		int myRank = 1;
+		int myScore = 1;
+		
+		for (GameScore gameScore : gameScores) {
+			if (gameScore.getId().equals(userIdStr)) {
 
+				myScore = gameScore.score;
+				score.setString(String.valueOf(myScore));
+			}
+		}
+		
+		for (GameScore gameScore : gameScores) {
+			if (gameScore.score > myScore) {
+				myRank++;
+			}
+		}
+		
+		Log.e("HomeMiddle", "rank : " + myRank + ", score : " + myScore);
+		userRanking.setString(String.valueOf(myRank));
+		
+		
+			userRanking.setString(String.valueOf(myRank));
 				String[] Ko = {"전 : ","승 / ","패"," 18"};
 				String[] En = {"Played "," : W","/L "," 16"};
 							
@@ -200,7 +211,7 @@ public class HomeMiddle {
 		
 		profileBg.addChild(profilePicture);
 		profileBg.addChild(levelProgressBar);
-		profileBg.addChild(ranking);
+		profileBg.addChild(userRanking);
 		profileBg.addChild(userName);
 		profileBg.addChild(score);
 		profileBg.addChild(recordData);

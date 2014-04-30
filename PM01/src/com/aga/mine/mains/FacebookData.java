@@ -180,9 +180,9 @@ public class FacebookData {
 		this.recipientID = recipientID;
 	}
 
-	public long getRequestID() {
-		long requestID = (long) (Math.random() * 99L);  //test용
-		return requestID;
+	public void getRequestID(String recipientID) {
+		MainApplication.getInstance().getActivity().sendInvite(recipientID, "우편물 발송", null);
+//		return  (long) (Math.random() * 9223372036854775807L);  //test용
 	}
 
 	public List<GameScore> getGameScore() {
