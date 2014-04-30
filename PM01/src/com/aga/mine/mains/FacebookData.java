@@ -15,6 +15,7 @@ import org.cocos2d.nodes.CCDirector;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.facebook.Session;
 import com.sromku.simple.fb.entities.Profile;
@@ -54,6 +55,7 @@ public class FacebookData {
 	}
 	
 	public void modDBData(String key, String value) {
+		Log.e("FacebookData / modDBData", "key : " + key + ", value : " + value);
 		if (key == null || value == null || key.equals("") || value.equals("")) {
 			return;
 		}

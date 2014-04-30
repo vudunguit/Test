@@ -49,17 +49,25 @@ public class HomeTop extends CCLayer{
 	public HomeTop(CCSprite parentSprite, String imageFolder, CCNode nodeThis) {
 		//빗자루 수량 초기화
 		mBroomstickCount = Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick"));
-		//mBroomstickCount = 2; //test
-		long pastTime = Util.getBroomstickTime(); //경과 시간(ms), 
-		int broomCount = (int)(pastTime/(BROOMSTICK_REFRESH_TIME * 1000)); //15분 경과시 1개로 빗자루 수량 계산
-		if(mBroomstickCount + broomCount >= 6) {
-			mBroomstickCount = 6;
-		} else {
-			mBroomstickCount += broomCount;
-			mMiliToRefreshBroom = pastTime%(BROOMSTICK_REFRESH_TIME*1000); //빗자루 수량과 남은시간 계산후 다시 pref에 세팅
-			Util.setBroomstickTime(mMiliToRefreshBroom);
+		
+		// 빗자루 수량 최고값이 6으로 되어있어 풀어주는걸로 수정하였습니다.
+		
+		// 그리고 남은시간은 빗자루수가 6개 미만일시만 돌아야되고 6개가 될시 초기화 되야 합니다.
+		// 현재 백그라운드에서 계속 도는건지 초기화가 안되는건지 6개에서 사용하고 돌아와보면 사용한 시간과 일치하지 않은 남은시간이 되어있습니다.
+		if (mBroomstickCount < 6) {
+			//mBroomstickCount = 2; //test
+			long pastTime = Util.getBroomstickTime(); //경과 시간(ms), 
+			int broomCount = (int)(pastTime/(BROOMSTICK_REFRESH_TIME * 1000)); //15분 경과시 1개로 빗자루 수량 계산
+			if(mBroomstickCount + broomCount >= 6) {
+				mBroomstickCount = 6;
+			} else {
+				mBroomstickCount += broomCount;
+				mMiliToRefreshBroom = pastTime%(BROOMSTICK_REFRESH_TIME*1000); //빗자루 수량과 남은시간 계산후 다시 pref에 세팅
+				Util.setBroomstickTime(mMiliToRefreshBroom);
+			}
+			FacebookData.getinstance().modDBData("ReceivedBroomstick", String.valueOf(mBroomstickCount)); //DB에 빗자루 수량 insert
 		}
-		FacebookData.getinstance().modDBData("ReceivedBroomstick", String.valueOf(mBroomstickCount)); //DB에 빗자루 수량 insert
+		
 		
 		setTopMenu(parentSprite, imageFolder, nodeThis);
 		

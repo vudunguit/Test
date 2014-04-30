@@ -77,9 +77,10 @@ public class MailListAdapter extends BaseAdapter {
 				if (!serialNumber.equals("")) {
 					long value;
 					boolean goldLimit = true;
+					final int GOLD_MAXIMUM = 16777215;
 					if (mMailItemList.get(position).category.equals("Gold")) {
 						value = Long.parseLong(FacebookData.getinstance().getDBData("Gold")) + Long.parseLong(mMailItemList.get(position).quantity);
-						if (value > 16777215) {
+						if (value > GOLD_MAXIMUM) {
 							goldLimit = false;
 							CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
 								@Override
@@ -92,7 +93,13 @@ public class MailListAdapter extends BaseAdapter {
 						}
 					} else {
 						value = Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick")) + Integer.parseInt(mMailItemList.get(position).quantity);
+						if (value >= 6) {
+							
+							//빗자루의 총합이 6개 이상일시 남은시간 초기화 시키는 코드 넣어주시기 바랍니다.
+							
+						}
 						FacebookData.getinstance().modDBData("ReceivedBroomstick", "" + value);
+
 					}
 					if (goldLimit) {
 						DataFilter.deleteMail(serialNumber);
