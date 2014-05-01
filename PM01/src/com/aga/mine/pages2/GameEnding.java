@@ -35,10 +35,10 @@ public class GameEnding extends CCLayer {
 //		scene.addChild(layer);
 //		return scene;
 //	}
-	public static CCLayer layer() {
-		CCLayer layer = new GameEnding();
-		return layer;
-	}
+//	public static CCLayer layer() {
+//		CCLayer layer = new GameEnding();
+//		return layer;
+//	}
 
 	public GameEnding() {
 		myName = FacebookData.getinstance().getUserInfo().getName();

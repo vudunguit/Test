@@ -11,7 +11,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.aga.mine.mains.Config;
-import com.aga.mine.pages.Game.HudLayer;
 
 //일단 완료(중간에 gameover game.release 빼고)
 public class GameProgressBar extends CCLayer {
@@ -26,9 +25,9 @@ public class GameProgressBar extends CCLayer {
 	
 	Context mContext;
 
-	int kTagBase = 100;
-	int kTagIndicatorMe = 110;
-	int kTagIndicatorOther = 120;
+	public static final int kTagBase = 100;
+	public static final int kTagIndicatorMe = 110;
+	public static final int kTagIndicatorOther = 120;
 
 	CCSprite base;
 	CCSprite indicatorMe;
@@ -42,8 +41,8 @@ public class GameProgressBar extends CCLayer {
 	private long mGameTime;
 	private long mLeftTime;
 
-	public GameProgressBar(Context context) {
-		mContext = context;
+	public GameProgressBar() {
+		mContext = CCDirector.theApp.getApplicationContext();
 		CGSize winSize = CCDirector.sharedDirector().winSize();
 
 		base = CCSprite.sprite(hudLayerFolder + "game-progressBase-hd.png");
@@ -103,9 +102,6 @@ public class GameProgressBar extends CCLayer {
 	 * @return
 	 */
 	void startTime() {
-		//this.controlGameEnding = gameEnding;
-		
-		this.hudLayer = hudLayer;
 		Log.e("progressBar / startTime", "progressBar in");
 		Log.e("progressBar / startTime", "hudLayer : " + hudLayer);
 		Log.e("progressBar / startTime", "this.hudLayer : " + this.hudLayer);
@@ -174,7 +170,7 @@ public class GameProgressBar extends CCLayer {
 	
 	public void gameover() {
 		Config.getInstance().setDisableButton(true);
-		Game.ending.setVisible(true);
+		((com.aga.mine.pages2.HudLayer)getParent()).setVisible(true);
 		//hudLayer.getChildByTag(1234).setVisible(false);
 		
 		/*
@@ -190,7 +186,7 @@ public class GameProgressBar extends CCLayer {
 	
 	
 	// CGFloat 없어서 float 대체
-	void progress(float value, int tag) {
+	public void progress(float value, int tag) {
 		value = CGPoint.clampf(value, 0, 1);
 		float height = base.getContentSize().height * 0.3f;
 		float positionX = base.getContentSize().width * value;
@@ -198,8 +194,4 @@ public class GameProgressBar extends CCLayer {
 		base.getChildByTag(tag).setPosition(positionX, height);
 	}
 
-	private void remove() {
-		this.removeChildByTag(kTagIndicatorOther, true);
-		this.removeChildByTag(kTagIndicatorMe, true);
-	}
 }

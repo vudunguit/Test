@@ -2,18 +2,14 @@
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
-import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.layers.CCLayer;
-import org.cocos2d.menus.CCMenuItem;
-import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.types.CGPoint;
-
-import com.aga.mine.mains.NetworkController;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.aga.mine.mains.NetworkController;
 
 // for문 돌리면 서 size 또는 length로 얻어온 객체 있으면 별도로 size 변수 만들어서 그값으로 할것
 // 잘못하면 큰일남 ㅇㅇ
@@ -90,6 +86,12 @@ public class MineCell extends CCLayer{
 		sphereRoundCells = new ArrayList<MineCell>();	
 		isSphereBasePossible = true;
 		sphereType = -1; // none
+	}
+	
+	private Game mGame;
+	public MineCell(Game game) {
+		this();
+		mGame = game;
 	}
 	
 	public void addRoundCell(MineCell cell) {
@@ -346,10 +348,10 @@ public class MineCell extends CCLayer{
 			int mineNumber = GameData.share().decreaseMineNumber();
 			
 			// 화면에 지뢰 갯수 갱신
-			Game.HudLayer.updateMineNumber(mineNumber);
+			mGame.mHud.updateMineNumber(mineNumber);
 			
 			// 프로그레스 하나 증가			
-			Game.HudLayer.updateProgress();
+			mGame.mHud.updateProgress();
 			
 			// 지뢰를 누르면 실제 지뢰갯수(currentMineNumber)에 +1를 해줌.
 			// +1을 안해주면~  안알랴줌 (노출지뢰가 실제 지뢰에 포함이 안됨)
@@ -378,8 +380,7 @@ public class MineCell extends CCLayer{
 			if (GameData.share().isHeartOut()) {
 				Log.e("MineCell / open", "delegate - gameOver *** mission failed ***");
 				this.delegate.gameOver();
-				GameProgressBar progress = new GameProgressBar(CCDirector.sharedDirector().getActivity());
-				progress.stopTime();
+				mGame.mHud.mGameProgressBar.stopTime();
 			}
 		}
 		

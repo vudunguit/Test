@@ -47,21 +47,25 @@ public class GameMinimap extends CCLayer{
 	ArrayList<MineCell> cells  = null;
 	ArrayList<MineCell> sphereBaseCells = null;
 	
-	private static GameMinimap gameMinimap;
+//	private static GameMinimap gameMinimap;
+//	
+//	public static synchronized GameMinimap getInstance() {
+//		if (gameMinimap == null) {
+//			gameMinimap = new GameMinimap();
+//		}
+//		return gameMinimap;
+//	}
 	
-	public static synchronized GameMinimap getInstance() {
-		if (gameMinimap == null) {
-			gameMinimap = new GameMinimap();
-		}
-		return gameMinimap;
-	}
+//	public void dealloc() {
+//		gameMinimap = null;
+//		
+//	}
 	
-	public void dealloc() {
-		gameMinimap = null;
+	private HudLayer mHudLayer;
+	
+	public GameMinimap(HudLayer hudLayer) {
+		mHudLayer = hudLayer;
 		
-	}
-	
-	private GameMinimap() {
 //		if (!GameConfig.share().isMinimapPanelOn() && !GameConfig.share().isEmoticonPanelOn()) {
 			this.layout();
 //			Config.getInstance().setDisableButton(true);
@@ -296,16 +300,16 @@ public class GameMinimap extends CCLayer{
 //			
 		case kPlayDataMagicAttack:
 			if (0 < data && data < 4) {
-				Game.HudLayer.testText.setString("적의 공격을 받습니다. type : " + data);
+				mHudLayer.testText.setString("적의 공격을 받습니다. type : " + data);
 			} else if (data < 7) {
-				Game.HudLayer.testText.setString("적이 방어 하였습니다. type : " + data);
+				mHudLayer.testText.setString("적이 방어 하였습니다. type : " + data);
 			} else {
-				Game.HudLayer.testText.setString("알수없는 타입의 공격 type : " + data);
+				mHudLayer.testText.setString("알수없는 타입의 공격 type : " + data);
 			}
 			break;
 			
 		case kPlayDataMagicDefense:
-			Game.HudLayer.testText.setString("적이 방어 하였습니다. kPlayDataMagicDefense");
+			mHudLayer.testText.setString("적이 방어 하였습니다. kPlayDataMagicDefense");
 			break;
 			
 //		case kPlayDataGameOver:
@@ -319,7 +323,7 @@ public class GameMinimap extends CCLayer{
 //			break;
 			
 		case kPlayDataEmoticon:
-			Game.HudLayer.testText.setString("이모티콘이 왔습니다. type : " + data);
+			mHudLayer.testText.setString("이모티콘이 왔습니다. type : " + data);
 			break;
 //			
 //		case kPlayDataMine:
@@ -343,7 +347,7 @@ public class GameMinimap extends CCLayer{
 			break;
 			
 		case kPlayDataSphereTake:
-			Game.HudLayer.testText.setString("Warning!!!! 적이 아이템 획득");
+			mHudLayer.testText.setString("Warning!!!! 적이 아이템 획득");
 //			count = 0;
 //			if (itemType == 0)
 //				itemType = 7;
@@ -360,7 +364,7 @@ public class GameMinimap extends CCLayer{
 
 		default:
 			Log.e("GameMinimap", "알수 없는 데이타 타입 : " + playType);
-			Game.HudLayer.testText.setString("알수 없는 데이타 타입. playType : " + playType);
+			mHudLayer.testText.setString("알수 없는 데이타 타입. playType : " + playType);
 			break;
 		}
 		
