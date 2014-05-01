@@ -23,10 +23,6 @@ public class GameLoading extends CCLayer {
 	final String folder = "59gameload/";
 	final String fileExtension = ".png";
 	
-	public final int BROOMSTICK_REFRESH_TIME = 900; //900초(15분)
-//	private int mBroomstickCount; //빗자루 수량
-//	private long mMiliToRefreshBroom; //단위는 ms, 빗자루를 갱신하기까지 남은 시간
-	
 	private GameLoading() {
 		
 		/************ 잘 사용했는지 모르겠습니다. 확인 부탁드립니다.  ************/
@@ -36,10 +32,8 @@ public class GameLoading extends CCLayer {
 		// setBroomstickTime(빗자루 무료 지급기) 실행
 		int mBroomstickCount = Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick"));
 		FacebookData.getinstance().modDBData("ReceivedBroomstick", String.valueOf(mBroomstickCount - 1)); //DB에 빗자루 수량 insert
-		if (mBroomstickCount <= 6) {
-			long pastTime = Util.getBroomstickTime(); //경과 시간(ms), 
-			long mMiliToRefreshBroom = pastTime%(BROOMSTICK_REFRESH_TIME*1000); //빗자루 수량과 남은시간 계산후 다시 pref에 세팅
-			Util.setBroomstickTime(mMiliToRefreshBroom);
+		if (mBroomstickCount >= 6) {
+			Util.setBroomstickTime();
 		}
 //		// hide scroll view
 //		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);

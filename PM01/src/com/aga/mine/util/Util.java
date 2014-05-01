@@ -74,6 +74,9 @@ public final class Util {
 		}
 	}
 	
+	/**
+	 * 현재 시간을 세팅, 빗자루 수량이 6에서 5로 줄어들 경우에 사용
+	 */
 	public static void setBroomstickTime() {
 		Context context = MainApplication.getInstance().getApplicationContext();
 		SharedPreferences pref = context.getSharedPreferences("mine", 0);
@@ -83,6 +86,10 @@ public final class Util {
 		edit.commit();
 	}
 	
+	/**
+	 * 현재 시간에 남은 경과시간을 빼서 세팅
+	 * 빗자루 수량이 6보다 작은 경우 수량을 계산하고 남은 시간을 세팅시에 사용
+	 */
 	public static void setBroomstickTime(long leftTime) {
 		Context context = MainApplication.getInstance().getApplicationContext();
 		SharedPreferences pref = context.getSharedPreferences("mine", 0);
@@ -92,6 +99,10 @@ public final class Util {
 		edit.commit();
 	}
 	
+	/**
+	 * 경과시간을 리턴
+	 * 최초로 앱을 실행시에는 0을 리턴 (경과시간이 없다라는 의미)
+	 */
 	public static long getBroomstickTime() {
 		Context context = MainApplication.getInstance().getApplicationContext();
 		SharedPreferences pref = context.getSharedPreferences("mine",0);
