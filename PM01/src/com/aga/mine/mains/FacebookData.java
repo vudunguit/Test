@@ -6,7 +6,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +53,7 @@ public class FacebookData {
 	}
 	
 	public String getDBData(String key) {
-	return data.get(key); 
+		return data.get(key); 
 	}
 	
 	public void modDBData(String key, String value) {
@@ -60,6 +62,20 @@ public class FacebookData {
 			return;
 		}
 		data.put(key, value);
+		DataFilter.setUserDBData(data);
+	}
+	
+	
+	public void modDBData(HashMap<String, String> db) {
+		if (db == null) {
+			return;
+		}
+		Collection k = db .keySet();
+		Iterator itr = k.iterator();
+			while(itr.hasNext()){
+				String key = (String) itr.next();
+				data.put(key, db.get(key));
+		}
 		DataFilter.setUserDBData(data);
 	}
 	

@@ -1,6 +1,5 @@
 ﻿package com.aga.mine.mains;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,22 +15,23 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
-import com.aga.mine.mains.MainActivity.InviteCallback;
-import com.aga.mine.pages.UserData;
-
 import android.content.Context;
 import android.util.Log;
-import android.view.MotionEvent;
+
+import com.aga.mine.mains.MainActivity.InviteCallback;
+import com.aga.mine.pages.UserData;
+import com.aga.mine.util.Popup;
 
 public class ShopBroomstick2 extends CCLayer {
 	
 	final String commonfolder = "00common/";
 	final String folder = "23broomstick/";
 	final String fileExtension = ".png";
-
-	CCSprite bg;
 	
-	double[][] stickArray = { 
+	CCSprite bg;
+	CCLabel gold;
+	
+	long [][] stickArray = { 
 			{ 1000, 5, 0 }, { 1800, 10, 0 }, { 3400, 20, 0 },
 			{ 6400, 40, 0 }, { 12000, 80, 0 }, { 22400, 160, 0 } };
 	
@@ -46,7 +46,6 @@ public class ShopBroomstick2 extends CCLayer {
 		return scene;
 	}
 	
-	double quantity;
 	public InviteCallback mInviteCallback = new InviteCallback() {
 
 		@Override
@@ -95,7 +94,7 @@ public class ShopBroomstick2 extends CCLayer {
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
 		
-		FrameTitle6.setTitle(boardFrame, folder);
+		gold = FrameTitle6.setTitle(boardFrame, folder);
 	}
 	
 	private void setMainMenu(CCSprite parentSprite){
@@ -105,10 +104,10 @@ public class ShopBroomstick2 extends CCLayer {
 		parentSprite.addChild(gameMenu);
 	}
 	
-	private CCMenuItem[] buttons(double[][] valuesArray) {
+	private CCMenuItem[] buttons(long[][] valuesArray) {
 		List<CCMenuItem> listMenus = new ArrayList<CCMenuItem>();
 		
-		for (double[] ds : valuesArray) {
+		for (long[] ds : valuesArray) {
 			CCMenuItemImage button = CCMenuItemImage.item(
 					folder + "buttonnormal" + fileExtension,
 					folder + "buttonpressed" + fileExtension,
@@ -122,7 +121,7 @@ public class ShopBroomstick2 extends CCLayer {
 			button.addChild(goldimage);
 			
 			// 가격
-			CCLabel  gold = CCLabel.makeLabel(numberComma((int)ds[0]), "Arial", 28);
+			CCLabel  gold = CCLabel.makeLabel(new NumberComma().numberComma(ds[0]), "Arial", 28);
 //			gold.setColor(ccColor3B.ccYELLOW);
 //			gold.setAnchorPoint(1, 1);
 //			gold.setPosition(button.getContentSize().width - 15, button.getContentSize().height - 5);
@@ -157,38 +156,10 @@ public class ShopBroomstick2 extends CCLayer {
 	}
 	
 	private String plus	(int value1, int value2) {
-		String values = numberComma(value1);
+		String values = new NumberComma().numberComma(value1);
 		if (value2 > 0)
-			values = values + "+" + numberComma(value2);
+			values = values + "+" + new NumberComma().numberComma(value2);
 		return values;
-	}
-	
-	// int 값을 String으로 변환하여 comma 삽입
-	private String Decimal(int value) {
-		DecimalFormat format = new DecimalFormat("###,###,###,###");
-		String ret = format.format(value);
-		return ret;
-	}
-	
-	// int 값을 String으로 변환하여 comma 삽입
-	private String numberComma(int value) {
-		String s = Integer.toString(value);
-		return numberComma(s);
-	}
-	
-	// String에 comma 삽입
-	private String numberComma(String string) {
-		if (string.length() < 4) 
-			return string;
-		
-		String value = string;
-		int len = value.length();
-		int position = 3;
-		for (int i = 0; i < (len -1) / 3; i++) {
-			value = value.substring(0, (value.length() - position)) + "," + value.substring((value.length() - position), value.length());
-			position += 4;
-		}
-		return value;
 	}
 
 	// config 파일에 나중에 옮길것
@@ -204,38 +175,69 @@ public class ShopBroomstick2 extends CCLayer {
 			switch (value) {
 			case previous:
 				scene = Shop.scene();
+				CCDirector.sharedDirector().replaceScene(scene);
 				break;
 
 			case home:
 				scene = Home.scene();
+				CCDirector.sharedDirector().replaceScene(scene);
+				break;
+				
+			case Constant.PURCHASING_OK:
+				isPurchase = true;
+				makeAPurchase();
+				this.removeChildByTag(Constant.POPUP_LAYER, true);
+				break;
+				
+			case Constant.PURCHASING_CANCEL:
+				isPurchase = false;
+				makeAPurchase();
+				this.removeChildByTag(Constant.POPUP_LAYER, true);
 				break;
 			}
-			CCDirector.sharedDirector().replaceScene(scene);
+
 		}
+	}
+
+	private boolean  isPurchase = false;
+	private long quantity;
+	private long price;
+	
+	private void makeAPurchase() {
+//				String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
+//				MainApplication.getInstance().getActivity().sendInvite(recipientID, "우편물 발송", null);
+////				FacebookData.getinstance().getRequestID(recipientID);  //test용
+		
+		// 테스트용 (facebook invite에서 requestID 받으면 그것으로 대체 위에 코드)
+		if (isPurchase) {
+			long requestID = (long) (Math.random() * 72036854775807L);  //facebook 알림글번호로 대체할 것
+			String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
+			String senderID = FacebookData.getinstance().getUserInfo().getId();
+			String data = 
+					"0,RequestModeMailBoxAdd*22," + requestID + 
+					"*1," + recipientID + "*19," + senderID + "*20,Broomstick*21," + quantity;
+			long myGold = Long.parseLong(FacebookData.getinstance().getDBData("Gold"));
+			if (myGold < price) {
+				return;
+			}
+			String sum = String.valueOf(myGold - price);
+			DataFilter.sendMail(data);
+			FacebookData.getinstance().modDBData("Gold", sum);
+			gold.setString(new NumberComma().numberComma(sum));
+		}
+
 	}
 	
 	public void buttonCallback(Object sender) {
-		double[] value = (double[]) ((CCNode)sender).getUserData();
+		Popup.popupOfPurchase(this);
+		
+		long[] value = (long[]) ((CCNode)sender).getUserData();
+		price = value[0];
 		quantity = value[1];
 		// 로그용
 		for (double d : value) {
 			Log.e("ShopBroomstick2", "buttonCallback : " + (int)d);
 		}
-		
-				String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
-				MainApplication.getInstance().getActivity().sendInvite(recipientID, "우편물 발송", null);
-//				FacebookData.getinstance().getRequestID(recipientID);  //test용 
-		
-////		double requestID = Math.random() * 9223372036854775807L;  //facebook 알림글번호로 대체할 것
-//		long requestID = FacebookData.getinstance().getRequestID();  //test용 
-//		String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
-//		String senderID = FacebookData.getinstance().getUserInfo().getId();
-//		String data = 
-//				"0,RequestModeMailBoxAdd*22," + requestID + 
-//				"*1," + recipientID + "*19," + senderID + "*20,Broomstick*21," + value[1];
-//		DataFilter.sendMail(data);
-
-		
 	}
 	
 }

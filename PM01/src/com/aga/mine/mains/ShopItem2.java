@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.aga.mine.pages.UserData;
+import com.aga.mine.util.Popup;
 
 public class ShopItem2 extends CCLayer {
 
@@ -97,25 +98,25 @@ public class ShopItem2 extends CCLayer {
 		CCMenuItem itemSphere = CCMenuItemImage.item(
 				folder + "item-buttonBuy-hd" + fileExtension,
 				folder + "item-buttonBuy-select-hd" + fileExtension,
-				this, "SphereCallback");
+				this, "buySphereCallback");
 		itemSphere.setUserData("Sphere");
 		
 		CCMenuItem itemOffenseBuy = CCMenuItemImage.item(
 				folder + "item-buttonBuy-hd" + fileExtension,
 				folder + "item-buttonBuy-select-hd" + fileExtension,
-				this, "offenseCallback");
+				this, "buyMagicCallback");
 		itemOffenseBuy.setUserData("Offense");
 		
 		CCMenuItem itemDefenseBuy = CCMenuItemImage.item(
 				folder + "item-buttonBuy-hd" + fileExtension,
 				folder + "item-buttonBuy-select-hd" + fileExtension,
-				this, "offenseCallback");
+				this, "buyMagicCallback");
 		itemDefenseBuy.setUserData("Defense");
 		
 		CCMenuItem o_fire = CCMenuItemImage.item(
 				folder + "item-buttonFire-hd" + fileExtension,
 				folder + "item-buttonFire-select-hd" + fileExtension,
-				this, "buttonCallback");		
+				this, "selectMagicCallback");		
 		o_fire.setUserData(0);
 		o_fire.addChild(itemOver);
 		o_fire.setIsEnabled(false);
@@ -123,19 +124,19 @@ public class ShopItem2 extends CCLayer {
 		CCMenuItem o_wind = CCMenuItemImage.item(
 				folder + "item-buttonWind-hd" + fileExtension,
 				folder + "item-buttonWind-select-hd" + fileExtension,
-				this, "buttonCallback");
+				this, "selectMagicCallback");
 		o_wind.setUserData(1);
 		
 		CCMenuItem o_cloud = CCMenuItemImage.item(
 				folder + "item-buttonCloud-hd" + fileExtension,
 				folder + "item-buttonCloud-select-hd" + fileExtension,
-				this, "buttonCallback");
+				this, "selectMagicCallback");
 		o_cloud.setUserData(2);
 		
 		CCMenuItem d_fire = CCMenuItemImage.item(
 				folder + "item-buttonFire-hd" + fileExtension,
 				folder + "item-buttonFire-select-hd" + fileExtension,
-				this, "buttonCallback");		
+				this, "selectMagicCallback");		
 		d_fire.setUserData(3);
 		d_fire.addChild(itemOver);
 		d_fire.setIsEnabled(false);
@@ -143,13 +144,13 @@ public class ShopItem2 extends CCLayer {
 		CCMenuItem d_wind = CCMenuItemImage.item(
 				folder + "item-buttonWind-hd" + fileExtension,
 				folder + "item-buttonWind-select-hd" + fileExtension,
-				this, "buttonCallback");
+				this, "selectMagicCallback");
 		d_wind.setUserData(4);
 		
 		CCMenuItem d_cloud = CCMenuItemImage.item(
 				folder + "item-buttonCloud-hd" + fileExtension,
 				folder + "item-buttonCloud-select-hd" + fileExtension,
-				this, "buttonCallback");
+				this, "selectMagicCallback");
 		d_cloud.setUserData(5);
 		
 		CCMenu spherebuyMenu = CCMenu.menu(itemSphere);
@@ -282,7 +283,7 @@ public class ShopItem2 extends CCLayer {
 			levelFire = 1;
 		}
 		if (levelFire < 20) {
-			int firePrice = userData.buyOffenseFire[levelFire - 1];	
+			int firePrice = userData.buyOffenseFire[levelFire];	
 			userData.offenceMagic = 0;
 			offenseAttributeSelected1 = CCLabel.makeLabel(
 					new NumberComma().numberComma(firePrice), "Arial", 30);
@@ -328,7 +329,7 @@ public class ShopItem2 extends CCLayer {
 			LevelDivine = 1;
 		}
 		if (LevelDivine < 20) {
-			int divinePrice = userData.buyOffenseFire[LevelDivine - 1];	
+			int divinePrice = userData.buyOffenseFire[LevelDivine];	
 			userData.defenceMagic = 3;
 			defenseAttributeSelected1 = CCLabel.makeLabel(
 					new NumberComma().numberComma(divinePrice), "Arial", 30);
@@ -367,106 +368,158 @@ public class ShopItem2 extends CCLayer {
 			switch (value) {
 			case previous:
 				scene = Shop.scene();
+				CCDirector.sharedDirector().replaceScene(scene);
 				break;
 
 			case home:
 				scene = Home.scene();
+				CCDirector.sharedDirector().replaceScene(scene);
+				break;
+				
+			case Constant.PURCHASING_OK:
+				isPurchase = true;
+				makeAPurchase();
+				this.removeChildByTag(Constant.POPUP_LAYER, true);
+				break;
+				
+			case Constant.PURCHASING_CANCEL:
+				isPurchase = false;
+				makeAPurchase();
+				this.removeChildByTag(Constant.POPUP_LAYER, true);
 				break;
 			}
-			CCDirector.sharedDirector().replaceScene(scene);
+
 		}
 	}
 
-	public void SphereCallback(Object sender) {
-		int sphereNumber = Integer.parseInt(FacebookData.getinstance().getDBData("SphereNumber"));
-		int spherePrice = userData.buySphere[sphereNumber - 3];
+	private boolean  isPurchase = false;
+	private long quantity;
+//	private long price;
+
+	private void makeAPurchase() {
+//				String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
+//				MainApplication.getInstance().getActivity().sendInvite(recipientID, "우편물 발송", null);
+////				FacebookData.getinstance().getRequestID(recipientID);  //test용
 		
-		if (sphereNumber < 9) {
-			String gold = FacebookData.getinstance().getDBData("Gold");
-			FacebookData.getinstance().modDBData("Gold", "" + (Integer.parseInt(gold) - spherePrice));
-			FacebookData.getinstance().modDBData("SphereNumber", "" + (sphereNumber + 1));
-			
-			sphereNumber = Integer.parseInt(FacebookData.getinstance().getDBData("SphereNumber"));
-			
-			if (sphereNumber < 9) {
-				spherePrice = userData.buySphere[sphereNumber - 3];
-				sphereNumber1.setString(new NumberComma().numberComma(spherePrice));	
-			} else {
-				sphereNumber1.setString("MAX");
-				sphereNumber1.setColor(ccColor3B.ccYELLOW);
-			}
-			sphereNumber2.setString("보유 정령병 :  " + new NumberComma().numberComma(sphereNumber));
-			
-//			Log.e("ShopItem2", "getChildByTag : " + bb.getChildByTag(1));
-//			Log.e("ShopItem2", "userData : " + ((CCMenuItemImage)sender).getUserData());
-//			userData.increaseSphere();
+		// 테스트용 (facebook invite에서 requestID 받으면 그것으로 대체 위에 코드)
+		if (isPurchase) {
+			Log.e("ShopItem2", "isPurchase : " + isPurchase);
+//			long requestID = (long) (Math.random() * 72036854775807L);  //facebook 알림글번호로 대체할 것
+//			String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
+//			String senderID = FacebookData.getinstance().getUserInfo().getId();
+//			String data = 
+//					"0,RequestModeMailBoxAdd*22," + requestID + 
+//					"*1," + recipientID + "*19," + senderID + "*20,Broomstick*21," + quantity;
+//			long myGold = Long.parseLong(FacebookData.getinstance().getDBData("Gold"));
+//			if (myGold < price) {
+//				return;
+//			}
+//			String sum = String.valueOf(myGold - price);
+//			DataFilter.sendMail(data);
+//			FacebookData.getinstance().modDBData("Gold", sum);
+//			gold.setString(new NumberComma().numberComma(sum));
+		} else {
+			Log.e("ShopItem2", "isPurchase : " + isPurchase);
 		}
+
+	}
+	public void buySphereCallback(Object sender) {
+		
+		Popup.popupOfPurchase(this);
+		
+//		// max일때 구입안되게 막아야됨.
+//		int sphereNumber = Integer.parseInt(FacebookData.getinstance().getDBData("SphereNumber"));
+//		int spherePrice = userData.buySphere[sphereNumber - 3];
+//		
+//		if (sphereNumber < 9) {
+//			String gold = FacebookData.getinstance().getDBData("Gold");
+//			FacebookData.getinstance().modDBData("Gold", "" + (Integer.parseInt(gold) - spherePrice));
+//			FacebookData.getinstance().modDBData("SphereNumber", "" + (sphereNumber + 1));
+//			
+//			sphereNumber = Integer.parseInt(FacebookData.getinstance().getDBData("SphereNumber"));
+//			
+//			if (sphereNumber < 9) {
+//				spherePrice = userData.buySphere[sphereNumber - 3];
+//				sphereNumber1.setString(new NumberComma().numberComma(spherePrice));	
+//			} else {
+//				sphereNumber1.setString("MAX");
+//				sphereNumber1.setColor(ccColor3B.ccYELLOW);
+//			}
+//			sphereNumber2.setString("보유 정령병 :  " + new NumberComma().numberComma(sphereNumber));
+//			
+////			Log.e("ShopItem2", "getChildByTag : " + bb.getChildByTag(1));
+////			Log.e("ShopItem2", "userData : " + ((CCMenuItemImage)sender).getUserData());
+////			userData.increaseSphere();
+//		}
 	}
 
-	public void offenseCallback(Object sender) {
-		Log.e("item", "offenseCallback : " + ((CCMenuItemImage)sender).getUserData()); 	
+	public void buyMagicCallback(Object sender) {
+		Popup.popupOfPurchase(this);
 		
-		CCLabel  magicLabel1 = defenseAttributeSelected1;
-		CCLabel  magicLabel2 = defenseAttributeSelected2;
-		CCLabel  magicLabel3 = null;
-		int magicNumber = userData.defenceMagic;
-				
-		if (((CCMenuItemImage)sender).getUserData().equals("Offense")) {
-			magicLabel1 = offenseAttributeSelected1;
-			magicLabel2 = offenseAttributeSelected2;
-			magicNumber = userData.offenceMagic;
-		}
-		
-		String magicType = itemType[magicNumber];
-		int magicLevel = Integer.parseInt(FacebookData.getinstance().getDBData(magicType));
-		int price = userData.magicPrice[magicNumber][magicLevel];
-		
-		if (magicLevel < 20) {
-			String gold = FacebookData.getinstance().getDBData("Gold");
-			FacebookData.getinstance().modDBData("Gold", "" + (Integer.parseInt(gold) - price));
-			FacebookData.getinstance().modDBData(magicType, "" + (magicLevel + 1));
-			magicLevel = Integer.parseInt(FacebookData.getinstance().getDBData(magicType));
-			String levelStr = "Lv" + magicLevel;
-						
-			switch (magicNumber) {
-			case 0:
-				magicLabel3 = levelFire;
-				break;
-	
-			case 1:
-				magicLabel3 = levelWind;
-				break;
-				
-			case 2:
-				magicLabel3 = levelCloud;
-				break;
-				
-			case 3:
-				magicLabel3 = levelDivine;
-				break;
-				
-			case 4:
-				magicLabel3 = levelEarth;
-				break;
-				
-			case 5:
-				magicLabel3 = levelMirror;
-				break;			
-			}
-			
-			if (magicLevel < 20) {
-				price = userData.magicPrice[magicNumber][magicLevel];
-				magicLabel1.setString(new NumberComma().numberComma(price));	
-			} else {
-				magicLabel1.setString("MAX");
-				magicLabel1.setColor(ccColor3B.ccYELLOW);
-			}
-			magicLabel2.setString(magicText2[magicNumber/3][0] + magicLevel + magicText2[magicNumber/3][1]);
-			magicLabel3.setString(levelStr);
-		}
+//		// max일때 구입안되게 막아야됨.
+//		Log.e("item", "buyMagicCallback : " + ((CCMenuItemImage)sender).getUserData()); 	
+//		
+//		CCLabel  magicLabel1 = defenseAttributeSelected1;
+//		CCLabel  magicLabel2 = defenseAttributeSelected2;
+//		CCLabel  magicLabel3 = null;
+//		int magicNumber = userData.defenceMagic;
+//				
+//		if (((CCMenuItemImage)sender).getUserData().equals("Offense")) {
+//			magicLabel1 = offenseAttributeSelected1;
+//			magicLabel2 = offenseAttributeSelected2;
+//			magicNumber = userData.offenceMagic;
+//		}
+//		
+//		String magicType = itemType[magicNumber];
+//		int magicLevel = Integer.parseInt(FacebookData.getinstance().getDBData(magicType));
+//		int price = userData.magicPrice[magicNumber][magicLevel];
+//		
+//		if (magicLevel < 20) {
+//			String gold = FacebookData.getinstance().getDBData("Gold");
+//			FacebookData.getinstance().modDBData("Gold", "" + (Integer.parseInt(gold) - price));
+//			FacebookData.getinstance().modDBData(magicType, "" + (magicLevel + 1));
+//			magicLevel = Integer.parseInt(FacebookData.getinstance().getDBData(magicType));
+//			String levelStr = "Lv" + magicLevel;
+//						
+//			switch (magicNumber) {
+//			case 0:
+//				magicLabel3 = levelFire;
+//				break;
+//	
+//			case 1:
+//				magicLabel3 = levelWind;
+//				break;
+//				
+//			case 2:
+//				magicLabel3 = levelCloud;
+//				break;
+//				
+//			case 3:
+//				magicLabel3 = levelDivine;
+//				break;
+//				
+//			case 4:
+//				magicLabel3 = levelEarth;
+//				break;
+//				
+//			case 5:
+//				magicLabel3 = levelMirror;
+//				break;			
+//			}
+//			
+//			if (magicLevel < 20) {
+//				price = userData.magicPrice[magicNumber][magicLevel];
+//				magicLabel1.setString(new NumberComma().numberComma(price));	
+//			} else {
+//				magicLabel1.setString("MAX");
+//				magicLabel1.setColor(ccColor3B.ccYELLOW);
+//			}
+//			magicLabel2.setString(magicText2[magicNumber/3][0] + magicLevel + magicText2[magicNumber/3][1]);
+//			magicLabel3.setString(levelStr);
+//		}
 	}
 
-	public void buttonCallback(Object sender) {
+	public void selectMagicCallback(Object sender) {
 		CCMenuItemImage button = (CCMenuItemImage)sender;
 		List<CCNode> a = button.getParent().getChildren();
 //		Log.e("ShopItem2", "a : " + a);
@@ -483,8 +536,10 @@ public class ShopItem2 extends CCLayer {
 //		test(button.getUserData());
 	}
 
+	
 	String[] itemType = { "LevelFire", "LevelWind", "LevelCloud", "LevelDivine", "LevelEarth", "LevelMirror" };
 	String[][] magicText2 = { {"공격 시간 ","초 증가"}, {"피해 시간 ","초 감소"}};
+	
 	private void setElemental(int type) {
 		String level = FacebookData.getinstance().getDBData(itemType[type]);
 		

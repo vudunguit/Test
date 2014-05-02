@@ -11,4 +11,9 @@ public final class Constant {
 	
 	public final static int MAIL_TAB_BROOM = 1;
 	public final static int MAIL_TAB_GOLD = 2;
+	
+	public final static int PURCHASING_OK = 1;
+	public final static int PURCHASING_CANCEL = 2;
+	public final static int POPUP_LAYER = 201;
+	
 }

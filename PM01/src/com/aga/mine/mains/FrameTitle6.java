@@ -37,7 +37,7 @@ public class FrameTitle6 {
 		banner.setAnchorPoint(0.5f, 1);
 		banner.setPosition(titlePanel.getContentSize().width / 2, 10);
 		
-		// 골드 텍스트
+		// 골드 텍스트 --> Gold
 		CCLabel goldText = CCLabel.makeLabel("Gold", "Arial", 24);
 		banner.addChild(goldText);
 		goldText.setColor(ccColor3B.ccYELLOW);
