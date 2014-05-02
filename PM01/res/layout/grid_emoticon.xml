@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:padding="2dp"
         android:layout_marginBottom="2dp"
-        android:text="100 Gold"
+        android:text="Gold 100"
         android:textColor="#FFCBA135"
         android:textSize="9dp"
         android:textStyle="bold"
