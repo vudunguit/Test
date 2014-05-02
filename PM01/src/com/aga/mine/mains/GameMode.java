@@ -43,12 +43,6 @@ public class GameMode extends CCLayer {
 		BottomImage.setBottomImage(this);
 		
 		this.setIsTouchEnabled(true);
-		
-		if (!GameData.share().isGuestMode) {
-			// 게임 점수 테스트용 (20점 얻음)
-			DataFilter.addGameScore("20");
-			Log.e("GameMode", "score 20점 증가");			
-		}
 	}
 	
 	// 백 보드 설정
