@@ -63,7 +63,7 @@ public class HomeMiddle {
 		post.setTag(mailButton);
 		post.setAnchorPoint(1.0f, 0.5f);
 		
-		final CCSprite userImage = CCSprite.sprite(commonfolder + "noPicture" + fileExtension); // 프로필 사진
+		final CCSprite userImage = CCSprite.sprite("noPicture" + fileExtension); // 프로필 사진
 		userImage.setAnchorPoint(0.5f, 0.5f);
 		userImage.setPosition(profilePicture.getContentSize().width / 2, profilePicture.getContentSize().height / 2);
 		profilePicture.addChild(userImage);

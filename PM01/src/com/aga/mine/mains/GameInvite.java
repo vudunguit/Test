@@ -167,7 +167,7 @@ public class GameInvite extends CCLayer {
 					parentSprite.getContentSize().height - _node.getContentSize().height * (value * 1.05f + 0.1f));
 			
 			// 이미지
-			final CCSprite _picture = CCSprite.sprite(commonfolder + "noPicture.png");		
+			final CCSprite _picture = CCSprite.sprite("noPicture.png");		
 			_picture.setAnchorPoint(0.5f, 0.5f);
 			_picture.setPosition(_picture.getContentSize().width * 2.7f, _node.getContentSize().height / 2);
 			_node.addChild(_picture, 0, 102);
