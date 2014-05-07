@@ -76,7 +76,7 @@ public class GameEnding extends CCLayer {
 		
 		/*********************************************************/
 		// 
-		CCSprite picture = CCSprite.sprite("00common/" + "noPicture.png");
+		CCSprite picture = CCSprite.sprite("noPicture.png");
 		backboard.addChild(picture);
 		picture.setAnchorPoint(0.5f, 0.5f);
 		picture.setScale(1.4f);
