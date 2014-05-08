@@ -107,6 +107,7 @@ public class Shop extends CCLayer {
 	
 	// sceneCallback들 전부 여기로 옮기기
 	public void clicked(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		CCScene scene = null;
 		int value = ((CCNode) sender).getTag();
 		if (buttonActive) {
@@ -125,23 +126,27 @@ public class Shop extends CCLayer {
 	}
 	
 	public void button1Callback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		FacebookData.getinstance().setRecipientID(FacebookData.getinstance().getUserInfo().getId());
 		CCScene scene = ShopGold2.scene();
 		CCDirector.sharedDirector().replaceScene(scene);
 	}
 	
 	public void button2Callback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		CCScene scene = ShopItem2.scene();
 		CCDirector.sharedDirector().replaceScene(scene);
 	}
 	
 	public void button3Callback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		FacebookData.getinstance().setRecipientID(FacebookData.getinstance().getUserInfo().getId());
 		CCScene scene = ShopBroomstick2.scene();
 		CCDirector.sharedDirector().replaceScene(scene);
 	}
 	
 	public void button4Callback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		CCScene scene = ShopEmoticon.scene();
 		CCDirector.sharedDirector().replaceScene(scene);
 	}

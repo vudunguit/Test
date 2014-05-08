@@ -6,9 +6,11 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -21,6 +23,7 @@ public class Daily extends CCLayer {
 	int dailyCount = 0;
 
 	private CCSprite stamp;
+	Context mContext;
 
 	static CCScene scene(int dailyCount) {
 		CCScene scene = CCScene.node();
@@ -30,6 +33,8 @@ public class Daily extends CCLayer {
 	}
 
 	public Daily(int dailyCount) {
+		mContext = CCDirector.sharedDirector().getActivity();
+		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.stamp);
 		this.dailyCount = dailyCount;
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), folder
 				+ "daily-bg" + fileExtension);
@@ -166,6 +171,7 @@ public class Daily extends CCLayer {
 	@Override
 	public boolean ccTouchesEnded(MotionEvent event) {
 		nextCallback(10f);
+		MainApplication.getInstance().getActivity().click();
 		this.setIsTouchEnabled(false);
 		return super.ccTouchesEnded(event);
 	}
@@ -181,6 +187,8 @@ public class Daily extends CCLayer {
 		
 		CCScaleTo actionTo = CCScaleTo.action(0.25f, 0.23f);
 		stamp.runAction(actionTo);
+		// 액션 끝날때 쿵하고 소리 나야되는데 소리를 어떻게 붙이는지 모르겠네요.
+		SoundEngine.sharedEngine().playEffect(mContext, R.raw.stamp);
 	}
 
 }

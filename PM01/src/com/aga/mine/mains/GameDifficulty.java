@@ -134,6 +134,7 @@ public class GameDifficulty extends CCLayer {
 	
 	// sceneCallback들 전부 여기로 옮기기
 	public void clicked(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		CCScene scene = null;
 		int value = ((CCNode) sender).getTag();
 		if (buttonActive) {
@@ -156,6 +157,7 @@ public class GameDifficulty extends CCLayer {
 	}
 	
 	public void nextCallback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		final int random = 1;
 		final int invite = 2;
 		

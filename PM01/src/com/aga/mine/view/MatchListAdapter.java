@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.aga.mine.mains.FacebookData;
 import com.aga.mine.mains.GameData;
 import com.aga.mine.mains.GameScore;
+import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.R;
 import com.aga.mine.util.Util;
@@ -100,7 +101,7 @@ public class MatchListAdapter extends BaseAdapter {
 		holder.imgInviteBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+				MainApplication.getInstance().getActivity().click();
 				if (Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick")) < 1) {
 					CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
 								public void run() {

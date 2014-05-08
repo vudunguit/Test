@@ -194,6 +194,7 @@ public class ShopGold2 extends CCLayer {
 	
 	// sceneCallback들 전부 여기로 옮기기
 	public void clicked(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		CCScene scene = null;
 		int value = ((CCNode) sender).getTag();
 		if (buttonActive) {
@@ -211,6 +212,7 @@ public class ShopGold2 extends CCLayer {
 	}
 	
 	public void buttonCallback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		String Product = "gold";
 		float bonus = 1.2f;
 		double usd = (Double)((CCNode)sender).getUserData();

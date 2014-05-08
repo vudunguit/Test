@@ -104,6 +104,7 @@ public class InviteListAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 			    MainActivity mMainActivity = MainApplication.getInstance().getActivity();
+			    mMainActivity.click();
 				String friend = notAPlayers.get(position).getId();
 				//	mMainActivity.mSimpleFacebook.invite(friend, "I invite you to use this app", onInviteListener, "secret data");
 				// 메시지가 정확하게 전달 되는지는 모르겠네요.

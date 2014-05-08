@@ -7,6 +7,7 @@ import java.util.List;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
+import org.cocos2d.sound.SoundEngine;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -245,6 +246,9 @@ public class MainActivity extends Activity {
         CCDirector.sharedDirector().setDisplayFPS(true);
         CCDirector.sharedDirector().setAnimationInterval(1.0f / 60);
 
+		SoundEngine.sharedEngine().preloadEffect(this, R.raw.click); // 클릭음
+		SoundEngine.sharedEngine().preloadEffect(this, R.raw.buy); // 구입음
+		
         CCScene scene = Logo.scene();
         director.runWithScene(scene);
     }
@@ -288,7 +292,7 @@ public class MainActivity extends Activity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
         case KeyEvent.KEYCODE_BACK:
-
+        	click();
             new AlertDialog.Builder(this).setTitle(R.string.app_name)
                         .setMessage("종료하겠습니까?")
                         .setPositiveButton("예", new DialogInterface.OnClickListener() {
@@ -579,4 +583,7 @@ public class MainActivity extends Activity {
         }
     }
 
+    public void click() {
+		SoundEngine.sharedEngine().playEffect(this, R.raw.click); // click
+	}
 }

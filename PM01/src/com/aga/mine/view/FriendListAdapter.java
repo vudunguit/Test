@@ -114,6 +114,7 @@ public class FriendListAdapter extends BaseAdapter {
 		holder.imgGift.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				MainApplication.getInstance().getActivity().click();
 				//hide scroll view
 				MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 				
@@ -136,6 +137,7 @@ public class FriendListAdapter extends BaseAdapter {
 		holder.imgBroomstick.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				MainApplication.getInstance().getActivity().click();
 				MainActivity mMainActivity = MainApplication.getInstance().getActivity();
 				mMainActivity.sendInvite(gameScore.get(position).id, gameScore.get(position).name + "이(가) 빗자루 하나를 보냈습니다", null);
 			}

@@ -37,6 +37,7 @@ public class GameGuide1 extends CCLayer {
 	}
 	
 	public void nextCallback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		CCScene scene = GameGuide2.scene();
 		CCDirector.sharedDirector().replaceScene(scene);
 		}

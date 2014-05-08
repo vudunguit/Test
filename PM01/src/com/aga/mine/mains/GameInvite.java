@@ -184,6 +184,7 @@ public class GameInvite extends CCLayer {
 	
 	// sceneCallback들 전부 여기로 옮기기
 	public void clicked(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		// hide scroll view
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 		CCScene scene = null;
@@ -212,6 +213,7 @@ public class GameInvite extends CCLayer {
 
 	// BottomMenu3.setBottomMenu
 	public void randomMatch(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		// hide scroll view
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 		try {

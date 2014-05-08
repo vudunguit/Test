@@ -92,10 +92,12 @@ public class Login extends CCLayer{
 	}
 	
 	public void facebookCallback(Object sender){
+		MainApplication.getInstance().getActivity().click();
 		MainApplication.getInstance().getActivity().loginFaceBook();
 	}
 
 	public void guestCallback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		CCScene scene = Home2.scene();
 		CCDirector.sharedDirector().replaceScene(scene);
 	}

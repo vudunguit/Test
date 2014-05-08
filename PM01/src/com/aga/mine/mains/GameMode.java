@@ -132,6 +132,7 @@ public class GameMode extends CCLayer {
 	
 	// sceneCallback들 전부 여기로 옮기기
 	public void clicked(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		CCScene scene = null;
 		int value = ((CCNode) sender).getTag();
 		if (buttonActive) {
@@ -150,6 +151,7 @@ public class GameMode extends CCLayer {
 	}
 
 	public void nextCallback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		int tagNumber = ((CCNode)sender).getTag();
 		Log.e("GameMode", "selectButton  : " + tagNumber);
 		GameData.share().setGameMode(tagNumber); // gameData로 옮겨야됨. (기존에 있음.)

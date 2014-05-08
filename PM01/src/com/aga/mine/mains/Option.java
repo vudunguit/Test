@@ -186,6 +186,7 @@ public class Option extends CCLayer {
 	}
 	
 	public void buttonCallback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		CCMenuItemImage button = (CCMenuItemImage)sender;
 		button.getUserData();
 		List<CCNode> a = button.getParent().getChildren();
@@ -213,6 +214,7 @@ public class Option extends CCLayer {
 	
 	// sceneCallback들 전부 여기로 옮기기
 	public void clicked(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		CCScene scene = null;
 		int value = ((CCNode) sender).getTag();
 		if (buttonActive) {
@@ -231,11 +233,13 @@ public class Option extends CCLayer {
 	}
 
 	public void guideCallback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		CCScene scene = GameGuide1.scene();
 		CCDirector.sharedDirector().replaceScene(scene);
 	}
 
 	public void facebookCallback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		MainActivity mMainActivity = MainApplication.getInstance().getActivity();
 		if(mMainActivity.mSimpleFacebook.isLogin()) {
 	    	mMainActivity.logoutFaceBook(); 
@@ -244,6 +248,7 @@ public class Option extends CCLayer {
 		}
 
 	public void policyCallback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		String address = "http://agatong.co.kr/policy/policy_eng.html";
 		if (Locale.getDefault().getLanguage().toString().equals("ko"))
 			address = "http://agatong.co.kr/policy/policy_kor.html";
@@ -251,6 +256,7 @@ public class Option extends CCLayer {
 	}
 
 	public void more_appsCallback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		String address = "http://agatong.co.kr/m/index.html";
 		if (Locale.getDefault().getLanguage().toString().equals("ko"))
 			address = "http://www.agatong.co.kr/m/index_kor.html";

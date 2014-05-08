@@ -147,6 +147,7 @@ public class Home2 extends CCLayer {
 	}
 	
 	public void clicked2(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		int value = ((CCNode) sender).getTag();
 		CCScene scene;
 		

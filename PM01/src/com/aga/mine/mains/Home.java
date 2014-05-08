@@ -28,7 +28,7 @@ public class Home extends CCLayer{
 	final static int scrollLayerTag = 1;
 	final static int homeLayerTag = 2;
 	final static int mailBoxLayerTag = 3;
-	
+
 	// 나중에 다른 클래스에서 정의한 것과 하나로 합치기
 	final int broomstickButton = 1001;
 	final int goldButton = 1002;
@@ -253,6 +253,7 @@ public class Home extends CCLayer{
 
 
 	public void clicked2(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		// hide scroll view
 		MainApplication.getInstance().getActivity().mHandler
 				.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
