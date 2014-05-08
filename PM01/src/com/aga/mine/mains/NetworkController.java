@@ -113,12 +113,11 @@ public class NetworkController extends Activity {
 
 	public static String kTempFacebookId = "999999999999999";
 	public static String kTempName = "@Guest";
+	private static int kTempLevel = 0;
 
 	private enum NetworkState{}
 	private enum MessageType{}
-
-	final static int kTempLevel = 15;
-
+	
 //	final static String kServerHost = "192.168.10.232"; // 회사 내부 테스트용
 	final static String kServerHost = "211.110.139.226"; // cafe24 상용서버
 	final static int kServerPort = 8007;
@@ -148,6 +147,8 @@ public class NetworkController extends Activity {
 //		if (FacebookData.getinstance().getUserInfo() != null) {
 			kTempFacebookId  = FacebookData.getinstance().getUserInfo().getId();
 			kTempName  = FacebookData.getinstance().getUserInfo().getName();
+			Log.e("NetworkController", "kTempLevel");
+			kTempLevel = Integer.parseInt(FacebookData.getinstance().getDBData("LevelCharacter"));
 //		if (userData.facebookUserInfo != null) {
 //			kTempFacebookId  = userData.facebookUserInfo.getId();
 //			kTempName = userData.facebookUserInfo.getName();			

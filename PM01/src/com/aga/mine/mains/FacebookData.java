@@ -66,7 +66,7 @@ public class FacebookData {
 	}
 	
 	
-	public void modDBData(HashMap<String, String> db) {
+	public void modDBData(Map<String, String> db) {
 		if (db == null) {
 			return;
 		}
@@ -80,6 +80,7 @@ public class FacebookData {
 	}
 	
 	public void setDBData(String data) {
+		Log.e("FacebookData", "setDBData");
 		setDBData(DataFilter.userDBFilter(data));
 	}
 
@@ -196,8 +197,9 @@ public class FacebookData {
 		this.recipientID = recipientID;
 	}
 
-	public void getRequestID(String recipientID) {
-		MainApplication.getInstance().getActivity().sendInvite(recipientID, "우편물 발송", null);
+	public long getRequestID(String recipientID) {
+//		MainApplication.getInstance().getActivity().sendInvite(recipientID, "우편물 발송", null);
+		return  (long) (100 * Math.random()) + System.currentTimeMillis() * 100;
 //		return  (long) (Math.random() * 9223372036854775807L);  //test용
 	}
 
