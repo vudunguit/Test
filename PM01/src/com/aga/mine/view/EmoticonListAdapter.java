@@ -3,7 +3,10 @@ package com.aga.mine.view;
 import java.util.ArrayList;
 
 import com.aga.mine.mains.FacebookData;
+import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.R;
+import com.aga.mine.mains.ShopEmoticon;
+import com.aga.mine.util.Popup;
 
 import android.content.Context;
 import android.util.Log;
@@ -77,14 +80,17 @@ public class EmoticonListAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				// TODO 
-				String emoticons = FacebookData.getinstance().getDBData("Emoticons");
-				Log.e("EmoticonAdapter", "emoticons [" +emoticons + "] + " + (position+1));
-				emoticons += "," + (position+1);
-				Log.e("EmoticonAdapter", "emoticons : " + emoticons);
-				FacebookData.getinstance().modDBData("Emoticons", emoticons);
+				MainApplication.getInstance().getActivity().click();
+				new ShopEmoticon().popup(position+1);
+//				String emoticons = FacebookData.getinstance().getDBData("Emoticons");
+//				Log.e("EmoticonAdapter", "emoticons [" +emoticons + "] + " + (position+1));
+//				emoticons += "," + (position+1);
+//				Log.e("EmoticonAdapter", "emoticons : " + emoticons);
+//				FacebookData.getinstance().modDBData("Emoticons", emoticons);
+				
 				//상태변경
-				mItemList.get(position).checked = true;
-				EmoticonListAdapter.this.notifyDataSetChanged();
+//				mItemList.get(position).checked = true;
+//				EmoticonListAdapter.this.notifyDataSetChanged();
 			}
 		});
 		

@@ -1,6 +1,10 @@
 ﻿package com.aga.mine.mains;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -11,16 +15,18 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.MotionEvent;
+import android.widget.Toast;
 
 import com.aga.mine.pages.UserData;
 import com.aga.mine.util.Popup;
 
+// 전체적인 변수명 정리와 리팩토링이 필요함. (급하니 코드가 더 더러워짐.)
 public class ShopItem2 extends CCLayer {
 
 	final String commonfolder = "00common/";
@@ -52,6 +58,7 @@ public class ShopItem2 extends CCLayer {
 	CCLabel  levelDivine;
 	CCLabel  levelEarth;
 	CCLabel  levelMirror;
+	CCLabel gold;
 	
 	static CCScene scene() {
 		CCScene scene = CCScene.node();
@@ -87,7 +94,7 @@ public class ShopItem2 extends CCLayer {
 		bg.addChild(boardFrame);
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
-		FrameTitle6.setTitle(boardFrame, folder);
+		gold = FrameTitle6.setTitle(boardFrame, folder);
 	}
 	
 	
@@ -105,19 +112,19 @@ public class ShopItem2 extends CCLayer {
 				folder + "item-buttonBuy-hd" + fileExtension,
 				folder + "item-buttonBuy-select-hd" + fileExtension,
 				this, "buyMagicCallback");
-		itemOffenseBuy.setUserData("Offense");
+		itemOffenseBuy.setTag(offense);
 		
 		CCMenuItem itemDefenseBuy = CCMenuItemImage.item(
 				folder + "item-buttonBuy-hd" + fileExtension,
 				folder + "item-buttonBuy-select-hd" + fileExtension,
 				this, "buyMagicCallback");
-		itemDefenseBuy.setUserData("Defense");
+		itemDefenseBuy.setTag(defense);
 		
 		CCMenuItem o_fire = CCMenuItemImage.item(
 				folder + "item-buttonFire-hd" + fileExtension,
 				folder + "item-buttonFire-select-hd" + fileExtension,
 				this, "selectMagicCallback");		
-		o_fire.setUserData(0);
+		o_fire.setTag(0);
 		o_fire.addChild(itemOver);
 		o_fire.setIsEnabled(false);
 		
@@ -125,19 +132,19 @@ public class ShopItem2 extends CCLayer {
 				folder + "item-buttonWind-hd" + fileExtension,
 				folder + "item-buttonWind-select-hd" + fileExtension,
 				this, "selectMagicCallback");
-		o_wind.setUserData(1);
+		o_wind.setTag(1);
 		
 		CCMenuItem o_cloud = CCMenuItemImage.item(
 				folder + "item-buttonCloud-hd" + fileExtension,
 				folder + "item-buttonCloud-select-hd" + fileExtension,
 				this, "selectMagicCallback");
-		o_cloud.setUserData(2);
+		o_cloud.setTag(2);
 		
 		CCMenuItem d_fire = CCMenuItemImage.item(
 				folder + "item-buttonFire-hd" + fileExtension,
 				folder + "item-buttonFire-select-hd" + fileExtension,
 				this, "selectMagicCallback");		
-		d_fire.setUserData(3);
+		d_fire.setTag(3);
 		d_fire.addChild(itemOver);
 		d_fire.setIsEnabled(false);
 		
@@ -145,13 +152,13 @@ public class ShopItem2 extends CCLayer {
 				folder + "item-buttonWind-hd" + fileExtension,
 				folder + "item-buttonWind-select-hd" + fileExtension,
 				this, "selectMagicCallback");
-		d_wind.setUserData(4);
+		d_wind.setTag(4);
 		
 		CCMenuItem d_cloud = CCMenuItemImage.item(
 				folder + "item-buttonCloud-hd" + fileExtension,
 				folder + "item-buttonCloud-select-hd" + fileExtension,
 				this, "selectMagicCallback");
-		d_cloud.setUserData(5);
+		d_cloud.setTag(5);
 		
 		CCMenu spherebuyMenu = CCMenu.menu(itemSphere);
 		CCMenu offensebuyMenu = CCMenu.menu(itemOffenseBuy);
@@ -195,37 +202,43 @@ public class ShopItem2 extends CCLayer {
 		itemDefenseBuy.addChild(buyText);
 		
 		levelFire = CCLabel.makeLabel("Lv" + FacebookData.getinstance().getDBData("LevelFire"), "Arial", 20);
-		levelFire.setColor(ccColor3B.ccYELLOW);
+//		levelFire.setColor(ccColor3B.ccYELLOW);
+		levelFire.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
 		levelFire.setPosition(CGPoint.make(o_fire.getContentSize().width - 12, o_fire.getContentSize().height - 7));
 		levelFire.setAnchorPoint(1, 1);
 		o_fire.addChild(levelFire);
 		
 		levelWind = CCLabel.makeLabel("Lv"+FacebookData.getinstance().getDBData("LevelWind"), "Arial", 20);
-		levelWind.setColor(ccColor3B.ccYELLOW);
+//		levelWind.setColor(ccColor3B.ccYELLOW);
+		levelWind.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
 		levelWind.setPosition(CGPoint.make(o_fire.getContentSize().width - 12, o_fire.getContentSize().height - 7));
 		levelWind.setAnchorPoint(1, 1);
 		o_wind.addChild(levelWind);				
 		
 		levelCloud = CCLabel.makeLabel("Lv"+FacebookData.getinstance().getDBData("LevelCloud"), "Arial", 20);
-		levelCloud.setColor(ccColor3B.ccYELLOW);
+//		levelCloud.setColor(ccColor3B.ccYELLOW);
+		levelCloud.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
 		levelCloud.setPosition(CGPoint.make(o_fire.getContentSize().width - 12, o_fire.getContentSize().height - 7));
 		levelCloud.setAnchorPoint(1, 1);
 		o_cloud.addChild(levelCloud);				
 		
 		levelDivine = CCLabel.makeLabel("Lv"+FacebookData.getinstance().getDBData("LevelDivine"), "Arial", 20);
-		levelDivine.setColor(ccColor3B.ccYELLOW);
+//		levelDivine.setColor(ccColor3B.ccYELLOW);
+		levelDivine.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
 		levelDivine.setPosition(CGPoint.make(o_fire.getContentSize().width - 12, o_fire.getContentSize().height - 7));
 		levelDivine.setAnchorPoint(1, 1);
 		d_fire.addChild(levelDivine);						
 		
 		levelEarth = CCLabel.makeLabel("Lv"+FacebookData.getinstance().getDBData("LevelEarth"), "Arial", 20);
-		levelEarth.setColor(ccColor3B.ccYELLOW);
+//		levelEarth.setColor(ccColor3B.ccYELLOW);
+		levelEarth.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
 		levelEarth.setPosition(CGPoint.make(o_fire.getContentSize().width - 12, o_fire.getContentSize().height - 7));
 		levelEarth.setAnchorPoint(1, 1);
 		d_wind.addChild(levelEarth);					
 		
 		levelMirror = CCLabel.makeLabel("Lv"+FacebookData.getinstance().getDBData("LevelMirror"), "Arial", 20);
-		levelMirror.setColor(ccColor3B.ccYELLOW);
+//		levelMirror.setColor(ccColor3B.ccYELLOW);
+		levelMirror.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
 		levelMirror.setPosition(CGPoint.make(o_fire.getContentSize().width - 12, o_fire.getContentSize().height - 7));
 		levelMirror.setAnchorPoint(1, 1);
 		d_cloud.addChild(levelMirror);						
@@ -367,11 +380,13 @@ public class ShopItem2 extends CCLayer {
 		if (buttonActive) {
 			switch (value) {
 			case previous:
+				MainApplication.getInstance().getActivity().click();
 				scene = Shop.scene();
 				CCDirector.sharedDirector().replaceScene(scene);
 				break;
 
 			case home:
+				MainApplication.getInstance().getActivity().click();
 				scene = Home.scene();
 				CCDirector.sharedDirector().replaceScene(scene);
 				break;
@@ -383,8 +398,14 @@ public class ShopItem2 extends CCLayer {
 				break;
 				
 			case Constant.PURCHASING_CANCEL:
+				MainApplication.getInstance().getActivity().click();
 				isPurchase = false;
-				makeAPurchase();
+				CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(mContext, "구매 취소", Toast.LENGTH_SHORT).show();
+					}
+				});
 				this.removeChildByTag(Constant.POPUP_LAYER, true);
 				break;
 			}
@@ -397,179 +418,249 @@ public class ShopItem2 extends CCLayer {
 //	private long price;
 
 	private void makeAPurchase() {
-//				String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
-//				MainApplication.getInstance().getActivity().sendInvite(recipientID, "우편물 발송", null);
-////				FacebookData.getinstance().getRequestID(recipientID);  //test용
-		
-		// 테스트용 (facebook invite에서 requestID 받으면 그것으로 대체 위에 코드)
+		Log.e("ShopItem2", "isPurchase : " + isPurchase);
 		if (isPurchase) {
-			Log.e("ShopItem2", "isPurchase : " + isPurchase);
-//			long requestID = (long) (Math.random() * 72036854775807L);  //facebook 알림글번호로 대체할 것
-//			String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
-//			String senderID = FacebookData.getinstance().getUserInfo().getId();
-//			String data = 
-//					"0,RequestModeMailBoxAdd*22," + requestID + 
-//					"*1," + recipientID + "*19," + senderID + "*20,Broomstick*21," + quantity;
-//			long myGold = Long.parseLong(FacebookData.getinstance().getDBData("Gold"));
-//			if (myGold < price) {
-//				return;
-//			}
-//			String sum = String.valueOf(myGold - price);
-//			DataFilter.sendMail(data);
-//			FacebookData.getinstance().modDBData("Gold", sum);
-//			gold.setString(new NumberComma().numberComma(sum));
+			FacebookData.getinstance().modDBData(basket);
+			gold.setString(new NumberComma().numberComma(FacebookData.getinstance().getDBData("Gold")));
+			
+			Collection k = basket .keySet();
+			Iterator itr = k.iterator();
+			boolean isSphere = false;
+				while(itr.hasNext()){
+					if (((String) itr.next()).equals("SphereNumber")) {
+						isSphere = true;
+						break;
+					}
+			}
+			if (isSphere)
+				refreshSphere();
+			 else {
+				refreshMagic(offenseTag);
+				refreshMagic(defenseTag);
+			 }
+//				 for (int i = 0; i < itemType.length; i++) {
+					 //  맞는것만 돌리기
+//					 if (itemType[i].equals(object)) {
+//							refreshMagic(i);
+//					}
+//				}
+			
+			basket.clear();
+			SoundEngine.sharedEngine().playEffect(mContext, R.raw.buy);
+			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					Toast.makeText(mContext, "구매 완료", Toast.LENGTH_SHORT).show();
+				}
+			});
+			
 		} else {
+			MainApplication.getInstance().getActivity().click();
 			Log.e("ShopItem2", "isPurchase : " + isPurchase);
 		}
 
 	}
+	
+	private void refreshSphere() {
+		int sphereNumber = Integer.parseInt(FacebookData.getinstance().getDBData("SphereNumber"));
+		
+		if (sphereNumber < 9) {
+			int spherePrice = userData.buySphere[sphereNumber - 3];	
+			sphereNumber1.setString(new NumberComma().numberComma(spherePrice));
+		} else {
+			sphereNumber1.setString("MAX");
+			sphereNumber1.setColor(ccColor3B.ccYELLOW);
+		}
+		
+		sphereNumber2.setString("보유 정령병 :  " + new NumberComma().numberComma(sphereNumber));
+	}
+	
+	
+	final int offense = 0; 
+	final int defense = 1; 
+	Map<String, String> basket = new HashMap<String, String>();
+	
+	
 	public void buySphereCallback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
+		int sphereQuantity = Integer.parseInt(FacebookData.getinstance().getDBData("SphereNumber"));
+		
+		// 보유 정령병 MAX (종료) 
+		if (sphereQuantity >= 9) {
+			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					Toast.makeText(mContext, "더 이상 구매가 불가능 합니다.", Toast.LENGTH_SHORT).show();
+				}
+			});
+			return;
+		}
+		
+		int spherePrice = userData.buySphere[sphereQuantity - 3];
+		long gold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
+		
+		// 골드 부족 (종료) 
+		if (gold < spherePrice) {
+			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					Toast.makeText(mContext, "골드가 부족합니다.", Toast.LENGTH_SHORT).show();
+				}
+			});
+			return;
+		}
 		
 		Popup.popupOfPurchase(this);
+		basket.put("SphereNumber", String.valueOf(sphereQuantity + 1));
+		basket.put("Gold", String.valueOf(gold - spherePrice));				
+	}
+	
+	
+	public void buyMagicCallback(Object sender) {
+		MainApplication.getInstance().getActivity().click();
+		int buttonTag = ((CCNode)sender).getTag();
+		int _tag;
 		
-//		// max일때 구입안되게 막아야됨.
-//		int sphereNumber = Integer.parseInt(FacebookData.getinstance().getDBData("SphereNumber"));
-//		int spherePrice = userData.buySphere[sphereNumber - 3];
-//		
-//		if (sphereNumber < 9) {
-//			String gold = FacebookData.getinstance().getDBData("Gold");
-//			FacebookData.getinstance().modDBData("Gold", "" + (Integer.parseInt(gold) - spherePrice));
-//			FacebookData.getinstance().modDBData("SphereNumber", "" + (sphereNumber + 1));
-//			
-//			sphereNumber = Integer.parseInt(FacebookData.getinstance().getDBData("SphereNumber"));
-//			
-//			if (sphereNumber < 9) {
-//				spherePrice = userData.buySphere[sphereNumber - 3];
-//				sphereNumber1.setString(new NumberComma().numberComma(spherePrice));	
-//			} else {
-//				sphereNumber1.setString("MAX");
-//				sphereNumber1.setColor(ccColor3B.ccYELLOW);
-//			}
-//			sphereNumber2.setString("보유 정령병 :  " + new NumberComma().numberComma(sphereNumber));
-//			
-////			Log.e("ShopItem2", "getChildByTag : " + bb.getChildByTag(1));
-////			Log.e("ShopItem2", "userData : " + ((CCMenuItemImage)sender).getUserData());
-////			userData.increaseSphere();
-//		}
+		if (buttonTag == offense) {
+			_tag = offenseTag;
+		} else {
+			_tag = defenseTag;
+		}
+		
+		String magicType = itemType[_tag];
+		
+		int level = Integer.parseInt(FacebookData.getinstance().getDBData(magicType));
+
+		// 지정 마법 MAX (종료) 
+		if (level >= 20) {
+			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					Toast.makeText(mContext, "더 이상 구매가 불가능 합니다.", Toast.LENGTH_SHORT).show();
+				}
+			});
+			return;
+		}
+		
+		int price = userData.magicPrice[_tag][level];
+		long gold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
+		
+		// 골드 부족 (종료) 
+		if (gold < price) {
+			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					Toast.makeText(mContext, "골드가 부족합니다.", Toast.LENGTH_SHORT).show();
+				}
+			});
+			return;
+		}
+		
+		Popup.popupOfPurchase(this);
+		basket.put(magicType, String.valueOf(level + 1));
+		basket.put("Gold", String.valueOf(gold - price));			
 	}
 
-	public void buyMagicCallback(Object sender) {
-		Popup.popupOfPurchase(this);
-		
-//		// max일때 구입안되게 막아야됨.
-//		Log.e("item", "buyMagicCallback : " + ((CCMenuItemImage)sender).getUserData()); 	
-//		
-//		CCLabel  magicLabel1 = defenseAttributeSelected1;
-//		CCLabel  magicLabel2 = defenseAttributeSelected2;
-//		CCLabel  magicLabel3 = null;
-//		int magicNumber = userData.defenceMagic;
-//				
-//		if (((CCMenuItemImage)sender).getUserData().equals("Offense")) {
-//			magicLabel1 = offenseAttributeSelected1;
-//			magicLabel2 = offenseAttributeSelected2;
-//			magicNumber = userData.offenceMagic;
-//		}
-//		
-//		String magicType = itemType[magicNumber];
-//		int magicLevel = Integer.parseInt(FacebookData.getinstance().getDBData(magicType));
-//		int price = userData.magicPrice[magicNumber][magicLevel];
-//		
-//		if (magicLevel < 20) {
-//			String gold = FacebookData.getinstance().getDBData("Gold");
-//			FacebookData.getinstance().modDBData("Gold", "" + (Integer.parseInt(gold) - price));
-//			FacebookData.getinstance().modDBData(magicType, "" + (magicLevel + 1));
-//			magicLevel = Integer.parseInt(FacebookData.getinstance().getDBData(magicType));
-//			String levelStr = "Lv" + magicLevel;
-//						
-//			switch (magicNumber) {
-//			case 0:
-//				magicLabel3 = levelFire;
-//				break;
-//	
-//			case 1:
-//				magicLabel3 = levelWind;
-//				break;
-//				
-//			case 2:
-//				magicLabel3 = levelCloud;
-//				break;
-//				
-//			case 3:
-//				magicLabel3 = levelDivine;
-//				break;
-//				
-//			case 4:
-//				magicLabel3 = levelEarth;
-//				break;
-//				
-//			case 5:
-//				magicLabel3 = levelMirror;
-//				break;			
-//			}
-//			
-//			if (magicLevel < 20) {
-//				price = userData.magicPrice[magicNumber][magicLevel];
-//				magicLabel1.setString(new NumberComma().numberComma(price));	
-//			} else {
-//				magicLabel1.setString("MAX");
-//				magicLabel1.setColor(ccColor3B.ccYELLOW);
-//			}
-//			magicLabel2.setString(magicText2[magicNumber/3][0] + magicLevel + magicText2[magicNumber/3][1]);
-//			magicLabel3.setString(levelStr);
-//		}
-	}
 
 	public void selectMagicCallback(Object sender) {
-		CCMenuItemImage button = (CCMenuItemImage)sender;
-		List<CCNode> a = button.getParent().getChildren();
-//		Log.e("ShopItem2", "a : " + a);
-		for (CCNode ccNode : a) {
-//			Log.e("ShopItem2", "ccNode : " + ccNode.getUserData());
-			final CCMenuItemImage sprite = (CCMenuItemImage)ccNode;
-			sprite.setIsEnabled(true);
-			sprite.removeChild(itemOver, true);
+		MainApplication.getInstance().getActivity().click();
+		int buttonTag = ((CCNode) sender).getTag();
+		if (buttonTag < 3) {
+			offenseTag = buttonTag;
+		} else {
+			defenseTag  = buttonTag;
 		}
+//		Log.e("ShopItem2", "selectMagicCallback _ tag : " + temp);
+		
+		List<CCNode> a = ((CCNode) sender).getParent().getChildren();
+		CCMenuItemImage button = (CCMenuItemImage)sender;
+		
+		// 부모에 속한 자식들 모두 선택되지 않은상태로 변경
+		for (CCNode ccNode : a) {
+			final CCMenuItemImage ccButton = (CCMenuItemImage)ccNode;
+			ccButton.setIsEnabled(true);
+			ccButton.removeChild(itemOver, true);
+		}
+		
+		// 현재 선택된 버튼만 선택된상태로 변경
 		button.addChild(itemOver, 777);
 		itemOver.setAnchorPoint(0,0);
 		button.setIsEnabled(false);
-		setElemental(((Integer)button.getUserData()));
-//		test(button.getUserData());
+		Log.e("ShopItem2", "button _ tag : " + button.getTag());
+		refreshMagic(buttonTag);
 	}
-
 	
+//	final int  levelFire = 0;
+//	final int  levelWind = 1;
+//	final int  levelCloud = 2;
+//	final int  levelDivine = 3;
+//	final int  levelEarth = 4;
+//	final int  levelMirror = 5;
+	
+	int offenseTag = 0;
+	int defenseTag = 3;
 	String[] itemType = { "LevelFire", "LevelWind", "LevelCloud", "LevelDivine", "LevelEarth", "LevelMirror" };
 	String[][] magicText2 = { {"공격 시간 ","초 증가"}, {"피해 시간 ","초 감소"}};
 	
-	private void setElemental(int type) {
-		String level = FacebookData.getinstance().getDBData(itemType[type]);
-		
+	private void refreshMagic(int type) {
+		Log.e("ShopItem2", "setElemental _ tag : " + type);
 		String price = "MAX";
-		if (Integer.parseInt(level) < 20) {
-			price = "" + userData.magicPrice[type][Integer.parseInt(level)];
+		String magicType = itemType[type];
+		
+		int level = Integer.parseInt(FacebookData.getinstance().getDBData(magicType));
+		
+		if (level < 20)
+			price = "" + userData.magicPrice[type][level];
+		
+		CCLabel level_Label = null;
+		
+		switch (type) {
+		case 0:
+			level_Label = levelFire;
+			break;
+		case 1:
+			level_Label = levelWind;
+			break;
+		case 2:
+			level_Label = levelCloud;
+			break;
+		case 3:
+			level_Label = levelDivine;
+			break;
+		case 4:
+			level_Label = levelEarth;
+			break;
+		case 5:
+			level_Label = levelMirror;
+			break;
 		}
 		
+		level_Label.setString("Lv" + FacebookData.getinstance().getDBData(itemType[type]));
 		
-		if (type < 3) {		
+		if (type < 3) {
 			offenseAttributeSelected1.setString(
 					new NumberComma().numberComma(price));				
 			offenseAttributeSelected2.setString(magicText2[0][0] + level + magicText2[0][1]);	
 			userData.offenceMagic =  type;
-			if (price.equals("MAX")) {
+			
+			if (price.equals("MAX"))
 				offenseAttributeSelected1.setColor(ccColor3B.ccYELLOW);
-			} else {
+			else
 				offenseAttributeSelected1.setColor(ccColor3B.ccWHITE);
-			}
-		} else {			
+			
+		} else {
 			defenseAttributeSelected1.setString(
 					new NumberComma().numberComma(price));		
 			defenseAttributeSelected2.setString(magicText2[1][0] + level + magicText2[1][1]);
 			userData.defenceMagic =  type;
-			if (price.equals("MAX")) {
+			
+			if (price.equals("MAX"))
 				defenseAttributeSelected1.setColor(ccColor3B.ccYELLOW);
-			} else {
+			else
 				defenseAttributeSelected1.setColor(ccColor3B.ccWHITE);
-			}
+			
 		}
+		
 	}
 
 }

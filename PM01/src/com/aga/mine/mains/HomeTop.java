@@ -32,8 +32,8 @@ public class HomeTop extends CCLayer{
 	final int optionButton = 1005;
 	final int inviteButton = 1006;
 	
-	private CCLabel broomstickEA;
-	private CCLabel gold;
+	private static CCLabel broomstickEA;
+	private static CCLabel gold;
 			
 	//주간 순위 갱신 변수
 	private float mSecondToRefreshWeek; //단위는 sec, 주간순위를 갱신하기까지 남은 시간
@@ -305,5 +305,10 @@ public class HomeTop extends CCLayer{
 		friendsInvite.setPosition((595 * winsize().width) / parentSprite.getBoundingBox().size.width ,
 		inviteMenu.getContentSize().height - 710);
 		friendsInvite.setAnchorPoint(1, 1);
+	}
+	
+	public static void getDB() {
+		broomstickEA.setString("+" + FacebookData.getinstance().getDBData("ReceivedBroomstick"));
+		gold.setString(new NumberComma().numberComma(FacebookData.getinstance().getDBData("Gold")));
 	}
 }

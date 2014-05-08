@@ -12,11 +12,13 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.pages.UserData;
@@ -174,11 +176,13 @@ public class ShopBroomstick2 extends CCLayer {
 		if (buttonActive) {
 			switch (value) {
 			case previous:
+				MainApplication.getInstance().getActivity().click();
 				scene = Shop.scene();
 				CCDirector.sharedDirector().replaceScene(scene);
 				break;
 
 			case home:
+				MainApplication.getInstance().getActivity().click();
 				scene = Home.scene();
 				CCDirector.sharedDirector().replaceScene(scene);
 				break;
@@ -190,8 +194,16 @@ public class ShopBroomstick2 extends CCLayer {
 				break;
 				
 			case Constant.PURCHASING_CANCEL:
+				MainApplication.getInstance().getActivity().click();
 				isPurchase = false;
-				makeAPurchase();
+				CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(mContext, "구매 취소", Toast.LENGTH_SHORT).show();
+					}
+				});
+//				isPurchase = false;
+//				makeAPurchase();
 				this.removeChildByTag(Constant.POPUP_LAYER, true);
 				break;
 			}
@@ -217,27 +229,56 @@ public class ShopBroomstick2 extends CCLayer {
 					"0,RequestModeMailBoxAdd*22," + requestID + 
 					"*1," + recipientID + "*19," + senderID + "*20,Broomstick*21," + quantity;
 			long myGold = Long.parseLong(FacebookData.getinstance().getDBData("Gold"));
-			if (myGold < price) {
-				return;
-			}
+//			if (myGold < price) {
+//				CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+//					@Override
+//					public void run() {
+//						Toast.makeText(mContext, "골드가 부족합니다.", Toast.LENGTH_SHORT).show();
+//					}
+//				});
+//				return;
+//			}
+			
 			String sum = String.valueOf(myGold - price);
 			DataFilter.sendMail(data);
 			FacebookData.getinstance().modDBData("Gold", sum);
+			SoundEngine.sharedEngine().playEffect(mContext, R.raw.buy);
+			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					Toast.makeText(mContext, "구매 완료", Toast.LENGTH_SHORT).show();
+				}
+			});
 			gold.setString(new NumberComma().numberComma(sum));
 		}
 
 	}
 	
 	public void buttonCallback(Object sender) {
-		Popup.popupOfPurchase(this);
-		
+		MainApplication.getInstance().getActivity().click();
 		long[] value = (long[]) ((CCNode)sender).getUserData();
 		price = value[0];
 		quantity = value[1];
-		// 로그용
-		for (double d : value) {
-			Log.e("ShopBroomstick2", "buttonCallback : " + (int)d);
+		
+		long gold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
+		
+		// 골드 부족 (종료) 
+		if (gold < price) {
+			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					Toast.makeText(mContext, "골드가 부족합니다.", Toast.LENGTH_SHORT).show();
+				}
+			});
+			return;
 		}
+		
+		Popup.popupOfPurchase(this);
+		
+//		// 로그용
+//		for (double d : value) {
+//			Log.e("ShopBroomstick2", "buttonCallback : " + (int)d);
+//		}
 	}
 	
 }

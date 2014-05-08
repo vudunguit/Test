@@ -6,7 +6,13 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
+
+import android.util.Log;
+import android.widget.Toast;
+
+import com.aga.mine.util.Popup;
 
 public class ShopEmoticon extends CCLayer {
 	
@@ -61,6 +67,7 @@ public class ShopEmoticon extends CCLayer {
 	
 	// sceneCallback들 전부 여기로 옮기기
 	public void clicked(Object sender) {
+		
 		// hide scroll view
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 		CCScene scene = null;
@@ -68,15 +75,46 @@ public class ShopEmoticon extends CCLayer {
 		if (buttonActive) {
 			switch (value) {
 			case previous:
+				MainApplication.getInstance().getActivity().click();
 				scene = Shop.scene();
+				CCDirector.sharedDirector().replaceScene(scene);
 				break;
 
 			case home:
+				MainApplication.getInstance().getActivity().click();
 				scene = Home.scene();
+				CCDirector.sharedDirector().replaceScene(scene);
+				break;
+				
+			case Constant.PURCHASING_OK:
+				String emoticons = FacebookData.getinstance().getDBData("Emoticons");
+				emoticons += "," + emoticonID;
+				FacebookData.getinstance().modDBData("Emoticons", emoticons);
+				
+				String gold = FacebookData.getinstance().getDBData("Gold");
+				gold = String.valueOf(Long.parseLong(gold) - 100);
+				FacebookData.getinstance().modDBData("Gold", gold);
+				SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.buy);
+				MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_EMOTICONLIST);
+				break;
+				
+			case Constant.PURCHASING_CANCEL:
+				MainApplication.getInstance().getActivity().click();
+				CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(CCDirector.sharedDirector().getActivity(), "구매 취소", Toast.LENGTH_SHORT).show();
+					}
+				});
 				break;
 			}
-			CCDirector.sharedDirector().replaceScene(scene);
+			
 		}
 	}
 
+	int emoticonID;
+	public void popup(int emoticonID){
+		Popup.popupOfPurchase(this);
+		this.emoticonID = emoticonID;
+	}
 }

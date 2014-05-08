@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.aga.mine.mains.Constant;
 import com.aga.mine.mains.DataFilter;
 import com.aga.mine.mains.FacebookData;
+import com.aga.mine.mains.HomeTop;
 import com.aga.mine.mains.MailBox;
 import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.R;
@@ -71,6 +72,7 @@ public class MailListAdapter extends BaseAdapter {
 		holder.image.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				MainApplication.getInstance().getActivity().click();
 				// 일반 버튼같이 down상태에서는 이미지 변경이 가능할까요?
 				String serialNumber = mMailItemList.get(position).serial_number;
 
@@ -109,12 +111,14 @@ public class MailListAdapter extends BaseAdapter {
 							mMailItemList.remove(position);
 							MailBox.postNumber.setString(String.valueOf(mMailItemList.size()));
 							MailListAdapter.this.notifyDataSetChanged();
+							HomeTop.getDB();
 						} else {
 							// 골드 화면 갱신
 							holder.image.setImageResource(R.drawable.mail_giftbutton2);
 							mMailItemList.remove(position);
 							MailBox.postNumber.setString(String.valueOf(mMailItemList.size()));
 							MailListAdapter.this.notifyDataSetChanged();
+							HomeTop.getDB();
 						}
 					}
 					
