@@ -19,8 +19,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
-import com.aga.mine.pages.Game;
-import com.aga.mine.pages.GameMinimap;
+import com.aga.mine.pages2.Game;
 import com.aga.mine.util.Util;
 
 //import com.aga.mine.layers.GameInvite;
@@ -110,6 +109,8 @@ public class NetworkController extends Activity {
 	final static int kModeReceived = 1;
 	/*******************************************/	
 	static NetworkControllerDelegate delegate;
+	
+	Game mGame;
 
 	public static String kTempFacebookId = "999999999999999";
 	public static String kTempName = "@Guest";
@@ -251,8 +252,12 @@ public class NetworkController extends Activity {
 	}
 	
 	private void processMessage(byte[] data) throws IOException {
+		
 		MessageReader reader = new MessageReader(data);
-		final byte messageType = reader.readByte();		
+		final byte messageType = reader.readByte();
+		
+		Log.e("NetworkController", "data : " + data.length);
+		Log.e("NetworkController", "reader : " + reader.length());
 
 		// 디버그 코드
 		final String[] messageTypeString = {
@@ -318,9 +323,16 @@ public class NetworkController extends Activity {
 			
 		case kMessagePlayData:
 			Log.e("NetworkController", "kMessagePlayData");
+			mGame = Game.getInstance();
 			int count = 0;
+			Log.e("NetworkController", "reader : " + reader.buffer_);
+			byte playType;
+			int playData;
 			while (reader.buffer_.hasRemaining()) {
-				GameMinimap.getInstance().receivePlayData(reader.readByte(), reader.readInt());
+				playType = reader.readByte();
+				playData = reader.readInt();
+				Log.e("NetworkController", "playType : " + playType + ",playData : " + playData);
+				mGame.mHud.mGameMinimap.receivePlayData(playType, playData);
 				// kMessageRequestIsPlayerConnected와 같이 수정해도 될듯
 				if (reader.buffer_.hasRemaining()) {
 					count++;
@@ -328,26 +340,38 @@ public class NetworkController extends Activity {
 				}
 			}
 
+//			while (reader.buffer_.hasRemaining()) {
+//				playType = reader.readByte();
+//				playData = reader.readInt();
+//				mGame.mHud.mGameMinimap.receivePlayData(playType, playData);
+//				if (reader.buffer_.hasRemaining()) {
+//					reader.readInt(); // dataSize
+//					reader.readByte(); // connenct_dataType // or
+//				}
+//			}
+			
 //			ByteInt[] playData = new ByteInt[(data.length /10) +1];
 //
 //			byte messageTypeGarbage;
 //			int dataSizeGarbage;
-//			int count = 0;
-//			Log.e("GameMinimap", "receivePlayData reader.length() : " + reader.length());
+//			int playCount = 0;
+//			Log.e("NetworkController", "receivePlayData reader.length() : " + reader.length());
 //			for (int i = 0; i < (data.length /10) +1 ; i++) {
 //				GameMinimap.getInstance().receivePlayData(reader.readByte(), reader.readInt());
 ////				playData[i].setPlayType(reader.readByte());		
 ////				playData[i].setData(reader.readInt());
-//				if (count != data.length /10) {
+//				if (playCount != data.length /10) {
 //					dataSizeGarbage = reader.readInt();
 //					messageTypeGarbage = reader.readByte();
-//					count ++;
+//					playCount ++;
 //				}
 //			}
 			
 //			GameMinimap.getInstance().receivePlayData(playData);
 //			GameMinimap.getInstance().receivePlayData(data);
-//			GameMinimap.getInstance().receivePlayData(reader.readByte(), reader.readInt());
+//			byte playType = reader.readByte();
+//			int playData = reader.readInt();
+//			GameMinimap.getInstance().receivePlayData(playType, playData);
 			break;
 
 		case kMessageOpponentConnectionLost:
@@ -401,7 +425,8 @@ public class NetworkController extends Activity {
 			int result2 = reader.readInt();
 			Log.e("Network", "상대방 점수 : " + result2);
 //			Game.HudLayer.gameOver();
-			Game.HudLayer.gameOver(1, 1);
+
+			mGame.mHud.gameOver(1,1);
 			
 //			NetworkController.getInstance().sendPlayDataGameOver(98765);
 			break;
@@ -415,6 +440,9 @@ public class NetworkController extends Activity {
 			Log.e("NetworkController", "kNetworkStateMatchCompleted");
 			matchedOppenentFacebookId = reader.readString();
 			matchedOppenentName = reader.readString();
+			int ai = reader.readByte();
+			int mapType = reader.readByte();
+			Log.e("NetworkController", "mapType : " + mapType + "  // gamedata로 보낼것");
 			
 			CCScene scene;
 			// 랜덤 매치 or 초대매치 && 방장 or 손님 
@@ -795,22 +823,22 @@ public class NetworkController extends Activity {
 //	
 ////	 MineCell.open()
 //	//private void sendPlayDataMine(int cell_ID) throws IOException {
-//	public void sendPlayDataMine(int cell_ID) throws IOException {
-//		this.sendPlayData(kPlayDataMine, cell_ID);
-//	}
+	public void sendPlayDataMine(int cell_ID) throws IOException {
+		this.sendPlayData(kPlayDataMine, cell_ID);
+	}
 	
-//	
-//	// Game.handleLongPress()
-//	// private void sendPlayDataMushroomOff(int cell_ID) throws IOException {
-//	public void sendPlayDataMushroomOff(int cell_ID) throws IOException {
-//		this.sendPlayData(kPlayDataMushroomOff, cell_ID);
-//	}
-////	 Game.handleLongPress()
-//	// private void sendPlayDataMushroomOn(int cell_ID) throws IOException {
-//	public void sendPlayDataMushroomOn(int cell_ID) throws IOException {
-//		this.sendPlayData(kPlayDataMushroomOn, cell_ID);
-//	}
-//	
+	
+	// Game.handleLongPress()
+	// private void sendPlayDataMushroomOff(int cell_ID) throws IOException {
+	public void sendPlayDataMushroomOff(int cell_ID) throws IOException {
+		this.sendPlayData(kPlayDataMushroomOff, cell_ID);
+	}
+//	 Game.handleLongPress()
+	// private void sendPlayDataMushroomOn(int cell_ID) throws IOException {
+	public void sendPlayDataMushroomOn(int cell_ID) throws IOException {
+		this.sendPlayData(kPlayDataMushroomOn, cell_ID);
+	}
+	
 //	 Game.addSphereTo()
 	// 아이템 타입추가 필요
 	//private void sendPlayDatasphereTake(int cell_ID) throws IOException {
@@ -874,4 +902,5 @@ public class NetworkController extends Activity {
     	Log.e("NetworkController", "Callback_2 - setMatchCallback");
     	mMatchCallback = callback;
     }
+    
 }
