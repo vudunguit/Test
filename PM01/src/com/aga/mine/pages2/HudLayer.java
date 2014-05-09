@@ -67,7 +67,7 @@ public class HudLayer extends CCLayer {
 	HudLayer controlHudLayer;
 	
 	private Game mGame;
-	private GameMinimap mGameMinimap;
+	public GameMinimap mGameMinimap;
 	public GameProgressBar mGameProgressBar;
 
 	public HudLayer(Game game) {
@@ -455,7 +455,8 @@ public class HudLayer extends CCLayer {
 	 */
 	public boolean isGameOver = false; // 게임 종료 메시지를 서버로 무한 보내는것을 방지함.
 
-	public void gameOver() {
+//	public void gameOver() {
+	public void gameOver(int myPoint, int otherPoint) {
 		Log.e("Game / HudLayer / gameOver", "gameEnding - gogo");
 		Config.getInstance().setDisableButton(true);
 		
@@ -489,6 +490,7 @@ public class HudLayer extends CCLayer {
 	// others
 
 	// 위쪽 캐릭터 얼굴만있는 프로그레스바에 캐릭 얼굴 움직이게 해줌
+	// mine에서 tiles로 변경해야됨.
 	public void updateProgress() {
 		int gameDifficulty = GameData.share().getGameDifficulty();
 		int maxMine = GameData.share().getMaxMineNumber(gameDifficulty);

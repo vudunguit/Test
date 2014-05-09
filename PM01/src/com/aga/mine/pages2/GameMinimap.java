@@ -1,5 +1,6 @@
 ﻿package com.aga.mine.pages2;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,6 +19,7 @@ import org.cocos2d.utils.CCFormatter;
 import android.util.Log;
 
 import com.aga.mine.mains.Config;
+import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.Utility;
 
 public class GameMinimap extends CCLayer{
@@ -261,7 +263,7 @@ public class GameMinimap extends CCLayer{
 	 * @return
 	 */
 	public void receivePlayData(byte playType, int data) {
-		Log.e("GameMinimap", "receivePlayData / " +playType+","+data );
+		Log.e("GameMinimap", "receivePlayData / " + playType + ", " + data );
 
 		final int kPlayDataCellOpen = 0;
 		final int kPlayDataMushroomOn = 1;
@@ -312,15 +314,15 @@ public class GameMinimap extends CCLayer{
 			mHudLayer.testText.setString("적이 방어 하였습니다. kPlayDataMagicDefense");
 			break;
 			
-//		case kPlayDataGameOver:
-//			try {
-//				Game.HudLayer.gameOver();
-////				NetworkController.getInstance().sendPlayDataGameOver(111111);
-//				NetworkController.getInstance().sendGameOver();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//			break;
+		case kPlayDataGameOver:
+			try {
+				mHudLayer.gameOver(1,1); // 점수 넣어야될듯
+//				NetworkController.getInstance().sendPlayDataGameOver(111111);
+				NetworkController.getInstance().sendGameOver();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
 			
 		case kPlayDataEmoticon:
 			mHudLayer.testText.setString("이모티콘이 왔습니다. type : " + data);

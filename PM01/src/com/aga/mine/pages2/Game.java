@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
 
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFuncND;
@@ -38,9 +40,14 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.aga.mine.mains.Config;
+import com.aga.mine.mains.Constant;
+import com.aga.mine.mains.DataFilter;
+import com.aga.mine.mains.FacebookData;
+import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.R;
 import com.aga.mine.pages2.MineCell.MineCellDelegate;
+import com.aga.mine.util.Util;
 
 public class Game extends CCLayer implements MineCell.MineCellDelegate {
 
@@ -77,13 +84,13 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	final int kSphereTypeMirror = 6;
 	// ----------------------- Game.m --------------------------//
 	private CCTMXTiledMap tileMap;
-	CCTMXLayer bg;
-	CCTMXLayer meta;
-	CCTMXLayer fg;
-	CCTMXLayer mineLayer;
-	CCTMXLayer itemLayer;
-	CCTMXLayer flagLayer;
-	CCTMXLayer earthLayer;
+	CCTMXLayer tmxBg;
+	CCTMXLayer tmxMeta;
+	CCTMXLayer tmxFg;
+	CCTMXLayer tmxMineLayer;
+	CCTMXLayer tmxItemLayer;
+	CCTMXLayer tmxFlagLayer;
+	CCTMXLayer tmxEarthLayer;
 	CCSprite player;
 
 	public static HudLayer mHud;
@@ -125,7 +132,18 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	// game = null;
 	// }
 	//
-
+	
+	
+	private static Game mGame;
+	
+	public static synchronized Game getInstance() {
+		if (mGame == null) {
+			mGame = new Game();
+			Log.e("** Game **", "make Single Instance");
+		}
+		return mGame;
+	}
+	
 	// gamedata에서 수정하였음.
 	// 지뢰수 수정하여 테스트중 현재 3개로 수정
 	// 수정구 1개로 수정
@@ -135,6 +153,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	 * @param context
 	 */
 	private Game() {
+		
 		Log.e("** Game **", "Instance");
 		//GameMinimap.getInstance().dealloc();
 		//mHud.isGameOver = false;
@@ -179,12 +198,14 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 
 		//
 		// 사운드 (로드)
-		SoundEngine.sharedEngine().preloadEffect(this.mContext,	R.raw.lo_01); // 이펙트 (효과음) // (타일)pickup
-		SoundEngine.sharedEngine().preloadEffect(this.mContext,	R.raw.lo_02); // 이펙트 (효과음) // (타일)pickup
-		SoundEngine.sharedEngine().preloadEffect(this.mContext,
-				R.raw.game_pumpkin); // 이펙트 (효과음) // (호박)hit
-		SoundEngine.sharedEngine().preloadEffect(this.mContext,
-				R.raw.game_mushroom); // 이펙트 (효과음) // (버섯)move
+		int effect = R.raw.landopen_01;
+		for (int i = 0; i < 8; i++) {
+			SoundEngine.sharedEngine().preloadEffect(mContext, effect + i); // 이펙트 (효과음) // (타일)pickup	
+		}
+		
+//		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.landopen_02); // 이펙트 (효과음) // (타일)pickup
+		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.game_pumpkin); // 이펙트 (효과음) // (호박)hit
+		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.game_mushroom); // 이펙트 (효과음) // (버섯)move
 
 		//
 		// 타일맵 로드
@@ -219,18 +240,18 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		 * 깃발 꽂을 레이어 this.earthLayer = this.tileMap.layerNamed("CrackedEarth");
 		 * // 갈라진대지 레이어
 		 */
-		this.itemLayer = this.tileMap.layerNamed("ItemLayer"); // 지뢰 및 아이템, 깃발
+		this.tmxItemLayer = this.tileMap.layerNamed("ItemLayer"); // 지뢰 및 아이템, 깃발
 																// 가져오는 레이어
-		this.earthLayer = this.tileMap.layerNamed("CrackedEarth"); // 갈라진대지
+		this.tmxEarthLayer = this.tileMap.layerNamed("CrackedEarth"); // 갈라진대지
 																	// 레이어(아이템
 																	// 이펙트)
-		this.bg = this.tileMap.layerNamed("Background"); // Layer Name in Tiled
-		this.mineLayer = this.tileMap.layerNamed("MineLayer"); // 지뢰(호박) 및 아이템
+		this.tmxBg = this.tileMap.layerNamed("Background"); // Layer Name in Tiled
+		this.tmxMineLayer = this.tileMap.layerNamed("MineLayer"); // 지뢰(호박) 및 아이템
 																// 뿌릴 레이어
-		this.fg = this.tileMap.layerNamed("Foreground"); // 잔디
-		this.flagLayer = this.tileMap.layerNamed("FlagLayer"); // 깃발(버섯) 꽂을 레이어
-		this.meta = this.tileMap.layerNamed("Meta"); // 선택 불가 영역
-		this.meta.setVisible(false);
+		this.tmxFg = this.tileMap.layerNamed("Foreground"); // 잔디
+		this.tmxFlagLayer = this.tileMap.layerNamed("FlagLayer"); // 깃발(버섯) 꽂을 레이어
+		this.tmxMeta = this.tileMap.layerNamed("Meta"); // 선택 불가 영역
+		this.tmxMeta.setVisible(false);
 
 		theLayer.setScale(GameConfig.share().kDefaultScale * 128
 				/ tileMap.getTileSize().width);
@@ -435,7 +456,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// 원래 순서는 수정구부터
 		//
 		// 수정구 설치
-		this.scatterSpheres();
+		scatterSpheres(cells, tmxFg, false);
 
 		//
 		// 지뢰 설치
@@ -459,10 +480,10 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		cellsTemp = cells;
 		size = cellsTemp.size();
 		for (int i = 0; i < size; i++) {
-			int gid = this.itemLayer.tileGIDAt(CGPoint.make(
+			int gid = this.tmxItemLayer.tileGIDAt(CGPoint.make(
 					(float) (Math.random() * 4), 8));
 			gid = CCFormatter.swapIntToLittleEndian(gid);
-			this.earthLayer.setTileGID(gid, cellsTemp.get(i).getTileCoord());
+			this.tmxEarthLayer.setTileGID(gid, cellsTemp.get(i).getTileCoord());
 		}
 
 		// /////////////////////////////////////
@@ -506,12 +527,13 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			animation.addFrame(String.format("60game/%02d.png", i));
 		}
 		mOpenAction = CCAnimate.action(0.2f, animation, false);
+		SoundEngine.sharedEngine().preloadSound(mContext, R.raw.bgm); // 백그라운드 뮤직
 	}
 
 	// 생성자Game end
 
 	private void aaaaa() {
-		Log.e("Game / game", "I'm Ready!");
+		Log.e("Game", "I'm Ready!");
 		try {
 			NetworkController.getInstance().sendGameReady();
 		} catch (IOException e) {
@@ -544,6 +566,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	 * 이모티콘 애니는 위치가 정해지지 않았습니다. Game 또는 Hud중 무난한 곳에 넣어주시면 됩니다.
 	 **/
 
+	
 	// public CCScene scene() {
 	public static CCScene scene() {
 		// 기존에는 static으로 멤버 변수로 선언하였었음. 이상시 원래 대로 바꿀것
@@ -551,7 +574,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 
 		// 게임 레이어
 		// Game game = Game.getInstance();
-		Game game = new Game();
+		Game game = Game.getInstance();
 		scene.addChild(game);
 		game.setAnchorPoint(0.0f, 0.0f);
 		/*** 중요 ***/
@@ -564,13 +587,13 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 //		hudLayer.addChild(ending, GameConfig.share().kDepthPopup, 1234);
 //		ending.setVisible(false);
 //		ending.setIsTouchEnabled(false);
-		// game.hud.gameEnding = ending;
-		// game.hud.controlHudLayer = hudLayer;
+		// game.mHud.gameEnding = ending;
+		// game.mHud.controlHudLayer = hudLayer;
 		/*
 		 * GameEmoticon gameEmoticon = new GameEmoticon();
 		 * //hudLayer.addChild(gameEmoticon); scene.addChild(gameEmoticon);
 		 */
-
+		
 		return scene;
 	}
 
@@ -637,7 +660,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 
 		// unsigned
 		// 작은값으로 변환
-		int mineGid = CCFormatter.swapIntToLittleEndian(this.itemLayer
+		int mineGid = CCFormatter.swapIntToLittleEndian(this.tmxItemLayer
 				.tileGIDAt(CGPoint.make(0f, 0f))); // mind gid
 		// Log.e("Game / scatterMines", "mineGid : " + mineGid);
 		for (int i = 0; i < maxMineNumber; i++) {
@@ -662,7 +685,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 					// isDontSetMine:cell.tileCoord] == NO)
 
 					cell.setMine(true);
-					this.mineLayer.setTileGID(mineGid, cell.getTileCoord()); // 레이어가
+					this.tmxMineLayer.setTileGID(mineGid, cell.getTileCoord()); // 레이어가
 																				// 비어있으면
 																				// 에러남!
 					// this.fg.setTileGID(mineGid, cell.tileCoord); // for test
@@ -672,7 +695,9 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		}
 	}
 
-	public void scatterSpheres() {
+	// 인자 추가
+	public void scatterSpheres(ArrayList<MineCell> cells, CCTMXLayer tmx, boolean isAi) {
+		
 		for (int i = 0; i < GameData.share().kNumberOfSphere; i++) {
 			//
 			// 정해진 확률에 맞춰 수정구의 종류를 결정한다.
@@ -741,12 +766,11 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 					sphereBaseCells.add(cell);
 					cell.setSphereType(sphereType);
 					cell.setToSphereCells(sphereType);
-					this.addSphereTo(this.mineLayer, sphereType, cell);
+					this.addSphereTo(tmx, sphereType, cell, isAi);
 					isBoolean = false;
-					// Log.e("Game / scatterSpheres - isBoolean", "false");
 				} else {
-					// Log.e("Game / scatterSpheres - isBoolean", "true");
 				}
+				// Log.e("Game", "scatterSpheres" + isBoolean);
 			}
 		}
 	}
@@ -762,68 +786,55 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		return false;
 	}
 
-	public void addSphereTo(CCTMXLayer layer, int sphereType, MineCell baseCell) {
-
-		// 0은 user가 아이템을 획득 0이 아니면 최초 맵에 수정구 설치
-		if (GameData.share().isMultiGame) {
-			try {
-				if (sphereType == 0) {
-					// NetworkController.getInstance().sendPlayDatasphereTake(baseCell.getUnSignedSphereCellId());
-					// hud.testText.setString("" +
-					// baseCell.getUnSignedCellId());
-					// Log.e("", "baseCell.getUnSignedCellId()" +
-					// baseCell.getUnSignedCellId());
-					NetworkController.getInstance().sendPlayDatasphereTake(
-							baseCell.getCell_ID() + (sphereType * 10000));
-				} else {
-					// hud.testText.setString("" +
-					// baseCell.getUnSignedCellId());
-					Log.e("", "baseCell.getCell_ID()" + baseCell.getCell_ID());
-
-					NetworkController.getInstance().sendPlayDataSphere(
-							baseCell.getCell_ID() + (sphereType * 10000));
+	// 인자 isAi 추가
+	public void addSphereTo(CCTMXLayer tmx, int sphereType, MineCell baseCell, boolean isAi) {
+		int counter = 0;
+		
+		if(isAi == false) {
+//			if (Config.getInstance().guest == true || Config.getInstance().modechoise == kmodeSingle) {
+//			} else {}
+			// 수정구를 없애면 sphereTake로 아니면 그냥 sphere로
+			// 0은 user가 아이템을 획득 0이 아니면 최초 맵에 수정구 설치
+			if (GameData.share().isMultiGame) {
+				try {
+					if (sphereType == 0) {
+						NetworkController.getInstance().sendPlayDatasphereTake(baseCell.getCell_ID() + (sphereType * 10000));
+					} else {
+						NetworkController.getInstance().sendPlayDataSphere(baseCell.getCell_ID() + (sphereType * 10000));
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 
-		int counter = 0;
 		for (MineCell cell : baseCell.getSphereCells()) {
 			cell.setSphere(true);
 
 			if (sphereType == 0)
 				sphereType = 7;
-			// Log.e("Game / addSphereTo", "sphereType check1 : " + counter +
-			// "," + sphereType);
-			// sphereType = sphereType == 0 ? 7 : sphereType; // tilemap의 7번째
-			// 타일(0:7~3:7)에 빈 수정구가 있어서
+			// Log.e("Game / addSphereTo", "sphereType check1 : " + counter + "," + sphereType);
+			// sphereType = sphereType == 0 ? 7 : sphereType; // tilemap의 7번째 타일(0:7~3:7)에 빈 수정구가 있어서
 
-			int gid = CCFormatter.swapIntToLittleEndian(this.itemLayer
-					.tileGIDAt(CGPoint.make(counter, sphereType)));
-			// layer.setTileGID(gid, cell.getTileCoord());
-			layer.setTileGID(gid, cell.getTileCoord());
-			// test code // 수정구 볼수 잇게 해줌
-			this.fg.setTileGID(gid, cell.getTileCoord()); // 임시용 차후 문제시 정식으로 고칠것
-
-			//
-			// test code // 수정구가 숨겨진 타일에 표시한 라벨
-			// CCLabel label = CCLabel.makeLabel(""+ cell.getUnSignedCellId(),
-			// "Arial", (30 * tileSize.width) / 128);
-			// this.addChild(label, 1000);
-			// label.setColor(ccColor3B.ccc3(240, 0, 240));
-			// label.setPosition(cell.getTilePosition());
+			// 기존 코드
+//			int gid = CCFormatter.swapIntToLittleEndian(this.tmxItemLayer
+//					.tileGIDAt(CGPoint.make(counter, sphereType)));
+//			// layer.setTileGID(gid, cell.getTileCoord());
+//			tmx.setTileGID(gid, cell.getTileCoord());
+//			// test code // 수정구 볼수 잇게 해줌
+//			tmxFg.setTileGID(gid, cell.getTileCoord()); // 임시용 차후 문제시 정식으로 고칠것
+//			counter++;
+			
+			// 새로운 코드
+			CCTMXLayer itemLayer = null;
+			if(isAi == true) // ai일시 자신의 맵을 미니맵에 표현한듯.
+				itemLayer = new GameMinimap(mHud).itemLayer;
+			else
+				itemLayer = tmxItemLayer;
+			
+			int gid = itemLayer.tileGIDAt(CGPoint.make(counter, sphereType));
+			tmx.setTileGID(gid, cell.getTileCoord());
 			counter++;
-			/*
-			 * // 수정구 오픈시 마지막칸 오른쪽에 tile 한칸더 추가 if (counter == 4 && sphereType
-			 * == 7) { gid =
-			 * CCFormatter.swapIntToLittleEndian(this.itemLayer.tileGIDAt
-			 * (CGPoint.make(counter, sphereType))); layer.setTileGID(gid,
-			 * CGPoint.ccp(cell.getTileCoord().x+1, cell.getTileCoord().y));
-			 * this.fg.setTileGID(gid, CGPoint.ccp(cell.getTileCoord().x+1,
-			 * cell.getTileCoord().y)); // 임시용 차후 문제시 정식으로 고칠것 }
-			 */
 		}
 
 	}
@@ -1073,8 +1084,8 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 				// Log.e("Game", "long press recognized if");
 
 				// effect sound play
-				SoundEngine.sharedEngine().playSound(this.mContext,
-						R.raw.game_mushroom, false);
+//				SoundEngine.sharedEngine().playSound(mContext, R.raw.game_mushroom, false);
+				SoundEngine.sharedEngine().playEffect(mContext, R.raw.game_mushroom);
 
 				// 꽂아져있는 버섯(깃발)을 취소할때 버섯(깃발)을 없애줌
 				if (cellArray.get(k).isMarked()) {
@@ -1085,16 +1096,14 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 						// Log.e("previousMineNumber : ", " " + aaa);
 					}
 					cellArray.get(k).setMarked(false);
-					// try {
-					// hud.testText.setString("" +
-					// cellArray.get(k).getUnSignedCellId());
-					Log.e("", "cellArray.get(k).getCell_ID()"
-							+ cellArray.get(k).getCell_ID());
-					// NetworkController.getInstance().sendPlayDataMushroomOff(cellArray.get(k).getCell_ID());
+					 try {
+					 mHud.testText.setString(String.valueOf(cellArray.get(k).getCell_ID()));
+					Log.e("Game", "cellArray.get(k).getCell_ID()" + cellArray.get(k).getCell_ID());
+					 NetworkController.getInstance().sendPlayDataMushroomOff(cellArray.get(k).getCell_ID());
 					this.removeFlag(coord);
-					// } catch (IOException e) {
-					// e.printStackTrace();
-					// }
+					 } catch (IOException e) {
+					 e.printStackTrace();
+					 }
 
 				} else {
 					// 오픈안된 셀에 버섯(깃발)꽂기
@@ -1130,19 +1139,18 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 							/**************************************/
 						}
 						cellArray.get(k).setMarked(true);
-						// try {
-						// hud.testText.setString("" +
-						// cellArray.get(k).getUnSignedCellId());
-						Log.e("", "cellArray.get(k).getCell_ID()"
-								+ cellArray.get(k).getCell_ID());
-						// NetworkController.getInstance().sendPlayDataMushroomOn(cellArray.get(k).getCell_ID());
+						 try {
+						 mHud.testText.setString(String.valueOf(cellArray.get(k).getCell_ID()));
+						Log.e("Game", "cellArray.get(k).getCell_ID()" + cellArray.get(k).getCell_ID());
+						 NetworkController.getInstance().sendPlayDataMushroomOn(cellArray.get(k).getCell_ID());
 						this.markFlag(coord);
-						// } catch (IOException e) {
-						// e.printStackTrace();
-						// }
+						 } catch (IOException e) {
+						 e.printStackTrace();
+						 }
 					}
 					// Log.e("Game / handleLongPress", "지뢰 없음");
 				}
+				// 프로그레스바 업데이트 되는곳. (minecell.open()으로 이동해야될듯.)
 				mHud.updateProgress();
 				break;
 
@@ -1226,7 +1234,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 
 					// Log.e("Game / handleDoubleTap", "check 1 / 아이템 타일 변경");
 					// 빈 수정구 타일로 바꾼다.
-					this.addSphereTo(this.mineLayer, kSphereTypeEmpty, cell);
+					this.addSphereTo(tmxFg, kSphereTypeEmpty, cell, false);
 
 					// 수정구 획득수를 타입별로 하나 증가시킨다.
 					GameData.share().increaseItemByType(sphereType);
@@ -1270,7 +1278,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		isLongTap = true;
 
 		// // effect sound load
-		// SoundEngine.sharedEngine().preloadSound(this.mContext, R.raw.ding);
+		// SoundEngine.sharedEngine().preloadSound(mContext, R.raw.ding);
 		// // 무슨 사운드이지??
 
 		// 현재 찍힌 좌표 계산
@@ -1437,7 +1445,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 				// );
 
 				// debug label
-				// this.hud.updateDebugLabel(theLayer.getScale(),
+				// mHud.updateDebugLabel(theLayer.getScale(),
 				// theLayer.getPosition());
 				isMove = false;
 			}
@@ -1588,9 +1596,9 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	// tile methods
 	public void markFlag(CGPoint tileCoord) {
 
-		int flagGid = this.itemLayer.tileGIDAt(CGPoint.ccp(1, 0)); // 빨간깃발(방장)
+		int flagGid = this.tmxItemLayer.tileGIDAt(CGPoint.ccp(1, 0)); // 빨간깃발(방장)
 		flagGid = CCFormatter.swapIntToLittleEndian(flagGid);
-		this.flagLayer.setTileGID(flagGid, tileCoord);
+		this.tmxFlagLayer.setTileGID(flagGid, tileCoord);
 
 		//
 		// 지뢰수 하나 감소시킬시 디스플레이 업데이트 시킨다.
@@ -1670,7 +1678,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	public void removeTile(CGPoint tileCoord, int depth) {
 		++mCount;
 		// Global ID // Globally unique IDentifier
-		int tileGid = this.meta.tileGIDAt(tileCoord);
+		int tileGid = this.tmxMeta.tileGIDAt(tileCoord);
 		tileGid = CCFormatter.swapIntToLittleEndian(tileGid); // 뭔지 아직 모르겠음.
 		// 0 : 일시 타일값 없음
 
@@ -1683,10 +1691,9 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 				String collisionValue = properties.get("Collidable");
 
 				if (collisionValue != null && collisionValue.equals("true")) {
-					SoundEngine.sharedEngine().playEffect(this.mContext,
-							R.raw.game_pumpkin); // hit
+					SoundEngine.sharedEngine().playEffect(mContext, R.raw.game_pumpkin); // hit
 				} else {
-					SoundEngine.sharedEngine().playEffect(this.mContext, R.raw.game_open2); // pickup
+					SoundEngine.sharedEngine().playEffect(mContext, R.raw.game_open2); // pickup
 					// Log.e("Game / removeTile", "getFg : " + getFg());
 					// Log.e("Game / removeTile", "tileCoord : " + tileCoord);
 					// 자주 문제 발생 stack over flow Error (thread 오버)
@@ -1706,10 +1713,13 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			
 			tile.runAction(CCSequence.actions(mScaleAction, mOpenAction, CCCallFuncND.action(this, "removeTileAni", tileCoord)));
 			
+			int effect = R.raw.landopen_01;
 			if(mCount%8 == 1 || depth == 1) {
-				SoundEngine.sharedEngine().playEffect(mContext, R.raw.lo_01);
-			} else if(depth%8 == 5) {
-				SoundEngine.sharedEngine().playEffect(mContext, R.raw.lo_02);
+				effect = R.raw.landopen_01;
+				SoundEngine.sharedEngine().playEffect(mContext, effect);
+			} else {
+				effect ++;
+				SoundEngine.sharedEngine().playEffect(mContext, effect);
 			}
 			Log.d("LDK", "depth:" + depth);
 		}
@@ -1725,7 +1735,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 
 	@Override
 	public void gameOver() {
-		mHud.gameOver();
+		mHud.gameOver(1,1); // 점수 넣어야될 듯
 	}
 
 	// HudLayer inner class end
@@ -1747,7 +1757,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	// metaLayer (작업 불가능 영역)
 	public boolean isMetaChecked(CGPoint tileCoord, String metaString) {
 		// tile이 있는 곳은 0이 아닌 값을 가진다.
-		int gid = CCFormatter.swapIntToLittleEndian(this.meta
+		int gid = CCFormatter.swapIntToLittleEndian(this.tmxMeta
 				.tileGIDAt(tileCoord));
 		// tile이 깔린곳
 		if (gid > 0) {
@@ -1781,7 +1791,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	}
 
 	public void removeFlag(CGPoint tileCoord) {
-		this.flagLayer.removeTileAt(tileCoord);
+		this.tmxFlagLayer.removeTileAt(tileCoord);
 
 		//
 		// 지뢰수 하나 증가시키고 디스플레이 업데이트 시킨다.
@@ -1789,11 +1799,11 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	}
 
 	public CCTMXLayer getFg() {
-		return fg;
+		return tmxFg;
 	}
 
 	public void setFg(CCTMXLayer fg) {
-		this.fg = fg;
+		this.tmxFg = fg;
 	}
 
 	// 뭔가 다름...
@@ -1817,7 +1827,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	}
 
 	public void effectMagmaOn() {
-		this.bg.setVisible(false);
+		this.tmxBg.setVisible(false);
 		ArrayList<MineCell> cellsTemp = cells;
 		int size = cellsTemp.size();
 		for (int k = 0; k < size; k++) {
@@ -1829,7 +1839,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	}
 
 	public void effectMagmaOff() {
-		this.bg.setVisible(true);
+		this.tmxBg.setVisible(true);
 		ArrayList<MineCell> cellsTemp = cells;
 		int size = cellsTemp.size();
 		for (int k = 0; k < size; k++) {

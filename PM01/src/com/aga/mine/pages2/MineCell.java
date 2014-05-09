@@ -318,9 +318,14 @@ public class MineCell extends CCLayer{
 		/*** 그냥 이해 안되도 적당히 포트중... 나중에 안돌아갈것같음. ***/
 		/*** 너무 심각해서 어디가 문제인지 못찾을까봐 심히 걱정됨 ***/
 		/*** 일단 얼추 수정됨 ***/
-		this.delegate.removeTile(this.tileCoord, depth);
-		//NetworkController.getInstance().send
-		Game.unopenedTile --;
+		try {
+			this.delegate.removeTile(this.tileCoord, depth);
+			NetworkController.getInstance().sendPlayDataCellOpen(getCell_ID());
+			Game.unopenedTile --;
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
 		
 		if (numberOfMine > 0) {
 			//
@@ -335,13 +340,13 @@ public class MineCell extends CCLayer{
 			// 지뢰로 표시
 			this.setMine(true);
 			this.setOpened(true);
-//			try {
-//				Game.HudLayer.abc(this.getUnSignedCellId());
-//				NetworkController.getInstance().sendPlayDataMine(this.getCell_ID());
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+			try {
+				mGame.mHud.abc(this.getCell_ID());
+				NetworkController.getInstance().sendPlayDataMine(this.getCell_ID());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			
 			// 지뢰를 누르면 지뢰갯수 (화면좌측위 지뢰 숫자) 하나를 없애준다.

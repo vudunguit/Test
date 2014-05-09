@@ -135,6 +135,7 @@ public class RequestMatch extends CCLayer{
 	}
 
 	public void clicked(Object sender) {
+		MainApplication.getInstance().getActivity().click();
 		Log.e("RequestMatch", "clicked");
 		// 초대창 애니메이션 오프
 		CCFiniteTimeAction moveOff = CCMoveTo.action(GameConfig.share().kEmoticonPanelMoveTime, basePositionOff);
