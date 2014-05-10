@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cocos2d.actions.UpdateCallback;
+import org.cocos2d.actions.instant.CCCallFuncN;
+import org.cocos2d.actions.interval.CCDelayTime;
+import org.cocos2d.actions.interval.CCFadeOut;
+import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -237,7 +241,31 @@ public class HudLayer extends CCLayer {
 
 	}
 
-	// HudLayer() end
+	//이모티콘 애니메이션 : NetworkController에서 데이터를 수신후 이 펑션을 호출
+	public void startEmoticonAni(int emoticonId) {
+		String emoticonPath = String.format("62game_emoticon/emoticons-hd/emoticon%02d-hd.png", emoticonId);
+		CCSprite emoticon = CCSprite.sprite(emoticonPath);
+		
+		emoticon.setScale(0.5f);
+		emoticon.setPosition(winSize.getWidth()/2, winSize.getHeight() * 3 / 4);
+		addChild(emoticon, 10);
+		
+		CCScaleTo action1 = CCScaleTo.action(0.4f, 1.3f);
+		CCScaleTo action2 = CCScaleTo.action(0.1f, 0.9f);
+		CCScaleTo action3 = CCScaleTo.action(0.1f, 1.1f);
+		CCScaleTo action4 = CCScaleTo.action(0.1f, 1.0f);
+		CCDelayTime action5 = CCDelayTime.action(2.0f);
+		CCFadeOut action6 = CCFadeOut.action(1.0f);
+		CCCallFuncN action7 = CCCallFuncN.action(this, "removeEmoticon"); 
+		
+		emoticon.runAction(CCSequence.actions(action1, action2, action3, action4, action5, action6, action7));
+	}
+	
+	public void removeEmoticon(Object sender) {
+		CCSprite emoticon = (CCSprite)sender;
+		emoticon.removeFromParentAndCleanup(true);
+	}
+	//이모티콘 애니메이션 끝-----------------------------------------------------------------
 
 	//
 	public boolean updateHeart() {

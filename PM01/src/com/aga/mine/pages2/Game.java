@@ -8,9 +8,14 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 
+import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCRepeatForever;
+import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.instant.CCCallFuncND;
 import org.cocos2d.actions.interval.CCAnimate;
+import org.cocos2d.actions.interval.CCDelayTime;
+import org.cocos2d.actions.interval.CCFadeIn;
+import org.cocos2d.actions.interval.CCFadeOut;
 import org.cocos2d.actions.interval.CCRotateBy;
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
@@ -115,34 +120,6 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	public CCTMXTiledMap getTileMap() {
 		return tileMap;
 	}
-
-	//
-	// private static Game game;
-	//
-	// public static synchronized Game getInstance() {
-	// if (game == null) {
-	// game = new Game();
-	// Log.e("** Game **", "make Single Instance");
-	// }
-	// return game;
-	// }
-	//
-	// public void dealloc(){
-	// Log.e("** Game **", "dealloc");
-	// game = null;
-	// }
-	//
-	
-	
-//	private static Game mGame;
-//	
-//	public static synchronized Game getInstance() {
-//		if (mGame == null) {
-//			mGame = new Game();
-//			Log.e("** Game **", "make Single Instance");
-//		}
-//		return mGame;
-//	}
 	
 	// gamedata에서 수정하였음.
 	// 지뢰수 수정하여 테스트중 현재 3개로 수정
@@ -528,9 +505,10 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		}
 		mOpenAction = CCAnimate.action(0.2f, animation, false);
 		SoundEngine.sharedEngine().preloadSound(mContext, R.raw.bgm); // 백그라운드 뮤직
+		
+		//이모티콘 test : 실제로는 NetworkController에서 전송된 이모티콘 id를 던져준다.
+		//mHud.startEmoticonAni(5);
 	}
-
-	// 생성자Game end
 
 	private void aaaaa() {
 		Log.e("Game", "I'm Ready!");
@@ -548,16 +526,6 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// Game.HudLayer.testText.setString("게임 시작! testText"); // 느린 기기에서는
 		// 뻗어버림...
 	}
-
-	//
-	// public static boolean getEnding() {
-	// return ending.getVisible();
-	// }
-	//
-	// public static void setEnding(boolean visible) {
-	// ending.setVisible(visible);
-	// }
-	//
 
 	/********************************************************/
 	/**
@@ -584,22 +552,12 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// 헤드 업 디스플레이 레이어
 		mHud = new HudLayer(game);
 		scene.addChild(mHud);
-
-		// scene.addChild(ending, GameConfig.share().kDepthPopup);
-//		hudLayer.addChild(ending, GameConfig.share().kDepthPopup, 1234);
-//		ending.setVisible(false);
-//		ending.setIsTouchEnabled(false);
-		// game.mHud.gameEnding = ending;
-		// game.mHud.controlHudLayer = hudLayer;
-		/*
-		 * GameEmoticon gameEmoticon = new GameEmoticon();
-		 * //hudLayer.addChild(gameEmoticon); scene.addChild(gameEmoticon);
-		 */
 		
 		return scene;
 	}
-
 	/********************************************************/
+	
+
 
 	// map utility
 	// 현재 화면의 position을 지정
