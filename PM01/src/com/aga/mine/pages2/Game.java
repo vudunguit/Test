@@ -484,6 +484,22 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			GameData.share().isMultiGame = false;
 			bbbbb();
 		}
+		
+		//주변의 지뢰 갯수를 미리 구한다.
+		for(MineCell cell : cells) {
+			if (cell.isMine()) {
+				cell.numberOfArroundMine = -1;
+				continue;
+			}
+
+			int countOfMine = 0;
+			for (MineCell arroundCell : cell.getRoundCells()) {
+				if (arroundCell != null && arroundCell.isMine())
+					countOfMine++;
+			}
+			cell.numberOfArroundMine = countOfMine;
+			Log.d("LDK", "arround mine number:" + cell.numberOfArroundMine);
+		}
 
 		// 게임시간 초기화
 		GameData.share().setSeconds(900);
@@ -1689,9 +1705,9 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 						effect = 16 - effect%17;
 					}
 					SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01 + effect);
+					Log.d("LDK", "effect:" + effect);
 				}
 			}
-			Log.d("LDK", "depth:" + depth);
 		}
 	}
 	

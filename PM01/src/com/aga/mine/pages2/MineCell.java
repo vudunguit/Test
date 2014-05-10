@@ -71,6 +71,8 @@ public class MineCell extends CCLayer{
 	ArrayList<MineCell> roundCells  = new ArrayList<MineCell>();
 	ArrayList<MineCell> sphereRoundCells;
 	
+	public int numberOfArroundMine; //자기 주변의 지뢰 숫자
+	
 	//
 	//	MineCell(Context context) {
 	MineCell() {
@@ -149,6 +151,8 @@ public class MineCell extends CCLayer{
 	}
 	
 	// 숫자 주변의 마인 수 (ㄷㄷㄷ)
+	//ArrayList는 쓰레드 세이프하지 않기 때문에 동기화문제로 타일 오픈시 indexOutOfBound 초래함.
+	//또한 계산할때 부하도 많기 때문에 Game 생성자에서 미리 계산하여 numberOfArroundMine 변수에 저장하여 사용한다.
 	public int getNumberOfMineAround() {
 		//Log.e("지뢰 주변 숫자","" + isMine());
 		if (isMine()) return -1;
@@ -228,7 +232,7 @@ public class MineCell extends CCLayer{
 	
 	// sdfsdf
 	public int roundOpen() {
-		int numberOfMine = this.getNumberOfMineAround();
+		int numberOfMine = this.numberOfArroundMine;
 		int getNumberOfMushroomAround = this.getNumberOfMushroomAndPumpkinAround();
 		//Log.e("폭탄 노출됨", "" + numberOfMine + "," + plusMine + ",");
 /*		int boom = 0;
@@ -289,7 +293,7 @@ public class MineCell extends CCLayer{
 	
 	public int open(int depth) {
 		// 셀주변의 지뢰 갯수를 구한다.
-		int numberOfMine = this.getNumberOfMineAround();
+		//int numberOfMine = this.numberOfArroundMine;
 		// numberOfMine : 타일에 적히는 숫자
 		//Log.e("MineCell / open", "numberOfMine: " + numberOfMine);
 		/*
@@ -300,7 +304,7 @@ public class MineCell extends CCLayer{
 		*/
 		//
 		// 이미 오픈되었거나 깃발꽂은 셀이면 그냥 빠져 나온다.
-		if(isOpened() || isMarked()) return numberOfMine;
+		if(isOpened() || isMarked()) return numberOfArroundMine;
 		this.setOpened(true);
 		
 		if (GameData.share().isMultiGame) {
@@ -327,15 +331,15 @@ public class MineCell extends CCLayer{
 		}
 		
 		
-		if (numberOfMine > 0) {
+		if (numberOfArroundMine > 0) {
 			//
 			// 열려진 셀(타일)의 주변셀 지뢰 갯수를 표시한다.
-			Log.e("MineCell / open", "주변 마인 갯수 : " + numberOfMine);
-			this.delegate.displayMineNumber(numberOfMine, tilePosition, Cell_ID);
+			Log.e("MineCell / open", "주변 마인 갯수 : " + numberOfArroundMine);
+			this.delegate.displayMineNumber(numberOfArroundMine, tilePosition, Cell_ID);
 		}
 		
 		// 지뢰는 -1로 지정했음 숫자가 없는거는 0, 숫자있는건 그숫자대로
-		else if (numberOfMine == -1){
+		else if (numberOfArroundMine == -1){
 			//Log.e("MineCell / open", "plusMine : " + plusMine);
 			// 지뢰로 표시
 			this.setMine(true);
@@ -395,19 +399,19 @@ public class MineCell extends CCLayer{
 		// 지뢰가 없는 곳만 열기 또는 지뢰와 아이템이 없는 곳만 열기
 		int numberOfSphere = this.getNumberOfSphereAround();
 		// 지뢰 없는 곳만 열어주기
-		if(numberOfMine  + numberOfSphere == 0){
+		if(numberOfArroundMine  + numberOfSphere == 0){
 		// 지뢰 없는 곳과 수정구까지 열어주기
 		//if (numberOfMine == 0) {
 			for (final MineCell cell : getRoundCells()) {
 				try {
-					Thread.sleep(4);
+					Thread.sleep(5);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				cell.open(++depth);
 			}
 		}
-		return numberOfMine;
+		return numberOfArroundMine;
 	}
 	/*****************************************************/
 	
