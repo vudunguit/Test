@@ -1636,7 +1636,12 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	//
 	// MineCell Delegate
 	public void removeTile(CGPoint tileCoord, int depth) {
-		++mCount;
+		if(depth == 1) {
+			mCount = 1;
+		} else {
+			++mCount;
+		}
+		Log.d("LDK", "depth:" + depth + " , mCount:" + mCount);
 		// Global ID // Globally unique IDentifier
 		int tileGid = this.tmxMeta.tileGIDAt(tileCoord);
 		tileGid = CCFormatter.swapIntToLittleEndian(tileGid); // 뭔지 아직 모르겠음.
@@ -1673,13 +1678,18 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			
 			tile.runAction(CCSequence.actions(mScaleAction, mOpenAction, CCCallFuncND.action(this, "removeTileAni", tileCoord)));
 			
-			int effect = R.raw.landopen_01;
-			if(mCount%8 == 1 || depth == 1) {
-				effect = R.raw.landopen_01;
-				SoundEngine.sharedEngine().playEffect(mContext, effect);
+			if(depth == 1) {
+				SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01);
 			} else {
-				effect ++;
-				SoundEngine.sharedEngine().playEffect(mContext, effect);
+				if(mCount%4 == 0) {
+					int effect = mCount/4;
+					if ((effect/17)%2 == 0) {
+						effect = effect%17;
+					} else {
+						effect = 16 - effect%17;
+					}
+					SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01 + effect);
+				}
 			}
 			Log.d("LDK", "depth:" + depth);
 		}
