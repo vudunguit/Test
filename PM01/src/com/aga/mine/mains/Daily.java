@@ -1,6 +1,9 @@
 ﻿package com.aga.mine.mains;
 
+import org.cocos2d.actions.instant.CCCallFunc;
+import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.interval.CCScaleTo;
+import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
@@ -115,12 +118,20 @@ public class Daily extends CCLayer {
 					stamp.setPosition(goldX[i], goldY[k]);
 					stamp.setAnchorPoint(0.5f, 0.5f);
 					//stamp.setScale(0.23f);
-
+					
+					//스탬프 애니메이션
+					CCScaleTo action1 = CCScaleTo.action(0.25f, 0.23f);
+					CCCallFunc action2 = CCCallFunc.action(this, "soundStamp");
+					stamp.runAction(CCSequence.actions(action1, action2));
 				}
 
 				count++;
 			}
 		}
+	}
+	
+	public void soundStamp() {
+		SoundEngine.sharedEngine().playEffect(mContext, R.raw.stamp);
 	}
 
 	// 출석부 gold 및 보상 가격 text
@@ -179,16 +190,6 @@ public class Daily extends CCLayer {
 	public void nextCallback(float dt) {
 		CCScene scene = Home.scene();
 		CCDirector.sharedDirector().replaceScene(scene);
-	}
-
-	@Override
-	public void onEnter() {
-		super.onEnter();
-		
-		CCScaleTo actionTo = CCScaleTo.action(0.25f, 0.23f);
-		stamp.runAction(actionTo);
-		// 액션 끝날때 쿵하고 소리 나야되는데 소리를 어떻게 붙이는지 모르겠네요.
-		SoundEngine.sharedEngine().playEffect(mContext, R.raw.stamp);
 	}
 
 }
