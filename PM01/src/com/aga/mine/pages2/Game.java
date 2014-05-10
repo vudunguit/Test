@@ -134,15 +134,15 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	//
 	
 	
-	private static Game mGame;
-	
-	public static synchronized Game getInstance() {
-		if (mGame == null) {
-			mGame = new Game();
-			Log.e("** Game **", "make Single Instance");
-		}
-		return mGame;
-	}
+//	private static Game mGame;
+//	
+//	public static synchronized Game getInstance() {
+//		if (mGame == null) {
+//			mGame = new Game();
+//			Log.e("** Game **", "make Single Instance");
+//		}
+//		return mGame;
+//	}
 	
 	// gamedata에서 수정하였음.
 	// 지뢰수 수정하여 테스트중 현재 3개로 수정
@@ -574,7 +574,9 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 
 		// 게임 레이어
 		// Game game = Game.getInstance();
-		Game game = Game.getInstance();
+		//Game game = Game.getInstance();
+		Game game = new Game();
+		NetworkController.getInstance().setGame(game);
 		scene.addChild(game);
 		game.setAnchorPoint(0.0f, 0.0f);
 		/*** 중요 ***/

@@ -200,12 +200,6 @@ public class HudLayer extends CCLayer {
 		// this.schedule("tick", 0.1f);
 		this.updateSphereItemNumber();
 
-		//
-		// test code - 게임이 시작되면 게임엔딩 화면이 바로뜸
-		// GameEnding ending = GameEnding.share(this.mContext);
-		// this.addChild(ending, GameConfig.share().kDepthPopup);
-
-		//
 		// test code
 		// GameLoading loading = GameLoading.share(this.mContext);
 		// this.addChild(loading, GameConfig.share().kDepthPopup);
@@ -237,8 +231,9 @@ public class HudLayer extends CCLayer {
 		this.addChild(mGameMinimap, GameConfig.share().kDepthPopup);
 		mGameMinimap.setVisible(false);
 		
-		GameEnding ending = new GameEnding();
-		addChild(ending, GameConfig.share().kDepthPopup, 1234);
+		//test
+		//GameEnding ending = new GameEnding();
+		//addChild(ending, GameConfig.share().kDepthPopup, 1234);
 
 	}
 

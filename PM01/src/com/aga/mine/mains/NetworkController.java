@@ -110,7 +110,10 @@ public class NetworkController extends Activity {
 	/*******************************************/	
 	static NetworkControllerDelegate delegate;
 	
-	Game mGame;
+	private Game mGame;
+	public void setGame(Game game) {
+		this.mGame = game;
+	}
 
 	public static String kTempFacebookId = "999999999999999";
 	public static String kTempName = "@Guest";
@@ -323,7 +326,7 @@ public class NetworkController extends Activity {
 			
 		case kMessagePlayData:
 			Log.e("NetworkController", "kMessagePlayData");
-			mGame = Game.getInstance();
+			//mGame = Game.getInstance();
 			int count = 0;
 			Log.e("NetworkController", "reader : " + reader.buffer_);
 			byte playType;
