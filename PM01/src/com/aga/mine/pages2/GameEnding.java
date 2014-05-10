@@ -1,5 +1,6 @@
 ﻿package com.aga.mine.pages2;
 
+import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
@@ -27,6 +28,15 @@ public class GameEnding extends CCLayer {
 	int myScore;
 	int myGold;
 	int myExp;
+	
+	private CCLabel exp;
+	private CCSprite bg;
+	private CCSprite expBar;
+	private CCSprite expTail;
+	private CCSprite expHead;
+	private float mExpX; //경험치 충전 상태
+	private int mLeftExp; //초기: 획득 경험치, 애니메이션이 진행됨에 따라 점점 줄어듬.
+	
 
 //	public static CCScene scene() {
 //		CCScene scene = CCScene.node();
@@ -46,6 +56,10 @@ public class GameEnding extends CCLayer {
 		myGold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
 		myExp = Integer.parseInt(FacebookData.getinstance().getDBData("Exp"));
 		myScore = (int) (Math.random() * 1000) + 1;
+		//test
+		//myGold = 12345;
+		//myExp = 3000;
+		//myScore = 2123;
 		mainMenu();
 		setpoint();
 	}
@@ -59,7 +73,7 @@ public class GameEnding extends CCLayer {
 		String userColor = "";
 		int randomPoint = (int) (Math.random() * 1000) + 1;
 		
-		CCSprite bg = CCSprite.sprite("00common/" + "opacitybg.png");
+		bg = CCSprite.sprite("00common/" + "opacitybg.png");
 		this.addChild(bg);
 		bg.setPosition(winSize.width / 2, winSize.height / 2);
 		
@@ -99,12 +113,17 @@ public class GameEnding extends CCLayer {
 		gold.setAnchorPoint(1, 0.5f);
 		gold.setPosition(460, backboard.getContentSize().height - 338); // 340
 		
-		CCLabel exp = CCLabel.makeLabel(String.valueOf(myExp), "Arial", 30);
+		exp = CCLabel.makeLabel(String.valueOf(myExp), "Arial", 30);
 		backboard.addChild(exp);
 		exp.setAnchorPoint(1, 0.5f);
 		exp.setPosition(460, backboard.getContentSize().height - 396); //400
 		
 		/*********************************************************/
+		//현재 레벨 위치 : (현재레벨/현재레벨Max)% * 322px, 
+		mExpX = (myExp/(float)UserData.expPerLevel[0]); //단위는 0 ~ 1.0
+		//test : 획득 경험치는 8000이라 가정함. 
+		mLeftExp = 8000;
+		
 		// 경험치 바
 		CCSprite expbg = null;
 		// 경험치가 0일때 true로 사용할 것
@@ -120,14 +139,14 @@ public class GameEnding extends CCLayer {
 					base.getPosition().y - (base.getAnchorPoint().y * base.getContentSize().height) 
 					- expbg.getAnchorPoint().y * expbg.getContentSize().height
 					);
-			CCSprite expBar = CCSprite.sprite(folder + "ending-exp02.png");
+			expBar = CCSprite.sprite(folder + "ending-exp02.png");
 			expbg.addChild(expBar, 1);
 			expBar.setAnchorPoint(1, 0.5f);
-			expBar.setPosition((int)(Math.random() * 322) + 172, 45); // x값 172 = 0
+			expBar.setPosition((int)(mExpX * 322) + 172, 45); // x값 172 = 0
 //			expBar.setPosition(172, 45); // x값 172 = 0
 //			expBar.setPosition(494, 45);
 			
-			CCSprite expTail = CCSprite.sprite(folder + "ending-exp03.png");
+			expTail = CCSprite.sprite(folder + "ending-exp03.png");
 			expBar.addChild(expTail);
 			expTail.setAnchorPoint(1, 0.5f);
 			expTail.setPosition(
@@ -143,7 +162,7 @@ public class GameEnding extends CCLayer {
 			lv.setAnchorPoint(0, 0.5f);
 			lv.setPosition(25, 45);
 			
-			CCSprite expHead = CCSprite.sprite(folder + "ending-exp05.png");
+			expHead = CCSprite.sprite(folder + "ending-exp05.png");
 			expbg.addChild(expHead, 2);
 			expHead.setAnchorPoint(0.5f, 0.5f);
 			expHead.setPosition(expBar.getPosition());
@@ -187,6 +206,59 @@ public class GameEnding extends CCLayer {
 				expbg.getPosition().y - (expbg.getAnchorPoint().y * expbg.getContentSize().height) 
 				- rightbutton.getAnchorPoint().y * buttonR.getContentSize().height - 10
 				);
+		
+		//경험치 및 레벨업 애니메이션
+		//경험치 1000당 1초
+		schedule("expAni");
+	}
+	
+	public void expAni(float dt) {
+		if(mLeftExp <= 0) {
+			unschedule("expAni");
+			return;
+		}
+		int gainedExp = (int)(dt * 1000);
+		myExp += gainedExp;
+		mLeftExp -= gainedExp;
+		//만일 mLeftExp가 음수가 되면 보정
+		if(mLeftExp < 0) {
+			myExp += mLeftExp;
+			mLeftExp = 0;
+		}
+		
+		//늘어난 경험치가 현재 레벨의 최대 경험치를 넘지 않으면 애니메이션 넘으면 레벨 팝업
+		if(myExp <= UserData.expPerLevel[0]) {
+			//경험치 애니메이션
+			mExpX = (myExp/(float)UserData.expPerLevel[0]);
+			expBar.setPosition((int)(mExpX * 322) + 172, 45);
+			expTail.setScaleX((expBar.getPosition().x - 172) / 322);
+			expHead.setPosition(expBar.getPosition());
+			exp.setString(String.valueOf(myExp));
+		} else {
+			//레벨 팝업
+			unschedule("expAni");
+			myExp = myExp - UserData.expPerLevel[0];
+			final CCSprite levelUp = CCSprite.sprite("lv_up_popup/lvup.png");
+			bg.addChild(levelUp, 2000);
+			levelUp.setAnchorPoint(0.5f, 0.5f);
+			levelUp.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height / 2);
+			
+			CCSprite levelUpKo = CCSprite.sprite("lv_up_popup/lvupKo.png");
+			levelUp.addChild(levelUpKo, 1);
+			levelUpKo.setAnchorPoint(0.5f, 0.5f);
+			levelUpKo.setPosition(levelUp.getContentSize().width/2, levelUp.getContentSize().height/2);
+			
+			//3초 후에 레벨팝업을 제거하고 다시 경험치 애니메이션 구동
+			schedule(new UpdateCallback() {
+				@Override
+				public void update(float d) {
+					unschedule(this);
+					bg.removeChild(levelUp, true);
+					schedule("expAni");
+				}
+			}, 3.0f);
+		}
+		
 	}
 	
 	private CCSprite addChild_Center(CCSprite parentSprite, String childSpriteImage) {

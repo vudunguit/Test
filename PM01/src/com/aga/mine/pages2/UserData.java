@@ -220,7 +220,7 @@ public class UserData{
 	
 	
 	// 레벨당 경험치 및 레벨업 보상(골드)
-	final int[] expPerLevel = {
+	public static final int[] expPerLevel = {
 			7000,			7350,			7710,			8090,			8490,
 			8910,			9350,			9810,			10300,		10810,
 			11350,		11910,		12500,		13120,		13770,

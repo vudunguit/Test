@@ -236,6 +236,9 @@ public class HudLayer extends CCLayer {
 		
 		this.addChild(mGameMinimap, GameConfig.share().kDepthPopup);
 		mGameMinimap.setVisible(false);
+		
+		GameEnding ending = new GameEnding();
+		addChild(ending, GameConfig.share().kDepthPopup, 1234);
 
 	}
 
