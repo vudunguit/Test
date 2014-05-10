@@ -329,14 +329,23 @@ public class NetworkController extends Activity {
 			byte playType;
 			int playData;
 			while (reader.buffer_.hasRemaining()) {
+				Log.e("NetworkController", "position : " + reader.buffer_.position());
+				Log.e("NetworkController", "limit : " + reader.buffer_.limit());
 				playType = reader.readByte();
 				playData = reader.readInt();
-				Log.e("NetworkController", "playType : " + playType + ",playData : " + playData);
+				Log.e("NetworkController", "count : " + count + ", playType : " + playType + ",playData : " + playData);
+				// 포지션과 리미트 그리고 데이터가 존재하기 때문에 데이터의 문제는 아닌 것 같고,
+				// 아직 미니맵이 생성되지 않아 익셉션이 발생되는 것 같음 
+				// gameData에 담아뒀다가 minimap 생성되면 직접 불러다 쓰는 방식으로 수정해야 될 것 같음.
 				mGame.mHud.mGameMinimap.receivePlayData(playType, playData);
 				// kMessageRequestIsPlayerConnected와 같이 수정해도 될듯
 				if (reader.buffer_.hasRemaining()) {
-					count++;
-					reader.buffer_.position(1 + 10 * count);
+					Log.e("NetworkController", "readInt : " + reader.readInt() + ", readByte : " + reader.readByte());
+					reader.readInt(); // dataSize
+					reader.readByte(); // connenct_dataType // or
+
+//					count++;
+//					reader.buffer_.position(1 + 10 * count);
 				}
 			}
 
