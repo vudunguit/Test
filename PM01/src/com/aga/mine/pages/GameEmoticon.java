@@ -21,6 +21,7 @@ import android.view.MotionEvent;
 import com.aga.mine.mains.Config;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.Utility;
+import com.aga.mine.pages2.GameData;
 
 
 // 이미지 파일명의 -hd를 제거 하여서 오류 발생 함.

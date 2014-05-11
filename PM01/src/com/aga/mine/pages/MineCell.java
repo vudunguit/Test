@@ -2,17 +2,16 @@
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.cocos2d.layers.CCLayer;
-import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.types.CGPoint;
 
-import com.aga.mine.mains.NetworkController;
-
 import android.content.Context;
 import android.util.Log;
+
+import com.aga.mine.mains.NetworkController;
+import com.aga.mine.pages2.GameData;
 
 // for문 돌리면 서 size 또는 length로 얻어온 객체 있으면 별도로 size 변수 만들어서 그값으로 할것
 // 잘못하면 큰일남 ㅇㅇ

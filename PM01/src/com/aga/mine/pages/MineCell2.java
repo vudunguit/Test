@@ -13,6 +13,7 @@ import android.util.Log;
 import com.aga.mine.mains.Config;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.R;
+import com.aga.mine.pages2.GameData;
 
 // for문 돌리면 서 size 또는 length로 얻어온 객체 있으면 별도로 size 변수 만들어서 그값으로 할것
 // 잘못하면 큰일남 ㅇㅇ

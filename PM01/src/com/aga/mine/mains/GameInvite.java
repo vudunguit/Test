@@ -15,8 +15,8 @@ import org.cocos2d.types.CGPoint;
 import android.util.Log;
 
 import com.aga.mine.mains.ImageDownloader.ImageLoaderListener;
-import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.mains.NetworkController.MatchCallback;
+import com.aga.mine.pages2.GameData;
 import com.aga.mine.util.Util;
 
 public class GameInvite extends CCLayer {

@@ -11,6 +11,8 @@ import org.cocos2d.types.CGPoint;
 
 import android.view.MotionEvent;
 
+import com.aga.mine.pages2.GameData;
+
 public class Shop extends CCLayer {
 	
 	final String commonfolder = "00common/";

@@ -324,7 +324,9 @@ public class MineCell extends CCLayer{
 		/*** 일단 얼추 수정됨 ***/
 		try {
 			this.delegate.removeTile(this.tileCoord, depth);
-			NetworkController.getInstance().sendPlayDataCellOpen(getCell_ID());
+			if (GameData.share().isMultiGame) {
+				NetworkController.getInstance().sendPlayDataCellOpen(getCell_ID());
+			}
 			Game.unopenedTile --;
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -346,7 +348,9 @@ public class MineCell extends CCLayer{
 			this.setOpened(true);
 			try {
 				mGame.mHud.abc(this.getCell_ID());
-				NetworkController.getInstance().sendPlayDataMine(this.getCell_ID());
+				if (GameData.share().isMultiGame) {
+					NetworkController.getInstance().sendPlayDataMine(this.getCell_ID());
+				}				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

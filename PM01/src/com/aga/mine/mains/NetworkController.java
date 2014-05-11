@@ -20,6 +20,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.aga.mine.pages2.Game;
+import com.aga.mine.pages2.GameData;
 import com.aga.mine.util.Util;
 
 //import com.aga.mine.layers.GameInvite;
@@ -337,21 +338,26 @@ public class NetworkController extends Activity {
 				playType = reader.readByte();
 				playData = reader.readInt();
 				Log.e("NetworkController", "count : " + count + ", playType : " + playType + ",playData : " + playData);
-				// 포지션과 리미트 그리고 데이터가 존재하기 때문에 데이터의 문제는 아닌 것 같고,
-				// 아직 미니맵이 생성되지 않아 익셉션이 발생되는 것 같음 
-				// gameData에 담아뒀다가 minimap 생성되면 직접 불러다 쓰는 방식으로 수정해야 될 것 같음.
-				mGame.mHud.mGameMinimap.receivePlayData(playType, playData);
+				
+				if (playType == 8) {
+					// 포지션과 리미트 그리고 데이터가 존재하기 때문에 데이터의 문제는 아닌 것 같고,
+					// 아직 미니맵이 생성되지 않아 익셉션이 발생되는 것 같음 
+					// gameData에 담아뒀다가 minimap 생성되면 직접 불러다 쓰는 방식으로 수정해야 될 것 같음.
+					GameData.share().setplayData(playType, playData);
+				} else {
+					mGame.mHud.mGameMinimap.receivePlayData(playType, playData);
+				}
+				
 				// kMessageRequestIsPlayerConnected와 같이 수정해도 될듯
 				if (reader.buffer_.hasRemaining()) {
 					Log.e("NetworkController", "readInt : " + reader.readInt() + ", readByte : " + reader.readByte());
-					reader.readInt(); // dataSize
-					reader.readByte(); // connenct_dataType // or
-
-//					count++;
-//					reader.buffer_.position(1 + 10 * count);
+//					reader.readInt(); // dataSize
+//					reader.readByte(); // connenct_dataType // or
+					count++;
+					reader.buffer_.position(1 + 10 * count);
 				}
 			}
-
+			
 //			while (reader.buffer_.hasRemaining()) {
 //				playType = reader.readByte();
 //				playData = reader.readInt();
@@ -455,7 +461,7 @@ public class NetworkController extends Activity {
 			int ai = reader.readByte();
 			int mapType = reader.readByte();
 			Log.e("NetworkController", "mapType : " + mapType + "  // gamedata로 보낼것");
-			
+			GameData.share().isMultiGame = true;
 			CCScene scene;
 			// 랜덤 매치 or 초대매치 && 방장 or 손님 
 //			int matchMode = standby;		

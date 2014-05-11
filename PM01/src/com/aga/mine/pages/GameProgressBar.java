@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.aga.mine.mains.Config;
 import com.aga.mine.pages.Game.HudLayer;
+import com.aga.mine.pages2.GameData;
 
 //일단 완료(중간에 gameover game.release 빼고)
 public class GameProgressBar extends CCLayer {

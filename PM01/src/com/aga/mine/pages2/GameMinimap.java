@@ -3,6 +3,7 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCTMXLayer;
@@ -72,6 +73,10 @@ public class GameMinimap extends CCLayer{
 			this.layout();
 //			Config.getInstance().setDisableButton(true);
 //		}
+			List<GameData.MessageData> playData = GameData.share().getplayData();
+			for (GameData.MessageData data: playData) {
+				receivePlayData(data.type, data.value);
+			}
 	}
 
 	public void layout() {

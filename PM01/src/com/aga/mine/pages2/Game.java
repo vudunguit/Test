@@ -6,16 +6,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
 
-import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCRepeatForever;
-import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.instant.CCCallFuncND;
 import org.cocos2d.actions.interval.CCAnimate;
-import org.cocos2d.actions.interval.CCDelayTime;
-import org.cocos2d.actions.interval.CCFadeIn;
-import org.cocos2d.actions.interval.CCFadeOut;
 import org.cocos2d.actions.interval.CCRotateBy;
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
@@ -45,14 +39,9 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.aga.mine.mains.Config;
-import com.aga.mine.mains.Constant;
-import com.aga.mine.mains.DataFilter;
-import com.aga.mine.mains.FacebookData;
-import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.R;
 import com.aga.mine.pages2.MineCell.MineCellDelegate;
-import com.aga.mine.util.Util;
 
 public class Game extends CCLayer implements MineCell.MineCellDelegate {
 
@@ -136,9 +125,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		//mHud.isGameOver = false;
 		unopenedTile = 0;
 		// 기본 초기화
-		mContext = CCDirector.sharedDirector().getActivity()
-				.getApplicationContext();
-		// winSize = CCDirector.sharedDirector().winSize();
+		mContext = CCDirector.sharedDirector().getActivity().getApplicationContext();
 		winSize = CCDirector.sharedDirector().winSize();
 
 		//
@@ -474,15 +461,13 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// 128);
 		// this.addChild(mapLabel);
 		// mapLabel.setPosition(getPosition());
-		if (!GameData.share().isGuestMode) {
-
+		if (GameData.share().isGuestMode) {
+			GameData.share().isMultiGame = false;
+			bbbbb();
+		} else {
 			if (GameData.share().isMultiGame) {
 				aaaaa();
 			}
-
-		} else {
-			GameData.share().isMultiGame = false;
-			bbbbb();
 		}
 		
 		//주변의 지뢰 갯수를 미리 구한다.
@@ -560,7 +545,9 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// Game game = Game.getInstance();
 		//Game game = Game.getInstance();
 		Game game = new Game();
-		NetworkController.getInstance().setGame(game);
+		if (GameData.share().isMultiGame) {
+			NetworkController.getInstance().setGame(game);	
+		}
 		scene.addChild(game);
 		game.setAnchorPoint(0.0f, 0.0f);
 		/*** 중요 ***/
@@ -1075,7 +1062,9 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 					 try {
 					 mHud.testText.setString(String.valueOf(cellArray.get(k).getCell_ID()));
 					Log.e("Game", "cellArray.get(k).getCell_ID()" + cellArray.get(k).getCell_ID());
-					 NetworkController.getInstance().sendPlayDataMushroomOff(cellArray.get(k).getCell_ID());
+					if (GameData.share().isMultiGame) {
+						NetworkController.getInstance().sendPlayDataMushroomOff(cellArray.get(k).getCell_ID());	
+					}
 					this.removeFlag(coord);
 					 } catch (IOException e) {
 					 e.printStackTrace();
@@ -1118,7 +1107,9 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 						 try {
 						 mHud.testText.setString(String.valueOf(cellArray.get(k).getCell_ID()));
 						Log.e("Game", "cellArray.get(k).getCell_ID()" + cellArray.get(k).getCell_ID());
-						 NetworkController.getInstance().sendPlayDataMushroomOn(cellArray.get(k).getCell_ID());
+						if (GameData.share().isMultiGame) {
+							NetworkController.getInstance().sendPlayDataMushroomOn(cellArray.get(k).getCell_ID());	
+						}
 						this.markFlag(coord);
 						 } catch (IOException e) {
 						 e.printStackTrace();

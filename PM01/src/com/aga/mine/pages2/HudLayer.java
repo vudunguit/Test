@@ -487,7 +487,7 @@ public class HudLayer extends CCLayer {
 		Config.getInstance().setDisableButton(true);
 		
 		// 나중에 GameData 전부 합치기
-		if (com.aga.mine.mains.GameData.share().isGuestMode) {
+		if (GameData.share().isGuestMode) {
 			CCScene scene = Home2.scene();
 			CCDirector.sharedDirector().replaceScene(scene);
 		} else if (GameData.share().isMultiGame) {

@@ -13,12 +13,13 @@ import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
-import com.aga.mine.pages.UserData;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+
+import com.aga.mine.pages.UserData;
+import com.aga.mine.pages2.GameData;
 //
 public class Option extends CCLayer {
 	

@@ -44,6 +44,7 @@ import com.aga.mine.mains.GameLoading;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.R;
 import com.aga.mine.mains.Utility;
+import com.aga.mine.pages2.GameData;
 
 public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 	

@@ -19,6 +19,7 @@ import android.util.Log;
 
 import com.aga.mine.mains.Config;
 import com.aga.mine.mains.Utility;
+import com.aga.mine.pages2.GameData;
 
 public class GameMinimap extends CCLayer{
 	

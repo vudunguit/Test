@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.aga.mine.pages2.GameData;
 import com.sromku.simple.fb.entities.Profile;
 
 public class GameRandom extends CCLayer {

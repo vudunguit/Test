@@ -19,16 +19,13 @@ import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor4B;
 
-import android.R.integer;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.aga.mine.mains.NetworkController;
-import com.aga.mine.mains.Utility;
 import com.aga.mine.pages.UserData;
-import com.facebook.model.GraphUser;
+import com.aga.mine.pages2.GameData;
 import com.sromku.simple.fb.entities.Profile;
 
 

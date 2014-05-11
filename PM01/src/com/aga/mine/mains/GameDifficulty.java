@@ -14,6 +14,9 @@ import org.cocos2d.types.CGPoint;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.aga.mine.pages2.GameData;
+import com.aga.mine.util.Util;
+
 public class GameDifficulty extends CCLayer {
 	
 	final String commonfolder = "00common/";
@@ -172,8 +175,8 @@ public class GameDifficulty extends CCLayer {
 		
 		switch (GameData.share().getGameMode()) {  // gameData로 옮겨야됨. (기존에 있음.)
 		case singleMode:
-			scene = GameLoading.scene();
 			single(scene);
+			scene = GameLoading.scene();
 			break;
 			
 		case randomMode:
@@ -200,13 +203,29 @@ public class GameDifficulty extends CCLayer {
 	}
 
 	private void single(CCScene scene) {
-		if (Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick")) < 1) {
-			scene = GameDifficulty.scene();
-			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
-						public void run() {
-							Toast.makeText(MainApplication.getInstance().getApplicationContext(), "빗자루가 부족합니다.", Toast.LENGTH_SHORT).show();
-						}
-					});
+		// 게스트모드면 패스
+		if (!GameData.share().isGuestMode) {
+			
+			int mBroomstickCount = Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick"));
+			if (mBroomstickCount > 0) {
+				// 빗자루 수량이 1개 이상이면 게임 실행
+				// 게임 입장시 출입증격인 Broomstick을 1개 사용
+				// 사용후 남은 Broomstick이 6개 미만일시
+				// 기존에 빗자루 무료 제공하는 시간을 받아온 후
+				// setBroomstickTime(빗자루 무료 지급기) 실행
+				FacebookData.getinstance().modDBData("ReceivedBroomstick", String.valueOf(mBroomstickCount - 1)); // DB에 빗자루 수량 insert
+				if (mBroomstickCount >= 6) {
+					Util.setBroomstickTime();
+				}
+			} else {
+				// 빗자루 수량이 0개면 메시지 출력 및 원래 화면으로
+				scene = GameDifficulty.scene();
+				CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+							public void run() {
+								Toast.makeText(MainApplication.getInstance().getApplicationContext(), "빗자루가 부족합니다.", Toast.LENGTH_SHORT).show();
+							}
+						});
+			}
 		}
 	}
 

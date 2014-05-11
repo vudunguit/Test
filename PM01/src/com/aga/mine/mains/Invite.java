@@ -18,6 +18,7 @@ import android.util.Log;
 
 import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.pages.UserData;
+import com.aga.mine.pages2.GameData;
 import com.aga.mine.util.Util;
 
 public class Invite extends CCLayer {

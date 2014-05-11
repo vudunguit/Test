@@ -33,6 +33,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.aga.mine.pages2.GameData;
 import com.aga.mine.view.EmoticonListAdapter;
 import com.aga.mine.view.FriendListAdapter;
 import com.aga.mine.view.InviteListAdapter;

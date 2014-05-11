@@ -26,15 +26,6 @@ public class GameLoading extends CCLayer {
 	private GameLoading() {
 		
 		/************ 잘 사용했는지 모르겠습니다. 확인 부탁드립니다.  ************/
-		// 게임 입장시 출입증격인 Broomstick을 1개 사용
-		// 사용후 남은 Broomstick이 6개 미만일시
-		// 기존에 빗자루 무료 제공하는 시간을 받아온 후
-		// setBroomstickTime(빗자루 무료 지급기) 실행
-		int mBroomstickCount = Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick"));
-		FacebookData.getinstance().modDBData("ReceivedBroomstick", String.valueOf(mBroomstickCount - 1)); //DB에 빗자루 수량 insert
-		if (mBroomstickCount >= 6) {
-			Util.setBroomstickTime();
-		}
 //		// hide scroll view
 //		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 		setBackground();

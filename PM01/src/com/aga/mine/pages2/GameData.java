@@ -1,7 +1,8 @@
 ﻿package com.aga.mine.pages2;
 
-import java.util.Currency;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.cocos2d.types.CGPoint;
 
@@ -9,23 +10,41 @@ import android.util.Log;
 
 	// 일단 물어볼것 빼고 완료
 public class GameData {
-
+	
+	public class MessageData {
+		byte type;
+		int value;
+	}
+	
+	List<MessageData> playData = new ArrayList<MessageData>();
+	
+	public void setplayData(byte key, int value) {
+		MessageData data = new MessageData();
+		data.type = key;
+		data.value = value;
+		playData.add(data);
+//		playData.put(key, value);
+	}
+	
+	public List getplayData() {
+		return playData;
+	}
 	//
 	// 게임 데이터 일반 (생명력)
-	final int kMaxHeartNumber = 3;
+	public final int kMaxHeartNumber = 3;
 	
 	// 수정구
-	final int kNumberOfSphere = 3; // 기본3개
+	public final int kNumberOfSphere = 3; // 기본3개
 
 	//
 	// 수정구 확률
-	final int kFireChance = 14;
-	final int kWindChance = 21;
-	final int kCloudChance = 35;
+	public final int kFireChance = 14;
+	public final int kWindChance = 21;
+	public final int kCloudChance = 35;
 
-	final int kDivineChance = 15;
-	final int kEarthChance = 9;
-	final int kMirrorChance = 6;
+	public final int kDivineChance = 15;
+	public final int kEarthChance = 9;
+	public final int kMirrorChance = 6;
 
 	//
 	// 게임 난이도
@@ -39,9 +58,9 @@ public class GameData {
 	
 	//
 	// 난이도별 지뢰 갯수
-	final int kMaxMineNumberEasy    =  30;
-	final int kMaxMineNumberNormal  =  60;
-	final int kMaxMineNumberHard     = 90;
+	public final int kMaxMineNumberEasy    =  30;
+	public final int kMaxMineNumberNormal  =  60;
+	public final int kMaxMineNumberHard     = 90;
 	
 	
 	String mapFolder =  "80map/";
@@ -50,7 +69,7 @@ public class GameData {
 	//String gameMap = "tileMap.tmx";
 	//String gameMap = "tilemap02.tmx";
 	//
-	String gameMap = mapFolder + "map001.tmx";
+	public String gameMap = mapFolder + "map001.tmx";
 	//String gameMap = "map002.tmx";
 	//String gameMap = "map003.tmx";
 	//"orthogonal-test1.tmx";
@@ -58,7 +77,7 @@ public class GameData {
 	//"attendance2.tmx";
 	
 	public boolean isGuestMode = true;
-	public boolean isMultiGame = true;
+	public boolean isMultiGame = false;
 	//---------------------------------------------------------------//
 	
 	private static GameData gameData;
@@ -79,7 +98,7 @@ public class GameData {
 
     //
     // 게임설정 스프레드쉬트를 읽어들인다.
-   final int maxMineNumber = getMaxMineNumber(getGameDifficulty());
+   public final int maxMineNumber = getMaxMineNumber(getGameDifficulty());
    
 	private void initGameData() {
 	
@@ -275,6 +294,23 @@ public class GameData {
 
 	public void setGameData(String key, int value) {
 		data.put(key, value);
+	}
+	
+	/**************************** 변경 ****************************/
+	int openCell = 0;
+	
+	public int getOpenedCell() {
+		return this.openCell += 1;
+	}
+
+	public int getHeart() {
+		return getGameData("HeartNumber");
+		
+	}
+
+	public int getSecond() {
+		return getGameData("Seconds");
+		
 	}
 	
 }

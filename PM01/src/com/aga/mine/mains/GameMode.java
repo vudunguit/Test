@@ -11,6 +11,8 @@ import org.cocos2d.types.CGPoint;
 
 import android.util.Log;
 
+import com.aga.mine.pages2.GameData;
+
 public class GameMode extends CCLayer {
 	
 	final String commonfolder = "00common/";

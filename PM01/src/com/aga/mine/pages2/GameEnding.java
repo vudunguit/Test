@@ -13,7 +13,6 @@ import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
 import com.aga.mine.mains.FacebookData;
-import com.aga.mine.mains.GameData;
 import com.aga.mine.mains.Home;
 import com.aga.mine.mains.Home2;
 import com.aga.mine.mains.Utility;
@@ -51,10 +50,17 @@ public class GameEnding extends CCLayer {
 //	}
 
 	public GameEnding() {
-		myName = FacebookData.getinstance().getUserInfo().getName();
-		myID = FacebookData.getinstance().getUserInfo().getId();
-		myGold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
-		myExp = Integer.parseInt(FacebookData.getinstance().getDBData("Exp"));
+		if (GameData.share().isMultiGame) {
+			myName = FacebookData.getinstance().getUserInfo().getName();
+			myID = FacebookData.getinstance().getUserInfo().getId();
+			myGold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
+			myExp = Integer.parseInt(FacebookData.getinstance().getDBData("Exp"));
+		} else {
+			myName = "Guest";
+			myID = "0";
+			myGold = 0;
+			myExp = 0;
+		}
 		myScore = (int) (Math.random() * 1000) + 1;
 		//test
 		//myGold = 12345;
