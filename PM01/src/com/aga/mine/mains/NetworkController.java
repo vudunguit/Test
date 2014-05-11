@@ -458,10 +458,11 @@ public class NetworkController extends Activity {
 			Log.e("NetworkController", "kNetworkStateMatchCompleted");
 			matchedOppenentFacebookId = reader.readString();
 			matchedOppenentName = reader.readString();
-			int ai = reader.readByte();
-			int mapType = reader.readByte();
+			byte ai = reader.readByte();
+			byte mapType = reader.readByte();
 			Log.e("NetworkController", "mapType : " + mapType + "  // gamedata로 보낼것");
 			GameData.share().isMultiGame = true;
+			GameData.share().setMap(mapType);
 			CCScene scene;
 			// 랜덤 매치 or 초대매치 && 방장 or 손님 
 //			int matchMode = standby;		

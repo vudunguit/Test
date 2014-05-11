@@ -18,6 +18,7 @@ import org.cocos2d.types.ccColor3B;
 
 import android.util.Log;
 
+import com.aga.mine.pages2.GameData;
 import com.sromku.simple.fb.entities.Profile;
 
 public class RequestMatch extends CCLayer{
@@ -95,7 +96,10 @@ public class RequestMatch extends CCLayer{
 		base.setPosition(GameConfig.share().isEmoticonPanelOn ? basePositionOn : basePositionOff);
 	}
 
+	static int difficulty;
+	
 	public static void inviteMatch(String id, int result) {
+		difficulty = result;
 		String name = null;
 		String gameLevel = null;
 		final int easy = 1;
@@ -144,8 +148,10 @@ public class RequestMatch extends CCLayer{
 		switch (((CCMenuItem)sender).getTag()) {
 		case 1:
 			try {
+				GameData.share().setGameDifficulty(difficulty);
 				NetworkController.getInstance().sendRoomOwner(0);
 				NetworkController.getInstance().sendWillYouAcceptInviteOk(oppenentPlayerID);
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

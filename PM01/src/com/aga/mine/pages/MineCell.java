@@ -401,12 +401,12 @@ public class MineCell extends CCLayer{
 			// +1을 안해주면~  안알랴줌 (노출지뢰가 실제 지뢰에 포함이 안됨)
 			//int currentMine = GameData.share().currentMineNumber() + 1;
 			int currentMine = GameData.share().currentMineNumber();
-			Log.e("MineCell / open", "최대 지뢰 수 : " + GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
+			Log.e("MineCell / open", "최대 지뢰 수 : " + GameData.share().getMineNumber());
 			Log.e("MineCell / open", "open3 : currentMineNumber" + currentMine + ", decreaseMineNumber : " + mineNumber);
 
 			//최대 지뢰 갯수와 currentMine의 수가 같으면 게임 종료
-			Log.e("MineCell / open", "currentMine : " + currentMine + ", MaxMineNumber : " +  GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
-			if (currentMine == GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty())) {
+			Log.e("MineCell / open", "currentMine : " + currentMine + ", MaxMineNumber : " +  GameData.share().getMineNumber());
+			if (currentMine == GameData.share().getMineNumber()) {
 			Log.e("MineCell / open", "delegate - gameOver *** mission complete ***");
 				this.delegate.gameOver();
 			}

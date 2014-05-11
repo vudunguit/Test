@@ -306,13 +306,34 @@ public class GameMinimap extends CCLayer{
 //			break;
 //			
 		case kPlayDataMagicAttack:
-			if (0 < data && data < 4) {
-				mHudLayer.testText.setString("적의 공격을 받습니다. type : " + data);
-			} else if (data < 7) {
-				mHudLayer.testText.setString("적이 방어 하였습니다. type : " + data);
-			} else {
-				mHudLayer.testText.setString("알수없는 타입의 공격 type : " + data);
+			switch ((data - 23) / 1000) {
+			case 1:
+				mHudLayer.testText.setString("불마법을 사용. type : " + data);
+			break;
+			case 2:
+				mHudLayer.testText.setString("바람마법을 사용. type : " + data);
+			break;
+			case 3:
+				mHudLayer.testText.setString("구름마법을 사용. type : " + data);
+			break;
+			case 4:
+				mHudLayer.testText.setString("신성마법을 사용. type : " + data);
+			break;
+			case 5:
+				mHudLayer.testText.setString("대지마법을 사용. type : " + data);
+			break;
+			case 6:
+				mHudLayer.testText.setString("반사마법을 사용. type : " + data);
+			break;
+
 			}
+//			if (0 < data && data < 4) {
+//				mHudLayer.testText.setString("적의 공격을 받습니다. type : " + data);
+//			} else if (data < 7) {
+//				mHudLayer.testText.setString("적이 방어 하였습니다. type : " + data);
+//			} else {
+//				mHudLayer.testText.setString("알수없는 타입의 공격 type : " + data);
+//			}
 			break;
 			
 		case kPlayDataMagicDefense:

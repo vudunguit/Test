@@ -136,11 +136,11 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		}
 
 		// 난이도 ( 0~2 초,중,상급)
-		GameData.share().setGameDifficulty(1);
-		// 데이터를 들어있는 숫자 깃발 초기화
+//		GameData.share().setGameDifficulty(1);
+//		// 데이터를 들어있는 숫자 깃발 초기화
 		GameData.share().resetMineNumber();
 		// 호박에 나타나있는 숫자 깃발 초기화
-		GameData.share().setMineNumber(GameData.share().maxMineNumber);
+//		GameData.share().setMineNumber(GameData.share().maxMineNumber);
 		// GameData.share().setMineNumber(GameData.share().getGameDifficulty());
 		Log.e("Game / game ", "난이도 : " + GameData.share().getGameDifficulty());
 		// 생명수 초기화

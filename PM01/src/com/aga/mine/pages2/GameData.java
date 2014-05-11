@@ -48,9 +48,9 @@ public class GameData {
 
 	//
 	// 게임 난이도
-	final int kGameDifficultyEasy = 0;
-	final int kGameDifficultyNormal = 1;
-	final int kGameDifficultyHard = 2;
+	public final int kGameDifficultyEasy = 1;
+	public final int kGameDifficultyNormal = 2;
+	public final int kGameDifficultyHard = 3;
 
 	// 게임 데이터
 	HashMap<String, Integer> data;
@@ -69,7 +69,7 @@ public class GameData {
 	//String gameMap = "tileMap.tmx";
 	//String gameMap = "tilemap02.tmx";
 	//
-	public String gameMap = mapFolder + "map001.tmx";
+	public String gameMap = mapFolder + "map003.tmx";
 	//String gameMap = "map002.tmx";
 	//String gameMap = "map003.tmx";
 	//"orthogonal-test1.tmx";
@@ -98,7 +98,7 @@ public class GameData {
 
     //
     // 게임설정 스프레드쉬트를 읽어들인다.
-   public final int maxMineNumber = getMaxMineNumber(getGameDifficulty());
+//   public final int maxMineNumber = getMaxMineNumber(getGameDifficulty());
    
 	private void initGameData() {
 	
@@ -109,7 +109,7 @@ public class GameData {
 		   
 		   // value 꺼낼때는 형변환 해줘야됨.
 		   data.put("HeartNumber", 3);	 // 생명수
-		   data.put("MineNumber", maxMineNumber);	 // 남아있는 지뢰수
+		   data.put("MineNumber", 0);	 // 남아있는 지뢰수
 		   data.put("Seconds", 900); 		// 15 min, 남은 게임 진행시간 // Game에서 다시 값을 넣어서 무의미 하다.
 		   data.put("ItemFire", 0);				// 획득한 수정구, 불	
 		   data.put("ItemWind", 0);			// 획득한 수정구, 바람	
@@ -125,27 +125,29 @@ public class GameData {
 	}
 
 	// #pragma mark - data methods
-	public int getMaxMineNumber(int gameDifficulty) {
+	int getMaxMineNumber(int gameDifficulty) {
 		int value = -1;
-
-		// 테스트를 위해 지뢰수 임시 수정
+		String difficulty = null;
+		
+		// 맵마다 지뢰 수량 다른듯...
+		// 맵 구석 지뢰 생김..(난이도 상승에 따른 제거 였다가 다시 올린듯. tilemap 수정필요)
 		switch (gameDifficulty) {
 		case kGameDifficultyEasy:
-			Log.e("GameData / getMaxMineNumber", "gameDifficulty --> MineNumber : " + 30);
-			value = 30; // 기본 30개
+			value = 30;
+			difficulty = "Easy";
 			break;
 
 		case kGameDifficultyNormal:
-			Log.e("GameData / getMaxMineNumber", "gameDifficulty --> MineNumber : " + 60);
-			value = 60;
+			value = 48;
+			difficulty = "Normal";
 			break;
 
 		case kGameDifficultyHard:
-			Log.e("GameData / getMaxMineNumber", "gameDifficulty --> MineNumber : " + 90);
-			value = 90;
+			value = 65;
+			difficulty = "Hard";
 			break;
 		}
-
+		Log.e("GameData", "gameDifficulty " + difficulty + ", MineNumber : " + value);
 		return value;
 	}
 
@@ -242,8 +244,6 @@ public class GameData {
 	}
 
 	public int getGameData(String key) {
-		// 임시로
-		//
 		return data.get(key);
 	}
 
@@ -272,14 +272,13 @@ public class GameData {
 	
 	// 난이도
 	public int getGameDifficulty(){
-		//Log.e("get", ""+getGameData("GameDifficulty"));  // log로 확인
-		return 0; // 임시로 expert
-		//return getGameData("GameDifficulty");
+		return getGameData("GameDifficulty");
 	}
 	
 	public void setGameDifficulty(int difficulty) {
-		Log.e("GameData / setGameDifficulty", "Difficulty : "+ getGameData("GameDifficulty"));  // log로 확인
+//		Log.e("GameData / setGameDifficulty", "Difficulty : "+ getGameData("GameDifficulty"));  // log로 확인
 		this.setGameData("GameDifficulty", difficulty);
+		setMineNumber(getMaxMineNumber(getGameDifficulty()));
 	}
 
 	//GameMode
@@ -291,10 +290,14 @@ public class GameData {
 		this.setGameData("GameMode", mode);
 	}
 
-
 	public void setGameData(String key, int value) {
 		data.put(key, value);
 	}
+	
+//	public void setGameData(String key, int value) {
+//		data.put(key, value);
+//	}
+	
 	
 	/**************************** 변경 ****************************/
 	int openCell = 0;
@@ -305,13 +308,14 @@ public class GameData {
 
 	public int getHeart() {
 		return getGameData("HeartNumber");
-		
 	}
 
 	public int getSecond() {
 		return getGameData("Seconds");
-		
 	}
 	
+	public void setMap(byte mapType) {
+		gameMap = mapFolder + "map00"+ mapType + ".tmx";
+	}
 }
 // end

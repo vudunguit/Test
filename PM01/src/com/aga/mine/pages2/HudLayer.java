@@ -375,12 +375,13 @@ public class HudLayer extends CCLayer {
 	 * @return
 	 */
 	public void clicked(final Object button) {
+		final int tag = ((CCMenuItem) button).getTag();
 		// public void clicked(CCMenuItem button) {
 		// Log.e("clicked", "clicked");
 		if (!Config.getInstance().isDisableButton()) {
 			// Log.e("clicked", "Button Enable");
 			String effectName = "";
-			switch (((CCMenuItem) button).getTag()) {
+			switch (tag) {
 			case Game.kButtonMinimap:
 				// Log.e("button pressed", "kButtonMinimap");
 				String a = GameConfig.share().isMinimapPanelOn() ? "true"
@@ -447,15 +448,15 @@ public class HudLayer extends CCLayer {
 						// 디펜스와 어택 구분 필요 이유????
 						if (GameData.share().isMultiGame) {
 							try {
-								NetworkController.getInstance().sendPlayDataMagicAttack(((CCMenuItem) button).getTag());
+								NetworkController.getInstance().sendPlayDataMagicAttack((tag * 1000) + 23);
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
 						}
 
-						GameData.share().decreaseItemByType(((CCMenuItem) button).getTag());
+						GameData.share().decreaseItemByType(tag);
 						updateSphereItemNumber();
-						clickEffect(((CCMenuItem) button).getTag());
+						clickEffect(tag);
 						
 						unschedule(this);
 					}
@@ -508,7 +509,11 @@ public class HudLayer extends CCLayer {
 		} else if (GameData.share().isGuestMode) {
 			CCScene scene = Home2.scene();
 			CCDirector.sharedDirector().replaceScene(scene);
-		} 
+		} else { // single
+			mGameEnding = new GameEnding();
+			addChild(mGameEnding, GameConfig.share().kDepthPopup, 1234);
+			mGameEnding.setIsTouchEnabled(true);
+		}
 	}
 
 	/*****************************************************/

@@ -22,11 +22,11 @@ public class GameEnding extends CCLayer {
 	String folder = "70game_ending/";
 	
 	CGSize winSize = CCDirector.sharedDirector().winSize();
-	String myName;
-	String myID;
-	int myScore;
-	int myGold;
-	int myExp;
+	String myName = "Guest";
+	String myID = "0";
+	int myScore = 0;
+	int myGold = 0;
+	int myExp = 0;
 	
 	private CCLabel exp;
 	private CCSprite bg;
@@ -50,17 +50,13 @@ public class GameEnding extends CCLayer {
 //	}
 
 	public GameEnding() {
-		if (GameData.share().isMultiGame) {
+		if (!GameData.share().isGuestMode) {
 			myName = FacebookData.getinstance().getUserInfo().getName();
 			myID = FacebookData.getinstance().getUserInfo().getId();
 			myGold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
 			myExp = Integer.parseInt(FacebookData.getinstance().getDBData("Exp"));
-		} else {
-			myName = "Guest";
-			myID = "0";
-			myGold = 0;
-			myExp = 0;
 		}
+		
 		myScore = (int) (Math.random() * 1000) + 1;
 		//test
 		//myGold = 12345;

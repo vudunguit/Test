@@ -147,11 +147,11 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		}
 
 		//난이도 ( 0~2 초,중,상급)
-		GameData.share().setGameDifficulty(1);
+//		GameData.share().setGameDifficulty(1);
 		// 데이터를 들어있는 숫자 깃발 초기화
 		GameData.share().resetMineNumber();
 		// 호박에 나타나있는 숫자 깃발 초기화
-		GameData.share().setMineNumber(GameData.share().maxMineNumber);
+//		GameData.share().setMineNumber(GameData.share().maxMineNumber);
 		//GameData.share().setMineNumber(GameData.share().getGameDifficulty());
 		Log.e("Game / game ", "난이도 : " + GameData.share().getGameDifficulty());
 		// 생명수 초기화
@@ -1095,8 +1095,8 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 									// gamedata.share.getgamedifficulty는 난이도 설정하는
 									// 창에서 설정되서 들어옴
 									/**************************************/
-									Log.e("Game / handleLongPress", "unopenedTile : " + unopenedTile + " / "+ GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
-									if (unopenedTile  == GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty())) {
+									Log.e("Game / handleLongPress", "unopenedTile : " + unopenedTile + " / "+ GameData.share().getMineNumber());
+									if (unopenedTile  == GameData.share().getMineNumber()) {
 										Log.e("Game / handleLongPress", "handleLongPress Game Over");
 										this.gameOver();
 										//Log.e("Game / handleLongPress", "mine:" + mine + ", difficulty : " + GameData.share().getGameDifficulty());
@@ -1212,11 +1212,9 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 					}
 				}
 				// end 모두 열린 수정구가 있는지 확인한다. 
-				Log.e("Game / handleDoubleTap", 
-						"unopenedTile : " + unopenedTile +  
-						", Max Mine : " + GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
+				Log.e("Game / handleDoubleTap",  "unopenedTile : " + unopenedTile + ", Max Mine : " + GameData.share().getMineNumber());
 				
-				if (unopenedTile == GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty())) {
+				if (unopenedTile == GameData.share().getMineNumber()) {
 					Log.e("Game / handleDoubleTap", "handleDoubleTap Game Over");
 					this.gameOver();
 				}
@@ -2387,7 +2385,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		// 위쪽 캐릭터 얼굴만있는 프로그레스바에 캐릭 얼굴 움직이게 해줌
 		public static void updateProgress() {
 			int gameDifficulty  = GameData.share().getGameDifficulty();
-			int maxMine = GameData.share().getMaxMineNumber(gameDifficulty);
+			int maxMine = GameData.share().getMineNumber();
 			int remainedMine = GameData.share().getMineNumber();
 			float progress = (float)remainedMine / (float)maxMine;
 			progress = 1- progress;

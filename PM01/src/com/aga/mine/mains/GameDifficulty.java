@@ -27,9 +27,9 @@ public class GameDifficulty extends CCLayer {
 	final int randomMode = 2;
 	final int inviteMode = 3;
 	
-	final int easy = 1;
-	final int normal = 2;
-	final int expert = 3;
+//	final int easy = 1;
+//	final int normal = 2;
+//	final int expert = 3;
 	
 	CCSprite bg;
 	
@@ -95,19 +95,19 @@ public class GameDifficulty extends CCLayer {
 				folder + "difficulty-easybutton1" + fileExtension,
 				folder + "difficulty-easybutton2" + fileExtension,
 				this, "nextCallback");
-		button1.setTag(easy);
+		button1.setTag(GameData.share().kGameDifficultyEasy);
 		// 중급
 		CCMenuItemImage button2 = CCMenuItemImage.item(
 				folder + 	"difficulty-normalbutton1" + fileExtension,
 				folder + 	"difficulty-normalbutton2" + fileExtension,
 				this, "nextCallback");
-		button2.setTag(normal);
+		button2.setTag(GameData.share().kGameDifficultyNormal);
 		// 상급
 		CCMenuItemImage button3 = CCMenuItemImage.item(
 				folder + 	"difficulty-hardbutton1" + fileExtension,
 				folder + 	"difficulty-hardbutton2" + fileExtension,
 				this, "nextCallback");
-		button3.setTag(expert);
+		button3.setTag(GameData.share().kGameDifficultyHard);
 		
 		CCMenu gameMenu = CCMenu.menu(button1, button2, button3);
 		gameMenu.alignItemsVertically(0);
