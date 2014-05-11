@@ -451,7 +451,7 @@ public class NetworkController extends Activity {
 			
 		case kMessageGameStart:
 			Log.e("NetworkController", "kMessageGameStart - game start!");
-			Game.bbbbb();
+			mGame.gameStart();
 			break;
 			
 		case kMessageMatchCompleted:

@@ -11,6 +11,8 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 //import org.cocos2d.types.ccColor4B; // 이게 왜 들어가있지??
 
+import com.aga.mine.pages2.GameData;
+
 public class Login extends CCLayer{
 	
 	final String folder = "02appload/";
@@ -98,6 +100,7 @@ public class Login extends CCLayer{
 
 	public void guestCallback(Object sender) {
 		MainApplication.getInstance().getActivity().click();
+		GameData.share().isGuestMode = true;
 		CCScene scene = Home2.scene();
 		CCDirector.sharedDirector().replaceScene(scene);
 	}

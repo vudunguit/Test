@@ -242,11 +242,13 @@ public class Option extends CCLayer {
 	public void facebookCallback(Object sender) {
 		MainApplication.getInstance().getActivity().click();
 		MainActivity mMainActivity = MainApplication.getInstance().getActivity();
-		if(mMainActivity.mSimpleFacebook.isLogin()) {
-	    	mMainActivity.logoutFaceBook(); 
-	    } else 
-    		mMainActivity.loginFaceBook();
+		if (mMainActivity.mSimpleFacebook.isLogin()) {
+			mMainActivity.logoutFaceBook();
+		} else {
+			GameData.share().isGuestMode = false;
+			mMainActivity.loginFaceBook();
 		}
+	}
 
 	public void policyCallback(Object sender) {
 		MainApplication.getInstance().getActivity().click();

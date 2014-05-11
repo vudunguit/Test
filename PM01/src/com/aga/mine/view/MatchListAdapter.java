@@ -2,7 +2,6 @@ package com.aga.mine.view;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.cocos2d.nodes.CCDirector;
@@ -16,11 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aga.mine.mains.FacebookData;
-import com.aga.mine.mains.GameData;
 import com.aga.mine.mains.GameScore;
 import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.R;
+import com.aga.mine.pages2.GameData;
 import com.aga.mine.util.Util;
 import com.androidquery.AQuery;
 

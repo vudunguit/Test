@@ -486,29 +486,29 @@ public class HudLayer extends CCLayer {
 		Log.e("Game / HudLayer / gameOver", "gameEnding - gogo");
 		Config.getInstance().setDisableButton(true);
 		
-		// 나중에 GameData 전부 합치기
-		if (GameData.share().isGuestMode) {
-			CCScene scene = Home2.scene();
-			CCDirector.sharedDirector().replaceScene(scene);
-		} else if (GameData.share().isMultiGame) {
+		if (GameData.share().isMultiGame) {
+			
 			// 게임 종료 메시지를 서버로 무한 보내는것을 방지함.
 			if (!isGameOver) {
 				try {
 					isGameOver = !isGameOver;
-					NetworkController.getInstance().sendRequestGameOver(
-							123456);
+					NetworkController.getInstance().sendRequestGameOver(123456);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			} else {
+				mGameEnding = new GameEnding();
+				addChild(mGameEnding, GameConfig.share().kDepthPopup, 1234);
+				mGameEnding.setIsTouchEnabled(true);
+//				GameData.share().isMultiGame = true;
+				// GameEnding ending = GameEnding.share(this.mContext);
+				// this.addChild(ending, GameConfig.share().kDepthPopup);
 			}
-		}
-		
-		mGameEnding = new GameEnding();
-		addChild(mGameEnding, GameConfig.share().kDepthPopup, 1234);
-		mGameEnding.setIsTouchEnabled(true);
-		GameData.share().isMultiGame = true;
-		// GameEnding ending = GameEnding.share(this.mContext);
-		// this.addChild(ending, GameConfig.share().kDepthPopup);
+			
+		} else if (GameData.share().isGuestMode) {
+			CCScene scene = Home2.scene();
+			CCDirector.sharedDirector().replaceScene(scene);
+		} 
 	}
 
 	/*****************************************************/

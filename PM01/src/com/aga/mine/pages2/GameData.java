@@ -76,7 +76,7 @@ public class GameData {
 	//"orthogonal-test3.tmx";
 	//"attendance2.tmx";
 	
-	public boolean isGuestMode = true;
+	public boolean isGuestMode = false;
 	public boolean isMultiGame = false;
 	//---------------------------------------------------------------//
 	

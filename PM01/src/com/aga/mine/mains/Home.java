@@ -9,7 +9,6 @@ import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCDirector;
-import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
@@ -17,6 +16,7 @@ import org.cocos2d.types.CGPoint;
 import android.util.Log;
 
 import com.aga.mine.mains.MainActivity.InviteCallback;
+import com.aga.mine.pages2.GameData;
 import com.aga.mine.util.Util;
 
 public class Home extends CCLayer{
@@ -102,6 +102,7 @@ public class Home extends CCLayer{
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 		//display scroll view
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_RANKLIST);
+		GameData.share().isMultiGame = false;
 	}
 	
 //	private CGSize winsize() {

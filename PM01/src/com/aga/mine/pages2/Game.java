@@ -461,14 +461,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// 128);
 		// this.addChild(mapLabel);
 		// mapLabel.setPosition(getPosition());
-		if (GameData.share().isGuestMode) {
-			GameData.share().isMultiGame = false;
-			bbbbb();
-		} else {
-			if (GameData.share().isMultiGame) {
-				aaaaa();
-			}
-		}
+
 		
 		//주변의 지뢰 갯수를 미리 구한다.
 		for(MineCell cell : cells) {
@@ -509,9 +502,15 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		
 		//이모티콘 test : 실제로는 NetworkController에서 전송된 이모티콘 id를 던져준다.
 		//mHud.startEmoticonAni(5);
+		
+		if (GameData.share().isMultiGame) {
+			gameReady();
+		} else if (GameData.share().isGuestMode) {
+			gameStart();
+		}
 	}
 
-	private void aaaaa() {
+	private void gameReady() {
 		Log.e("Game", "I'm Ready!");
 		try {
 			NetworkController.getInstance().sendGameReady();
@@ -520,7 +519,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		}
 	}
 
-	public static void bbbbb() {
+	public void gameStart() {
 		// 게임시간 초기화
 		GameData.share().setSeconds(900);
 		Config.getInstance().setDisableButton(false);
