@@ -5,9 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cocos2d.actions.UpdateCallback;
+import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFuncN;
+import org.cocos2d.actions.interval.CCAnimate;
 import org.cocos2d.actions.interval.CCDelayTime;
 import org.cocos2d.actions.interval.CCFadeOut;
+import org.cocos2d.actions.interval.CCMoveBy;
+import org.cocos2d.actions.interval.CCRotateTo;
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
@@ -17,6 +21,7 @@ import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.menus.CCMenuItemToggle;
+import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
@@ -235,10 +240,15 @@ public class HudLayer extends CCLayer {
 		this.addChild(mGameMinimap, GameConfig.share().kDepthPopup);
 		mGameMinimap.setVisible(false);
 		
+		//fire animation
+		CCAnimation fireAttack = CCAnimation.animation("fireAttack");
+		CCSprite fireattack1 = CCSprite.sprite("61hud/fire-01.png");
+		fireattack1.flipY_ = true;
+
+		
 		//test
 		//GameEnding ending = new GameEnding();
 		//addChild(ending, GameConfig.share().kDepthPopup, 1234);
-
 	}
 
 	//이모티콘 애니메이션 : NetworkController에서 데이터를 수신후 이 펑션을 호출
@@ -625,12 +635,44 @@ public class HudLayer extends CCLayer {
 		return super.ccTouchesEnded(event);
 	}
 
-	// CCLabel point1 = CCLabel.makeLabel("point1 : ", "Arial", (30*
-	// tilePixelSize) / 128);
-	// CCLabel point2 = CCLabel.makeLabel("point2 : ", "Arial", (30*
-	// tilePixelSize) / 128);
-	// CCLabel point3 = CCLabel.makeLabel("point3 : ", "Arial", (30*
-	// tilePixelSize) / 128);
-	// CCLabel point4 = CCLabel.makeLabel("point4 : ", "Arial", (30*
-	// tilePixelSize) / 128);
+	//불공격 애니메이션-------------------------------------------------------------
+	public void StartAniFireAttack() {
+		CCSprite fire1 = CCSprite.sprite("61hud/fire-01.png");
+		fire1.setPosition(magician.getPosition().x + magician.getContentSize().width, magician.getPosition().y + magician.getContentSize().height);
+		fire1.setAnchorPoint(CGPoint.ccp(0.5f, 1.0f));
+		fire1.setScale(0);
+		addChild(fire1);
+		
+		CCRotateTo rot	= CCRotateTo.action(0.01f, 180);
+		CCScaleTo scale = CCScaleTo.action(0.3f, 1.0f);
+		CCCallFuncN action2 = CCCallFuncN.action(this, "cbFireMove");
+		fire1.runAction(CCSequence.actions(rot, scale, action2));
+	}
+	
+	public void cbFireMove(Object sender) {
+		CCSprite fire1 = (CCSprite) sender;
+		
+		CCAnimation fireAttack = CCAnimation.animation("fireAttack");
+		for(int i=1; i<=6; i++) {
+    		CCSprite fire = CCSprite.sprite(String.format("61hud/fire-%02d.png", i));
+    		//fire.flipY_ = true;
+    		fireAttack.addFrame(fire.getTexture());
+		}
+		
+		CCAnimate action = CCAnimate.action(1f, fireAttack, false);
+		CCRepeatForever repeat = CCRepeatForever.action(action);
+		
+		
+		CCMoveBy move = CCMoveBy.action(2, CGPoint.ccp(0, winSize.height));
+		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveFire");
+		
+		fire1.runAction(repeat);
+		fire1.runAction(CCSequence.actions(move, remove));
+	}
+	
+	public void cbRemoveFire(Object sender) {
+		CCSprite fire1 = (CCSprite) sender;
+		fire1.removeFromParentAndCleanup(true);
+	}
+	//불공격 애니메이션 끝---------------------------------------------------------
 }
