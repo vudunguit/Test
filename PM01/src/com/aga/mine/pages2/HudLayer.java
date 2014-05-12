@@ -240,12 +240,6 @@ public class HudLayer extends CCLayer {
 		this.addChild(mGameMinimap, GameConfig.share().kDepthPopup);
 		mGameMinimap.setVisible(false);
 		
-		//fire animation
-		CCAnimation fireAttack = CCAnimation.animation("fireAttack");
-		CCSprite fireattack1 = CCSprite.sprite("61hud/fire-01.png");
-		fireattack1.flipY_ = true;
-
-		
 		//test
 		//GameEnding ending = new GameEnding();
 		//addChild(ending, GameConfig.share().kDepthPopup, 1234);
@@ -405,6 +399,7 @@ public class HudLayer extends CCLayer {
 			case Game.kButtonFire:
 				// Log.e("button pressed", "kButtonFire");
 				effectName = "불마법";
+				StartAniFireAttack();
 				break;
 			case Game.kButtonWind:
 				// Log.e("button pressed", "kButtonWind");
@@ -638,7 +633,8 @@ public class HudLayer extends CCLayer {
 	//불공격 애니메이션-------------------------------------------------------------
 	public void StartAniFireAttack() {
 		CCSprite fire1 = CCSprite.sprite("61hud/fire-01.png");
-		fire1.setPosition(magician.getPosition().x + magician.getContentSize().width, magician.getPosition().y + magician.getContentSize().height);
+		//위치 조정 필요
+		fire1.setPosition(winSize.width * 0.62f, winSize.height * 0.3f);
 		fire1.setAnchorPoint(CGPoint.ccp(0.5f, 1.0f));
 		fire1.setScale(0);
 		addChild(fire1);
