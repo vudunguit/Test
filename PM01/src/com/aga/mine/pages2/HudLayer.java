@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cocos2d.actions.UpdateCallback;
+import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.interval.CCAnimate;
@@ -14,6 +15,7 @@ import org.cocos2d.actions.interval.CCMoveBy;
 import org.cocos2d.actions.interval.CCRotateTo;
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
+import org.cocos2d.actions.interval.CCSpawn;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.layers.CCTMXTiledMap;
@@ -78,6 +80,13 @@ public class HudLayer extends CCLayer {
 	private Game mGame;
 	public GameMinimap mGameMinimap;
 	public GameProgressBar mGameProgressBar;
+	
+	private CCSprite fire;
+	private CCAnimation fireAttack;
+	private CCSprite wind;
+	private CCAnimation windAttack;
+	private CCSprite cloud;
+	private CCAnimation cloudAttack;
 
 	public HudLayer(Game game) {
 		mGame = game;
@@ -239,6 +248,30 @@ public class HudLayer extends CCLayer {
 		
 		this.addChild(mGameMinimap, GameConfig.share().kDepthPopup);
 		mGameMinimap.setVisible(false);
+		
+		//불, 바람, 구름 애니메이션
+		fire = CCSprite.sprite("61hud/fire-01.png");
+		fireAttack = CCAnimation.animation("fireAttack");
+		for(int i=1; i<=6; i++) {
+    		CCSprite fireframe = CCSprite.sprite(String.format("61hud/fire-%02d.png", i));
+    		fireAttack.addFrame(fireframe.getTexture());
+		}
+		
+		wind = CCSprite.sprite("61hud/wind01_0.1.png");
+		windAttack = CCAnimation.animation("windAttack");
+		for(int i=1; i<=8; i++) {
+    		CCSprite windframe = CCSprite.sprite(String.format("61hud/wind%02d_0.1.png", i));
+    		//fire.flipY_ = true;
+    		windAttack.addFrame(windframe.getTexture());
+		}
+		
+		cloud = CCSprite.sprite("61hud/fx-passingcloud1.png");
+		cloudAttack = CCAnimation.animation("cloudAttack");
+		for(int i=1; i<=3; i++) {
+    		CCSprite cloudframe = CCSprite.sprite(String.format("61hud/fx-passingcloud%d.png", i));
+    		//fire.flipY_ = true;
+    		cloudAttack.addFrame(cloudframe.getTexture());
+		}
 		
 		//test
 		//GameEnding ending = new GameEnding();
@@ -404,10 +437,12 @@ public class HudLayer extends CCLayer {
 			case Game.kButtonWind:
 				// Log.e("button pressed", "kButtonWind");
 				effectName = "바람마법";
+				StartAniWindAttack();
 				break;
 			case Game.kButtonCloud:
 				// Log.e("button pressed", "kButtonCloud");
 				effectName = "구름마법";
+				StartAniCloudAttack();
 				break;
 			case Game.kButtonDivine:
 				// Log.e("button pressed", "kButtonDivine");
@@ -632,43 +667,85 @@ public class HudLayer extends CCLayer {
 
 	//불공격 애니메이션-------------------------------------------------------------
 	public void StartAniFireAttack() {
-		CCSprite fire1 = CCSprite.sprite("61hud/fire-01.png");
-		//위치 조정 필요
-		fire1.setPosition(winSize.width * 0.62f, winSize.height * 0.3f);
-		fire1.setAnchorPoint(CGPoint.ccp(0.5f, 1.0f));
-		fire1.setScale(0);
-		addChild(fire1);
+		fire.setPosition(winSize.width * 0.62f, winSize.height * 0.3f);
+		fire.setAnchorPoint(CGPoint.ccp(0.5f, 1.0f));
+		fire.setScale(0);
+		addChild(fire);
 		
 		CCRotateTo rot	= CCRotateTo.action(0.01f, 180);
-		CCScaleTo scale = CCScaleTo.action(0.3f, 1.0f);
+		CCScaleTo scale = CCScaleTo.action(0.4f, 1.0f);
 		CCCallFuncN action2 = CCCallFuncN.action(this, "cbFireMove");
-		fire1.runAction(CCSequence.actions(rot, scale, action2));
+		fire.runAction(CCSequence.actions(rot, scale, action2));
 	}
 	
 	public void cbFireMove(Object sender) {
 		CCSprite fire1 = (CCSprite) sender;
-		
-		CCAnimation fireAttack = CCAnimation.animation("fireAttack");
-		for(int i=1; i<=6; i++) {
-    		CCSprite fire = CCSprite.sprite(String.format("61hud/fire-%02d.png", i));
-    		//fire.flipY_ = true;
-    		fireAttack.addFrame(fire.getTexture());
-		}
-		
+
 		CCAnimate action = CCAnimate.action(1f, fireAttack, false);
 		CCRepeatForever repeat = CCRepeatForever.action(action);
 		
-		
 		CCMoveBy move = CCMoveBy.action(2, CGPoint.ccp(0, winSize.height));
-		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveFire");
+		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite");
 		
 		fire1.runAction(repeat);
 		fire1.runAction(CCSequence.actions(move, remove));
 	}
 	
-	public void cbRemoveFire(Object sender) {
-		CCSprite fire1 = (CCSprite) sender;
-		fire1.removeFromParentAndCleanup(true);
+	public void cbRemoveSprite(Object sender) {
+		CCSprite sprite = (CCSprite) sender;
+		sprite.removeFromParentAndCleanup(true);
 	}
 	//불공격 애니메이션 끝---------------------------------------------------------
+	
+	//바람공격 애니메이션------------------------------------------------------------
+	public void StartAniWindAttack() {
+		wind.setPosition(winSize.width * 0.62f, winSize.height * 0.3f);
+		wind.setAnchorPoint(CGPoint.ccp(0.5f, 0));
+		wind.setScale(0);
+		addChild(wind);
+		
+		CCScaleTo scale = CCScaleTo.action(0.4f, 1.0f);
+		CCCallFuncN action2 = CCCallFuncN.action(this, "cbWindMove");
+		wind.runAction(CCSequence.actions(scale, action2));
+	}
+	
+	public void cbWindMove(Object sender) {
+		CCSprite wind1 = (CCSprite) sender;
+
+		CCAnimate action = CCAnimate.action(1.4f, windAttack, false);
+		CCRepeatForever repeat = CCRepeatForever.action(action);
+		
+		CCMoveBy move = CCMoveBy.action(2, CGPoint.ccp(0, winSize.height));
+		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite");
+		
+		wind1.runAction(repeat);
+		wind1.runAction(CCSequence.actions(move, remove));
+	}
+	//바람공격 애니메이션 끝------------------------------------------------------------
+	
+	//구름공격 애니메이션------------------------------------------------------------
+	public void StartAniCloudAttack() {
+		cloud.setPosition(winSize.width * 0.62f, winSize.height * 0.3f);
+		cloud.setAnchorPoint(CGPoint.ccp(0.5f, 0));
+		cloud.setScale(0);
+		addChild(cloud);
+		
+		CCScaleTo scale = CCScaleTo.action(0.4f, 1.0f);
+		CCCallFuncN action2 = CCCallFuncN.action(this, "cbCloudMove");
+		cloud.runAction(CCSequence.actions(scale, action2));
+	}
+	
+	public void cbCloudMove(Object sender) {
+		CCSprite cloud1 = (CCSprite) sender;
+		
+		CCAnimate action = CCAnimate.action(0.7f, cloudAttack, false);
+		CCRepeatForever repeat = CCRepeatForever.action(action);
+		
+		CCMoveBy move = CCMoveBy.action(2, CGPoint.ccp(0, winSize.height));
+		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite");
+		
+		cloud1.runAction(repeat);
+		cloud1.runAction(CCSequence.actions(move, remove));
+	}
+	//구름공격 애니메이션 끝------------------------------------------------------------
 }
