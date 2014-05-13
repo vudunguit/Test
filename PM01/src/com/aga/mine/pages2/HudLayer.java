@@ -8,6 +8,7 @@ import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFuncN;
+import org.cocos2d.actions.instant.CCCallFuncND;
 import org.cocos2d.actions.interval.CCAnimate;
 import org.cocos2d.actions.interval.CCDelayTime;
 import org.cocos2d.actions.interval.CCFadeOut;
@@ -87,6 +88,14 @@ public class HudLayer extends CCLayer {
 	private CCAnimation windAttack;
 	private CCSprite cloud;
 	private CCAnimation cloudAttack;
+	private CCSprite rune;
+	private CCAnimation runeAni;
+	private CCSprite divine;
+	private CCAnimation divineAni;
+	private CCSprite earth;
+	private CCAnimation earthAni;
+	private CCSprite mirror;
+	private CCAnimation mirrorAni;
 
 	float maxTiles;
 	public HudLayer(Game game) {
@@ -270,8 +279,35 @@ public class HudLayer extends CCLayer {
 		cloudAttack = CCAnimation.animation("cloudAttack");
 		for(int i=1; i<=3; i++) {
     		CCSprite cloudframe = CCSprite.sprite(String.format("61hud/fx-passingcloud%d.png", i));
-    		//fire.flipY_ = true;
     		cloudAttack.addFrame(cloudframe.getTexture());
+		}
+		
+		rune = CCSprite.sprite("61hud/rune-01.png");
+		runeAni = CCAnimation.animation("rune");
+		for(int i=1; i<=10; i++) {
+    		CCSprite runeframe = CCSprite.sprite(String.format("61hud/rune-%02d.png", i));
+    		runeAni.addFrame(runeframe.getTexture());
+		}
+		
+		divine = CCSprite.sprite("61hud/divine-01.png");
+		divineAni = CCAnimation.animation("divine");
+		for(int i=1; i<=6; i++) {
+    		CCSprite divineframe = CCSprite.sprite(String.format("61hud/divine-%02d.png", i));
+    		divineAni.addFrame(divineframe.getTexture());
+		}
+		
+		earth = CCSprite.sprite("61hud/earth-01.png");
+		earthAni = CCAnimation.animation("earth");
+		for(int i=1; i<=6; i++) {
+    		CCSprite earthframe = CCSprite.sprite(String.format("61hud/earth-%02d.png", i));
+    		earthAni.addFrame(earthframe.getTexture());
+		}
+		
+		mirror = CCSprite.sprite("61hud/mirror-01.png");
+		mirrorAni = CCAnimation.animation("mirror");
+		for(int i=1; i<=6; i++) {
+    		CCSprite mirrorframe = CCSprite.sprite(String.format("61hud/mirror-%02d.png", i));
+    		mirrorAni.addFrame(mirrorframe.getTexture());
 		}
 		
 		//test
@@ -450,14 +486,17 @@ public class HudLayer extends CCLayer {
 			case Game.kButtonDivine:
 				// Log.e("button pressed", "kButtonDivine");
 				effectName = "신성마법";
+				StartAniRune(4);
 				break;
 			case Game.kButtonEarth:
 				// Log.e("button pressed", "kButtonEarth");
 				effectName = "대지마법";
+				StartAniRune(5);
 				break;
 			case Game.kButtonMirror:
 				// Log.e("button pressed", "kButtonMirror");
 				effectName = "반사마법";
+				StartAniRune(6);
 				break;
 
 			default:
@@ -781,4 +820,64 @@ public class HudLayer extends CCLayer {
 		cloud1.runAction(CCSequence.actions(move, remove));
 	}
 	//구름공격 애니메이션 끝------------------------------------------------------------
+	
+	//룬(마법진) 애니메이션-----------------------------------------------------
+	//parameter : 4:신성, 5:대지, 6:반사
+	public void StartAniRune(int kind) {
+		rune.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
+		rune.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
+		addChild(rune);
+		
+		CCAnimate action = CCAnimate.action(1.2f, runeAni, false);
+		CCCallFuncND call = CCCallFuncND.action(this, "cbRune", kind);
+		rune.runAction(CCSequence.actions(action, call));
+	}
+	
+	public void cbRune(Object sender, Object k) {
+		CCSprite rune = (CCSprite) sender;
+		int kind = (Integer) k;
+		switch(kind) {
+		case 4:
+			divine.setPosition(rune.getContentSize().width * 0.5f, rune.getContentSize().height * 0.5f);
+			divine.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
+			rune.addChild(divine, 2);
+			CCAnimate divineAction = CCAnimate.action(1.2f, divineAni, false);
+			divine.runAction(CCSequence.actions(divineAction, CCCallFuncND.action(this, "cbRemoveSprite", kind)));
+			break;
+		case 5:
+			earth.setPosition(rune.getContentSize().width * 0.5f, rune.getContentSize().height * 0.5f);
+			earth.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
+			rune.addChild(earth, 2);
+			CCAnimate earthAction = CCAnimate.action(1.2f, earthAni, false);
+			earth.runAction(CCSequence.actions(earthAction, CCCallFuncND.action(this, "cbRemoveSprite", kind)));
+			break;
+		case 6:
+			mirror.setPosition(rune.getContentSize().width * 0.5f, rune.getContentSize().height * 0.5f);
+			mirror.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
+			rune.addChild(mirror, 2);
+			CCAnimate mirrorAction = CCAnimate.action(1.2f, mirrorAni, false);
+			mirror.runAction(CCSequence.actions(mirrorAction, CCCallFuncND.action(this, "cbRemoveSprite", kind)));
+			break;
+		}
+	}
+	
+	public void cbRemoveSprite(Object sender, Object k) {
+		CCSprite sprite = (CCSprite) sender;
+		sprite.getParent().removeFromParentAndCleanup(true);
+		sprite.removeFromParentAndCleanup(true);
+		
+		int kind = (Integer) k;
+		
+		switch(kind) {
+		case 4: //신성 마법
+			
+			break;
+		case 5:
+			//대지마법 이펙트
+			
+			break;
+		}
+		
+	}
+	//룬(마법진) 애니메이션 끝------------------------------------------------------
 }
