@@ -1,5 +1,7 @@
 ﻿package com.aga.mine.pages2;
 
+import java.security.spec.MGF1ParameterSpec;
+
 import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -12,6 +14,9 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
+import android.util.Log;
+
+import com.aga.mine.mains.Config;
 import com.aga.mine.mains.FacebookData;
 import com.aga.mine.mains.Home;
 import com.aga.mine.mains.Home2;
@@ -30,9 +35,9 @@ public class GameEnding extends CCLayer {
 	
 	private CCLabel exp;
 	private CCSprite bg;
-	private CCSprite expBar;
-	private CCSprite expTail;
 	private CCSprite expHead;
+	private CCSprite expTail;
+	private CCSprite expBar;
 	private float mExpX; //경험치 충전 상태
 	private int mLeftExp; //초기: 획득 경험치, 애니메이션이 진행됨에 따라 점점 줄어듬.
 	
@@ -49,20 +54,44 @@ public class GameEnding extends CCLayer {
 //		return layer;
 //	}
 
-	public GameEnding() {
+	int myPoint2;
+	int otherPoint;
+	int closedCell;
+	
+	public GameEnding(int myScore2, int otherScore, int closedCell) {
+		Log.e("GameEnding", "myScore : " + myScore2+ ", otherScore : " + otherScore + ", closedCell : " + closedCell);
+		// 소리 정지
+		
+		this.myPoint2 = myScore2;
+		this.otherPoint = otherScore;
+		this.closedCell = closedCell;
+		
 		if (!GameData.share().isGuestMode) {
 			myName = FacebookData.getinstance().getUserInfo().getName();
 			myID = FacebookData.getinstance().getUserInfo().getId();
 			myGold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
 			myExp = Integer.parseInt(FacebookData.getinstance().getDBData("Exp"));
-		}
+		}			
 		
-		myScore = (int) (Math.random() * 1000) + 1;
+		// Config.getInstance().vsWin
+		if (Config.getInstance().getVs()) {
+			Log.e("GameEnding", "Win");
+			// 승리 효과음
+			// 남은 생명수로 하트 애니 출력
+			myScore = myScore2;
+		} else {
+			Log.e("GameEnding", "Lose");
+			// 패배 효과음
+			myScore = otherScore;
+		}
+
+//		myScore = (int) (Math.random() * 1000) + 1;
 		//test
 		//myGold = 12345;
 		//myExp = 3000;
 		//myScore = 2123;
-		mainMenu();
+//		mainMenu(true);
+		mainMenu(Config.getInstance().getVs());
 		setpoint();
 	}
 
@@ -70,8 +99,8 @@ public class GameEnding extends CCLayer {
 	// 적색, 청색
 	// facebookID (image는 web 또는 저장된 것 호출)
 	// 3가지 점수 (점수가 있을시 lv, exp 호출)
-	private void mainMenu() {
-		
+	private void mainMenu(boolean showAni) {
+		Log.e("GameEnding", "showAni(vsWin) :" + showAni);
 		String userColor = "";
 		int randomPoint = (int) (Math.random() * 1000) + 1;
 		
@@ -211,7 +240,9 @@ public class GameEnding extends CCLayer {
 		
 		//경험치 및 레벨업 애니메이션
 		//경험치 1000당 1초
-		schedule("expAni");
+		if (!GameData.share().isGuestMode && showAni) {
+			schedule("expAni");
+		}
 	}
 	
 	public void expAni(float dt) {
@@ -278,6 +309,7 @@ public class GameEnding extends CCLayer {
 	
 	CCLabel myPoint = null;
 	private void setpoint() {
+		Log.e("GameEnding", "setpoint :");
 		myPoint = CCLabel.makeLabel("Gold : " + myScore, "Arial", 30);
 		this.addChild(myPoint, 2);
 		myPoint.setPosition(winSize.width / 2, (winSize.height / 5) * 4);

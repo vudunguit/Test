@@ -1897,6 +1897,60 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		return 0;
 	}
 
+
+	public void messageReceived(int messageType, Object obj) {
+		Log.e("Game", "kmessageRequestScore = 15, kmessageGameOver = 6, kmessageOpponentConnectionLost = 9");
+		Log.e("Game", "messageReceived - messageType : " + messageType);
+		final int kmessageRequestScore = 15;
+		final int kmessageGameOver = 6;
+		final int kmessageOpponentConnectionLost = 9;
+		
+		int otherScore = -1;
+		if (obj != null) {
+			otherScore = (Integer) obj;			
+		}
+		
+		// 값 넣어야됨.
+		float mine = 1;
+		float mushroom = 1; 
+		float unOpenedCell = unopenedTile;
+		float heart = 1;
+		float time = 900 - 1;
+		
+		int myScore = -1;
+		if (heart > 0) {
+			myScore = (int) ((((mine + heart) * mushroom) + time) * mushroom * 0.006f);
+		}
+		
+		Log.e("HudLayer", "값 넣어야됨." + myScore);
+		
+		if (myScore < otherScore)
+			Config.getInstance().setVs(Config.getInstance().vsLose);
+		else 
+			Config.getInstance().setVs(Config.getInstance().vsWin);
+		
+		switch (messageType) {
+		case kmessageRequestScore:
+			try {
+				NetworkController.getInstance().sendRequestGameOver(myScore);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+			
+		case kmessageGameOver:
+			mHud.gameOver(myScore, otherScore);
+			break;
+			
+		case kmessageOpponentConnectionLost:
+			mHud.gameOver(myScore, 0);
+			break;
+		}
+	}
+
+	public int getClosedCell() {
+		return unopenedTile;
+	}
 	/**************************************/
 
 
@@ -1912,6 +1966,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		public abstract void run();
 		
 	}
+
 
 }
 // Game class end

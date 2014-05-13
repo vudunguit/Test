@@ -521,39 +521,52 @@ public class HudLayer extends CCLayer {
 	 * @return
 	 */
 	public boolean isGameOver = false; // 게임 종료 메시지를 서버로 무한 보내는것을 방지함.
-
+	
+	int myScore;
+	int otherScore; 
 //	public void gameOver() {
-	public void gameOver(int myPoint, int otherPoint) {
-		Log.e("Game / HudLayer / gameOver", "gameEnding - gogo");
+	public void gameOver(int myScore, int otherScore) {
+		Log.e("HudLayer", "gameEnding - gogo");
 		Config.getInstance().setDisableButton(true);
+		this.myScore = myScore;
+		this.otherScore = otherScore; 
+		Log.e("HudLayer", "myScore : " + myScore + ", otherScore : " + otherScore);
+		// 애니메이션 이펙트 endingZoomOutAndBlastFX
+		endingZoomOut();
 		
-		if (GameData.share().isMultiGame) {
-			
-			// 게임 종료 메시지를 서버로 무한 보내는것을 방지함.
-			if (!isGameOver) {
-				try {
-					isGameOver = !isGameOver;
-					NetworkController.getInstance().sendRequestGameOver(123456);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			} else {
-				mGameEnding = new GameEnding();
-				addChild(mGameEnding, GameConfig.share().kDepthPopup, 1234);
-				mGameEnding.setIsTouchEnabled(true);
-//				GameData.share().isMultiGame = true;
-				// GameEnding ending = GameEnding.share(this.mContext);
-				// this.addChild(ending, GameConfig.share().kDepthPopup);
-			}
-			
-		} else if (GameData.share().isGuestMode) {
-			CCScene scene = Home2.scene();
-			CCDirector.sharedDirector().replaceScene(scene);
-		} else { // single
-			mGameEnding = new GameEnding();
-			addChild(mGameEnding, GameConfig.share().kDepthPopup, 1234);
-			mGameEnding.setIsTouchEnabled(true);
-		}
+//		if (GameData.share().isMultiGame) {
+//			
+//			// 게임 종료 메시지를 서버로 무한 보내는것을 방지함.
+//			if (!isGameOver) {
+//				try {
+//					isGameOver = !isGameOver;
+//					NetworkController.getInstance().sendRequestGameOver(123456);
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			} else {
+//				mGameEnding = new GameEnding(myPoint, otherPoint, mGame.getClosedCell());
+//				addChild(mGameEnding, GameConfig.share().kDepthPopup, 1234);
+//				mGameEnding.setIsTouchEnabled(true);
+////				GameData.share().isMultiGame = true;
+//				// GameEnding ending = GameEnding.share(this.mContext);
+//				// this.addChild(ending, GameConfig.share().kDepthPopup);
+//			}
+//			
+//		} else if (GameData.share().isGuestMode) {
+//			CCScene scene = Home2.scene();
+//			CCDirector.sharedDirector().replaceScene(scene);
+//		} else { // single
+//			mGameEnding = new GameEnding(myPoint, otherPoint, mGame.getClosedCell());
+//			addChild(mGameEnding, GameConfig.share().kDepthPopup, 1234);
+//			mGameEnding.setIsTouchEnabled(true);
+//		}
+	}
+	
+	private void endingZoomOut() {
+		mGameEnding = new GameEnding(myScore, otherScore, mGame.getClosedCell());
+		addChild(mGameEnding, GameConfig.share().kDepthPopup, 1234);
+		mGameEnding.setIsTouchEnabled(true);
 	}
 
 	/*****************************************************/

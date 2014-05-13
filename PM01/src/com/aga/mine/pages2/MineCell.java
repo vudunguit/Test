@@ -9,6 +9,7 @@ import org.cocos2d.types.CGPoint;
 import android.content.Context;
 import android.util.Log;
 
+import com.aga.mine.mains.Config;
 import com.aga.mine.mains.NetworkController;
 
 // for문 돌리면 서 size 또는 length로 얻어온 객체 있으면 별도로 size 변수 만들어서 그값으로 할것
@@ -18,7 +19,9 @@ import com.aga.mine.mains.NetworkController;
 //this.delegate.removeTile(this.tileCoord);
 public class MineCell extends CCLayer{
 	
-	/************** inner class *****************/
+	// 잘 될려낭????
+	MineCellDelegate delegate ;
+	
 	//class MineCellDelegate{
 	public interface MineCellDelegate{
 		boolean updateHeart();
@@ -39,7 +42,6 @@ public class MineCell extends CCLayer{
 	//		super(context);
 	//	}	
 	}
-	/***************************************/
 	
 	// 지뢰
 	private boolean isMine;
@@ -64,8 +66,7 @@ public class MineCell extends CCLayer{
 	//int plusMine;
 	
 	Context mContext;
-	// 잘 될려낭????
-	MineCellDelegate delegate ;
+
 	
 	ArrayList<MineCell> sphereCells;
 	ArrayList<MineCell> roundCells  = new ArrayList<MineCell>();
@@ -377,7 +378,28 @@ public class MineCell extends CCLayer{
 			Log.e("MineCell / open", "currentMine : " + currentMine + ", MaxMineNumber : " +  GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
 			if (currentMine == GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty())) {
 			Log.e("MineCell / open", "delegate - gameOver *** mission complete ***");
-				this.delegate.gameOver();
+//				this.delegate.gameOver();
+				
+			// 값 넣어야됨.
+			float mine = 1;
+			float mushroom = 1; 
+			float unOpenedCell = mGame.unopenedTile;
+			float heart = 1;
+			float time = 900 - 1;
+			
+			int myScore = 0;
+			if (heart > 0) {
+				myScore = (int) ((((mine + heart) * mushroom) + time) * mushroom * 0.006f);
+			}
+			
+				if (GameData.share().isMultiGame) {
+					gameOverType = continueGame;
+					sendRequestGameOver(myScore);
+				} else if (GameData.share().isGuestMode) {
+					gameOverType = singleCompleted;
+					gameOver(myScore);
+				}
+				
 			}
 			
 			// 지뢰를 누르면 생명 하나 감소 시킨다.(현재셀은 이미 오픈되었음)
@@ -392,8 +414,15 @@ public class MineCell extends CCLayer{
 			//if (true) {
 			if (GameData.share().isHeartOut()) {
 				Log.e("MineCell / open", "delegate - gameOver *** mission failed ***");
-				this.delegate.gameOver();
-				mGame.mHud.mGameProgressBar.stopTime();
+//				this.delegate.gameOver();
+				
+				if (GameData.share().isMultiGame) {
+					sendRequestGameOver(0); // 대전이므로 서버로 내점수 0점 보내기
+				} else {
+					gameOverType = singleFailed;
+					gameOver(-1); // 대전이 아니므로 서버로 점수 안보내기
+				}
+				
 			}
 		}
 		
@@ -419,7 +448,37 @@ public class MineCell extends CCLayer{
 	}
 	/*****************************************************/
 	
+	// 대전했을시 게임오버 점수
+	private void sendRequestGameOver(int point) {
+//		String str = String.valueOf(point);
+//		int pp 
+		try {
+			NetworkController.getInstance().sendRequestGameOver(point);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
+	int gameOverType = 0; //
+	final int singleFailed = 1;
+	final int singleCompleted = 2;
+	final int continueGame = 3;
+	
+	// 싱글 및 게스트일때 게임오버 점수
+	private void gameOver(int myScore) {
+		Log.e("MineCell", "myScore : " + myScore);
+		if (gameOverType == singleFailed) {
+			Log.e("MineCell", "싱글 - 생명 전부 소모로 종료 (type) : " + gameOverType);
+			Config.getInstance().setVs(Config.getInstance().vsLose);
+			mGame.mHud.gameOver(myScore, 0);
+		} else if (gameOverType == singleCompleted){
+			Log.e("MineCell", "싱글 - 전부 찾고 종료 (type) : " + gameOverType);
+			Config.getInstance().setVs(Config.getInstance().vsWin);
+			mGame.mHud.gameOver(0, 0);
+		} else if (gameOverType == continueGame){
+			Log.e("MineCell", "멀티 - 계속 하기 (type) : " + gameOverType);
+		}
+	}
 	
 	
 	

@@ -364,9 +364,23 @@ public class Config {
 	
 	
 	/***************************************************/
-	/**************************** 변경 ****************************/
+	/**************************** 추가 or 변경 ****************************/
 	boolean guest = false;
 	public boolean isGuest() {
 		return this.guest;
 	}
+	
+	public final boolean vsLose = false;
+	public final boolean vsWin = true;
+	public boolean vsResult = true;
+	
+	public void setVs(boolean vsResult) {
+		this.vsResult = vsResult; 
+	}
+	
+	public boolean getVs() {
+		return vsResult; 
+	}
+	
+	
 }

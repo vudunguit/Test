@@ -421,12 +421,21 @@ public class NetworkController extends Activity {
 			break;
 
 //			
-//		case kMessageGameOver:
-//			Log.e("NetworkController", "kMessageGameOver");
-//			Game.HudLayer.gameOver();
-////			getInstance().sendPlayDataGameOver(98765);
-////			NetworkController.getInstance().sendPlayDataGameOver(98765);
-//			break;
+		case kMessageGameOver:
+			Log.e("NetworkController", "kMessageGameOver - data 크기 : " + data.length);
+			int otherPoint = reader.readInt();
+			Log.e("NetworkController", "상대방 점수 : " + otherPoint);
+			mGame.messageReceived(messageType, otherPoint);
+			
+//			int kMessageGameOverCount = 1;
+//			while (reader.buffer_.hasRemaining()) {
+//				Log.e("Network", "count1 : " + kMessageGameOverCount + ", message value : " + reader.readByte());
+//				kMessageGameOverCount++;
+//			}
+//			mGame.gameOver();
+//			getInstance().sendPlayDataGameOver(98765);
+//			NetworkController.getInstance().sendPlayDataGameOver(98765);
+			break;
 //			
 //		case kMessageRequestGameOver:
 //			Log.e("NetworkController", "kMessageRequestGameOver");
@@ -435,16 +444,27 @@ public class NetworkController extends Activity {
 //			break;
 //			
 		case kMessageRequestScore:
-			Log.e("NetworkController", "kMessageRequestGameOver");
+			Log.e("NetworkController", "kMessageRequestGameOver - data 크기 : " + data.length);
+			int kMessageRequestScoreCount = 1;
+//			if (reader.buffer_.hasRemaining()) {
+//				Log.e("Network", "count1 : " + count1 + "message value : " + reader.readByte());
+//				count1++;
+				while (reader.buffer_.hasRemaining()) {
+					Log.e("Network", "count1 : " + kMessageRequestScoreCount + "message value : " + reader.readByte());
+					kMessageRequestScoreCount++;
+				}
+				
+				mGame.messageReceived(messageType, null);
+//				mGame.gameOver();
+//			}
 //			byte result1 = reader.readByte();
 //			Log.e("Network", "상대방 점수 : " + result1);
 			
-			Log.e("Network", "data 크기 : " + data.length);
-			int result2 = reader.readInt();
-			Log.e("Network", "상대방 점수 : " + result2);
+//			int result2 = reader.readInt();
+//			Log.e("Network", "상대방 점수 : " + result2);
 //			Game.HudLayer.gameOver();
 
-			mGame.mHud.gameOver(1,1);
+//			mGame.mHud.gameOver(1,result1);
 			
 //			NetworkController.getInstance().sendPlayDataGameOver(98765);
 			break;
@@ -682,7 +702,7 @@ public class NetworkController extends Activity {
 		message.writeInt(point);
 		sendData(message.data_);
 		setMessage(kMessageRequestGameOver, kModeSent);
-		Log.e("NetworkController", "sending RequestGameOver");
+//		Log.e("NetworkController", "sending RequestGameOver");
 	}
 	
 	// 서버 접속시 서버에 보냄
