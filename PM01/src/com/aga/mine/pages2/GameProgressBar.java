@@ -55,12 +55,14 @@ public class GameProgressBar extends CCLayer {
 		indicatorMe.setTag(kTagIndicatorMe);
 		indicatorOther.setTag(kTagIndicatorOther);
 
-		base.addChild(indicatorOther);
+		if (GameData.share().isMultiGame) {
+			base.addChild(indicatorOther);
+			this.progress(0.0f, kTagIndicatorOther);			
+		}
+		
 		base.addChild(indicatorMe);
-
 		this.progress(0.0f, kTagIndicatorMe);
-		this.progress(5.f, kTagIndicatorOther);
-
+		
 		/*****************************************************/
 		/** 문제지점 
 		 * 게임 시계

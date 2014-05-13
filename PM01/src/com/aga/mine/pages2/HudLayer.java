@@ -88,6 +88,7 @@ public class HudLayer extends CCLayer {
 	private CCSprite cloud;
 	private CCAnimation cloudAttack;
 
+	float maxTiles;
 	public HudLayer(Game game) {
 		mGame = game;
 		
@@ -276,6 +277,8 @@ public class HudLayer extends CCLayer {
 		//test
 		//GameEnding ending = new GameEnding();
 		//addChild(ending, GameConfig.share().kDepthPopup, 1234);
+		maxTiles = mGame.getClosedCell();
+		otherProgress = (int) maxTiles;
 	}
 
 	//이모티콘 애니메이션 : NetworkController에서 데이터를 수신후 이 펑션을 호출
@@ -576,12 +579,29 @@ public class HudLayer extends CCLayer {
 	// 위쪽 캐릭터 얼굴만있는 프로그레스바에 캐릭 얼굴 움직이게 해줌
 	// mine에서 tiles로 변경해야됨.
 	public void updateProgress() {
-		int gameDifficulty = GameData.share().getGameDifficulty();
-		int maxMine = GameData.share().getMaxMineNumber(gameDifficulty);
-		int remainedMine = GameData.share().getMineNumber();
-		float progress = (float) remainedMine / (float) maxMine;
-		progress = 1 - progress;
+		float progress = 0;
+		progress = getProgressPosition(mGame.getClosedCell(), false);
+		Log.e("HudLayer", "player1 progress : " + progress + ", ClosedCell : " + mGame.getClosedCell() + ", maxTiles : " + maxTiles + ", mine : " + mine);		
 		mGameProgressBar.progress(progress, GameProgressBar.kTagIndicatorMe);
+	}
+	
+	int mine = GameData.share().getMineNumber();
+	int otherProgress;
+	
+	public void updateOtherPlayerProgress() {
+		float progress = 0;
+		progress = getProgressPosition(otherProgress, true);
+		Log.e("HudLayer", "player2 progress : " + progress + ", ClosedCell : " + otherProgress + ", maxTiles : " + maxTiles + ", mine : " + mine);
+		mGameProgressBar.progress(progress, GameProgressBar.kTagIndicatorOther);
+	}
+	
+	private float getProgressPosition(int closedCell, boolean isOtherProgress) {
+		float progress = 0;
+		if (isOtherProgress)
+			otherProgress--;
+		if (closedCell != 0)
+			progress = (closedCell - mine) / (maxTiles - mine);
+		return progress = 1 - progress;
 	}
 
 	// 지뢰갯수 숫자로 표시하는 메서드
@@ -640,7 +660,7 @@ public class HudLayer extends CCLayer {
 
 	}
 
-	public void abc(int cell_ID) {
+	public void showMessage(int cell_ID) {
 		testText.setString("message type : " + cell_ID);
 	}
 

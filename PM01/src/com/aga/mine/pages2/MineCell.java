@@ -305,126 +305,41 @@ public class MineCell extends CCLayer{
 		*/
 		//
 		// 이미 오픈되었거나 깃발꽂은 셀이면 그냥 빠져 나온다.
-		if(isOpened() || isMarked()) return numberOfArroundMine;
-		this.setOpened(true);
+		if(isOpened() || isMarked())
+			return numberOfArroundMine;
 		
+		// 오픈으로 데이터 설정
+		this.setOpened(true);
+
+
+		//
+		// TMX에서 현재 타일 제거 및 총 열리지 않은 총 타일수량 1개 감소
+		this.delegate.removeTile(this.tileCoord, depth);
+		Game.unopenedTile --;
 		if (GameData.share().isMultiGame) {
 			try {
-	//			Game.HudLayer.abc(this.getUnSignedCellId());
-	//			Log.e("", "this.getUnSignedCellId()" + this.getUnSignedCellId());
-				NetworkController.getInstance().sendPlayDataCellOpen(this.getCell_ID());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		//
-		// 현재 타일 제거
-		/*** 그냥 이해 안되도 적당히 포트중... 나중에 안돌아갈것같음. ***/
-		/*** 너무 심각해서 어디가 문제인지 못찾을까봐 심히 걱정됨 ***/
-		/*** 일단 얼추 수정됨 ***/
-		try {
-			this.delegate.removeTile(this.tileCoord, depth);
-			if (GameData.share().isMultiGame) {
 				NetworkController.getInstance().sendPlayDataCellOpen(getCell_ID());
+			} catch (IOException e1) {
+				e1.printStackTrace();
 			}
-			Game.unopenedTile --;
-		} catch (IOException e1) {
-			e1.printStackTrace();
 		}
 		
 		
-		if (numberOfArroundMine > 0) {
-			//
-			// 열려진 셀(타일)의 주변셀 지뢰 갯수를 표시한다.
-			Log.e("MineCell / open", "주변 마인 갯수 : " + numberOfArroundMine);
-			this.delegate.displayMineNumber(numberOfArroundMine, tilePosition, Cell_ID);
-		}
-		
-		// 지뢰는 -1로 지정했음 숫자가 없는거는 0, 숫자있는건 그숫자대로
-		else if (numberOfArroundMine == -1){
-			//Log.e("MineCell / open", "plusMine : " + plusMine);
-			// 지뢰로 표시
-			this.setMine(true);
-			this.setOpened(true);
-			try {
-				mGame.mHud.abc(this.getCell_ID());
-				if (GameData.share().isMultiGame) {
-					NetworkController.getInstance().sendPlayDataMine(this.getCell_ID());
-				}				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-			// 지뢰를 누르면 지뢰갯수 (화면좌측위 지뢰 숫자) 하나를 없애준다.
-			int mineNumber = GameData.share().decreaseMineNumber();
-			
-			// 화면에 지뢰 갯수 갱신
-			mGame.mHud.updateMineNumber(mineNumber);
-			
+		// 지뢰는 -1로 지정했음
+		int pumpkinMine = -1;
+		if (numberOfArroundMine > pumpkinMine) { // 주변의 지뢰 수량을 표시
+			if (numberOfArroundMine != 0)
+				showAroundMine();
 			// 프로그레스 하나 증가			
 			mGame.mHud.updateProgress();
-			
-			// 지뢰를 누르면 실제 지뢰갯수(currentMineNumber)에 +1를 해줌.
-			// +1을 안해주면~  안알랴줌 (노출지뢰가 실제 지뢰에 포함이 안됨)
-			//int currentMine = GameData.share().currentMineNumber() + 1;
-			int currentMine = GameData.share().currentMineNumber();
-			Log.e("MineCell / open", "최대 지뢰 수 : " + GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
-			Log.e("MineCell / open", "open3 : currentMineNumber" + currentMine + ", decreaseMineNumber : " + mineNumber);
-
-			//최대 지뢰 갯수와 currentMine의 수가 같으면 게임 종료
-			Log.e("MineCell / open", "currentMine : " + currentMine + ", MaxMineNumber : " +  GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
-			if (currentMine == GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty())) {
-			Log.e("MineCell / open", "delegate - gameOver *** mission complete ***");
-//				this.delegate.gameOver();
-				
-			// 값 넣어야됨.
-			float mine = 1;
-			float mushroom = 1; 
-			float unOpenedCell = mGame.unopenedTile;
-			float heart = 1;
-			float time = 900 - 1;
-			
-			int myScore = 0;
-			if (heart > 0) {
-				myScore = (int) ((((mine + heart) * mushroom) + time) * mushroom * 0.006f);
-			}
-			
-				if (GameData.share().isMultiGame) {
-					gameOverType = continueGame;
-					sendRequestGameOver(myScore);
-				} else if (GameData.share().isGuestMode) {
-					gameOverType = singleCompleted;
-					gameOver(myScore);
-				}
-				
-			}
-			
-			// 지뢰를 누르면 생명 하나 감소 시킨다.(현재셀은 이미 오픈되었음)
-			// 지뢰를 밟을시 생명 감소 (-1)
-			GameData.share().decreaseHeartNumber();
-			
-			// 생명수를 업데이트 시킨다.
-			Log.e("MineCell / open", "updateHeart : " + this.delegate.updateHeart());
-			this.delegate.updateHeart();
-
-			// 생명수 다없어지면 게임오버
-			//if (true) {
-			if (GameData.share().isHeartOut()) {
-				Log.e("MineCell / open", "delegate - gameOver *** mission failed ***");
-//				this.delegate.gameOver();
-				
-				if (GameData.share().isMultiGame) {
-					sendRequestGameOver(0); // 대전이므로 서버로 내점수 0점 보내기
-				} else {
-					gameOverType = singleFailed;
-					gameOver(-1); // 대전이 아니므로 서버로 점수 안보내기
-				}
-				
-			}
+		} else { // 지뢰 밟음
+			touchMine();
 		}
+//		if (numberOfArroundMine > 0) { // 주변의 지뢰 수량을 표시
+//			showAroundMine();
+//		} else if (numberOfArroundMine == pumpkinMine) { // 지뢰 밟음
+//			touchMine();
+//		}
 		
 		//Log.e("MineCell / open", "쭉~~~~~~~~~~~~~~~~~~");
 		//
@@ -446,14 +361,105 @@ public class MineCell extends CCLayer{
 		}
 		return numberOfArroundMine;
 	}
+	
+	private void showAroundMine() {
+		this.delegate.displayMineNumber(numberOfArroundMine, tilePosition, Cell_ID);
+		Log.e("MineCell / open", "주변 마인 갯수 : " + numberOfArroundMine);
+	}
+	
+	private void touchMine() {
+		// 주변 지뢰수를 숫자로 표현했으며, 주변에 지뢰가 없는 땅은 0으로 표현
+		//Log.e("MineCell / open", "plusMine : " + plusMine);
+		
+		// 지뢰로 표시
+		this.setMine(true);
+		
+		// 땅오픈
+		this.setOpened(true);
+		
+		// 지뢰를 누르면 지뢰갯수 (화면좌측위 지뢰 숫자) 하나를 없애준다.
+		int mineNumber = GameData.share().decreaseMineNumber();
+		
+		// 화면에 지뢰 갯수 갱신
+		mGame.mHud.updateMineNumber(mineNumber);
+					
+//		try {
+//			mGame.mHud.showMessage(this.getCell_ID());
+//			if (GameData.share().isMultiGame) {
+//				NetworkController.getInstance().sendPlayDataMine(this.getCell_ID()); // 사용 안함
+//			}				
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		
+		// 지뢰를 누르면 실제 지뢰갯수(currentMineNumber)에 +1를 해줌.
+		// +1을 안해주면~  안알랴줌 (노출지뢰가 실제 지뢰에 포함이 안됨)
+		//int currentMine = GameData.share().currentMineNumber() + 1;
+		int currentMine = GameData.share().currentMineNumber();
+		Log.e("MineCell / open", "최대 지뢰 수 : " + GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
+		Log.e("MineCell / open", "open3 : currentMineNumber" + currentMine + ", decreaseMineNumber : " + mineNumber);
+
+		//최대 지뢰 갯수와 currentMine의 수가 같으면 게임 종료 <<---- 밖으로 빼야 할 것 같음. 수상함. 좀 더 테스트
+		Log.e("MineCell / open", "currentMine : " + currentMine + ", MaxMineNumber : " +  GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
+		if (currentMine == GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty())) {
+			
+			Log.e("MineCell / open", "delegate - gameOver *** mission complete ***");
+//			this.delegate.gameOver();
+			
+			// 값 넣어야됨.
+			float mine = 1;
+			float mushroom = 1; 
+			float unOpenedCell = mGame.unopenedTile;
+			float heart = GameData.share().getHeartNumber();
+			float time = 900 - 1;
+			
+			int myScore = 0;
+			if (heart > 0) {
+				myScore = (int) ((((mine + heart) * mushroom) + time) * mushroom * 0.006f);
+			}
+		
+			if (GameData.share().isMultiGame) {
+				gameOverType = continueGame;
+				sendRequestGameOver(myScore);
+			} else if (GameData.share().isGuestMode) {
+				gameOverType = singleCompleted;
+				gameOver(myScore);
+			}
+			
+		}
+		
+		// 지뢰를 누르면 생명 하나 감소 시킨다.(현재셀은 이미 오픈되었음)
+		// 지뢰를 밟을시 생명 감소 (-1)
+		GameData.share().decreaseHeartNumber();
+		
+		// 생명수를 업데이트 시킨다.
+		Log.e("MineCell / open", "updateHeart : " + this.delegate.updateHeart());
+		this.delegate.updateHeart();
+
+		// 생명수 다없어지면 게임오버
+		//if (true) {
+		if (GameData.share().isHeartOut()) {
+			Log.e("MineCell / open", "delegate - gameOver *** mission failed ***");
+			if (GameData.share().isMultiGame) {
+				sendRequestGameOver(0); // 대전이므로 서버로 내점수 0점 보내기
+			} else {
+				gameOverType = singleFailed;
+				gameOver(-1); // 대전이 아니므로 서버로 점수 안보내기
+			}
+			
+		}
+	}
+	
+	
 	/*****************************************************/
 	
 	// 대전했을시 게임오버 점수
-	private void sendRequestGameOver(int point) {
+	private void sendRequestGameOver(int myScore) {
+		Log.e("MineCell", "myScore : " + myScore);
 //		String str = String.valueOf(point);
 //		int pp 
 		try {
-			NetworkController.getInstance().sendRequestGameOver(point);
+			NetworkController.getInstance().sendRequestGameOver(myScore);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

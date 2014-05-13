@@ -1899,6 +1899,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 
 
 	public void messageReceived(int messageType, Object obj) {
+		mHud.mGameProgressBar.stopTime();
 		Log.e("Game", "kmessageRequestScore = 15, kmessageGameOver = 6, kmessageOpponentConnectionLost = 9");
 		Log.e("Game", "messageReceived - messageType : " + messageType);
 		final int kmessageRequestScore = 15;
@@ -1906,15 +1907,14 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		final int kmessageOpponentConnectionLost = 9;
 		
 		int otherScore = -1;
-		if (obj != null) {
+		if (obj != null)
 			otherScore = (Integer) obj;			
-		}
 		
 		// 값 넣어야됨.
 		float mine = 1;
 		float mushroom = 1; 
 		float unOpenedCell = unopenedTile;
-		float heart = 1;
+		float heart = GameData.share().getHeartNumber();
 		float time = 900 - 1;
 		
 		int myScore = -1;
@@ -1922,7 +1922,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			myScore = (int) ((((mine + heart) * mushroom) + time) * mushroom * 0.006f);
 		}
 		
-		Log.e("HudLayer", "값 넣어야됨." + myScore);
+		Log.e("Game", "값 넣어야됨." + myScore);
 		
 		if (myScore < otherScore)
 			Config.getInstance().setVs(Config.getInstance().vsLose);

@@ -32,13 +32,17 @@ import com.aga.mine.util.Util;
 
 public class NetworkController extends Activity {
 	
-	boolean owner = false;
+	boolean _owner = false;
+	public final boolean owner = true;
+	public final boolean guest = false;
+	
+	int matchMode = 0;
 	final int standby = 0;
 	final int randomOwner = 1;
 	final int randomGuest = 2;
 	final int inviteOwner = 3;
 	final int inviteGuest= 4;
-	int matchMode = standby;
+	
 	// 네트워크 상황
 	final static int kNetworkStateNotAvailable = 0;
 	final static int kNetworkStateTryingStreamOpen = 1;
@@ -256,16 +260,13 @@ public class NetworkController extends Activity {
 	}
 	
 	private void processMessage(byte[] data) throws IOException {
+		Log.e("NetworkController", "*** data : " + data.length);		
 		
 		MessageReader reader = new MessageReader(data);
 		final byte messageType = reader.readByte();
-		
-		Log.e("NetworkController", "data : " + data.length);
-		Log.e("NetworkController", "reader : " + reader.length());
 
 		// 디버그 코드
 		final String[] messageTypeString = {
-				"kMessageConnection",
 				"kMessageConnectionCompletedServerConfirm",
 				"kMessagePlayerInformation",
 				"kMessageRequestMatch",
@@ -283,7 +284,13 @@ public class NetworkController extends Activity {
 				"kMessageRequestGameOver",
 				"kMessageRequestScore",
 				"kMessageGameReady",
-				"kMessageGameStart"
+				"kMessageGameStart",
+				"kMessageRequestInvite",
+				"kMessageResponseMatchInvite",
+				"kMessageResponseInvite",
+				"kMessageWillYouAcceptInvite",
+				"kMessageWillYouAcceptInviteOK",
+				"kMessagePlayerIdle"
 				};
 		
 		final String[] dataTypeString = {
@@ -303,7 +310,7 @@ public class NetworkController extends Activity {
 		int result;
 		char dataType;
 		int dataValue = 0;
-		Log.e("NetworkController", "messageType : " + messageType);
+		Log.e("NetworkController", "*** reader : " + reader.length() + "messageType : " + messageTypeString[messageType]);
 		
 		switch (messageType) {
 		case kMessageConnectionCompletedServerConfirm:
@@ -320,7 +327,7 @@ public class NetworkController extends Activity {
 			
 		case kMessageMatchFailed:
 			Log.e("NetworkController", "kMessageMatchFailed");
-			mMatchCallback.setEntry(null, null, sendRoomOwner(1));
+			mMatchCallback.setEntry(null, null, sendRoomOwner(owner));
 			matchMode = randomOwner;
 			break;
 			
@@ -493,7 +500,7 @@ public class NetworkController extends Activity {
     			Log.e("NetworkController", "inviteOwner");
 	    		if(mMatchCallback != null) {
 	    			Log.e("NetworkController", "Callback_6 - mInviteCallback != null");
-	    			mMatchCallback.setEntry(matchedOppenentFacebookId, matchedOppenentName, owner);
+	    			mMatchCallback.setEntry(matchedOppenentFacebookId, matchedOppenentName, _owner);
 	    		} else {
 	    			Log.e("NetworkController", "실패");
 	    		}
@@ -502,7 +509,7 @@ public class NetworkController extends Activity {
 			case inviteGuest:
     			Log.e("NetworkController", "randomGuest");
     			Log.e("NetworkController", "inviteGuest");
-    			scene = GameInvite.scene(matchedOppenentFacebookId, matchedOppenentName, sendRoomOwner(0));
+    			scene = GameInvite.scene(matchedOppenentFacebookId, matchedOppenentName, sendRoomOwner(guest));
     			CCDirector.sharedDirector().replaceScene(scene);
 				break;
 			}
@@ -695,11 +702,11 @@ public class NetworkController extends Activity {
 	}
 	
 	// Game.gameOver()
-	public void sendRequestGameOver(int point) throws IOException {
-		Log.e("NetworkController", "sending RequestGameOver ......");
+	public void sendRequestGameOver(int myScore) throws IOException {
+		Log.e("NetworkController", "sending RequestGameOver ...... : " + myScore);
 		MessageWriter message = new MessageWriter();
 		message.writeByte((byte) kMessageRequestGameOver);
-		message.writeInt(point);
+		message.writeInt(myScore);
 		sendData(message.data_);
 		setMessage(kMessageRequestGameOver, kModeSent);
 //		Log.e("NetworkController", "sending RequestGameOver");
@@ -739,26 +746,21 @@ public class NetworkController extends Activity {
 	
 
 	
-	public boolean sendRoomOwner(int Boolean) throws IOException {
+	public boolean sendRoomOwner(boolean isOwner) throws IOException {
+		// 오너가 되는 부분은 랜덤매치 실패 & 초대매치 입장시 & 초대매치를 통해 랜덤매치 입장시
+		_owner = isOwner;
 		Log.e("NetworkController", "sending sendRoomOwner ......");
 		MessageWriter message = new MessageWriter();
 		message.writeByte((byte) kMessageInRoomOwner);
-		if (Boolean > 0) {
+		if (_owner) {
 			message.writeByte((byte) 1);
-			owner = true;
-//			UserData.share(CCDirector.sharedDirector().getActivity()).iso
-//			GameRandom.isOwner = true; // gamerandom 임시로 막음
-//			GameInvite.getInstance().isOwner = true; // gameinvite 임시로 막음
 		} else {
 			message.writeByte((byte) 0);
-			owner = false;
-//			GameRandom.isOwner = false; // gamerandom 임시로 막음
-//			GameInvite.getInstance().isOwner = false; // gameinvite 임시로 막음
 		}
 		sendData(message.data_);
 		setMessage(kMessageInRoomOwner, kModeSent);
 		Log.e("NetworkController", "sendRoomOwner");
-		return owner;
+		return _owner;
 	}
 	
 //	public static void sendRequestMatchInvite(int difficulty, String facebookID) {
@@ -777,7 +779,7 @@ public class NetworkController extends Activity {
 		message.writeByte((byte) kMessageRequestMatch);
 		message.writeByte((byte) difficulty);
 		sendData(message.data_);
-		if (owner == true)
+		if (_owner == true)
 			matchMode = randomOwner;
 		else
 			matchMode = randomGuest;	
@@ -807,7 +809,7 @@ public class NetworkController extends Activity {
 		this.sendData(message.data_);
 		this.setMessage(kMessageRequestMatchInvite, kModeSent);
 		Log.e("NetworkController", "send Request Match Invite");
-		owner = true;
+		_owner = true;
 		matchMode = inviteOwner;
 	}
 	
@@ -834,7 +836,7 @@ public class NetworkController extends Activity {
 		this.sendData(message.data_);
 		this.setMessage(kMessageWillYouAcceptInviteOK, kModeSent);
 		Log.e("NetworkController", "kMessageWillYouAcceptInviteOK");
-		owner = false;
+		_owner = false;
 		matchMode = inviteGuest;
 	}
 	 

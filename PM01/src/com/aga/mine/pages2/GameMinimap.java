@@ -270,6 +270,9 @@ public class GameMinimap extends CCLayer{
 	public void receivePlayData(byte playType, int data) {
 		Log.e("GameMinimap", "receivePlayData / " + playType + ", " + data );
 
+		String[] type = {"CellOpen", "MushroomOn", "MushroomOff", "MagicAttack", "MagicDefense",
+				"GameOver", "Emoticon", "Mine", "Sphere", "SphereTake"};
+		
 		final int kPlayDataCellOpen = 0;
 		final int kPlayDataMushroomOn = 1;
 		final int kPlayDataMushroomOff = 2;
@@ -294,6 +297,7 @@ public class GameMinimap extends CCLayer{
 		switch (playType){
 		case kPlayDataCellOpen:
 			removeTile(data);
+			mHudLayer.updateOtherPlayerProgress();
 			break;
 //			
 //		case kPlayDataMushroomOn:
@@ -353,13 +357,15 @@ public class GameMinimap extends CCLayer{
 		case kPlayDataEmoticon:
 			mHudLayer.testText.setString("이모티콘이 왔습니다. type : " + data);
 			break;
-//			
-//		case kPlayDataMine:
+
+		case kPlayDataMine:
+			Log.e("GameMinimap", "상대방 지뢰 터짐 : " + data);
+			mHudLayer.testText.setString("상대방 지뢰 터짐 : " + data);
 //			cellGID = CCFormatter.swapIntToLittleEndian(this.itemLayer.tileGIDAt(CGPoint.make(0f, 0f)));
 //			this.mineLayer.setTileGID(cellGID, searchTilePosition(data));
 //			removeTile(data);
-//			break;
-//			
+			break;
+			
 		case kPlayDataSphere:
 			count = 0;
 			for (int m = 0; m < 2; m++) { // 세로 방향
