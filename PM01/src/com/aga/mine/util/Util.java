@@ -230,6 +230,7 @@ public final class Util {
 					counter.setTexture(counterNumber.getTexture());
 				} else {
 					isLoop = false;
+					count = 5;
 				}
 			}
 			// 작업하지않는 다른 패키지 이지만 잘 붙는지만 확인하는 것입니다.
