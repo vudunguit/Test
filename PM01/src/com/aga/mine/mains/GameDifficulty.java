@@ -191,7 +191,7 @@ public class GameDifficulty extends CCLayer {
 		case inviteMode:
 			scene = GameInvite.scene(invite);
 			try {
-				NetworkController.getInstance().sendRoomOwner(1);
+				NetworkController.getInstance().sendRoomOwner(NetworkController.getInstance().owner);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

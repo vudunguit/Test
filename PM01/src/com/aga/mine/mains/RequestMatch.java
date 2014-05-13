@@ -149,7 +149,7 @@ public class RequestMatch extends CCLayer{
 		case 1:
 			try {
 				GameData.share().setGameDifficulty(difficulty);
-				NetworkController.getInstance().sendRoomOwner(0);
+				NetworkController.getInstance().sendRoomOwner(NetworkController.getInstance().guest);
 				NetworkController.getInstance().sendWillYouAcceptInviteOk(oppenentPlayerID);
 				
 			} catch (IOException e) {

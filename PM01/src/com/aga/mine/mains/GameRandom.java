@@ -443,7 +443,7 @@ public class GameRandom extends CCLayer {
 		if (buttonActive) {
 			GameData.share().setGameDifficulty(empty);
 			try {
-				NetworkController.getInstance().sendRoomOwner(0); // 방장 권한 제거 (random match에서만 있음)
+				NetworkController.getInstance().sendRoomOwner(NetworkController.getInstance().guest); // 방장 권한 제거 (random match에서만 있음)
 				NetworkController.getInstance().sendRequestMatch(GameData.share().getGameDifficulty()); // 난이도 주입
 			} catch (IOException e) {
 				// 게임서버와 연결이 끊김.

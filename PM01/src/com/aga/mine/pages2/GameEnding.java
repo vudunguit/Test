@@ -1,5 +1,6 @@
 ﻿package com.aga.mine.pages2;
 
+import java.io.IOException;
 import java.security.spec.MGF1ParameterSpec;
 
 import org.cocos2d.actions.UpdateCallback;
@@ -20,6 +21,7 @@ import com.aga.mine.mains.Config;
 import com.aga.mine.mains.FacebookData;
 import com.aga.mine.mains.Home;
 import com.aga.mine.mains.Home2;
+import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.Utility;
 
 public class GameEnding extends CCLayer {
@@ -93,6 +95,13 @@ public class GameEnding extends CCLayer {
 //		mainMenu(true);
 		mainMenu(Config.getInstance().getVs());
 		setpoint();
+		
+		
+		try {
+			NetworkController.getInstance().sendRoomOwner(NetworkController.getInstance().guest);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// 받아야되는 값
