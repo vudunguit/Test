@@ -183,15 +183,15 @@ public class GameData {
 	
 	// 버섯(깃발)을 꽂았을때 꽂은 자리에 지뢰가 있으면 +1
 	public int currentMineNumber() {
-		int a = currentMine +=1;
-		Log.e("gameData currentMineNumber", "currentMine : " + a);  // log로 확인
-		return a;
+		currentMine += 1;
+		Log.e("gameData currentMineNumber", "currentMine : " + currentMine);  // log로 확인
+		return currentMine;
 	}
 	
 	public int previousMineNumber() {
-		int a = currentMine -=1;
-		Log.e("gameData previousMineNumber", "currentMine : " + a);  // log로 확인
-		return a;
+		currentMine -= 1;
+		Log.e("gameData previousMineNumber", "currentMine : " + currentMine);  // log로 확인
+		return currentMine;
 	}
 	
 	public int resetMineNumber() {
@@ -300,10 +300,14 @@ public class GameData {
 	
 	
 	/**************************** 변경 ****************************/
-	int openCell = 0;
+	private int openCell = 0;
+	
+	public void addOpenedCell() {
+		openCell++;
+	}
 	
 	public int getOpenedCell() {
-		return this.openCell += 1;
+		return openCell;
 	}
 
 	public int getHeart() {

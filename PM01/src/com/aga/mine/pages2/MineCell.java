@@ -310,8 +310,8 @@ public class MineCell extends CCLayer{
 		
 		// 오픈으로 데이터 설정
 		this.setOpened(true);
-
-
+		GameData.share().addOpenedCell();
+		
 		//
 		// TMX에서 현재 타일 제거 및 총 열리지 않은 총 타일수량 1개 감소
 		this.delegate.removeTile(this.tileCoord, depth);
@@ -401,23 +401,26 @@ public class MineCell extends CCLayer{
 
 		//최대 지뢰 갯수와 currentMine의 수가 같으면 게임 종료 <<---- 밖으로 빼야 할 것 같음. 수상함. 좀 더 테스트
 		Log.e("MineCell / open", "currentMine : " + currentMine + ", MaxMineNumber : " +  GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
+		
 		if (currentMine == GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty())) {
-			
 			Log.e("MineCell / open", "delegate - gameOver *** mission complete ***");
 //			this.delegate.gameOver();
 			
-			// 값 넣어야됨.
-			float mine = 1;
-			float mushroom = 1; 
-			float unOpenedCell = mGame.unopenedTile;
+			float openedCell = GameData.share().getOpenedCell();
+//			float foundMine = mGame.getFoundMine();
+			float mine = mGame.markedMine();
+			Log.e("MineCell", "markedMine() 값이 의문스러움. 아이폰에 물어볼 것 : " + mine);
+			Log.e("MineCell", "Game.java에도 같은 값 존재");
+			float mushroom = GameData.share().getMineNumber(); // 잘못된 데이터
 			float heart = GameData.share().getHeartNumber();
-			float time = 900 - 1;
+			float time = 900 - GameData.share().getSeconds();
 			
 			int myScore = 0;
 			if (heart > 0) {
-				myScore = (int) ((((mine + heart) * mushroom) + time) * mushroom * 0.006f);
+				myScore = (int) ((((mine + heart) * openedCell) + time) * mushroom * 0.006f);
 			}
-		
+			Log.e("MineCell", "myScore : " + myScore + ", openedCell : " + openedCell + ", mine : " + mine + ", mushroom : " + mushroom + ", heart_o : " + heart + ", time : " + time);
+			
 			if (GameData.share().isMultiGame) {
 				gameOverType = continueGame;
 				sendRequestGameOver(myScore);

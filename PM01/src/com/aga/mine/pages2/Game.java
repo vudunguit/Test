@@ -99,6 +99,8 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	CCLabel center3;
 
 	static int unopenedTile;
+	int previousMarkedMine;
+	int markedMine;
 	
 	//Tile animation
 	Bitmap mBitmap;
@@ -124,6 +126,8 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		//GameMinimap.getInstance().dealloc();
 		//mHud.isGameOver = false;
 		unopenedTile = 0;
+		previousMarkedMine = 0;
+		markedMine = 0;
 		// 기본 초기화
 		mContext = CCDirector.sharedDirector().getActivity().getApplicationContext();
 		winSize = CCDirector.sharedDirector().winSize();
@@ -1054,8 +1058,8 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 					if (numberOfMine == -1) {
 						// 지뢰가 있는 자리에 버섯(깃발)이 꽂혀있는걸 취소할때
 						// 기존에 +1 연산해준값을 취소한다.(다시 -1)
-						int aaa = GameData.share().previousMineNumber();
-						// Log.e("previousMineNumber : ", " " + aaa);
+						previousMarkedMine = GameData.share().previousMineNumber();
+						Log.e("Game", "previousMarkedMine : " + previousMarkedMine);
 					}
 					cellArray.get(k).setMarked(false);
 					 try {
@@ -1074,50 +1078,36 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 					if (!cellArray.get(k).isOpened()) {
 						// 지뢰가 있는 자리에 깃발을 꽂을 경우만 탐
 						if (numberOfMine == -1) {
+							markedMine = GameData.share().currentMineNumber();
+							Log.e("Game", "markedMine : " + markedMine);
+							Log.e("Game", "unopenedTile : " + unopenedTile + " / " + GameData.share().getMineNumber());
 							//
 							// int mine = GameData.share().currentMineNumber();
 							// 지뢰있는 곳에 호박 (깃발) 을 꽂는 수와 난이도 지뢰수가 같으면 게임오버
 							// gamedata.share.getgamedifficulty는 난이도 설정하는
 							// 창에서 설정되서 들어옴
-							/**************************************/
-							Log.e("Game / handleLongPress",
-									"unopenedTile : "
-											+ unopenedTile
-											+ " / "
-											+ GameData
-													.share()
-													.getMaxMineNumber(
-															GameData.share()
-																	.getGameDifficulty()));
-							if (unopenedTile == GameData.share()
-									.getMaxMineNumber(
-											GameData.share()
-													.getGameDifficulty())) {
-								Log.e("Game / handleLongPress",
-										"handleLongPress Game Over");
-								this.gameOver();
-								// Log.e("Game / handleLongPress", "mine:" +
-								// mine + ", difficulty : " +
-								// GameData.share().getGameDifficulty());
+							if (unopenedTile == GameData.share().getMineNumber()) { // 게임 종료, 이게 가능한가???								
+								// 오픈이 안된 셀 11개, 지뢰 1개 ==> 지뢰에 버섯을 꽂아도 타일은 오픈되지 않으므로x
+								// 오픈이 안된 셀 10개, 지뢰 0개 ==> 이미 더블탭에서 종료가 됐을것이기에 x
+								Log.e("Game", "handleLongPress Game Over");
+								mHud.gameOver(sumScore(), -1);
 							}
-							/**************************************/
 						}
 						cellArray.get(k).setMarked(true);
-						 try {
-						 mHud.testText.setString(String.valueOf(cellArray.get(k).getCell_ID()));
-						Log.e("Game", "cellArray.get(k).getCell_ID()" + cellArray.get(k).getCell_ID());
-						if (GameData.share().isMultiGame) {
-							NetworkController.getInstance().sendPlayDataMushroomOn(cellArray.get(k).getCell_ID());	
+						try {
+							mHud.testText.setString(String.valueOf(cellArray.get(k).getCell_ID()));
+							Log.e("Game", "cellArray.get(k).getCell_ID()" + cellArray.get(k).getCell_ID());
+							if (GameData.share().isMultiGame)
+								NetworkController.getInstance().sendPlayDataMushroomOn(cellArray.get(k).getCell_ID());
+							this.markFlag(coord);
+						} catch (IOException e) {
+							e.printStackTrace();
 						}
-						this.markFlag(coord);
-						 } catch (IOException e) {
-						 e.printStackTrace();
-						 }
 					}
 					// Log.e("Game / handleLongPress", "지뢰 없음");
 				}
 				// 프로그레스바 업데이트 되는곳. (minecell.open()으로 이동해야될듯.)
-				mHud.updateProgress();
+//				mHud.updateProgress();
 				break;
 
 			}
@@ -1128,10 +1118,10 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	//
 	// 더블터치 : 셀 오픈
 	public void handleDoubleTap(MotionEvent event) {
-		Log.e("Game / handleDoubleTap", "마인 갯수 : "
-				+ GameData.share().getMineNumber());
+		Log.e("Game / handleDoubleTap", "마인 갯수 : " + GameData.share().getMineNumber());
+		if (Config.getInstance().isDisableButton())
+			return;
 
-		if (!Config.getInstance().isDisableButton()) {
 			// Log.e("Game / handleDoubleTap", "enableButton");
 
 			CGPoint location = null;
@@ -1215,22 +1205,13 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 				}
 			}
 			// end 모두 열린 수정구가 있는지 확인한다.
-			Log.e("Game / handleDoubleTap",
-					"unopenedTile : "
-							+ unopenedTile
-							+ ", Max Mine : "
-							+ GameData.share().getMaxMineNumber(
-									GameData.share().getGameDifficulty()));
-
-			if (unopenedTile == GameData.share().getMaxMineNumber(
-					GameData.share().getGameDifficulty())) {
+			if (unopenedTile == GameData.share().getMineNumber()) {
 				Log.e("Game / handleDoubleTap", "handleDoubleTap Game Over");
-				this.gameOver();
+				Log.e("Game","unopenedTile : " + unopenedTile + ", Max Mine : "+ GameData.share().getMineNumber());
+				mHud.gameOver(sumScore(), -1);
 			}
-
+			// end Config.getInstance().isDisableButton()
 		}
-		// end Config.getInstance().isDisableButton()
-	}
 
 	@Override
 	public boolean ccTouchesBegan(MotionEvent event) {
@@ -1896,8 +1877,29 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// Log.e("Direction", "return 0");
 		return 0;
 	}
-
-
+	
+	// 다시 체크 해볼 것 
+	private int  sumScore() {
+		int myScore = 0;
+		
+		float openedCell = GameData.share().getOpenedCell();
+//		float foundMine = mGame.getFoundMine();
+		float mine = markedMine();
+		Log.e("Game", "markedMine() 값이 의문스러움. 아이폰에 물어볼 것 : " + mine);
+		Log.e("Game", "MineCell.java에도 같은 값 존재");
+		float mushroom = GameData.share().getMineNumber();  // 잘못된 데이터
+		float heart = GameData.share().getHeartNumber();
+		float time = 900 - GameData.share().getSeconds();
+		
+		if (heart > 0) {
+			myScore = (int) ((((mine + heart) * mushroom) + time) * mushroom * 0.006f);
+		}
+		
+		Log.e("MineCell", "myScore : " + myScore + ", openedCell : " + openedCell + ", mine : " + mine + ", mushroom : " + mushroom + ", heart : " + heart + ", time : " + time);
+		// 수량이 2배로 나옴. 이상함.. ㄷㄷ
+		return myScore;
+	}
+	
 	public void messageReceived(int messageType, Object obj) {
 		mHud.mGameProgressBar.stopTime();
 		Log.e("Game", "kmessageRequestScore = 15, kmessageGameOver = 6, kmessageOpponentConnectionLost = 9");
@@ -1906,24 +1908,13 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		final int kmessageGameOver = 6;
 		final int kmessageOpponentConnectionLost = 9;
 		
+		int myScore = 0;
 		int otherScore = -1;
 		if (obj != null)
-			otherScore = (Integer) obj;			
+			otherScore = (Integer) obj;		
 		
-		// 값 넣어야됨.
-		float mine = 1;
-		float mushroom = 1; 
-		float unOpenedCell = unopenedTile;
-		float heart = GameData.share().getHeartNumber();
-		float time = 900 - 1;
-		
-		int myScore = -1;
-		if (heart > 0) {
-			myScore = (int) ((((mine + heart) * mushroom) + time) * mushroom * 0.006f);
-		}
-		
-		Log.e("Game", "값 넣어야됨." + myScore);
-		
+		myScore = sumScore();
+
 		if (myScore < otherScore)
 			Config.getInstance().setVs(Config.getInstance().vsLose);
 		else 
@@ -1948,13 +1939,26 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		}
 	}
 
+	int foundMine = 0;
+//	public void setFoundMine(int value) {
+//		foundMine += value;
+//	}
+	
+	public int getFoundMine() {
+		return GameData.share().currentMine;
+	}
+	
+	public int markedMine() {
+		int _markedMine = markedMine + previousMarkedMine; 
+		return _markedMine;
+	}
+	
 	public int getClosedCell() {
 		return unopenedTile;
 	}
+	
 	/**************************************/
 
-
-	
 	abstract class TileOpenTask extends AsyncTask<Void, Void, Void> {
 
 		@Override
@@ -1966,6 +1970,8 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		public abstract void run();
 		
 	}
+
+
 
 
 }
