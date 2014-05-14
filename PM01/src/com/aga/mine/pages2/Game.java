@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.cocos2d.actions.base.CCRepeatForever;
+import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.instant.CCCallFuncND;
 import org.cocos2d.actions.interval.CCAnimate;
 import org.cocos2d.actions.interval.CCRotateBy;
@@ -107,6 +108,8 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	CCScaleTo mScaleAction;
 	private CCAnimate mOpenAction;
 	private int mCount;
+	
+	private CCAnimation mEarthBomb;
 
 	private int mineNumber;
 	public CCTMXTiledMap getTileMap() {
@@ -503,6 +506,13 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		}
 		mOpenAction = CCAnimate.action(0.2f, animation, false);
 		SoundEngine.sharedEngine().preloadSound(mContext, R.raw.bgm); // 백그라운드 뮤직
+		
+		//대지마법 애니메이션 초기화
+		mEarthBomb = CCAnimation.animation("EarthBomb");
+		for(int i=1; i<=12; i++) {
+    		CCSprite ebframe = CCSprite.sprite(String.format("61hud/earth-bomb%02d.png", i));
+    		mEarthBomb.addFrame(ebframe.getTexture());
+		}
 		
 		//이모티콘 test : 실제로는 NetworkController에서 전송된 이모티콘 id를 던져준다.
 		//mHud.startEmoticonAni(5);
@@ -1960,7 +1970,24 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	}
 	
 	
-	/**************************************/
+	public void startEarthBomb() {
+		CCSprite bomb = CCSprite.sprite("61hud/earth-bomb01.png");
+		//붙이는 위치, 크기 조정해야 함.
+		bomb.setPosition(winSize.width*0.5f, winSize.height*0.5f);
+		addChild(bomb, 100);
+		
+		CCAnimate action = CCAnimate.action(1.2f, mEarthBomb, false);
+		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveBomb");
+		
+		bomb.runAction(CCSequence.actions(action, remove));
+	}
+	
+	public void cbRemoveBomb(Object sender) {
+		CCSprite sprite = (CCSprite)sender;
+		sprite.removeFromParentAndCleanup(true);
+		
+		//9칸 타일 벗기기
+	}
 
 	abstract class TileOpenTask extends AsyncTask<Void, Void, Void> {
 
