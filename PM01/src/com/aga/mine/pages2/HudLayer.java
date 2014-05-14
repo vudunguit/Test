@@ -972,13 +972,14 @@ public class HudLayer extends CCLayer {
 		switch(kind) {
 		case 4: //신성 마법
 			
+			
 			break;
 		case 5:
-			//대지마법 이펙트
-			
+			//마법진 사라진 후 대지 폭발 효과
+			mGame.startEarthBomb();
 			break;
 		}
 		
 	}
-	//룬(마법진) 애니메이션 끝------------------------------------------------------
+
 }
