@@ -3,6 +3,7 @@ package com.aga.mine.pages2;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.actions.base.CCAction;
@@ -13,6 +14,7 @@ import org.cocos2d.actions.interval.CCAnimate;
 import org.cocos2d.actions.interval.CCDelayTime;
 import org.cocos2d.actions.interval.CCFadeOut;
 import org.cocos2d.actions.interval.CCMoveBy;
+import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.actions.interval.CCRotateTo;
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
@@ -88,13 +90,13 @@ public class HudLayer extends CCLayer {
 	private CCAnimation windAttack;
 	private CCSprite cloud;
 	private CCAnimation cloudAttack;
-	private CCSprite rune;
+	//private CCSprite rune;
 	private CCAnimation runeAni;
-	private CCSprite divine;
+	//private CCSprite divine;
 	private CCAnimation divineAni;
-	private CCSprite earth;
+	//private CCSprite earth;
 	private CCAnimation earthAni;
-	private CCSprite mirror;
+	//private CCSprite mirror;
 	private CCAnimation mirrorAni;
 
 	float maxTiles;
@@ -275,35 +277,35 @@ public class HudLayer extends CCLayer {
     		windAttack.addFrame(windframe.getTexture());
 		}
 		
-		cloud = CCSprite.sprite("61hud/fx-passingcloud1.png");
+		cloud = CCSprite.sprite("61hud/fx-cloud1.png");
 		cloudAttack = CCAnimation.animation("cloudAttack");
-		for(int i=1; i<=3; i++) {
-    		CCSprite cloudframe = CCSprite.sprite(String.format("61hud/fx-passingcloud%d.png", i));
+		for(int i=1; i<=4; i++) {
+    		CCSprite cloudframe = CCSprite.sprite(String.format("61hud/fx-cloud%d.png", i));
     		cloudAttack.addFrame(cloudframe.getTexture());
 		}
 		
-		rune = CCSprite.sprite("61hud/rune-01.png");
+//		rune = CCSprite.sprite("61hud/rune-01.png");
 		runeAni = CCAnimation.animation("rune");
 		for(int i=1; i<=10; i++) {
     		CCSprite runeframe = CCSprite.sprite(String.format("61hud/rune-%02d.png", i));
     		runeAni.addFrame(runeframe.getTexture());
 		}
 		
-		divine = CCSprite.sprite("61hud/divine-01.png");
+		//divine = CCSprite.sprite("61hud/divine-01.png");
 		divineAni = CCAnimation.animation("divine");
 		for(int i=1; i<=6; i++) {
     		CCSprite divineframe = CCSprite.sprite(String.format("61hud/divine-%02d.png", i));
     		divineAni.addFrame(divineframe.getTexture());
 		}
 		
-		earth = CCSprite.sprite("61hud/earth-01.png");
+		//earth = CCSprite.sprite("61hud/earth-01.png");
 		earthAni = CCAnimation.animation("earth");
 		for(int i=1; i<=6; i++) {
     		CCSprite earthframe = CCSprite.sprite(String.format("61hud/earth-%02d.png", i));
     		earthAni.addFrame(earthframe.getTexture());
 		}
 		
-		mirror = CCSprite.sprite("61hud/mirror-01.png");
+		//mirror = CCSprite.sprite("61hud/mirror-01.png");
 		mirrorAni = CCAnimation.animation("mirror");
 		for(int i=1; i<=6; i++) {
     		CCSprite mirrorframe = CCSprite.sprite(String.format("61hud/mirror-%02d.png", i));
@@ -332,14 +334,14 @@ public class HudLayer extends CCLayer {
 		CCScaleTo action4 = CCScaleTo.action(0.1f, 1.0f);
 		CCDelayTime action5 = CCDelayTime.action(2.0f);
 		CCFadeOut action6 = CCFadeOut.action(1.0f);
-		CCCallFuncN action7 = CCCallFuncN.action(this, "removeEmoticon"); 
+		CCCallFuncN action7 = CCCallFuncN.action(this, "cbRemoveSprite"); 
 		
 		emoticon.runAction(CCSequence.actions(action1, action2, action3, action4, action5, action6, action7));
 	}
 	
-	public void removeEmoticon(Object sender) {
-		CCSprite emoticon = (CCSprite)sender;
-		emoticon.removeFromParentAndCleanup(true);
+	public void cbRemoveSprite(Object sender) {
+		CCSprite sprite = (CCSprite)sender;
+		sprite.removeFromParentAndCleanup(true);
 	}
 	//이모티콘 애니메이션 끝-----------------------------------------------------------------
 
@@ -471,17 +473,20 @@ public class HudLayer extends CCLayer {
 			case Game.kButtonFire:
 				// Log.e("button pressed", "kButtonFire");
 				effectName = "불마법";
-				StartAniFireAttack();
+				//StartAniFireAttack();
+				StartAniFireDefense(); //test
 				break;
 			case Game.kButtonWind:
 				// Log.e("button pressed", "kButtonWind");
 				effectName = "바람마법";
-				StartAniWindAttack();
+				//StartAniWindAttack();
+				StartAniWindDefense(); //test
 				break;
 			case Game.kButtonCloud:
 				// Log.e("button pressed", "kButtonCloud");
 				effectName = "구름마법";
-				StartAniCloudAttack();
+				//StartAniCloudAttack();
+				StartAniCloudDefense(); //test
 				break;
 			case Game.kButtonDivine:
 				// Log.e("button pressed", "kButtonDivine");
@@ -737,7 +742,7 @@ public class HudLayer extends CCLayer {
 		return super.ccTouchesEnded(event);
 	}
 
-	//불공격 애니메이션-------------------------------------------------------------
+	//불 공격 애니메이션-------------------------------------------------------------
 	public void StartAniFireAttack() {
 		fire.setPosition(winSize.width * 0.62f, winSize.height * 0.3f);
 		fire.setAnchorPoint(CGPoint.ccp(0.5f, 1.0f));
@@ -763,11 +768,36 @@ public class HudLayer extends CCLayer {
 		fire1.runAction(CCSequence.actions(move, remove));
 	}
 	
-	public void cbRemoveSprite(Object sender) {
-		CCSprite sprite = (CCSprite) sender;
-		sprite.removeFromParentAndCleanup(true);
+	//불 방어 애니메이션
+	public void StartAniFireDefense() {
+		for(int k=0; k<20; k++) {
+			CCSprite fire = CCSprite.sprite("61hud/fire-01.png");
+			//x 위치 랜덤
+			Random rand = new Random();
+			fire.setPosition(rand.nextInt((int)(winSize.width)), winSize.height); //랜덤
+			fire.setAnchorPoint(CGPoint.ccp(0.5f, 0));
+			fire.setScale(0.5f + new Random().nextFloat() * 0.5f); //크기 랜덤
+			addChild(fire);
+			
+			CCAnimate action = CCAnimate.action(1f, fireAttack, false);
+			CCAction repeat = CCRepeatForever.action(action);
+			CCDelayTime delay = CCDelayTime.action(new Random().nextFloat() * 3.0f);
+			CCMoveBy move = CCMoveBy.action(2, CGPoint.ccp(0, - winSize.height-fire.getContentSize().height));
+			CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite");
+	
+			fire.runAction(repeat);
+			fire.runAction(CCSequence.actions(delay, move, remove));
+		}
+		//2초(시간은  조정 필요) 후에 맵에 표시되는 부분 구현
+		schedule(new UpdateCallback() {
+			@Override
+			public void update(float d) {
+				// TODO
+				unschedule(this);
+				Log.d("LDK", "fire attack");
+			}
+		}, 2.0f);
 	}
-	//불공격 애니메이션 끝---------------------------------------------------------
 	
 	//바람공격 애니메이션------------------------------------------------------------
 	public void StartAniWindAttack() {
@@ -793,7 +823,36 @@ public class HudLayer extends CCLayer {
 		wind1.runAction(repeat);
 		wind1.runAction(CCSequence.actions(move, remove));
 	}
-	//바람공격 애니메이션 끝------------------------------------------------------------
+	
+	//바람 방어 애니메이션
+	public void StartAniWindDefense() {
+		for(int k=0; k<20; k++) {
+			CCSprite wind = CCSprite.sprite("61hud/wind01_0.1.png");
+			//x 위치 랜덤
+			Random rand = new Random();
+			wind.setPosition(rand.nextInt((int)(winSize.width)), winSize.height); //랜덤
+			wind.setAnchorPoint(CGPoint.ccp(0.5f, 0));
+			wind.setScale(0.5f + new Random().nextFloat() * 0.5f); //크기 랜덤
+			addChild(wind);
+			
+			CCAnimate action = CCAnimate.action(1f, windAttack, false);
+			CCAction repeat = CCRepeatForever.action(action);
+			CCDelayTime delay = CCDelayTime.action(new Random().nextFloat() * 3.0f);
+			CCMoveBy move = CCMoveBy.action(2, CGPoint.ccp(0, - winSize.height-fire.getContentSize().height));
+			CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite");
+	
+			wind.runAction(repeat);
+			wind.runAction(CCSequence.actions(delay, move, remove));
+		}
+		//2초(시간은  조정 필요) 후에 맵에 표시되는 부분 구현
+		schedule(new UpdateCallback() {
+			@Override
+			public void update(float d) {
+				// TODO
+				unschedule(this);
+			}
+		}, 2.0f);
+	}
 	
 	//구름공격 애니메이션------------------------------------------------------------
 	public void StartAniCloudAttack() {
@@ -819,11 +878,50 @@ public class HudLayer extends CCLayer {
 		cloud1.runAction(repeat);
 		cloud1.runAction(CCSequence.actions(move, remove));
 	}
-	//구름공격 애니메이션 끝------------------------------------------------------------
+	
+	//구름 방어 애니메이션---------------------------------------------------------
+	public void StartAniCloudDefense() {
+		CCSprite cloud = CCSprite.sprite("61hud/fx-cloud1.png");
+		
+		//구름객체들의 움직이기 이전 좌표값과 이동후의 좌표값들
+		ArrayList<Cloud> mCloudList = new ArrayList<Cloud>(); 
+		mCloudList.add(new Cloud(-cloud.getContentSize().width * 0.5f, winSize.height*0.9f, winSize.width*0.3f, winSize.height*0.7f));
+		mCloudList.add(new Cloud(-cloud.getContentSize().width * 0.5f, winSize.height*0.1f, winSize.width*0.3f, winSize.height*0.3f));
+		mCloudList.add(new Cloud(winSize.width+cloud.getContentSize().width * 0.5f, winSize.height*0.9f, winSize.width*0.7f, winSize.height*0.7f));
+		mCloudList.add(new Cloud(winSize.width+cloud.getContentSize().width * 0.5f, winSize.height*0.1f, winSize.width*0.7f, winSize.height*0.3f));
+		
+		for(int k=0; k<4; k++) {
+			CCSprite cloud1 = CCSprite.sprite("61hud/fx-cloud1.png");
+			cloud1.setScale(0.5f + new Random().nextFloat() * 0.5f);
+			cloud1.setPosition(mCloudList.get(k).preX, mCloudList.get(k).preY); //이동전 랜덤 위치
+			cloud1.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
+			addChild(cloud1);
+			
+			CCAnimate action = CCAnimate.action(1f, cloudAttack, false);
+			CCAction repeat = CCRepeatForever.action(action);
+			CCDelayTime delay = CCDelayTime.action(new Random().nextFloat() * 1.5f);
+			CCMoveTo move = CCMoveTo.action(1.2f, CGPoint.ccp(mCloudList.get(k).postX, mCloudList.get(k).postY)); //이동후 위치
+			CCDelayTime delay2 = CCDelayTime.action(1.0f + new Random().nextFloat() * 2.0f);
+			CCFadeOut fadeout = CCFadeOut.action(1.5f+new Random().nextFloat() * 1.5f);
+			CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite");
+	
+			cloud1.runAction(repeat);
+			cloud1.runAction(CCSequence.actions(delay, move, delay2, fadeout, remove));
+		}
+		//2초(시간은  조정 필요) 후에 맵에 표시되는 부분 구현
+		schedule(new UpdateCallback() {
+			@Override
+			public void update(float d) {
+				// TODO
+				unschedule(this);
+			}
+		}, 2.0f);
+	}
 	
 	//룬(마법진) 애니메이션-----------------------------------------------------
 	//parameter : 4:신성, 5:대지, 6:반사
 	public void StartAniRune(int kind) {
+		CCSprite rune = CCSprite.sprite("61hud/rune-01.png");
 		rune.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
 		rune.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
 		addChild(rune);
@@ -838,6 +936,7 @@ public class HudLayer extends CCLayer {
 		int kind = (Integer) k;
 		switch(kind) {
 		case 4:
+			CCSprite divine = CCSprite.sprite("61hud/divine-01.png");
 			divine.setPosition(rune.getContentSize().width * 0.5f, rune.getContentSize().height * 0.5f);
 			divine.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
 			rune.addChild(divine, 2);
@@ -845,6 +944,7 @@ public class HudLayer extends CCLayer {
 			divine.runAction(CCSequence.actions(divineAction, CCCallFuncND.action(this, "cbRemoveSprite", kind)));
 			break;
 		case 5:
+			CCSprite earth = CCSprite.sprite("61hud/earth-01.png");
 			earth.setPosition(rune.getContentSize().width * 0.5f, rune.getContentSize().height * 0.5f);
 			earth.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
 			rune.addChild(earth, 2);
@@ -852,6 +952,7 @@ public class HudLayer extends CCLayer {
 			earth.runAction(CCSequence.actions(earthAction, CCCallFuncND.action(this, "cbRemoveSprite", kind)));
 			break;
 		case 6:
+			CCSprite mirror = CCSprite.sprite("61hud/mirror-01.png");
 			mirror.setPosition(rune.getContentSize().width * 0.5f, rune.getContentSize().height * 0.5f);
 			mirror.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
 			rune.addChild(mirror, 2);
