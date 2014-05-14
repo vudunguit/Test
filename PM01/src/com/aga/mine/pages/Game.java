@@ -101,6 +101,8 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 	float Yscale;
 	CCLabel center3;
 	
+	private static int mineNumber;
+	
 	static int unopenedTile;
 	
 	public CCTMXTiledMap getTileMap() {
@@ -278,7 +280,8 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 			}
 		}
 		 Log.e("Game / game ", "unopenedTile : " + unopenedTile);
-		
+		GameData.share().setMineNumber(getClosedCell());
+		mineNumber = GameData.share().getMineNumber();
 		//
 		// 주변타일 등록(선택지점)
 		ArrayList<MineCell2> cellsTemp = cells;
@@ -1071,7 +1074,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 							if (numberOfMine == -1) {
 								// 지뢰가 있는 자리에 버섯(깃발)이 꽂혀있는걸 취소할때
 								// 기존에 +1 연산해준값을 취소한다.(다시 -1)
-								int aaa = GameData.share().previousMineNumber();
+								GameData.share().unmarkMine();
 								//Log.e("previousMineNumber : ", " " + aaa);
 							}
 							cellArray.get(k).setMarked(false);
@@ -1488,7 +1491,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		
 		//
 		// 지뢰수 하나 감소시킬시 디스플레이 업데이트 시킨다.
-		this.hud.updateMineNumber(GameData.share().decreaseMineNumber());
+		this.hud.updateMineNumber(decreaseMineNumber());
 	}
 
 	//
@@ -1647,7 +1650,7 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		
 		//
 		// 지뢰수 하나 증가시키고 디스플레이 업데이트 시킨다.
-		this.hud.updateMineNumber(GameData.share().increaseMineNumber());
+		this.hud.updateMineNumber(increaseMineNumber());
 	}
 
 	public CCTMXLayer getFg() {
@@ -2592,6 +2595,26 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		
 	}
 	
+	public int getClosedCell() {
+		return unopenedTile;
+	}
 	
+	public void removeCell() {
+		unopenedTile--;
+	}
+	
+	public int getMineNumber() {
+		return mineNumber;
+	}
+	
+	public int increaseMineNumber() {
+		mineNumber ++;
+		return mineNumber;
+	}
+
+	public static int decreaseMineNumber() {
+		mineNumber --;
+		return mineNumber;
+	}
 }
 // Game class end

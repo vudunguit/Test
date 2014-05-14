@@ -2,6 +2,8 @@
 
 import java.io.IOException;
 import java.security.spec.MGF1ParameterSpec;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.layers.CCLayer;
@@ -18,11 +20,14 @@ import org.cocos2d.types.ccColor3B;
 import android.util.Log;
 
 import com.aga.mine.mains.Config;
+import com.aga.mine.mains.DataFilter;
 import com.aga.mine.mains.FacebookData;
 import com.aga.mine.mains.Home;
 import com.aga.mine.mains.Home2;
+import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.Utility;
+import com.facebook.android.Facebook;
 
 public class GameEnding extends CCLayer {
 
@@ -31,10 +36,17 @@ public class GameEnding extends CCLayer {
 	CGSize winSize = CCDirector.sharedDirector().winSize();
 	String myName = "Guest";
 	String myID = "0";
+	int myLevel = 0;
 	int myScore = 0;
 	int myGold = 0;
 	int myExp = 0;
+	float extraTimeReward = 1.25f; // 대전게임 승리자가 연장 게임을 하여서 완료시 기본 보상의 1.25배로 보상을 받음.  
+	boolean isExtraTime = false;  // 현재 사용하지 않는 것으로 보임.
 	
+	int decreaseScore = 0; // 일반적으로 대전 패배시 스코어 감소
+	int decreaseGold = 0; // 스코어 보호를 위해 스코어 대신 골드로 대신 감소(선택적)
+	
+	private CCLabel lv;
 	private CCLabel exp;
 	private CCSprite bg;
 	private CCSprite expHead;
@@ -56,23 +68,29 @@ public class GameEnding extends CCLayer {
 //		return layer;
 //	}
 
-	int myPoint2;
-	int otherPoint;
+//	int myScore2;
+	int otherScore;
 	int closedCell;
 	
 	public GameEnding(int myScore2, int otherScore, int closedCell) {
 		Log.e("GameEnding", "myScore : " + myScore2+ ", otherScore : " + otherScore + ", closedCell : " + closedCell);
 		// 소리 정지
 		
-		this.myPoint2 = myScore2;
-		this.otherPoint = otherScore;
+		this.myScore = myScore2;
+		this.otherScore = otherScore;
 		this.closedCell = closedCell;
 		
 		if (!GameData.share().isGuestMode) {
 			myName = FacebookData.getinstance().getUserInfo().getName();
 			myID = FacebookData.getinstance().getUserInfo().getId();
+			myLevel = Integer.parseInt(FacebookData.getinstance().getDBData("LevelCharacter"));
 			myGold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
 			myExp = Integer.parseInt(FacebookData.getinstance().getDBData("Exp"));
+			try {
+				NetworkController.getInstance().sendRoomOwner(NetworkController.getInstance().guest);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}			
 		
 		// Config.getInstance().vsWin
@@ -80,28 +98,35 @@ public class GameEnding extends CCLayer {
 			Log.e("GameEnding", "Win");
 			// 승리 효과음
 			// 남은 생명수로 하트 애니 출력
-			myScore = myScore2;
+//			myScore = myScore2;
+			mLeftExp = (int) (myScore * 1.5f);
+			myGold = myScore * 5;
 		} else {
 			Log.e("GameEnding", "Lose");
 			// 패배 효과음
-			myScore = otherScore;
+//			myScore = otherScore;
+			myScore = (int) (otherScore / 3.0f);
+			myGold = (int) (otherScore / 10.0f);
+//			decreaseScore = (int) (otherScore / 3.0f);
+			decreaseGold = (int) (otherScore / 10.0f);
 		}
-
+		
+		if (isExtraTime) {
+			myScore = (int) (myScore2 * extraTimeReward);
+			mLeftExp = (int) (myScore * 1.5f);
+			myGold = myScore * 5;
+		}
+		
 //		myScore = (int) (Math.random() * 1000) + 1;
 		//test
 		//myGold = 12345;
 		//myExp = 3000;
 		//myScore = 2123;
 //		mainMenu(true);
+		
+		// 팝업에 표현되는 모든 숫자는 이번에 획득 또는 상실 되는 숫자들만 표현 
 		mainMenu(Config.getInstance().getVs());
 		setpoint();
-		
-		
-		try {
-			NetworkController.getInstance().sendRoomOwner(NetworkController.getInstance().guest);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	// 받아야되는 값
@@ -111,7 +136,7 @@ public class GameEnding extends CCLayer {
 	private void mainMenu(boolean showAni) {
 		Log.e("GameEnding", "showAni(vsWin) :" + showAni);
 		String userColor = "";
-		int randomPoint = (int) (Math.random() * 1000) + 1;
+//		int randomPoint = myScore;
 		
 		bg = CCSprite.sprite("00common/" + "opacitybg.png");
 		this.addChild(bg);
@@ -153,7 +178,8 @@ public class GameEnding extends CCLayer {
 		gold.setAnchorPoint(1, 0.5f);
 		gold.setPosition(460, backboard.getContentSize().height - 338); // 340
 		
-		exp = CCLabel.makeLabel(String.valueOf(myExp), "Arial", 30);
+		// 획득한 경험치만 숫자로 표현(기존+획득 아님)
+		exp = CCLabel.makeLabel(String.valueOf(mLeftExp), "Arial", 30);
 		backboard.addChild(exp);
 		exp.setAnchorPoint(1, 0.5f);
 		exp.setPosition(460, backboard.getContentSize().height - 396); //400
@@ -162,7 +188,7 @@ public class GameEnding extends CCLayer {
 		//현재 레벨 위치 : (현재레벨/현재레벨Max)% * 322px, 
 		mExpX = (myExp/(float)UserData.expPerLevel[0]); //단위는 0 ~ 1.0
 		//test : 획득 경험치는 8000이라 가정함. 
-		mLeftExp = 8000;
+//		mLeftExp = 8000;
 		
 		// 경험치 바
 		CCSprite expbg = null;
@@ -196,7 +222,7 @@ public class GameEnding extends CCLayer {
 			
 			CCSprite expframe = addChild_Center(expbg, folder + "ending-exp04.png");
 			
-			CCLabel lv = CCLabel.makeLabel("Level " + 99, "Arial", 36);
+			lv = CCLabel.makeLabel("Level " + myLevel, "Arial", 36);
 			expframe.addChild(lv);
 			lv.setColor(ccColor3B.ccYELLOW);
 			lv.setAnchorPoint(0, 0.5f);
@@ -290,6 +316,11 @@ public class GameEnding extends CCLayer {
 			levelUpKo.setAnchorPoint(0.5f, 0.5f);
 			levelUpKo.setPosition(levelUp.getContentSize().width/2, levelUp.getContentSize().height/2);
 			
+			Log.e("GameEnding", "myLevel : " + myLevel);
+			myLevel++; 
+			basket.put("LevelCharacter", String.valueOf(myLevel));	
+			lv.setString("Level " + myLevel);
+			
 			//3초 후에 레벨팝업을 제거하고 다시 경험치 애니메이션 구동
 			schedule(new UpdateCallback() {
 				@Override
@@ -324,25 +355,62 @@ public class GameEnding extends CCLayer {
 		myPoint.setPosition(winSize.width / 2, (winSize.height / 5) * 4);
 	}
 
+	
+	Map<String, String> basket = new HashMap<String, String>();
+	
 	boolean buttonActive = true;
 	public void clicked(Object sender) {
-		int value = (Integer) ((CCMenuItemImage)sender).getUserData(); 
+		MainApplication.getInstance().getActivity().click();
+		int tag = (Integer) ((CCMenuItemImage)sender).getUserData(); 
 		
-		if (value == 0) {
-			CCScene scene = null;
-			if (GameData.share().isGuestMode) {
-				scene = Home2.scene();
-			} else {
-				scene = Home.scene();
-			}
-			CCDirector.sharedDirector().replaceScene(scene);
+		CCScene scene = null;
+		if (GameData.share().isGuestMode) {
+			scene = Home2.scene();
+		} else {
+			scene = Home.scene();
+		}
+		if (tag == 0) {
+			Log.e("GameEnding", "홈으로 가기");
 		} else {
 			if (buttonActive) {
-				myGold -= value;
+				myGold -= tag;
+				usedGold = true;
 				myPoint.setString("Gold : " + myGold);
 
 				buttonActive = false;
 			}
 		}
+		
+
+		// reward
+		if (!GameData.share().isGuestMode) {
+			Log.e("GameEnding", "DB : " + DataFilter.getUserDBData(FacebookData.getinstance().getUserInfo().getId()));			
+			if (Config.getInstance().getVs()) { // 승리 (스코어 및 경험치, 골드, 승률 ok)
+				Log.e("GameEnding", "승리 보상");
+				DataFilter.addGameScore(String.valueOf(myScore));
+//				basket.put("Point", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Point")) + myScore));
+				basket.put("Gold", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Gold")) + myGold));	
+//				basket.put("Exp", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Exp")) + mLeftExp));	
+				basket.put("Exp", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Exp")) + (int) (myScore * 1.5f)));	
+				basket.put("HistoryWin", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryWin")) + 1));	
+//				basket.put("Exp",String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Exp")) + mLeftExp));	
+			} else { // 패배(스코어 및 경험치, 골드, 승률 ok)
+				Log.e("GameEnding", "패배 패널티");
+				if (usedGold)
+					basket.put("Gold", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Gold")) - myGold));					
+				else
+					DataFilter.addGameScore(String.valueOf(-myScore));
+//					basket.put("Score", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Score")) - decreaseScore));
+				basket.put("HistoryLose", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryLose")) + 1));	
+			}
+			
+			FacebookData.getinstance().modDBData(basket);
+			Log.e("GameEnding", "DB : " + DataFilter.getUserDBData(FacebookData.getinstance().getUserInfo().getId()));
+		}
+		// 홈으로 갈때 DB데이터 갱신 필요
+		CCDirector.sharedDirector().replaceScene(scene);
 	}
+	
+	private boolean usedGold = false;
+	
 }

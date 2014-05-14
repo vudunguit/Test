@@ -57,10 +57,10 @@ public class GameData {
 	int currentMine;
 	
 	//
-	// 난이도별 지뢰 갯수
-	public final int kMaxMineNumberEasy    =  30;
-	public final int kMaxMineNumberNormal  =  60;
-	public final int kMaxMineNumberHard     = 90;
+	// 난이도별 지뢰 갯수 (단위 : 퍼센트)
+	public final int kMaxMineNumberEasy    =  12;
+	public final int kMaxMineNumberNormal  =  15;
+	public final int kMaxMineNumberHard     = 18;
 	
 	
 	String mapFolder =  "80map/";
@@ -124,32 +124,32 @@ public class GameData {
 		   currentMine = 0;
 	}
 
-	// #pragma mark - data methods
-	int getMaxMineNumber(int gameDifficulty) {
-		int value = -1;
-		String difficulty = null;
-		
-		// 맵마다 지뢰 수량 다른듯...
-		// 맵 구석 지뢰 생김..(난이도 상승에 따른 제거 였다가 다시 올린듯. tilemap 수정필요)
-		switch (gameDifficulty) {
-		case kGameDifficultyEasy:
-			value = 30;
-			difficulty = "Easy";
-			break;
-
-		case kGameDifficultyNormal:
-			value = 48;
-			difficulty = "Normal";
-			break;
-
-		case kGameDifficultyHard:
-			value = 65;
-			difficulty = "Hard";
-			break;
-		}
-		Log.e("GameData", "gameDifficulty " + difficulty + ", MineNumber : " + value);
-		return value;
-	}
+//	// #pragma mark - data methods
+//	int getMaxMineNumber(int gameDifficulty) {
+//		int value = -1;
+//		String difficulty = null;
+//		
+//		// 맵마다 지뢰 수량 다른듯...
+//		// 맵 구석 지뢰 생김..(난이도 상승에 따른 제거 였다가 다시 올린듯. tilemap 수정필요)
+//		switch (gameDifficulty) {
+//		case kGameDifficultyEasy:
+//			value = 30;
+//			difficulty = "Easy";
+//			break;
+//
+//		case kGameDifficultyNormal:
+//			value = 48;
+//			difficulty = "Normal";
+//			break;
+//
+//		case kGameDifficultyHard:
+//			value = 65;
+//			difficulty = "Hard";
+//			break;
+//		}
+//		Log.e("GameData", "gameDifficulty " + difficulty + ", MineNumber : " + value);
+//		return value;
+//	}
 
 	//HeartNumber
 	//return값이 int지만 hashmap에 integer로 저장되어 자동형변환이 안될시 형변환 필요
@@ -177,39 +177,50 @@ public class GameData {
 		return getGameData("MineNumber");
 	}
 	
-	public void setMineNumber(int number) {
-		this.setGameData("MineNumber", number);
-	}
+//	public void setMineNumber(int number) {
+//		this.setGameData("MineNumber", number);
+//	}
 	
-	// 버섯(깃발)을 꽂았을때 꽂은 자리에 지뢰가 있으면 +1
-	public int currentMineNumber() {
-		currentMine += 1;
-		Log.e("gameData currentMineNumber", "currentMine : " + currentMine);  // log로 확인
-		return currentMine;
+	public void setMineNumber(int TileNumber) {
+		int tile = (int) (TileNumber * ((9.0f + (getGameDifficulty() * 3)) / 100));
+		Log.e("GameData", "setMineNumber : " + tile);
+		setGameData("MineNumber", tile);
 	}
+
+//	public int increaseMineNumber() {
+//		setMineNumber(getMineNumber() + 1);
+//		return getMineNumber();
+//	}
+//	
+//	public int decreaseMineNumber() {
+//		setMineNumber(getMineNumber() - 1);
+//		return getMineNumber();
+//	}
 	
-	public int previousMineNumber() {
-		currentMine -= 1;
-		Log.e("gameData previousMineNumber", "currentMine : " + currentMine);  // log로 확인
+	
+	public int getCurrentMine() {
 		return currentMine;
 	}
 	
 	public int resetMineNumber() {
 		return currentMine = 0 ;
 	}
-
-	public int decreaseMineNumber() {
-		setMineNumber(getMineNumber() - 1);
-		return getMineNumber();
+	
+	// 버섯(깃발)을 꽂았을때 꽂은 자리에 지뢰가 있으면 +1
+	public void markMine() {
+		currentMine += 1;
+		Log.e("gameData currentMineNumber", "currentMine : " + currentMine);  // log로 확인
 	}
 	
-	public int increaseMineNumber() {
-		setMineNumber(getMineNumber() + 1);
-		return getMineNumber();
+	public void unmarkMine() {
+		currentMine -= 1;
+		Log.e("gameData previousMineNumber", "currentMine : " + currentMine);  // log로 확인
 	}
-
+	
 	public int getSeconds() {
-		return getGameData("Seconds");
+		int seconds = getGameData("Seconds");
+		Log.e("GameData", "getSeconds : " + seconds);
+		return seconds;
 	}
 	
 	public void setSeconds(int seconds) {
@@ -278,7 +289,7 @@ public class GameData {
 	public void setGameDifficulty(int difficulty) {
 //		Log.e("GameData / setGameDifficulty", "Difficulty : "+ getGameData("GameDifficulty"));  // log로 확인
 		this.setGameData("GameDifficulty", difficulty);
-		setMineNumber(getMaxMineNumber(getGameDifficulty()));
+//		setMineNumber(getMaxMineNumber(getGameDifficulty()));
 	}
 
 	//GameMode

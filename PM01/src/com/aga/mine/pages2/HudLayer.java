@@ -156,7 +156,7 @@ public class HudLayer extends CCLayer {
 		statusMine = CCLabel.makeLabel(
 		// GameData.share().getMineNumber() + " ",
 		// "AvenirNextCondensed-Bold", 11);
-				GameData.share().getMineNumber() + " ", "Arial-Bold", 30);
+				String.valueOf(mGame.getMineNumber()), "Arial-Bold", 30);
 		statusMine.setPosition(statusBase.getContentSize().width / 2,
 				statusBase.getContentSize().height / 4);
 		statusBase.addChild(statusMine);
@@ -317,6 +317,7 @@ public class HudLayer extends CCLayer {
 		//addChild(ending, GameConfig.share().kDepthPopup, 1234);
 		maxTiles = mGame.getClosedCell();
 		otherProgress = (int) maxTiles;
+		mine = mGame.getMineNumber();
 	}
 
 	//이모티콘 애니메이션 : NetworkController에서 데이터를 수신후 이 펑션을 호출
@@ -625,11 +626,11 @@ public class HudLayer extends CCLayer {
 	public void updateProgress() {
 		float progress = 0;
 		progress = getProgressPosition(mGame.getClosedCell(), false);
-		Log.e("HudLayer", "player1 progress : " + progress + ", ClosedCell : " + mGame.getClosedCell() + ", maxTiles : " + maxTiles + ", mine : " + mine);		
+		Log.e("HudLayer", "p1 prog: " + ((int)(progress*10)) / 10 + ", cell: " + mGame.getClosedCell() + ", tile: " + maxTiles + ", mine: " + mine);		
 		mGameProgressBar.progress(progress, GameProgressBar.kTagIndicatorMe);
 	}
 	
-	int mine = GameData.share().getMineNumber();
+	int mine;
 	int otherProgress;
 	
 	public void updateOtherPlayerProgress() {

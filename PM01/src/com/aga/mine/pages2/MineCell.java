@@ -315,7 +315,8 @@ public class MineCell extends CCLayer{
 		//
 		// TMX에서 현재 타일 제거 및 총 열리지 않은 총 타일수량 1개 감소
 		this.delegate.removeTile(this.tileCoord, depth);
-		Game.unopenedTile --;
+		mGame.removeCell();
+		
 		if (GameData.share().isMultiGame) {
 			try {
 				NetworkController.getInstance().sendPlayDataCellOpen(getCell_ID());
@@ -323,7 +324,6 @@ public class MineCell extends CCLayer{
 				e1.printStackTrace();
 			}
 		}
-		
 		
 		// 지뢰는 -1로 지정했음
 		int pumpkinMine = -1;
@@ -334,6 +334,23 @@ public class MineCell extends CCLayer{
 			mGame.mHud.updateProgress();
 		} else { // 지뢰 밟음
 			touchMine();
+		}
+		
+		Log.e("MineCell", "markedMine : " + GameData.share().getCurrentMine());
+		Log.e("MineCell", "getClosedCell : " + mGame.getClosedCell());
+		Log.e("MineCell", "getMineNumber() : " + GameData.share().getMineNumber());
+		
+//		int foundMines = GameData.share().getCurrentMine();
+		int closedTiles = mGame.getClosedCell();
+		if (closedTiles <= GameData.share().getMineNumber()) {
+			Log.e("MineCell", "new gameover : score 1000");
+			if (GameData.share().isMultiGame) {
+				gameOverType = continueGame;
+				sendRequestGameOver(1000);
+			} else {
+				gameOverType = singleCompleted;
+				gameOver(1000);
+			}
 		}
 //		if (numberOfArroundMine > 0) { // 주변의 지뢰 수량을 표시
 //			showAroundMine();
@@ -378,7 +395,7 @@ public class MineCell extends CCLayer{
 		this.setOpened(true);
 		
 		// 지뢰를 누르면 지뢰갯수 (화면좌측위 지뢰 숫자) 하나를 없애준다.
-		int mineNumber = GameData.share().decreaseMineNumber();
+		int mineNumber = mGame.decreaseMineNumber();
 		
 		// 화면에 지뢰 갯수 갱신
 		mGame.mHud.updateMineNumber(mineNumber);
@@ -395,31 +412,45 @@ public class MineCell extends CCLayer{
 		// 지뢰를 누르면 실제 지뢰갯수(currentMineNumber)에 +1를 해줌.
 		// +1을 안해주면~  안알랴줌 (노출지뢰가 실제 지뢰에 포함이 안됨)
 		//int currentMine = GameData.share().currentMineNumber() + 1;
-		int currentMine = GameData.share().currentMineNumber();
-		Log.e("MineCell / open", "최대 지뢰 수 : " + GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
+		GameData.share().markMine();
+		int currentMine = GameData.share().getCurrentMine(); // 로그용.
+		Log.e("MineCell / open", "최대 지뢰 수 : " + GameData.share().getMineNumber());
 		Log.e("MineCell / open", "open3 : currentMineNumber" + currentMine + ", decreaseMineNumber : " + mineNumber);
 
 		//최대 지뢰 갯수와 currentMine의 수가 같으면 게임 종료 <<---- 밖으로 빼야 할 것 같음. 수상함. 좀 더 테스트
-		Log.e("MineCell / open", "currentMine : " + currentMine + ", MaxMineNumber : " +  GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty()));
+		Log.e("MineCell / open", "currentMine : " + currentMine + ", MaxMineNumber : " +  GameData.share().getMineNumber());
 		
-		if (currentMine == GameData.share().getMaxMineNumber(GameData.share().getGameDifficulty())) {
+		if (GameData.share().getCurrentMine() == GameData.share().getMineNumber()) {
 			Log.e("MineCell / open", "delegate - gameOver *** mission complete ***");
 //			this.delegate.gameOver();
 			
+//			float openedCell = GameData.share().getOpenedCell();
+////			float foundMine = mGame.getFoundMine();
+//			float mine = GameData.share().getCurrentMine();
+//			Log.e("MineCell", "markedMine() 값이 의문스러움. 아이폰에 물어볼 것 : " + mine);
+//			Log.e("MineCell", "Game.java에도 같은 값 존재");
+//			float mushroom = mGame.getMineNumber(); // 잘못된 데이터
+//			float heart = GameData.share().getHeartNumber();
+//			float remainTime = GameData.share().getSeconds();
+//			
+//			int myScore = 0;
+
+			int myScore = 0;
+			
 			float openedCell = GameData.share().getOpenedCell();
 //			float foundMine = mGame.getFoundMine();
-			float mine = mGame.markedMine();
-			Log.e("MineCell", "markedMine() 값이 의문스러움. 아이폰에 물어볼 것 : " + mine);
-			Log.e("MineCell", "Game.java에도 같은 값 존재");
-			float mushroom = GameData.share().getMineNumber(); // 잘못된 데이터
+			float foundMine = GameData.share().getCurrentMine(); // 올바르게 버섯이 심겨진 지뢰만(찾은 호박)
+			Log.e("Game", "markedMine() 값이 의문스러움. 아이폰에 물어볼 것 : " + foundMine);
+			Log.e("Game", "MineCell.java에도 같은 값 존재");
+			float maxMine = GameData.share().getMineNumber(); // 테스트중
 			float heart = GameData.share().getHeartNumber();
-			float time = 900 - GameData.share().getSeconds();
-			
-			int myScore = 0;
+			float remainTime = GameData.share().getSeconds(); // 소요 시간
+
 			if (heart > 0) {
-				myScore = (int) ((((mine + heart) * openedCell) + time) * mushroom * 0.006f);
+				myScore = (int) ((((foundMine + heart) * maxMine) + remainTime) * maxMine * 0.006f);
 			}
-			Log.e("MineCell", "myScore : " + myScore + ", openedCell : " + openedCell + ", mine : " + mine + ", mushroom : " + mushroom + ", heart_o : " + heart + ", time : " + time);
+			
+			Log.e("MineCell", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", maxMine : " + maxMine + ", heart : " + heart + ", remainTime : " + remainTime);
 			
 			if (GameData.share().isMultiGame) {
 				gameOverType = continueGame;
@@ -483,7 +514,8 @@ public class MineCell extends CCLayer{
 		} else if (gameOverType == singleCompleted){
 			Log.e("MineCell", "싱글 - 전부 찾고 종료 (type) : " + gameOverType);
 			Config.getInstance().setVs(Config.getInstance().vsWin);
-			mGame.mHud.gameOver(0, 0);
+			myScore = (int) (myScore*0.2);
+			mGame.mHud.gameOver(myScore, 0);
 		} else if (gameOverType == continueGame){
 			Log.e("MineCell", "멀티 - 계속 하기 (type) : " + gameOverType);
 		}

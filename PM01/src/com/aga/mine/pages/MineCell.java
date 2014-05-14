@@ -389,7 +389,7 @@ public class MineCell extends CCLayer{
 			
 			
 			// 지뢰를 누르면 지뢰갯수 (화면좌측위 지뢰 숫자) 하나를 없애준다.
-			int mineNumber = GameData.share().decreaseMineNumber();
+			int mineNumber = Game.decreaseMineNumber();
 			
 			// 화면에 지뢰 갯수 갱신
 			Game.HudLayer.updateMineNumber(mineNumber);
@@ -400,7 +400,7 @@ public class MineCell extends CCLayer{
 			// 지뢰를 누르면 실제 지뢰갯수(currentMineNumber)에 +1를 해줌.
 			// +1을 안해주면~  안알랴줌 (노출지뢰가 실제 지뢰에 포함이 안됨)
 			//int currentMine = GameData.share().currentMineNumber() + 1;
-			int currentMine = GameData.share().currentMineNumber();
+			int currentMine = GameData.share().getCurrentMine();
 			Log.e("MineCell / open", "최대 지뢰 수 : " + GameData.share().getMineNumber());
 			Log.e("MineCell / open", "open3 : currentMineNumber" + currentMine + ", decreaseMineNumber : " + mineNumber);
 

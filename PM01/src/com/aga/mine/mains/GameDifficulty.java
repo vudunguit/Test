@@ -46,11 +46,6 @@ public class GameDifficulty extends CCLayer {
 	}
 
 	public GameDifficulty() {
-		if (!GameData.share().isGuestMode) {
-			// 게임 점수 테스트용 (20점 얻음)
-			DataFilter.addGameScore("20");
-			Log.e("GameMode", "score 20점 증가");			
-		}
 		
 //		mContext = CCDirector.sharedDirector().getActivity();
 //		userData = UserData.share(mContext);
