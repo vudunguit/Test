@@ -1111,5 +1111,28 @@ public class HudLayer extends CCLayer {
 
 		score.runAction(scale);
 	}
+	
+	//정령석 아래 영역으로 이동하는 애니 :
+	//CCSprite spirit : 정령석 종류
+	//CGPoint pos: HudLayer에서의 현재 좌표.  Game 레이어에서 HudLayer의 좌표로 변환해서 넘겨줘야함.
+	//CGPoint pos2 : 이동해야 할 좌표
+	//int kind : 정령석 종류
+	public void startOpenBottle(CCSprite spirit, CGPoint pos, CGPoint pos2, int kind) {
+		//정령석 애니메이션, 점점 커지면서 위로 잠깐 솟았다가 아래 아이콘 영역으로 이동
+		spirit.setPosition(pos);
+		spirit.setScale(0);
+		
+		CCScaleTo scale = CCScaleTo.action(1.5f, 1.0f);
+		spirit.runAction(scale);
+		
+		CCMoveBy moveby = CCMoveBy.action(0.5f, CGPoint.ccp(0, 100));
+		CCMoveTo moveto = CCMoveTo.action(1.0f, pos2);
+		CCCallFuncND increase = CCCallFuncND.action(this, "cbIncreaseNumber", kind);
+		spirit.runAction(CCSequence.actions(moveby, moveto, increase));
+	}
 
+	public void cbIncreaseNumber(Object sender, Object k) {
+		//To do : 아이콘 숫자 증가
+		Integer kind = (Integer) k;
+	}
 }

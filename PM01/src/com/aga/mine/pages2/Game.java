@@ -110,6 +110,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	private int mCount;
 	
 	private CCAnimation mEarthBomb;
+	private CCAnimation mBottle;
 
 	private int mineNumber;
 	public CCTMXTiledMap getTileMap() {
@@ -511,6 +512,13 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		for(int i=1; i<=12; i++) {
     		CCSprite ebframe = CCSprite.sprite(String.format("61hud/earth-bomb%02d.png", i));
     		mEarthBomb.addFrame(ebframe.getTexture());
+		}
+		
+		//정령석 병 여는 애니메이션
+		mBottle = CCAnimation.animation("bottle");
+		for(int i=1; i<=10; i++) {
+    		CCSprite bottle = CCSprite.sprite(String.format("61hud/spirit_%02d.png", i));
+    		mBottle.addFrame(bottle.getTexture());
 		}
 		
 		//이모티콘 test : 실제로는 NetworkController에서 전송된 이모티콘 id를 던져준다.
@@ -1994,33 +2002,16 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		return mineNumber;
 	}
 	
-//	private boolean _soundPlaying = false;
-//	private boolean _soundPaused = false;
-//	private boolean _resumeSound = false;
-//	
-//	public void bgMusicClicked(View button)
-//	{
-//	    // If we haven't started playing the sound - play it!
-//	    if (!_soundPlaying)
-//	    {
-//	        SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
-//	        _soundPlaying = true;
-//	    }
-//	    else
-//	    {
-//	        // We've loaded the sound, now it's just a case of pausing / resuming
-//	        if (!_soundPaused)
-//	        {
-//	            SoundEngine.sharedEngine().pauseSound();
-//	            _soundPaused = true;
-//	        }
-//	        else
-//	        {
-//	            SoundEngine.sharedEngine().resumeSound();
-//	            _soundPaused = false;
-//	        }
-//	    }
-//	}
+	//정령석 유리병 여는 애니메이션
+	public void startOpenBottle(CGPoint pos) {
+		CCSprite bottle = CCSprite.sprite("61hud/spirit_01.png");
+		bottle.setPosition(pos);
+		addChild(bottle);
+		
+		CCAnimate action = CCAnimate.action(1.0f, mBottle, false);
+		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveMove");
+		bottle.runAction(CCSequence.actions(action, remove));
+	}
 	
 	
 	public void startEarthBomb() {
@@ -2053,9 +2044,6 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		public abstract void run();
 		
 	}
-
-
-
 
 }
 // Game class end
