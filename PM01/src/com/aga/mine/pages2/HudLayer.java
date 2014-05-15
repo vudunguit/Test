@@ -15,6 +15,7 @@ import org.cocos2d.actions.interval.CCDelayTime;
 import org.cocos2d.actions.interval.CCFadeOut;
 import org.cocos2d.actions.interval.CCMoveBy;
 import org.cocos2d.actions.interval.CCMoveTo;
+import org.cocos2d.actions.interval.CCRotateBy;
 import org.cocos2d.actions.interval.CCRotateTo;
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
@@ -98,6 +99,8 @@ public class HudLayer extends CCLayer {
 	private CCAnimation earthAni;
 	//private CCSprite mirror;
 	private CCAnimation mirrorAni;
+	
+	private CCSprite mBg;
 
 	float maxTiles;
 	public HudLayer(Game game) {
@@ -580,7 +583,15 @@ public class HudLayer extends CCLayer {
 		this.otherScore = otherScore; 
 		Log.e("HudLayer", "myScore : " + myScore + ", otherScore : " + otherScore);
 		// 애니메이션 이펙트 endingZoomOutAndBlastFX
-		endingZoomOut();
+		
+		//To do : 대전게임에서 승리시 isVictory()로 승리 애니메이션 아니면 그냥 팝업
+		boolean isVictory = true;
+		if(isVictory) {
+			startVictory();
+		} else {
+			popupEnding();
+		}
+		
 		
 //		if (GameData.share().isMultiGame) {
 //			
@@ -611,7 +622,7 @@ public class HudLayer extends CCLayer {
 //		}
 	}
 	
-	private void endingZoomOut() {
+	private void popupEnding() {
 		mGameEnding = new GameEnding(myScore, otherScore, mGame.getClosedCell());
 		addChild(mGameEnding, GameConfig.share().kDepthPopup, 1234);
 		mGameEnding.setIsTouchEnabled(true);
@@ -981,6 +992,124 @@ public class HudLayer extends CCLayer {
 			break;
 		}
 		
+	}
+	
+	// Victory 애니메이션
+	private void startVictory() {
+		CCSprite backLight = CCSprite.sprite("70game_ending/back-light.png");
+		CCSprite backSearch = CCSprite.sprite("70game_ending/back-search.png");
+		CCSprite rybon = CCSprite.sprite("70game_ending/rybon.png");
+		
+		mBg = CCSprite.sprite("00common/" + "opacitybg.png");
+		mBg.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
+		//mBg.setScale(0.8f);
+		addChild(mBg);
+
+		// 백라이트 배치
+		mBg.addChild(backLight);
+		backLight.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
+
+		// 회전 섬광 배치
+		mBg.addChild(backSearch);
+		backSearch.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
+
+		// 리본 배치
+		rybon.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
+		mBg.addChild(rybon);
+
+		// 별배치
+/*		for (int i = 0; i < 100; i++) {
+			CCSprite star = CCSprite.sprite("70game_ending/star.png");
+
+			CCDelayTime delay = CCDelayTime
+					.action(new Random().nextFloat() * 5.0f);
+			CCCallFuncN show = CCCallFuncN.action(this, "cbShowSprite");
+			star.runAction(CCSequence.actions(delay, show));
+		}*/
+
+		// 배경 회전
+		CCRotateBy rot = CCRotateBy.action(4, 360);
+		CCCallFuncN end = CCCallFuncN.action(this, "cbEndVictory");
+		backSearch.runAction(CCSequence.actions(rot, end));
+
+		// 리본 확대->축소
+		rybon.setScale(1.5f);
+		CCScaleTo scale = CCScaleTo.action(0.5f, 1.0f);
+		CCCallFuncN call = CCCallFuncN.action(this, "cbCallHeartLeft");
+		rybon.runAction(CCSequence.actions(scale, call));
+	}
+
+	public void cbShowSprite(Object sender) {
+		CCSprite star = (CCSprite) sender;
+		// star.setOpacity(0);
+		star.setScale(0.5f + new Random().nextFloat() * 1.0f);
+		star.setPosition(new Random().nextFloat() * winSize.width, new Random().nextFloat() * winSize.height);
+
+		// CCFadeIn in = CCFadeIn.action(1.0f);
+		CCFadeOut out = CCFadeOut.action(1.0f);
+		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite");
+		mBg.addChild(star);
+		star.runAction(CCSequence.actions(out, remove));
+	}
+
+	public void cbEndVictory(Object sender) {
+		mBg.removeAllChildren(true);
+		popupEnding();
+	}
+
+	public void cbCallHeartLeft(Object sender) {
+		CCSprite heartLeft = CCSprite.sprite("70game_ending/heart-left.png");
+		mBg.addChild(heartLeft);
+		heartLeft.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
+
+		heartLeft.setScale(1.5f);
+		CCScaleTo scale = CCScaleTo.action(0.5f, 1.0f);
+		CCCallFuncN call = CCCallFuncN.action(this, "cbCallHeartRight");
+		heartLeft.runAction(CCSequence.actions(scale, call));
+	}
+
+	public void cbCallHeartRight(Object sender) {
+		CCSprite heartRight = CCSprite.sprite("70game_ending/heart-right.png");
+		mBg.addChild(heartRight);
+		heartRight.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
+
+		heartRight.setScale(1.5f);
+		CCScaleTo scale = CCScaleTo.action(0.5f, 1.0f);
+		CCCallFuncN call = CCCallFuncN.action(this, "cbCallHeartCenter");
+		heartRight.runAction(CCSequence.actions(scale, call));
+	}
+
+	public void cbCallHeartCenter(Object sender) {
+		CCSprite heartCenter = CCSprite
+				.sprite("70game_ending/heart-center.png");
+		mBg.addChild(heartCenter);
+		heartCenter.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
+
+		heartCenter.setScale(1.5f);
+		CCScaleTo scale = CCScaleTo.action(0.5f, 1.0f);
+		CCCallFuncN call = CCCallFuncN.action(this, "cbCallScore");
+		heartCenter.runAction(CCSequence.actions(scale, call));
+	}
+
+	public void cbCallScore(Object sender) {
+		//To do: 점수에 따라서 선택
+		int k = 3;
+		CCSprite score = null;
+		if (k == 1) {
+			score = CCSprite.sprite("70game_ending/x1.png");
+		} else if (k == 2) {
+			score = CCSprite.sprite("70game_ending/x2.png");
+		} else {
+			score = CCSprite.sprite("70game_ending/x3.png");
+		}
+
+		mBg.addChild(score);
+		score.setPosition(winSize.width * 0.5f, winSize.height * 0.43f);
+
+		score.setScale(1.5f);
+		CCScaleTo scale = CCScaleTo.action(0.5f, 1.0f);
+
+		score.runAction(scale);
 	}
 
 }
