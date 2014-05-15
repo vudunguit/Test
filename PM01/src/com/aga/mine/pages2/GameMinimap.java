@@ -274,13 +274,13 @@ public class GameMinimap extends CCLayer{
 				"GameOver", "Emoticon", "Mine", "Sphere", "SphereTake"};
 		
 		final int kPlayDataCellOpen = 0;
-		final int kPlayDataMushroomOn = 1;
-		final int kPlayDataMushroomOff = 2;
+//		final int kPlayDataMushroomOn = 1;
+//		final int kPlayDataMushroomOff = 2;
 		final int kPlayDataMagicAttack = 3;
-		final int kPlayDataMagicDefense = 4;
+//		final int kPlayDataMagicDefense = 4;
 		final int kPlayDataGameOver = 5;
 		final int kPlayDataEmoticon = 6;
-		final int kPlayDataMine = 7;
+//		final int kPlayDataMine = 7;
 		final int kPlayDataSphere = 8;
 		final int kPlayDataSphereTake = 9;
 		int cellGID;
@@ -310,39 +310,41 @@ public class GameMinimap extends CCLayer{
 //			break;
 //			
 		case kPlayDataMagicAttack:
-			switch ((data - 23) / 1000) {
+			
+			switch (data / 1000) {  // data를 1000으로 나누어 나머지 값이 공격 지속 시간입니다. 현재 23
+//			switch ((data - 23) / 1000) {  // data를 1000으로 나누어 나머지 값이 공격 지속 시간입니다. 현재 23
+			
 			case 1:
-				mHudLayer.testText.setString("불마법을 사용. type : " + data);
-			break;
+//				mHudLayer.testText.setString("불마법을 사용. type : " + data);
+				
+//				mHudLayer.StartAniFireDefense(data % 1000); // 나머지 값을 지속시간으로 사용
+				mHudLayer.StartAniFireDefense();
+				break;
 			case 2:
-				mHudLayer.testText.setString("바람마법을 사용. type : " + data);
-			break;
+//				mHudLayer.testText.setString("바람마법을 사용. type : " + data);
+				mHudLayer.StartAniWindDefense();
+				break;
 			case 3:
-				mHudLayer.testText.setString("구름마법을 사용. type : " + data);
-			break;
+//				mHudLayer.testText.setString("구름마법을 사용. type : " + data);
+				mHudLayer.StartAniCloudDefense();
+				break;
 			case 4:
 				mHudLayer.testText.setString("신성마법을 사용. type : " + data);
-			break;
+				break;
 			case 5:
 				mHudLayer.testText.setString("대지마법을 사용. type : " + data);
-			break;
+				break;
 			case 6:
 				mHudLayer.testText.setString("반사마법을 사용. type : " + data);
-			break;
-
+//				mHudLayer.StartAniMirrorDefense();
+				break;
 			}
-//			if (0 < data && data < 4) {
-//				mHudLayer.testText.setString("적의 공격을 받습니다. type : " + data);
-//			} else if (data < 7) {
-//				mHudLayer.testText.setString("적이 방어 하였습니다. type : " + data);
-//			} else {
-//				mHudLayer.testText.setString("알수없는 타입의 공격 type : " + data);
-//			}
+
 			break;
 			
-		case kPlayDataMagicDefense:
-			mHudLayer.testText.setString("적이 방어 하였습니다. kPlayDataMagicDefense");
-			break;
+//		case kPlayDataMagicDefense:
+//			mHudLayer.testText.setString("적이 방어 하였습니다. kPlayDataMagicDefense");
+//			break;
 			
 		case kPlayDataGameOver:
 			try {
@@ -356,15 +358,16 @@ public class GameMinimap extends CCLayer{
 			
 		case kPlayDataEmoticon:
 			mHudLayer.testText.setString("이모티콘이 왔습니다. type : " + data);
+			mHudLayer.startEmoticonAni(data);
 			break;
 
-		case kPlayDataMine:
-			Log.e("GameMinimap", "상대방 지뢰 터짐 : " + data);
-			mHudLayer.testText.setString("상대방 지뢰 터짐 : " + data);
-//			cellGID = CCFormatter.swapIntToLittleEndian(this.itemLayer.tileGIDAt(CGPoint.make(0f, 0f)));
-//			this.mineLayer.setTileGID(cellGID, searchTilePosition(data));
-//			removeTile(data);
-			break;
+//		case kPlayDataMine:
+//			Log.e("GameMinimap", "상대방 지뢰 터짐 : " + data);
+//			mHudLayer.testText.setString("상대방 지뢰 터짐 : " + data);
+////			cellGID = CCFormatter.swapIntToLittleEndian(this.itemLayer.tileGIDAt(CGPoint.make(0f, 0f)));
+////			this.mineLayer.setTileGID(cellGID, searchTilePosition(data));
+////			removeTile(data);
+//			break;
 			
 		case kPlayDataSphere:
 			count = 0;
@@ -381,24 +384,24 @@ public class GameMinimap extends CCLayer{
 			break;
 			
 		case kPlayDataSphereTake:
-			mHudLayer.testText.setString("Warning!!!! 적이 아이템 획득");
-//			count = 0;
-//			if (itemType == 0)
-//				itemType = 7;
-//			for (int m = 0; m < 2; m++) { // 세로 방향
-//				for (int k = 0; k < 2; k++) { // 가로 방향
-//					CGPoint targetTile = CGPoint.make(cell.x + k, cell.y + m);
-//					this.mineLayer.removeTileAt(targetTile);
-//					cellGID = CCFormatter.swapIntToLittleEndian(this.itemLayer.tileGIDAt(CGPoint.make(count, itemType)));
-//					this.mineLayer.setTileGID(cellGID, targetTile);
-//					count++;
-//				}
-//			}	
+//			mHudLayer.testText.setString("Warning!!!! 적이 아이템 획득");
+			count = 0;
+			if (itemType == 0)
+				itemType = 7;
+			for (int m = 0; m < 2; m++) { // 세로 방향
+				for (int k = 0; k < 2; k++) { // 가로 방향
+					CGPoint targetTile = CGPoint.make(cell.x + k, cell.y + m);
+					this.mineLayer.removeTileAt(targetTile);
+					cellGID = CCFormatter.swapIntToLittleEndian(this.itemLayer.tileGIDAt(CGPoint.make(count, itemType)));
+					this.mineLayer.setTileGID(cellGID, targetTile);
+					count++;
+				}
+			}	
 			break;
 
 		default:
-			Log.e("GameMinimap", "알수 없는 데이타 타입 : " + playType);
-			mHudLayer.testText.setString("알수 없는 데이타 타입. playType : " + playType);
+			Log.e("GameMinimap", type[playType] + " type : " + playType);
+			mHudLayer.testText.setString(type[playType] + " type : " + playType);
 			break;
 		}
 		

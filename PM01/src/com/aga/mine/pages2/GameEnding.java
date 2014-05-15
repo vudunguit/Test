@@ -73,8 +73,10 @@ public class GameEnding extends CCLayer {
 	int closedCell;
 	
 	public GameEnding(int myScore2, int otherScore, int closedCell) {
+		basket = new HashMap<String, String>();
 		Log.e("GameEnding", "myScore : " + myScore2+ ", otherScore : " + otherScore + ", closedCell : " + closedCell);
-		// 소리 정지
+		
+		// 플레이 중이던 모든 소리 정지
 		
 		this.myScore = myScore2;
 		this.otherScore = otherScore;
@@ -93,6 +95,7 @@ public class GameEnding extends CCLayer {
 			}
 		}			
 		
+		// 결과에 맞는 소리 재생
 		// Config.getInstance().vsWin
 		if (Config.getInstance().getVs()) {
 			Log.e("GameEnding", "Win");
@@ -126,7 +129,6 @@ public class GameEnding extends CCLayer {
 		
 		// 팝업에 표현되는 모든 숫자는 이번에 획득 또는 상실 되는 숫자들만 표현 
 		mainMenu(Config.getInstance().getVs());
-		setpoint();
 	}
 
 	// 받아야되는 값
@@ -318,7 +320,8 @@ public class GameEnding extends CCLayer {
 			
 			Log.e("GameEnding", "myLevel : " + myLevel);
 			myLevel++; 
-			basket.put("LevelCharacter", String.valueOf(myLevel));	
+			basket.put("LevelCharacter", String.valueOf(myLevel)); // 레벨업(기존레벨에 +1)
+			basket.put("Exp", String.valueOf(0)); // 레벨업에 따른 경험치 0으로 초기화 
 			lv.setString("Level " + myLevel);
 			
 			//3초 후에 레벨팝업을 제거하고 다시 경험치 애니메이션 구동
@@ -347,16 +350,7 @@ public class GameEnding extends CCLayer {
 		return childSprite;
 	}
 	
-	CCLabel myPoint = null;
-	private void setpoint() {
-		Log.e("GameEnding", "setpoint :");
-		myPoint = CCLabel.makeLabel("Gold : " + myScore, "Arial", 30);
-		this.addChild(myPoint, 2);
-		myPoint.setPosition(winSize.width / 2, (winSize.height / 5) * 4);
-	}
-
-	
-	Map<String, String> basket = new HashMap<String, String>();
+	Map<String, String> basket;
 	
 	boolean buttonActive = true;
 	public void clicked(Object sender) {
@@ -375,14 +369,13 @@ public class GameEnding extends CCLayer {
 			if (buttonActive) {
 				myGold -= tag;
 				usedGold = true;
-				myPoint.setString("Gold : " + myGold);
-
 				buttonActive = false;
 			}
 		}
 		
 
 		// reward
+		// DB에 적용시키는 데이터들
 		if (!GameData.share().isGuestMode) {
 			Log.e("GameEnding", "DB : " + DataFilter.getUserDBData(FacebookData.getinstance().getUserInfo().getId()));			
 			if (Config.getInstance().getVs()) { // 승리 (스코어 및 경험치, 골드, 승률 ok)
@@ -391,7 +384,11 @@ public class GameEnding extends CCLayer {
 //				basket.put("Point", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Point")) + myScore));
 				basket.put("Gold", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Gold")) + myGold));	
 //				basket.put("Exp", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Exp")) + mLeftExp));	
-				basket.put("Exp", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Exp")) + (int) (myScore * 1.5f)));	
+				
+				// 레벨업이 안됐을시 획득한 전체 경험치를
+				// 레벨업이 됐을시 레벨업후 남은 경험치를 넣어주세요.
+				// 경험치 계산식은 score * 1.5입니다. 전체 경험치를 어디서 받는지 몰라서 수식으로 넣었습니다.
+				basket.put("Exp", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Exp")) + (int) (myScore * 1.5f))); // 남은 경험치 
 				basket.put("HistoryWin", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryWin")) + 1));	
 //				basket.put("Exp",String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Exp")) + mLeftExp));	
 			} else { // 패배(스코어 및 경험치, 골드, 승률 ok)

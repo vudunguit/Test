@@ -45,6 +45,9 @@ public class GameData {
 	public final int kDivineChance = 15;
 	public final int kEarthChance = 9;
 	public final int kMirrorChance = 6;
+	
+	public final int kSingleEarthChance = 20;
+	public final int kSingleEmptyChance = 80;
 
 	//
 	// 게임 난이도

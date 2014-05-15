@@ -210,19 +210,16 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		 * 깃발 꽂을 레이어 this.earthLayer = this.tileMap.layerNamed("CrackedEarth");
 		 * // 갈라진대지 레이어
 		 */
-		this.tmxItemLayer = this.tileMap.layerNamed("ItemLayer"); // 지뢰 및 아이템, 깃발
-																// 가져오는 레이어
-		this.tmxEarthLayer = this.tileMap.layerNamed("CrackedEarth"); // 갈라진대지
-																	// 레이어(아이템
-																	// 이펙트)
 		this.tmxBg = this.tileMap.layerNamed("Background"); // Layer Name in Tiled
-		this.tmxMineLayer = this.tileMap.layerNamed("MineLayer"); // 지뢰(호박) 및 아이템
-																// 뿌릴 레이어
-		this.tmxFg = this.tileMap.layerNamed("Foreground"); // 잔디
-		this.tmxFlagLayer = this.tileMap.layerNamed("FlagLayer"); // 깃발(버섯) 꽂을 레이어
 		this.tmxMeta = this.tileMap.layerNamed("Meta"); // 선택 불가 영역
 		this.tmxMeta.setVisible(false);
-
+		
+		this.tmxFg = this.tileMap.layerNamed("Foreground"); // 잔디
+		this.tmxMineLayer = this.tileMap.layerNamed("MineLayer"); // 지뢰(호박) 및 아이템 뿌릴 레이어
+		this.tmxItemLayer = this.tileMap.layerNamed("ItemLayer"); // 지뢰 및 아이템, 깃발 가져오는 레이어
+		this.tmxFlagLayer = this.tileMap.layerNamed("FlagLayer"); // 깃발(버섯) 꽂을 레이어
+		this.tmxEarthLayer = this.tileMap.layerNamed("CrackedEarth"); // 갈라진대지 레이어(아이템 이펙트)
+		
 		theLayer.setScale(GameConfig.share().kDefaultScale * 128
 				/ tileMap.getTileSize().width);
 		theLayer.setPosition(
@@ -426,7 +423,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 
 		// 원래 순서는 수정구부터
 		//
-		// 수정구 설치
+		// 수정구 설치 (전체 셀, foreground TileMap, Ai)
 		scatterSpheres(cells, tmxFg, false);
 
 		//
@@ -674,53 +671,72 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	// 인자 추가
 	public void scatterSpheres(ArrayList<MineCell> cells, CCTMXLayer tmx, boolean isAi) {
 		
-		for (int i = 0; i < GameData.share().kNumberOfSphere; i++) {
-			//
-			// 정해진 확률에 맞춰 수정구의 종류를 결정한다.
-			// unsigned 없음
-			final int fireChange = GameData.share().kFireChance;
-			final int windChange = GameData.share().kWindChance;
-			final int cloudChange = GameData.share().kCloudChance;
-			final int mirrorChange = GameData.share().kMirrorChance;
-			final int divineChange = GameData.share().kDivineChance;
-			final int earthChange = GameData.share().kEarthChance;
-
-			// unsigned 없음
+		int numberOfSphere = 3;
+		if (!GameData.share().isGuestMode) {
+			numberOfSphere = GameData.share().kNumberOfSphere;
+		}
+		
+		for (int i = 0; i < numberOfSphere; i++) {
 			int location = 0;
-
-			// NSRange ????
-			int[] fireRange = { location, fireChange };
-			location += fireChange;
-			int[] windRange = { location, windChange };
-			location += windChange;
-			int[] cloudRange = { location, cloudChange };
-			location += cloudChange;
-			int[] mirrorRange = { location, mirrorChange };
-			location += mirrorChange;
-			int[] divineRange = { location, divineChange };
-			location += divineChange;
-
 			int randomPick = (int) (Math.random() * 100);
-
-			int sphereType;
-			if (nsLocationInRange(randomPick, fireRange)) {
-				sphereType = kSphereTypeFire;
-			} else if (nsLocationInRange(randomPick, windRange)) {
-				sphereType = kSphereTypeWind;
-			} else if (nsLocationInRange(randomPick, cloudRange)) {
-				sphereType = kSphereTypeCloud;
-			} else if (nsLocationInRange(randomPick, mirrorRange)) {
-				sphereType = kSphereTypeMirror;
-			} else if (nsLocationInRange(randomPick, divineRange)) {
-				sphereType = kSphereTypeDivine;
+			int sphereType = 0;
+			
+			if (!GameData.share().isMultiGame) {
+				final int earthChance = GameData.share().kSingleEarthChance;
+				final int emptyChance = GameData.share().kSingleEmptyChance;
+				
+				int[] earthRange = {location, earthChance};
+				location += earthChance;
+				int[] emptyRange = {location, emptyChance};
+				location += emptyChance;
+				
+				if (nsLocationInRange(randomPick, earthRange)) {
+					sphereType = kSphereTypeEarth;
+				}
+				else if (nsLocationInRange(randomPick, emptyRange)) {
+					sphereType = 0;
+				}
+				
 			} else {
-				sphereType = kSphereTypeEarth;
-			}
+				
+				// 정해진 확률에 맞춰 수정구의 종류를 결정한다.
+				final int fireChance = GameData.share().kFireChance;
+				final int windChance = GameData.share().kWindChance;
+				final int cloudChance = GameData.share().kCloudChance;
+				final int mirrorChance = GameData.share().kMirrorChance;
+				final int divineChance = GameData.share().kDivineChance;
+				final int earthChance = GameData.share().kEarthChance;
+				
+				// 각 속성별 획득 범위 설정
+				int[] fireRange = { location, fireChance };
+				location += fireChance;
+				int[] windRange = { location, windChance };
+				location += windChance;
+				int[] cloudRange = { location, cloudChance };
+				location += cloudChance;
+				int[] mirrorRange = { location, mirrorChance };
+				location += mirrorChance;
+				int[] divineRange = { location, divineChance };
+				location += divineChance;
+				
+				if (nsLocationInRange(randomPick, fireRange)) {
+					sphereType = kSphereTypeFire;
+				} else if (nsLocationInRange(randomPick, windRange)) {
+					sphereType = kSphereTypeWind;
+				} else if (nsLocationInRange(randomPick, cloudRange)) {
+					sphereType = kSphereTypeCloud;
+				} else if (nsLocationInRange(randomPick, mirrorRange)) {
+					sphereType = kSphereTypeMirror;
+				} else if (nsLocationInRange(randomPick, divineRange)) {
+					sphereType = kSphereTypeDivine;
+				} else {
+					sphereType = kSphereTypeEarth;
+				}
 
+			}
+			
 			boolean isBoolean = true;
 			while (isBoolean) {
-
-				//
 				// 무작위 셀 하나 추출
 				int rand = (int) (Math.random() * cells.size());
 				MineCell cell = cells.get(rand);
@@ -737,14 +753,23 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 				// isBoolean = false; // 임시용. isSphereBasePossible가 현재 무조건
 				// false이다.
 				if (cell.isSphereCellsClear() && cell.isSphereBasePossible()) {
-					//
 					// 수정구 설치된 기반셀 등록하여 오픈 체크에 사용
-					sphereBaseCells.add(cell);
+					if (isAi) {
+						Log.e("Game", "scatterSpheres - isAi");
+					} else {
+						sphereBaseCells.add(cell);
+					}
 					cell.setSphereType(sphereType);
-					cell.setToSphereCells(sphereType);
+					cell.setToSphereCells(sphereType); // 수정구 필드에 심기
+					
+					
+					
+//					/************/
+//					int tileGID = cell.getCell_ID();
+//					this.getFg().removeTileAt(cells.get(tileGID).getTileCoord());
+//					/************/					
 					this.addSphereTo(tmx, sphereType, cell, isAi);
 					isBoolean = false;
-				} else {
 				}
 				// Log.e("Game", "scatterSpheres" + isBoolean);
 			}
@@ -766,11 +791,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	public void addSphereTo(CCTMXLayer tmx, int sphereType, MineCell baseCell, boolean isAi) {
 		int counter = 0;
 		
-		if(isAi == false) {
-//			if (Config.getInstance().guest == true || Config.getInstance().modechoise == kmodeSingle) {
-//			} else {}
-			// 수정구를 없애면 sphereTake로 아니면 그냥 sphere로
-			// 0은 user가 아이템을 획득 0이 아니면 최초 맵에 수정구 설치
+		if(!isAi) {
 			if (GameData.share().isMultiGame) {
 				try {
 					if (sphereType == 0) {
@@ -793,8 +814,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			// sphereType = sphereType == 0 ? 7 : sphereType; // tilemap의 7번째 타일(0:7~3:7)에 빈 수정구가 있어서
 
 			// 기존 코드
-//			int gid = CCFormatter.swapIntToLittleEndian(this.tmxItemLayer
-//					.tileGIDAt(CGPoint.make(counter, sphereType)));
+//			int gid = CCFormatter.swapIntToLittleEndian(this.tmxItemLayer.tileGIDAt(CGPoint.make(counter, sphereType)));
 //			// layer.setTileGID(gid, cell.getTileCoord());
 //			tmx.setTileGID(gid, cell.getTileCoord());
 //			// test code // 수정구 볼수 잇게 해줌
@@ -803,13 +823,15 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			
 			// 새로운 코드
 			CCTMXLayer itemLayer = null;
-			if(isAi == true) // ai일시 자신의 맵을 미니맵에 표현한듯.
-				itemLayer = new GameMinimap(mHud).itemLayer;
+			if(isAi) // ai일시 자신의 맵을 미니맵에 표현한듯.
+				itemLayer = mHud.mGameMinimap.itemLayer;
+//				itemLayer = new GameMinimap(mHud).itemLayer;
 			else
 				itemLayer = tmxItemLayer;
-			
-			int gid = itemLayer.tileGIDAt(CGPoint.make(counter, sphereType));
-			tmx.setTileGID(gid, cell.getTileCoord());
+			// 아이폰과 다른점 : gid를 얻을시 반드시 CCFormatter.swapIntToLittleEndian(gid)에 gid를 넣을것 
+			int gid = CCFormatter.swapIntToLittleEndian(itemLayer.tileGIDAt(CGPoint.make(counter, sphereType)));
+//			tmx.setTileGID(gid, cell.getTileCoord());
+			tmxFg.setTileGID(gid, cell.getTileCoord()); // 임시용 차후 문제시 정식으로 고칠것
 			counter++;
 		}
 
@@ -1708,8 +1730,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	// metaLayer (작업 불가능 영역)
 	public boolean isMetaChecked(CGPoint tileCoord, String metaString) {
 		// tile이 있는 곳은 0이 아닌 값을 가진다.
-		int gid = CCFormatter.swapIntToLittleEndian(this.tmxMeta
-				.tileGIDAt(tileCoord));
+		int gid = CCFormatter.swapIntToLittleEndian(tmxMeta.tileGIDAt(tileCoord));
 		// tile이 깔린곳
 		if (gid > 0) {
 			// tileMap의 GID를 key로 넣어 HashMap으로 변환하여 Properties로 저장한다.

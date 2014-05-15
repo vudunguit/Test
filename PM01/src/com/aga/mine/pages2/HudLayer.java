@@ -474,20 +474,20 @@ public class HudLayer extends CCLayer {
 			case Game.kButtonFire:
 				// Log.e("button pressed", "kButtonFire");
 				effectName = "불마법";
-				//StartAniFireAttack();
-				StartAniFireDefense(); //test
+				StartAniFireAttack();
+//				StartAniFireDefense(); //test
 				break;
 			case Game.kButtonWind:
 				// Log.e("button pressed", "kButtonWind");
 				effectName = "바람마법";
-				//StartAniWindAttack();
-				StartAniWindDefense(); //test
+				StartAniWindAttack();
+//				StartAniWindDefense(); //test
 				break;
 			case Game.kButtonCloud:
 				// Log.e("button pressed", "kButtonCloud");
 				effectName = "구름마법";
-				//StartAniCloudAttack();
-				StartAniCloudDefense(); //test
+				StartAniCloudAttack();
+//				StartAniCloudDefense(); //test
 				break;
 			case Game.kButtonDivine:
 				// Log.e("button pressed", "kButtonDivine");
