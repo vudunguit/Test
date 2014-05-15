@@ -247,6 +247,7 @@ public class MainActivity extends Activity {
         CCDirector.sharedDirector().setDisplayFPS(true);
         CCDirector.sharedDirector().setAnimationInterval(1.0f / 60);
 
+		SoundEngine.sharedEngine().preloadSound(this, R.raw.bgm); // 배경음악
 		SoundEngine.sharedEngine().preloadEffect(this, R.raw.click); // 클릭음
 		SoundEngine.sharedEngine().preloadEffect(this, R.raw.buy); // 구입음
 		
@@ -271,6 +272,9 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+		SoundEngine.sharedEngine().realesAllEffects();
+		SoundEngine.sharedEngine().realesAllSounds();
+		SoundEngine.purgeSharedEngine();
         try {
             // 종료시 무조건 패배 (게임중이 아닐시 연결만 끊을 것)
             NetworkController.getInstance().sendRequestGameOver(0);

@@ -19,9 +19,7 @@ import org.cocos2d.actions.interval.CCRotateBy;
 import org.cocos2d.actions.interval.CCRotateTo;
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
-import org.cocos2d.actions.interval.CCSpawn;
 import org.cocos2d.layers.CCLayer;
-import org.cocos2d.layers.CCScene;
 import org.cocos2d.layers.CCTMXTiledMap;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
@@ -36,17 +34,18 @@ import org.cocos2d.nodes.CCSpriteFrame;
 import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.opengl.CCTexture2D;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
+import android.R;
 import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
 
 import com.aga.mine.mains.Config;
-import com.aga.mine.mains.Home2;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.Utility;
 
@@ -577,6 +576,7 @@ public class HudLayer extends CCLayer {
 	int otherScore; 
 //	public void gameOver() {
 	public void gameOver(int myScore, int otherScore) {
+        SoundEngine.sharedEngine().purgeSharedEngine();
 		Log.e("HudLayer", "gameEnding - gogo");
 		Config.getInstance().setDisableButton(true);
 		this.myScore = myScore;

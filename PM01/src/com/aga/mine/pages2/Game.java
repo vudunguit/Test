@@ -176,10 +176,12 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 //		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.landopen_02); // 이펙트 (효과음) // (타일)pickup
 		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.game_pumpkin); // 이펙트 (효과음) // (호박)hit
 		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.game_mushroom); // 이펙트 (효과음) // (버섯)move
-
 		//
 		// 타일맵 로드
+		if (!GameData.share().isMultiGame)
+			GameData.share().setMap((byte) 0); // 인자값은 무의미
 		this.tileMap = CCTMXTiledMap.tiledMap(GameData.share().gameMap);
+		
 
 		//
 		// 맵 올리고 기본 크기 지정
@@ -502,7 +504,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			animation.addFrame(String.format("60game/%02d.png", i));
 		}
 		mOpenAction = CCAnimate.action(0.2f, animation, false);
-		SoundEngine.sharedEngine().preloadSound(mContext, R.raw.bgm); // 백그라운드 뮤직
+//		SoundEngine.sharedEngine().preloadSound(mContext, R.raw.bgm); // 백그라운드 뮤직
 		
 		//대지마법 애니메이션 초기화
 		mEarthBomb = CCAnimation.animation("EarthBomb");
@@ -519,6 +521,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		} else if (GameData.share().isGuestMode) {
 			gameStart();
 		}
+		SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
 	}
 
 	private void gameReady() {
@@ -1634,6 +1637,9 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 				(int) (9 / 255f)));
 	}
 
+	
+	// 소리 파일이 여기서 나면 안되고 MineCell클래스에 if (numberOfArroundMine > pumpkinMine)문 에서 결정 되야합니다.
+	
 	//
 	// MineCell Delegate
 	public void removeTile(CGPoint tileCoord, int depth) {
@@ -1732,8 +1738,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// tile이 깔린곳
 		if (gid > 0) {
 			// tileMap의 GID를 key로 넣어 HashMap으로 변환하여 Properties로 저장한다.
-			HashMap<String, String> Properties = this.tileMap
-					.propertiesForGID(gid);
+			HashMap<String, String> Properties = this.tileMap.propertiesForGID(gid);
 			// <--- 문제 지점은 아마 키값이 안들어 있어서 인것같다 확인 필요.
 			if (Properties != null && Properties.size() != 0) {
 				// tile을 만들때 tile에 이름을 넣었던 것과 같은 이름의 타일을 찾는다.
@@ -1988,6 +1993,34 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		mineNumber --;
 		return mineNumber;
 	}
+	
+//	private boolean _soundPlaying = false;
+//	private boolean _soundPaused = false;
+//	private boolean _resumeSound = false;
+//	
+//	public void bgMusicClicked(View button)
+//	{
+//	    // If we haven't started playing the sound - play it!
+//	    if (!_soundPlaying)
+//	    {
+//	        SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
+//	        _soundPlaying = true;
+//	    }
+//	    else
+//	    {
+//	        // We've loaded the sound, now it's just a case of pausing / resuming
+//	        if (!_soundPaused)
+//	        {
+//	            SoundEngine.sharedEngine().pauseSound();
+//	            _soundPaused = true;
+//	        }
+//	        else
+//	        {
+//	            SoundEngine.sharedEngine().resumeSound();
+//	            _soundPaused = false;
+//	        }
+//	    }
+//	}
 	
 	
 	public void startEarthBomb() {

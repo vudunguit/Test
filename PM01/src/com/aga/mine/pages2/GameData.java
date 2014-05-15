@@ -337,7 +337,19 @@ public class GameData {
 	}
 	
 	public void setMap(byte mapType) {
-		gameMap = mapFolder + "map00"+ mapType + ".tmx";
+		if (isMultiGame)
+			gameMap = mapFolder + "map00"+ mapType + ".tmx";
+		else {
+			int map = (int) ((Math.random() * 3) + 1);
+			gameMap = String.format(mapFolder + "map%03d.tmx", map);
+		}
 	}
+
+//	public String getMap() {
+//		if (isMultiGame)
+//			return gameMap;
+//		int map = (int) ((Math.random() * 3) + 1);
+//		return String.format(mapFolder + "map%03d.tmx", map);
+//	}
 }
 // end
