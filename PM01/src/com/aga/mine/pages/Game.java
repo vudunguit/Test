@@ -184,7 +184,12 @@ public class Game extends CCLayer implements MineCell2.MineCellDelegate{
 		
 		//
 		// 타일맵 로드
-		this.tileMap = CCTMXTiledMap.tiledMap(GameData.share().gameMap);
+			if (!GameData.share().isMultiGame)
+				GameData.share().setMap((byte) 0); // 인자값은 무의미
+			this.tileMap = CCTMXTiledMap.tiledMap(GameData.share().gameMap);
+
+
+
 		 
 		//
 		// 맵 올리고 기본 크기 지정

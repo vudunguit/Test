@@ -179,7 +179,10 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 
 		//
 		// 타일맵 로드
+		if (!GameData.share().isMultiGame)
+			GameData.share().setMap((byte) 0); // 인자값은 무의미
 		this.tileMap = CCTMXTiledMap.tiledMap(GameData.share().gameMap);
+		
 
 		//
 		// 맵 올리고 기본 크기 지정
@@ -1732,8 +1735,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// tile이 깔린곳
 		if (gid > 0) {
 			// tileMap의 GID를 key로 넣어 HashMap으로 변환하여 Properties로 저장한다.
-			HashMap<String, String> Properties = this.tileMap
-					.propertiesForGID(gid);
+			HashMap<String, String> Properties = this.tileMap.propertiesForGID(gid);
 			// <--- 문제 지점은 아마 키값이 안들어 있어서 인것같다 확인 필요.
 			if (Properties != null && Properties.size() != 0) {
 				// tile을 만들때 tile에 이름을 넣었던 것과 같은 이름의 타일을 찾는다.
