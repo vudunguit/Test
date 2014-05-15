@@ -324,6 +324,10 @@ public class MineCell extends CCLayer{
 			}
 		}
 		
+		
+		// 아래 if문에서 타일오픈 소리 또는 호박터지는 소리가 결정 되야 합니다.
+		// showAroundMine(); or touchMine()
+		
 		// 지뢰는 -1로 지정했음
 		int pumpkinMine = -1;
 		if (numberOfArroundMine > pumpkinMine) { // 주변의 지뢰 수량을 표시
