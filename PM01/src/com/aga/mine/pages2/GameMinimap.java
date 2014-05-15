@@ -74,6 +74,7 @@ public class GameMinimap extends CCLayer{
 //			Config.getInstance().setDisableButton(true);
 //		}
 			List<GameData.MessageData> playData = GameData.share().getplayData();
+			
 			for (GameData.MessageData data: playData) {
 				receivePlayData(data.type, data.value);
 			}

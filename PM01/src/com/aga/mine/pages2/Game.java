@@ -424,7 +424,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// 원래 순서는 수정구부터
 		//
 		// 수정구 설치 (전체 셀, foreground TileMap, Ai)
-		scatterSpheres(cells, tmxFg, false);
+		scatterSpheres(cells, tmxMineLayer, false);
 
 		//
 		// 지뢰 설치
@@ -760,15 +760,11 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 						sphereBaseCells.add(cell);
 					}
 					cell.setSphereType(sphereType);
-					cell.setToSphereCells(sphereType); // 수정구 필드에 심기
+//					cell.setToSphereCells(sphereType); // 수정구 필드에 심기
 					
-					
-					
-//					/************/
-//					int tileGID = cell.getCell_ID();
-//					this.getFg().removeTileAt(cells.get(tileGID).getTileCoord());
-//					/************/					
-					this.addSphereTo(tmx, sphereType, cell, isAi);
+					Log.e("Game", "수정구 생성(타입) : " + sphereType);
+					createSphere = true;
+					this.addSphereTo(tmx, sphereType, cell, isAi); // 획득전 수정구는 마인레이어에 심기
 					isBoolean = false;
 				}
 				// Log.e("Game", "scatterSpheres" + isBoolean);
@@ -776,6 +772,8 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		}
 	}
 
+	boolean createSphere = false;
+	
 	public int[] nsRange(int loc, int len) {
 		int[] range = { loc, len };
 		return range;
@@ -794,7 +792,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		if(!isAi) {
 			if (GameData.share().isMultiGame) {
 				try {
-					if (sphereType == 0) {
+					if (sphereType == kSphereTypeEmpty) {
 						NetworkController.getInstance().sendPlayDatasphereTake(baseCell.getCell_ID() + (sphereType * 10000));
 					} else {
 						NetworkController.getInstance().sendPlayDataSphere(baseCell.getCell_ID() + (sphereType * 10000));
@@ -808,33 +806,32 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		for (MineCell cell : baseCell.getSphereCells()) {
 			cell.setSphere(true);
 
-			if (sphereType == 0)
-				sphereType = 7;
-			// Log.e("Game / addSphereTo", "sphereType check1 : " + counter + "," + sphereType);
-			// sphereType = sphereType == 0 ? 7 : sphereType; // tilemap의 7번째 타일(0:7~3:7)에 빈 수정구가 있어서
+			if (sphereType == kSphereTypeEmpty)
+				sphereType = 7; // 빈 수정구값은 0이지만 TMX에 있는 이미지는 7번에 있기때문에 새로 대입
 
-			// 기존 코드
-//			int gid = CCFormatter.swapIntToLittleEndian(this.tmxItemLayer.tileGIDAt(CGPoint.make(counter, sphereType)));
-//			// layer.setTileGID(gid, cell.getTileCoord());
-//			tmx.setTileGID(gid, cell.getTileCoord());
-//			// test code // 수정구 볼수 잇게 해줌
-//			tmxFg.setTileGID(gid, cell.getTileCoord()); // 임시용 차후 문제시 정식으로 고칠것
-//			counter++;
-			
-			// 새로운 코드
 			CCTMXLayer itemLayer = null;
 			if(isAi) // ai일시 자신의 맵을 미니맵에 표현한듯.
 				itemLayer = mHud.mGameMinimap.itemLayer;
-//				itemLayer = new GameMinimap(mHud).itemLayer;
 			else
 				itemLayer = tmxItemLayer;
 			// 아이폰과 다른점 : gid를 얻을시 반드시 CCFormatter.swapIntToLittleEndian(gid)에 gid를 넣을것 
-			int gid = CCFormatter.swapIntToLittleEndian(itemLayer.tileGIDAt(CGPoint.make(counter, sphereType)));
-//			tmx.setTileGID(gid, cell.getTileCoord());
-			tmxFg.setTileGID(gid, cell.getTileCoord()); // 임시용 차후 문제시 정식으로 고칠것
+			int gid = CCFormatter.swapIntToLittleEndian(itemLayer.tileGIDAt(CGPoint.make(counter, sphereType))); // 아이템 레이어에서 가지고 오기
+			if (!createSphere)
+				tmx.removeTileAt(cell.getTileCoord());
+			tmx.setTileGID(gid, cell.getTileCoord());
+			if (createSphere) {
+				try {
+					this.getFg().removeTileAt(cell.getTileCoord());
+					cell.setOpened(true); // 수정구가 있는 좌표는 Fg오픈하기
+					removeCell();
+					NetworkController.getInstance().sendPlayDataCellOpen(cell.getCell_ID());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 			counter++;
 		}
-
+		createSphere = false;
 	}
 
 	boolean toggleFlag;
@@ -1206,7 +1203,8 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 
 					// Log.e("Game / handleDoubleTap", "check 1 / 아이템 타일 변경");
 					// 빈 수정구 타일로 바꾼다.
-					this.addSphereTo(tmxFg, kSphereTypeEmpty, cell, false);
+					Log.e("Game", "수정구 획득");
+					this.addSphereTo(tmxMineLayer, kSphereTypeEmpty, cell, false); // 빈 수정구는 백그라운드에 심기
 
 					// 수정구 획득수를 타입별로 하나 증가시킨다.
 					GameData.share().increaseItemByType(sphereType);
@@ -1974,6 +1972,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	
 	public void removeCell() {
 		unopenedTile--;
+		Log.e("Game", "타일 제거됨. : " + getClosedCell()); // 테스트용
 	}
 	
 	public int getMineNumber() {

@@ -26,7 +26,11 @@ public class GameData {
 //		playData.put(key, value);
 	}
 	
+	public boolean createdMinimap = false;
 	public List getplayData() {
+		if (!createdMinimap) {
+			createdMinimap = !createdMinimap;
+		}
 		return playData;
 	}
 	//

@@ -384,7 +384,7 @@ public class MineCell extends CCLayer{
 	}
 	
 	private void touchMine() {
-		//mGame.startEarthBomb();
+		mGame.startEarthBomb();
 		// 주변 지뢰수를 숫자로 표현했으며, 주변에 지뢰가 없는 땅은 0으로 표현
 		//Log.e("MineCell / open", "plusMine : " + plusMine);
 		
