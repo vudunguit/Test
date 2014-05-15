@@ -27,7 +27,7 @@ public class MineCell extends CCLayer{
 		boolean updateHeart();
 		void displayMineNumber(int a, CGPoint b, int c);
 		void removeTile(CGPoint tileCoord, int depth);
-		void gameOver();
+		//void gameOver();
 		
 		//public void removeTile(CGPoint tileCoord) {}
 		//public void displayMineNumber(int numberOfMine, CGPoint position, int tag) {}

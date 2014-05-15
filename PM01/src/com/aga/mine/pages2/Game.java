@@ -1256,6 +1256,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// 현재 찍힌 좌표 계산
 		CGPoint convertedLocation = CCDirector.sharedDirector().convertToGL(
 				CGPoint.make(event.getRawX(), event.getRawY()));
+		
 		double tempTime = System.currentTimeMillis();
 
 		boolean abc = locationMatchingTest(touchLocation, convertedLocation, 20); // default
@@ -1718,10 +1719,10 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		obj.removeFromParentAndCleanup(false);
 	}
 
-	@Override
-	public void gameOver() {
-		mHud.gameOver(1,1); // 점수 넣어야될 듯
-	}
+//	@Override
+//	public void gameOver() {
+//		mHud.gameOver(1,1); // 점수 넣어야될 듯
+//	}
 
 	// HudLayer inner class end
 
@@ -2031,6 +2032,11 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		sprite.removeFromParentAndCleanup(true);
 		
 		//9칸 타일 벗기기
+	}
+	
+	//gameOver 애니메이션 : map zoomout 후 폭탄 터지는 애니메이션
+	public void gameOverAnimation() {
+
 	}
 
 	abstract class TileOpenTask extends AsyncTask<Void, Void, Void> {

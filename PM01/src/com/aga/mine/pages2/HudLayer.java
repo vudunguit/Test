@@ -575,51 +575,31 @@ public class HudLayer extends CCLayer {
 	int myScore;
 	int otherScore; 
 //	public void gameOver() {
-	public void gameOver(int myScore, int otherScore) {
+	public void gameOver(int score, int other) {
         SoundEngine.sharedEngine().purgeSharedEngine();
 		Log.e("HudLayer", "gameEnding - gogo");
 		Config.getInstance().setDisableButton(true);
-		this.myScore = myScore;
-		this.otherScore = otherScore; 
+		myScore = score;
+		otherScore = other; 
 		Log.e("HudLayer", "myScore : " + myScore + ", otherScore : " + otherScore);
+		
 		// 애니메이션 이펙트 endingZoomOutAndBlastFX
+		mGame.gameOverAnimation(); //2초동안 실행
 		
-		//To do : 대전게임에서 승리시 isVictory()로 승리 애니메이션 아니면 그냥 팝업
-		boolean isVictory = true;
-		if(isVictory) {
-			startVictory();
-		} else {
-			popupEnding();
-		}
-		
-		
-//		if (GameData.share().isMultiGame) {
-//			
-//			// 게임 종료 메시지를 서버로 무한 보내는것을 방지함.
-//			if (!isGameOver) {
-//				try {
-//					isGameOver = !isGameOver;
-//					NetworkController.getInstance().sendRequestGameOver(123456);
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			} else {
-//				mGameEnding = new GameEnding(myPoint, otherPoint, mGame.getClosedCell());
-//				addChild(mGameEnding, GameConfig.share().kDepthPopup, 1234);
-//				mGameEnding.setIsTouchEnabled(true);
-////				GameData.share().isMultiGame = true;
-//				// GameEnding ending = GameEnding.share(this.mContext);
-//				// this.addChild(ending, GameConfig.share().kDepthPopup);
-//			}
-//			
-//		} else if (GameData.share().isGuestMode) {
-//			CCScene scene = Home2.scene();
-//			CCDirector.sharedDirector().replaceScene(scene);
-//		} else { // single
-//			mGameEnding = new GameEnding(myPoint, otherPoint, mGame.getClosedCell());
-//			addChild(mGameEnding, GameConfig.share().kDepthPopup, 1234);
-//			mGameEnding.setIsTouchEnabled(true);
-//		}
+		schedule(new UpdateCallback() {
+			@Override
+			public void update(float d) {
+				unschedule(this);
+				
+				//To do : 대전게임에서 승리시 isVictory()로 승리 애니메이션 아니면 그냥 팝업
+				boolean isVictory = true;
+				if(isVictory) {
+					startVictory();
+				} else {
+					popupEnding();
+				}
+			}
+		}, 2.0f);  //2초후에 엔딩 팝업 
 	}
 	
 	private void popupEnding() {
