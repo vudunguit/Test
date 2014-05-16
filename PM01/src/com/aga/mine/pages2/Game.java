@@ -77,6 +77,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	final int kSphereTypeDivine = 4;
 	final int kSphereTypeEarth = 5;
 	final int kSphereTypeMirror = 6;
+	final int kSphereTypeGetMagic = 7; // 임시로 해놨습니다.
 	// ----------------------- Game.m --------------------------//
 	private CCTMXTiledMap tileMap;
 	CCTMXLayer tmxBg;
@@ -690,7 +691,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		for (int i = 0; i < numberOfSphere; i++) {
 			int location = 0;
 			int randomPick = (int) (Math.random() * 100);
-			int sphereType = 0;
+			int sphereType = kSphereTypeEmpty;
 			
 			if (!GameData.share().isMultiGame) {
 				final int earthChance = GameData.share().kSingleEarthChance;
@@ -705,7 +706,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 					sphereType = kSphereTypeEarth;
 				}
 				else if (nsLocationInRange(randomPick, emptyRange)) {
-					sphereType = 0;
+					sphereType = kSphereTypeEmpty;
 				}
 				
 			} else {
@@ -800,10 +801,19 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	public void addSphereTo(CCTMXLayer tmx, int sphereType, MineCell baseCell, boolean isAi) {
 		int counter = 0;
 		
+//		// 수정구 획득 애니 (일단 여기에 넣습니다. 나중에 리팩토링에 의해 정리해야됨.)
+		if (!createSphere) { // 수정구 생성하는게 아님.(수정구 획득)
+			CGPoint position = baseCell.getTilePosition();
+			startOpenBottle(baseCell.getTilePosition());
+		}
+		
+		if (sphereType == kSphereTypeEmpty)
+			sphereType = kSphereTypeGetMagic; // 빈 수정구값은 0이지만 TMX에 있는 이미지는 7번에 있기때문에 새로 대입
+		
 		if(!isAi) {
 			if (GameData.share().isMultiGame) {
 				try {
-					if (sphereType == kSphereTypeEmpty) {
+					if (sphereType == kSphereTypeGetMagic) {
 						NetworkController.getInstance().sendPlayDatasphereTake(baseCell.getCell_ID() + (sphereType * 10000));
 					} else {
 						NetworkController.getInstance().sendPlayDataSphere(baseCell.getCell_ID() + (sphereType * 10000));
@@ -813,12 +823,12 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 				}
 			}
 		}
-
+		
 		for (MineCell cell : baseCell.getSphereCells()) {
 			cell.setSphere(true);
 
-			if (sphereType == kSphereTypeEmpty)
-				sphereType = 7; // 빈 수정구값은 0이지만 TMX에 있는 이미지는 7번에 있기때문에 새로 대입
+//			if (sphereType == kSphereTypeEmpty)
+//				sphereType = 7; // 빈 수정구값은 0이지만 TMX에 있는 이미지는 7번에 있기때문에 새로 대입
 
 			CCTMXLayer itemLayer = null;
 			if(isAi) // ai일시 자신의 맵을 미니맵에 표현한듯.
@@ -1215,7 +1225,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 					// Log.e("Game / handleDoubleTap", "check 1 / 아이템 타일 변경");
 					// 빈 수정구 타일로 바꾼다.
 					Log.e("Game", "수정구 획득");
-					this.addSphereTo(tmxMineLayer, kSphereTypeEmpty, cell, false); // 빈 수정구는 백그라운드에 심기
+					this.addSphereTo(tmxMineLayer, kSphereTypeGetMagic, cell, false); // 빈 수정구는 백그라운드에 심기
 
 					// 수정구 획득수를 타입별로 하나 증가시킨다.
 					GameData.share().increaseItemByType(sphereType);
@@ -2006,12 +2016,16 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	//정령석 유리병 여는 애니메이션
 	public void startOpenBottle(CGPoint pos) {
 		CCSprite bottle = CCSprite.sprite("61hud/spirit_01.png");
+		
+		pos = CGPoint.ccp(pos.x + tileSize.width/2, pos.y - tileSize.height/2);
+		
 		bottle.setPosition(pos);
 		addChild(bottle);
 		
 		CCAnimate action = CCAnimate.action(1.0f, mBottle, false);
-		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveMove");
-		bottle.runAction(CCSequence.actions(action, remove));
+//		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveMove"); // 익셉션 발생에 따른 막아둠.
+//		bottle.runAction(CCSequence.actions(action, remove));
+		bottle.runAction(CCSequence.actions(action));
 	}
 	
 	
