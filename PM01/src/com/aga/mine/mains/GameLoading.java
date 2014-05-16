@@ -54,8 +54,8 @@ public class GameLoading extends CCLayer {
 		bg.setPosition(center());
 		this.addChild(bg);
 		
-		// 타이틀명
-		FrameTitle4.setTitle(bg, folder);
+//		// 타이틀명
+//		FrameTitle4.setTitle(bg, folder);
 	}
 	
 	private void setMainMenu() {
