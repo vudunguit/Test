@@ -164,13 +164,19 @@ public class HudLayer extends CCLayer {
 		statusBase.addChild(statusMine);
 		this.updateHeart(); // 생명 표시 초기화
 
+		String MinimapImageNormal = "game-buttonMinimap-normal-hd.png";
+		String MinimapImageSelect = "game-buttonMinimap-select-hd.png";
+		if (!GameData.share().isMultiGame) {
+			MinimapImageNormal = "pause1.png";
+			MinimapImageSelect = "pause2.png";
+		}
 		//
 		// 우상단 미니맵 버튼
-		CCMenuItem item = CCMenuItemImage.item(hudLayerFolder
-				+ "game-buttonMinimap-normal-hd.png", hudLayerFolder
-				+ "game-buttonMinimap-select-hd.png", this, "clicked");
-
+		CCMenuItem item = CCMenuItemImage.item(
+				hudLayerFolder + MinimapImageNormal, 
+				hudLayerFolder + MinimapImageSelect, this, "clicked");
 		item.setTag(Game.kButtonMinimap);
+		
 		CCMenu minimap = CCMenu.menu(item);
 		minimap.setPosition(
 				winSize.width - item.getContentSize().width / 2,
@@ -465,13 +471,17 @@ public class HudLayer extends CCLayer {
 			switch (tag) {
 			case Game.kButtonMinimap:
 				// Log.e("button pressed", "kButtonMinimap");
-				String a = GameConfig.share().isMinimapPanelOn() ? "true"
-						: "false";
-				Config.getInstance().setDisableButton(true);
-				// this.addChild(GameMinimap.getInstance().tileon(),
-				// GameConfig.share().kDepthPopup);
-				mGameMinimap.setVisible(true);
-				// Log.e("minimap flag is", a);
+				if (GameData.share().isMultiGame) {
+					String a = GameConfig.share().isMinimapPanelOn() ? "true" : "false";
+					Config.getInstance().setDisableButton(true);
+					
+					// this.addChild(GameMinimap.getInstance().tileon(),
+					// GameConfig.share().kDepthPopup);
+					mGameMinimap.setVisible(true);
+					// Log.e("minimap flag is", a);
+				} else {
+					pausePopup();
+				}
 				break;
 			case Game.kButtonFire:
 				// Log.e("button pressed", "kButtonFire");
@@ -554,6 +564,13 @@ public class HudLayer extends CCLayer {
 
 			}
 		}
+	}
+
+	private void pausePopup() {
+		Config.getInstance().setDisableButton(true);
+		CCSprite panel = CCSprite.sprite("00common/popup-bg.png");
+		panel.setPosition(this.getContentSize().width/2, this.getContentSize().height/2);
+		this.addChild(panel);
 	}
 
 	/*****************************************************/
