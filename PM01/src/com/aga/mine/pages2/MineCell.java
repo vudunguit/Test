@@ -27,7 +27,7 @@ public class MineCell extends CCLayer{
 		boolean updateHeart();
 		void displayMineNumber(int a, CGPoint b, int c);
 		void removeTile(CGPoint tileCoord, int depth);
-		//void gameOver();
+		void gameOver();
 		
 		//public void removeTile(CGPoint tileCoord) {}
 		//public void displayMineNumber(int numberOfMine, CGPoint position, int tag) {}
@@ -172,7 +172,8 @@ public class MineCell extends CCLayer{
 
 		int count = 0;
 		for (MineCell cell : getRoundCells()) {
-			if (cell.isSphere())
+//			if (cell.isSphere())
+			if (cell.isSphere() || cell.isOpened() || cell.isMine())
 				count++;
 		}
 		return count;
@@ -292,29 +293,17 @@ public class MineCell extends CCLayer{
 	}
 	
 	public int open(int depth) {
-		// 셀주변의 지뢰 갯수를 구한다.
-		//int numberOfMine = this.numberOfArroundMine;
-		// numberOfMine : 타일에 적히는 숫자
-		//Log.e("MineCell / open", "numberOfMine: " + numberOfMine);
-		/*
-		//지뢰면
-		if (numberOfMine == -1) {
-			Log.e("MineCell / open", "지뢰 밟음 ㅠㅠ 생명력 감소");
-		}
-		*/
-		//
 		// 이미 오픈되었거나 깃발꽂은 셀이면 그냥 빠져 나온다.
 		if(isOpened() || isMarked())
 			return numberOfArroundMine;
 		
 		// 오픈으로 데이터 설정
 		this.setOpened(true);
-		GameData.share().addOpenedCell();
-		
-		//
-		// TMX에서 현재 타일 제거 및 총 열리지 않은 총 타일수량 1개 감소
+		// TMX에서 현재 타일 제거
 		this.delegate.removeTile(this.tileCoord, depth);
-		mGame.removeCell();
+				
+		GameData.share().addOpenedCell(); // 오픈된 셀 수량 누적
+		mGame.removeCell(); // 남은 총 cell 수량 감소
 		
 		if (GameData.share().isMultiGame) {
 			try {
@@ -323,7 +312,6 @@ public class MineCell extends CCLayer{
 				e1.printStackTrace();
 			}
 		}
-		
 		
 		// 아래 if문에서 타일오픈 소리 또는 호박터지는 소리가 결정 되야 합니다.
 		// showAroundMine(); or touchMine()
@@ -355,19 +343,16 @@ public class MineCell extends CCLayer{
 				gameOver(1000);
 			}
 		}
-//		if (numberOfArroundMine > 0) { // 주변의 지뢰 수량을 표시
-//			showAroundMine();
-//		} else if (numberOfArroundMine == pumpkinMine) { // 지뢰 밟음
-//			touchMine();
-//		}
 		
 		//Log.e("MineCell / open", "쭉~~~~~~~~~~~~~~~~~~");
 		//
 		// 현재셀 주변에 지뢰나 수정구가 없다면 , 주변 셀을 모두 연다.
 		// 지뢰가 없는 곳만 열기 또는 지뢰와 아이템이 없는 곳만 열기
 		int numberOfSphere = this.getNumberOfSphereAround();
+		Log.e("MineCell", "open _ getNumberOfSphereAround : " + numberOfSphere);
 		// 지뢰 없는 곳만 열어주기
-		if(numberOfArroundMine  + numberOfSphere == 0){
+		if(numberOfArroundMine  == 0){
+//		if(numberOfArroundMine  + numberOfSphere == 0){
 		// 지뢰 없는 곳과 수정구까지 열어주기
 		//if (numberOfMine == 0) {
 			for (final MineCell cell : getRoundCells()) {

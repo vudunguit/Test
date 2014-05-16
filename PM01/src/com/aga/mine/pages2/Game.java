@@ -77,7 +77,6 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	final int kSphereTypeDivine = 4;
 	final int kSphereTypeEarth = 5;
 	final int kSphereTypeMirror = 6;
-	final int kSphereTypeGetMagic = 7; // 임시로 해놨습니다.
 	// ----------------------- Game.m --------------------------//
 	private CCTMXTiledMap tileMap;
 	CCTMXLayer tmxBg;
@@ -174,10 +173,8 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		for (int i = 0; i < 8; i++) {
 			SoundEngine.sharedEngine().preloadEffect(mContext, effect + i); // 이펙트 (효과음) // (타일)pickup	
 		}
-		
-//		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.landopen_02); // 이펙트 (효과음) // (타일)pickup
-		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.game_pumpkin); // 이펙트 (효과음) // (호박)hit
-		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.game_mushroom); // 이펙트 (효과음) // (버섯)move
+		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.pumpkin); // 이펙트 (효과음) // (호박)hit
+		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.mushroom); // 이펙트 (효과음) // (버섯)move
 		//
 		// 타일맵 로드
 		if (!GameData.share().isMultiGame)
@@ -401,9 +398,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 					// 비활성 셀 - 은 등록하지 않는다. (null이 나올수 없다.)
 					if (sphereCellRound.isCollidable())
 						continue;
-					cellsTemp.get(i).addSphereRoundCell(sphereCellRound); // 여기는
-																			// 이상
-																			// 없는듯
+					cellsTemp.get(i).addSphereRoundCell(sphereCellRound);
 				}
 			}
 
@@ -506,7 +501,6 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			animation.addFrame(String.format("60game/%02d.png", i));
 		}
 		mOpenAction = CCAnimate.action(0.2f, animation, false);
-//		SoundEngine.sharedEngine().preloadSound(mContext, R.raw.bgm); // 백그라운드 뮤직
 		
 		//대지마법 애니메이션 초기화
 		mEarthBomb = CCAnimation.animation("EarthBomb");
@@ -1075,11 +1069,20 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	public void handleLongPress(MotionEvent event) {
 		CGPoint coord = setCoord(event);
 		for (MineCell mineCell : cells) {
+			/***************테스트 코드**********************/
+			Log.e("Game_LongPress", "mineCell.isCollidable() : " + mineCell.isCollidable());
+			Log.e("Game_LongPress", "mineCell.isMarked() : " + mineCell.isMarked());
+			Log.e("Game_LongPress", "mineCell.isMine() : " + mineCell.isMine());
+			Log.e("Game_LongPress", "mineCell.isOpened() : " + mineCell.isOpened());
+			Log.e("Game_LongPress", "mineCell.isSphere() : " + mineCell.isSphere());
+			Log.e("Game_LongPress", "mineCell.isSphereBasePossible() : " + mineCell.isSphereBasePossible());
+			Log.e("Game_LongPress", "mineCell.isSphereCellsClear() : " + mineCell.isSphereCellsClear());
+			/*************************************/
 			
 			// 오픈안된 셀에 버섯(깃발)꽂기
 			if (!mineCell.isOpened() && !mineCell.isCollidable() && CGPoint.equalToPoint(mineCell.getTileCoord(), coord)) {
 				// effect sound play
-				SoundEngine.sharedEngine().playEffect(mContext, R.raw.game_mushroom);
+				SoundEngine.sharedEngine().playEffect(mContext, R.raw.mushroom);
 				int isMine = -1;
 				
 				// 꽂아져있는 버섯(깃발)을 취소할때 버섯(깃발)을 없애줌
@@ -1250,6 +1253,31 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 
 	@Override
 	public boolean ccTouchesBegan(MotionEvent event) {
+		
+		/************* 테스트 코드 ******************/
+
+
+			CGPoint location = null;
+			CGPoint coord = null;
+
+			// GL 좌표
+			location = CGPoint.ccp(event.getRawX(), event.getRawY());
+			// cocos2d 좌표로 변환
+			location = CCDirector.sharedDirector().convertToGL(location);
+			// layer 좌측 하단으로 부터 좌표까지의 거리
+			location = this.convertToNodeSpace(location);
+			// 타일의 어느 좌표인지 확인하여 값 불러오기
+			coord = this.tileCoordForPosition(location);
+			int gid = CCFormatter.swapIntToLittleEndian(tmxMeta.tileGIDAt(coord));
+			
+			
+			ArrayList<MineCell> ad = cells;
+			for (MineCell mineCell : ad) {
+				mineCell.getTilePosition();
+//				mineCell.getTileCoord()
+			}
+		/*******************************/
+			
 		// device 좌표를 읽어온다. (openGL x)
 		currentTouchLocation = CCDirector.sharedDirector().convertToGL(
 				CGPoint.make(event.getRawX(), event.getRawY()));
@@ -1258,10 +1286,6 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// event.getRawY()));
 
 		isLongTap = true;
-
-		// // effect sound load
-		// SoundEngine.sharedEngine().preloadSound(mContext, R.raw.ding);
-		// // 무슨 사운드이지??
 
 		// 현재 찍힌 좌표 계산
 		CGPoint convertedLocation = CCDirector.sharedDirector().convertToGL(
@@ -1670,24 +1694,20 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		Log.d("LDK", "depth:" + depth + " , mCount:" + mCount);
 		// Global ID // Globally unique IDentifier
 		int tileGid = this.tmxMeta.tileGIDAt(tileCoord);
-		tileGid = CCFormatter.swapIntToLittleEndian(tileGid); // 뭔지 아직 모르겠음.
+		tileGid = CCFormatter.swapIntToLittleEndian(tileGid);
 		// 0 : 일시 타일값 없음
-
+		
 		if (tileGid > 0) {
-			HashMap<String, String> properties = this.tileMap
-					.propertiesForGID(tileGid);
+			HashMap<String, String> properties = this.tileMap.propertiesForGID(tileGid);
 
 			// Log.e("Game / removeTile", "properties:" + properties);
 			if (properties != null && properties.size() != 0) {
 				String collisionValue = properties.get("Collidable");
 
 				if (collisionValue != null && collisionValue.equals("true")) {
-					SoundEngine.sharedEngine().playEffect(mContext, R.raw.game_pumpkin); // hit
+					SoundEngine.sharedEngine().playEffect(mContext, R.raw.pumpkin); // hit
 				} else {
-					SoundEngine.sharedEngine().playEffect(mContext, R.raw.game_open2); // pickup
-					// Log.e("Game / removeTile", "getFg : " + getFg());
-					// Log.e("Game / removeTile", "tileCoord : " + tileCoord);
-					// 자주 문제 발생 stack over flow Error (thread 오버)
+					SoundEngine.sharedEngine().playEffect(mContext, R.raw.game_open2); // pickup // 뭐에 쓰는 거지?
 					this.getFg().removeTileAt(tileCoord);
 				}
 
@@ -2013,6 +2033,34 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		return mineNumber;
 	}
 	
+//	private boolean _soundPlaying = false;
+//	private boolean _soundPaused = false;
+//	private boolean _resumeSound = false;
+//	
+//	public void bgMusicClicked(View button)
+//	{
+//	    // If we haven't started playing the sound - play it!
+//	    if (!_soundPlaying)
+//	    {
+//	        SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
+//	        _soundPlaying = true;
+//	    }
+//	    else
+//	    {
+//	        // We've loaded the sound, now it's just a case of pausing / resuming
+//	        if (!_soundPaused)
+//	        {
+//	            SoundEngine.sharedEngine().pauseSound();
+//	            _soundPaused = true;
+//	        }
+//	        else
+//	        {
+//	            SoundEngine.sharedEngine().resumeSound();
+//	            _soundPaused = false;
+//	        }
+//	    }
+//	}
+	
 	//정령석 유리병 여는 애니메이션
 	public void startOpenBottle(CGPoint pos) {
 		CCSprite bottle = CCSprite.sprite("61hud/spirit_01.png");
@@ -2064,6 +2112,9 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		public abstract void run();
 		
 	}
+
+
+
 
 }
 // Game class end
