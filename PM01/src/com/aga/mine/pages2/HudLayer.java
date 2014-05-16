@@ -1114,10 +1114,44 @@ public class HudLayer extends CCLayer {
 	//CGPoint pos: HudLayer에서의 현재 좌표.  Game 레이어에서 HudLayer의 좌표로 변환해서 넘겨줘야함.
 	//CGPoint pos2 : 이동해야 할 좌표
 	//int kind : 정령석 종류
-	public void startOpenBottle(CCSprite spirit, CGPoint pos, CGPoint pos2, int kind) {
+	public void startMoveSpirit(int kind, CGPoint pos) {
+		CCSprite spirit = null;
+		CCNode item = null;
+		
+		switch(kind) {
+		case Game.kButtonFire:
+			spirit = CCSprite.sprite("61hud/game-itemFireOn-hd.png");
+			item = itemMenu.getChildByTag(Game.kButtonFire);
+			break;
+		case Game.kButtonWind:
+			spirit = CCSprite.sprite("61hud/game-itemWindOn-hd.png");
+			item = itemMenu.getChildByTag(Game.kButtonWind);
+			break;
+		case Game.kButtonCloud:
+			spirit = CCSprite.sprite("61hud/game-itemCloudOn-hd.png");
+			item = itemMenu.getChildByTag(Game.kButtonCloud);
+			break;
+		case Game.kButtonDivine:
+			spirit = CCSprite.sprite("61hud/game-itemDivineOn-hd.png");
+			item = itemMenu.getChildByTag(Game.kButtonDivine);
+			break;
+		case Game.kButtonEarth:
+			spirit = CCSprite.sprite("61hud/game-itemEarthOn-hd.png");
+			item = itemMenu.getChildByTag(Game.kButtonEarth);
+			break;
+		case Game.kButtonMirror:
+			spirit = CCSprite.sprite("61hud/game-itemMirrorOn-hd.png");
+			item = itemMenu.getChildByTag(Game.kButtonMirror);
+			break;
+		}
+		
+		CGPoint posTemp = item.convertToWorldSpace(item.getPosition().x, item.getPosition().y);
+		CGPoint pos2 = CGPoint.ccp(posTemp.x, posTemp.y +item.getContentSize().height/2);
+
 		//정령석 애니메이션, 점점 커지면서 위로 잠깐 솟았다가 아래 아이콘 영역으로 이동
 		spirit.setPosition(pos);
 		spirit.setScale(0);
+		addChild(spirit, 100);
 		
 		CCScaleTo scale = CCScaleTo.action(1.5f, 1.0f);
 		spirit.runAction(scale);
