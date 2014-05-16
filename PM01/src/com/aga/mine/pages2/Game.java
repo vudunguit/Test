@@ -77,6 +77,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	final int kSphereTypeDivine = 4;
 	final int kSphereTypeEarth = 5;
 	final int kSphereTypeMirror = 6;
+	final int kSphereTypeGetMagic = 7;
 	// ----------------------- Game.m --------------------------//
 	private CCTMXTiledMap tileMap;
 	CCTMXLayer tmxBg;
@@ -1749,10 +1750,10 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		obj.removeFromParentAndCleanup(false);
 	}
 
-//	@Override
-//	public void gameOver() {
-//		mHud.gameOver(1,1); // 점수 넣어야될 듯
-//	}
+	@Override
+	public void gameOver() {
+		mHud.gameOver(1,1); // 점수 넣어야될 듯
+	}
 
 	// HudLayer inner class end
 
