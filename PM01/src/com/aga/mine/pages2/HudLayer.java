@@ -57,7 +57,7 @@ public class HudLayer extends CCLayer {
 	CGSize winSize;
 
 	CCLabel label;
-	public CCLabel testText;
+	public CCLabel testText;  // 출시때는 레이블과 들어오는 데이터 모두 지울 것
 	// CCLabel debugLabel;
 	// CCLabel debugLabelLine2;
 	static CCLabel statusMine;
@@ -135,7 +135,7 @@ public class HudLayer extends CCLayer {
 				(testTextSize * tilePixelSize) / 128);
 		testText.setColor(ccColor3B.ccWHITE);
 		testText.setPosition(winSize.width / 2, winSize.height / 2);
-		this.addChild(testText);
+//		this.addChild(testText); //
 		//
 		// 상단 중앙 게임진행시간 및 진행 막대기
 		mGameProgressBar = new GameProgressBar();

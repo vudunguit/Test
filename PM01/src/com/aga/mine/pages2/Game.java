@@ -1750,11 +1750,6 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		obj.removeFromParentAndCleanup(false);
 	}
 
-	@Override
-	public void gameOver() {
-		mHud.gameOver(1,1); // 점수 넣어야될 듯
-	}
-
 	// HudLayer inner class end
 
 	public CGPoint tileCoordForPosition(CGPoint position) {

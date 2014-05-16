@@ -244,7 +244,7 @@ public class MainActivity extends Activity {
         director.setDeviceOrientation(CCDirector.kCCDeviceOrientationPortrait);
 
         setDisplayMetrics();
-        CCDirector.sharedDirector().setDisplayFPS(true);
+        CCDirector.sharedDirector().setDisplayFPS(false); // FPS 표시
         CCDirector.sharedDirector().setAnimationInterval(1.0f / 60);
 
 		SoundEngine.sharedEngine().preloadSound(this, R.raw.bgm); // 배경음악

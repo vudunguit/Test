@@ -32,7 +32,7 @@ public class Logo extends CCLayer {
 	
 	private void versionCheck(CCSprite parentSprite) {
 		CCLabel ccVersion = CCLabel.makeLabel("version  " + version, "Arial", 20);
-		parentSprite.addChild(ccVersion);
+//		parentSprite.addChild(ccVersion);
 		ccVersion.setPosition(parentSprite.getContentSize().width - 80, 70);
 		
 		String webVersion = DataFilter.getGameVersionData();
