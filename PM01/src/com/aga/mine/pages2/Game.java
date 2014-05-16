@@ -525,7 +525,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		} else if (GameData.share().isGuestMode) {
 			gameStart();
 		}
-		SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
+		//SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
 	}
 
 	private void gameReady() {
@@ -795,12 +795,6 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	// 인자 isAi 추가
 	public void addSphereTo(CCTMXLayer tmx, int sphereType, MineCell baseCell, boolean isAi) {
 		int counter = 0;
-		
-//		// 수정구 획득 애니 (일단 여기에 넣습니다. 나중에 리팩토링에 의해 정리해야됨.)
-		if (!createSphere) { // 수정구 생성하는게 아님.(수정구 획득)
-			CGPoint position = baseCell.getTilePosition();
-			startOpenBottle(baseCell.getTilePosition());
-		}
 		
 		if (sphereType == kSphereTypeEmpty)
 			sphereType = kSphereTypeGetMagic; // 빈 수정구값은 0이지만 TMX에 있는 이미지는 7번에 있기때문에 새로 대입
@@ -1168,9 +1162,10 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			// GL 좌표
 			location = CGPoint.ccp(event.getRawX(), event.getRawY());
 			// cocos2d 좌표로 변환
-			location = CCDirector.sharedDirector().convertToGL(location);
+			CGPoint glLocation = CCDirector.sharedDirector().convertToGL(location);
+			
 			// layer 좌측 하단으로 부터 좌표까지의 거리
-			location = this.convertToNodeSpace(location);
+			location = this.convertToNodeSpace(glLocation);
 			// 타일의 어느 좌표인지 확인하여 값 불러오기
 			coord = this.tileCoordForPosition(location);
 
@@ -1214,7 +1209,6 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			// 모두 열린 수정구가 있는지 확인한다.
 			float startDelay = 0;
 			for (MineCell cell : sphereBaseCells) {
-
 				//
 				// -1 : none
 				// 0 : empty
@@ -1231,16 +1225,13 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 					Log.e("Game", "수정구 획득");
 					this.addSphereTo(tmxMineLayer, kSphereTypeGetMagic, cell, false); // 빈 수정구는 백그라운드에 심기
 
-					// 수정구 획득수를 타입별로 하나 증가시킨다.
-					GameData.share().increaseItemByType(sphereType);
-
-					// UI 업데이트를 한다.
-					// 수정구를 클릭해서 활성화시키면 +1 씩 라벨에 넣어준다.
-					mHud.updateSphereItemNumber();
-
-					// 버튼에 클릭효과를 넣는다.
-					mHud.clickEffect(sphereType, startDelay);
-					startDelay += 0.2f;
+					//유리병 터지는 애니메이션
+					if (!createSphere) { // 수정구 생성하는게 아님.(수정구 획득)
+						startOpenBottle(cell.getTilePosition());
+					}
+					
+					//정령석 아래 HUD로 이동하는 애니메이션
+					mHud.startMoveSpirit(sphereType, glLocation);
 				}
 			}
 			// end 모두 열린 수정구가 있는지 확인한다.
@@ -2067,9 +2058,14 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		addChild(bottle);
 		
 		CCAnimate action = CCAnimate.action(1.0f, mBottle, false);
-//		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveMove"); // 익셉션 발생에 따른 막아둠.
-//		bottle.runAction(CCSequence.actions(action, remove));
+		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite"); // 익셉션 발생에 따른 막아둠.
+		bottle.runAction(CCSequence.actions(action, remove));
 		bottle.runAction(CCSequence.actions(action));
+	}
+	
+	public void cbRemoveSprite(Object sender) {
+		CCSprite sprite = (CCSprite)sender;
+		sprite.removeFromParentAndCleanup(true);
 	}
 	
 	

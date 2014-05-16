@@ -65,6 +65,7 @@ public class HudLayer extends CCLayer {
 	CCSprite magician;
 
 	CCMenu itemMenu;
+	CCSprite itemBase;
 	CCSequence magicianAction;
 
 	Context mContext;
@@ -189,7 +190,7 @@ public class HudLayer extends CCLayer {
 
 		//
 		// 하단 수정구 아이템
-		CCSprite itemBase = CCSprite.sprite(hudLayerFolder
+		itemBase = CCSprite.sprite(hudLayerFolder
 				+ "game-itemBase-hd.png");
 		this.addChild(itemBase);
 		itemBase.setPosition(
@@ -1115,6 +1116,10 @@ public class HudLayer extends CCLayer {
 	//CGPoint pos2 : 이동해야 할 좌표
 	//int kind : 정령석 종류
 	public void startMoveSpirit(int kind, CGPoint pos) {
+		Log.d("LDK", "itembase: " + itemBase.getPosition().x + "," + itemBase.getPosition().y);
+		Log.d("LDK", "itemmenu: " + itemMenu.getPosition().x + "," + itemMenu.getPosition().y);
+		Log.d("LDK", "item1: " +  itemMenu.getChildByTag(Game.kButtonFire).getPosition().x + "," +  itemMenu.getChildByTag(Game.kButtonFire).getPosition().y);
+		
 		CCSprite spirit = null;
 		CCNode item = null;
 		
@@ -1145,8 +1150,7 @@ public class HudLayer extends CCLayer {
 			break;
 		}
 		
-		CGPoint posTemp = item.convertToWorldSpace(item.getPosition().x, item.getPosition().y);
-		CGPoint pos2 = CGPoint.ccp(posTemp.x, posTemp.y +item.getContentSize().height/2);
+		CGPoint pos2 = CGPoint.ccpAdd(itemBase.getPosition(), item.getPosition());
 
 		//정령석 애니메이션, 점점 커지면서 위로 잠깐 솟았다가 아래 아이콘 영역으로 이동
 		spirit.setPosition(pos);
@@ -1163,7 +1167,16 @@ public class HudLayer extends CCLayer {
 	}
 
 	public void cbIncreaseNumber(Object sender, Object k) {
-		//To do : 아이콘 숫자 증가
-		Integer kind = (Integer) k;
+		int kind = (Integer) k;
+		
+		// 수정구 획득수를 타입별로 하나 증가시킨다.
+		GameData.share().increaseItemByType(kind);
+
+		// UI 업데이트를 한다.
+		// 수정구를 클릭해서 활성화시키면 +1 씩 라벨에 넣어준다.
+		updateSphereItemNumber();
+
+		// 버튼에 클릭효과를 넣는다.
+		clickEffect(kind);
 	}
 }
