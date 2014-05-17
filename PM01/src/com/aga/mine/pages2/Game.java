@@ -40,6 +40,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.aga.mine.mains.Config;
+import com.aga.mine.mains.FacebookData;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.R;
 import com.aga.mine.pages2.MineCell.MineCellDelegate;
@@ -678,8 +679,8 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	// 인자 추가
 	public void scatterSpheres(ArrayList<MineCell> cells, CCTMXLayer tmx, boolean isAi) {
 		
-		int numberOfSphere = 3;
-		if (!GameData.share().isGuestMode) {
+		int numberOfSphere = Integer.parseInt(FacebookData.getinstance().getDBData("SphereNumber"));
+		if (GameData.share().isGuestMode) {
 			numberOfSphere = GameData.share().kNumberOfSphere;
 		}
 		

@@ -328,13 +328,13 @@ public class DataFilter {
 	
 	class DefaultUserData {
 		final static int level = 1;
-		final static int sphere = 2;
+		final static int sphere = 3;
 		final static int exp = 0;
-		final static int gold = 0;
+		final static int gold = 3000;
 		final static int gameScore = 0;
 		final static int win = 0;
 		final static int lose = 0;
-		final static int broomstick = 10;
+		final static int broomstick = 6;
 		final static int fireLevel = 1;
 		final static int windLevel = 1;
 		final static int cloudLevel = 1;
