@@ -195,9 +195,9 @@ public class GameEnding extends CCLayer {
 		// 경험치 바
 		CCSprite expbg = null;
 		// 경험치가 0일때 true로 사용할 것
-		if (myExp < 500) {
-			expbg = base;	
-		} else {
+//		if (myExp < 500) {
+//			expbg = base;	
+//		} else {
 			expbg = CCSprite.sprite(folder + "ending-exp01.png");
 			bg.addChild(expbg);
 	//		bg.setAnchorPoint(0.5f, 0.5f);
@@ -234,7 +234,7 @@ public class GameEnding extends CCLayer {
 			expbg.addChild(expHead, 2);
 			expHead.setAnchorPoint(0.5f, 0.5f);
 			expHead.setPosition(expBar.getPosition());
-		}
+//		}
 		
 		/*********************************************************/
 		// 좌측 버튼

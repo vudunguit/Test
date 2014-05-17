@@ -1,16 +1,33 @@
 ﻿package com.aga.mine.pages2;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.cocos2d.actions.instant.CCCallFuncN;
+import org.cocos2d.actions.instant.CCCallFuncND;
+import org.cocos2d.actions.interval.CCAnimate;
+import org.cocos2d.actions.interval.CCScaleTo;
+import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
+import org.cocos2d.nodes.CCAnimation;
+import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.nodes.CCLabel;
+import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
+import org.cocos2d.types.ccColor3B;
+import org.cocos2d.utils.CCFormatter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.aga.mine.mains.Config;
 import com.aga.mine.mains.NetworkController;
+import com.aga.mine.mains.R;
 
 // for문 돌리면 서 size 또는 length로 얻어온 객체 있으면 별도로 size 변수 만들어서 그값으로 할것
 // 잘못하면 큰일남 ㅇㅇ
@@ -19,29 +36,13 @@ import com.aga.mine.mains.NetworkController;
 //this.delegate.removeTile(this.tileCoord);
 public class MineCell extends CCLayer{
 	
-	// 잘 될려낭????
-	MineCellDelegate delegate ;
+	private int mCount;
 	
-	//class MineCellDelegate{
-	public interface MineCellDelegate{
-		boolean updateHeart();
-		void displayMineNumber(int a, CGPoint b, int c);
-		void removeTile(CGPoint tileCoord, int depth);
-		
-		//public void removeTile(CGPoint tileCoord) {}
-		//public void displayMineNumber(int numberOfMine, CGPoint position, int tag) {}
-		//public void gameOver() {}
-		//public void updateHeart() {}
-/*	class MineCellDelegate extends Game{
-		MineCellDelegate() {
-			super();
-		}
-*/			
-	//	MineCellDelegate(Context context) {
-	//		super(context);
-	//	}	
-	}
-	
+	//Tile animation
+	Bitmap mBitmap;
+	CCScaleTo mScaleAction;
+	private CCAnimate mOpenAction;
+	private CCAnimate mPumpkinBomb;
 	// 지뢰
 	private boolean isMine;
 	// 열어본 맵의 Tile
@@ -88,6 +89,29 @@ public class MineCell extends CCLayer{
 		sphereRoundCells = new ArrayList<MineCell>();	
 		isSphereBasePossible = true;
 		sphereType = -1; // none
+		
+		//타일 오픈 애니메이션 초기화
+		InputStream is;
+		try {
+			is = CCDirector.theApp.getAssets().open("60game/01.png");
+			mBitmap = BitmapFactory.decodeStream(is);
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		mScaleAction = CCScaleTo.action(0.1f, 1.8f);
+		CCAnimation animation = CCAnimation.animation("dance");
+		for( int i=1;i<=7;i++) {
+			animation.addFrame(String.format("60game/%02d.png", i));
+		}
+		mOpenAction = CCAnimate.action(0.2f, animation, false);
+		
+		//호박폭발 애니메이션
+		CCAnimation pumpkin = CCAnimation.animation("pumpkin");
+		for( int i=1;i<=7;i++) {
+			pumpkin.addFrame(String.format("60game/pumpkinbomb_%02d.png", i));
+		}
+		mPumpkinBomb = CCAnimate.action(0.5f, pumpkin, false);
 	}
 	
 	private Game mGame;
@@ -271,22 +295,6 @@ public class MineCell extends CCLayer{
 		return numberOfMine;
 	}
 	
-	/*****************************************************/
-	/** 문제지점 
-	 * 
-	 * Thread
-	 * 
-	 * 타일open시 UI 멈춤 
-	 * 많은 타일open후에도 UI 성능 저하
-	 * 
-	 * 
-	 * 애니매이션
-	 * 수정구 획득 & 타일 오픈 애니
-	 * 
-	 * 
-	 * @return
-	 */
-	
 	public int open() {
 		return open (1);
 	}
@@ -297,12 +305,9 @@ public class MineCell extends CCLayer{
 			return numberOfArroundMine;
 		
 		// 오픈으로 데이터 설정
-		this.setOpened(true);
+		setOpened(true);
 		// TMX에서 현재 타일 제거
-		this.delegate.removeTile(this.tileCoord, depth);
-				
-		GameData.share().addOpenedCell(); // 오픈된 셀 수량 누적
-		mGame.removeCell(); // 남은 총 cell 수량 감소
+		removeTile(this.tileCoord, depth);
 		
 		if (GameData.share().isMultiGame) {
 			try {
@@ -319,7 +324,7 @@ public class MineCell extends CCLayer{
 		int pumpkinMine = -1;
 		if (numberOfArroundMine > pumpkinMine) { // 주변의 지뢰 수량을 표시
 			if (numberOfArroundMine != 0)
-				showAroundMine();
+				showAroundMine(depth);
 			// 프로그레스 하나 증가			
 			mGame.mHud.updateProgress();
 		} else { // 지뢰 밟음
@@ -366,13 +371,93 @@ public class MineCell extends CCLayer{
 		return numberOfArroundMine;
 	}
 	
-	private void showAroundMine() {
-		this.delegate.displayMineNumber(numberOfArroundMine, tilePosition, Cell_ID);
+	public void removeTile(CGPoint tileCoord, int depth) {
+		if(depth == 1) {
+			mCount = 1;
+		} else {
+			++mCount;
+		}
+		Log.d("LDK", "depth:" + depth + " , mCount:" + mCount);
+		// Global ID // Globally unique IDentifier
+		int tileGid = mGame.tmxMeta.tileGIDAt(tileCoord);
+		tileGid = CCFormatter.swapIntToLittleEndian(tileGid);
+		// 0 : 일시 타일값 없음
+		
+		//메타레이어가 isCollidable, preOpened 일경우는 무시. isDontSetMine인 경우는 타일을 벗겨준다
+		if (tileGid > 0) {
+			HashMap<String, String> properties = mGame.tileMap.propertiesForGID(tileGid);
+
+			// Log.e("Game / removeTile", "properties:" + properties);
+			if (properties != null && properties.size() != 0) {
+				String isDontSetMine = properties.get("isDontSetMine");
+
+				if (isDontSetMine != null && isDontSetMine.equals("true")) {
+					//SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01); // pickup // 뭐에 쓰는 거지?
+					mGame.getFg().removeTileAt(tileCoord);
+					GameData.share().addOpenedCell(); // 오픈된 셀 수량 누적
+					mGame.removeCell(); // 남은 총 cell 수량 감소
+				}
+
+			} 
+		} else {
+			mGame.getFg().removeTileAt(tileCoord);
+			GameData.share().addOpenedCell(); // 오픈된 셀 수량 누적
+			mGame.removeCell(); // 남은 총 cell 수량 감소
+		}
+	}
+	
+	private void showAroundMine(int depth) {
+		//타일 오픈 애니메이션
+		CCSprite tile = CCSprite.sprite(mBitmap, "01");
+		mGame.addChild(tile, 5);
+		tile.setPosition(CGPoint.ccp(tileCoord.x * mGame.tileSize.width + mGame.tileSize.width / 2, 
+				 mGame.mapSize.height - (tileCoord.y *  mGame.tileSize.height +  mGame.tileSize.height / 2)));
+		
+		tile.runAction(CCSequence.actions(mScaleAction, mOpenAction, CCCallFuncND.action(this, "removeTileAni", tileCoord)));
+		
+		if(depth == 1) {
+			SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01);
+		} else {
+			if(mCount%4 == 0) {
+				int effect = mCount/4;
+				if ((effect/17)%2 == 0) {
+					effect = effect%17;
+				} else {
+					effect = 16 - effect%17;
+				}
+				SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01 + effect);
+				Log.d("LDK", "effect:" + effect);
+			}
+		}
+	}
+	
+	public void removeTileAni(Object sender, Object coord) {
+		CCSprite obj = (CCSprite)sender;
+		obj.removeFromParentAndCleanup(false);
+		
+		displayMineNumber(numberOfArroundMine, tilePosition, Cell_ID);
 		Log.e("MineCell / open", "주변 마인 갯수 : " + numberOfArroundMine);
 	}
 	
+	// 주변 지뢰 수
+	public void displayMineNumber(int numberOfMine, CGPoint position, int tag) {
+		if (mGame.isCollidable(mGame.tileCoordForPosition(position))) {
+			return;
+		}
+		// 글자 크기 기존의 2/3로 감소(사유 : 수정구 바닦에 숫자가 겹쳐야 되서 수정구에 의해 숫자가 가려짐. - 박정렬 팀장님)
+		CCLabel label = CCLabel.makeLabel("" + numberOfMine + " ",
+				"Arial-Bold", (int) ((70 * (2 / 3.0) * mGame.tileSize.width) / 128));
+		mGame.addChild(label, 100000, tag);
+		label.setAnchorPoint(0.5f, 0.5f);
+		label.setPosition(position);
+		label.setColor(ccColor3B.ccc3((int) (75 / 255f), (int) (51 / 255f),
+				(int) (9 / 255f)));
+	}
+	
 	private void touchMine() {
-		mGame.startEarthBomb();
+		//호박폭탄 애니메이션
+		startPumpkinBomb();
+		
 		// 주변 지뢰수를 숫자로 표현했으며, 주변에 지뢰가 없는 땅은 0으로 표현
 		//Log.e("MineCell / open", "plusMine : " + plusMine);
 		
@@ -455,8 +540,8 @@ public class MineCell extends CCLayer{
 		GameData.share().decreaseHeartNumber();
 		
 		// 생명수를 업데이트 시킨다.
-		Log.e("MineCell / open", "updateHeart : " + this.delegate.updateHeart());
-		this.delegate.updateHeart();
+		Log.e("MineCell / open", "updateHeart : " + updateHeart());
+		updateHeart();
 
 		// 생명수 다없어지면 게임오버
 		//if (true) {
@@ -472,6 +557,26 @@ public class MineCell extends CCLayer{
 		}
 	}
 	
+	public void startPumpkinBomb() {
+		CCSprite bomb = CCSprite.sprite("60game/pumpkinbomb_01.png");
+		//붙이는 위치, 크기 조정해야 함.
+		bomb.setPosition(tilePosition);
+		mGame.addChild(bomb, 100);
+		
+		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemovePumpkinBomb");
+		bomb.runAction(CCSequence.actions(mPumpkinBomb, remove));
+		
+		SoundEngine.sharedEngine().playEffect(mContext, R.raw.pumpkin);
+	}
+	
+	public void cbRemovePumpkinBomb(Object sender) {
+		CCSprite sprite = (CCSprite)sender;
+		sprite.removeFromParentAndCleanup(true);
+	}
+	
+	public boolean updateHeart() {
+		return mGame.mHud.updateHeart();
+	}
 	
 	/*****************************************************/
 	
@@ -508,49 +613,7 @@ public class MineCell extends CCLayer{
 			Log.e("MineCell", "멀티 - 계속 하기 (type) : " + gameOverType);
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	public int getSphereItem() {
 		

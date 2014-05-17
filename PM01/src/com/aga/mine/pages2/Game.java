@@ -1,16 +1,14 @@
 ﻿package com.aga.mine.pages2;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFuncN;
-import org.cocos2d.actions.instant.CCCallFuncND;
 import org.cocos2d.actions.interval.CCAnimate;
+import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.actions.interval.CCRotateBy;
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
@@ -28,12 +26,9 @@ import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
-import org.cocos2d.types.ccColor3B;
 import org.cocos2d.utils.CCFormatter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -43,9 +38,8 @@ import com.aga.mine.mains.Config;
 import com.aga.mine.mains.FacebookData;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.R;
-import com.aga.mine.pages2.MineCell.MineCellDelegate;
 
-public class Game extends CCLayer implements MineCell.MineCellDelegate {
+public class Game extends CCLayer {
 
 	String folder = "60game/";
 	String fileExtension = ".png";
@@ -80,7 +74,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	final int kSphereTypeMirror = 6;
 	final int kSphereTypeGetMagic = 7;
 	// ----------------------- Game.m --------------------------//
-	private CCTMXTiledMap tileMap;
+	public CCTMXTiledMap tileMap;
 	CCTMXLayer tmxBg;
 	CCTMXLayer tmxMeta;
 	CCTMXLayer tmxFg;
@@ -102,14 +96,6 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	CCLabel center3;
 
 	private int unopenedTile;
-//	int previousMarkedMine;
-//	int markedMine;
-	
-	//Tile animation
-	Bitmap mBitmap;
-	CCScaleTo mScaleAction;
-	private CCAnimate mOpenAction;
-	private int mCount;
 	
 	private CCAnimation mEarthBomb;
 	private CCAnimation mBottle;
@@ -130,8 +116,6 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	private Game() {
 		
 		Log.e("** Game **", "Instance");
-		//GameMinimap.getInstance().dealloc();
-		//mHud.isGameOver = false;
 		unopenedTile = 0;
 		// 기본 초기화
 		mContext = CCDirector.sharedDirector().getActivity().getApplicationContext();
@@ -249,7 +233,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			for (int y = 0; y < (int) tileMap.getMapSize().height; y++) {
 				MineCell cell = new MineCell(this);
 
-				cell.delegate = (MineCellDelegate) this;
+				//cell.delegate = (MineCellDelegate) this;
 				cell.setTileCoord(CGPoint.make(x, y));
 				cell.setCell_ID(count);
 				cell.setTilePosition(CGPoint.ccp(x * tileSize.width
@@ -439,7 +423,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 			if (cellsTemp.get(i).isOpened()) {
 				int numberOfMine = cellsTemp.get(i).getNumberOfMineAround();
 				if (numberOfMine > 0)
-					this.displayMineNumber(numberOfMine, cellsTemp.get(i)
+					cellsTemp.get(i).displayMineNumber(numberOfMine, cellsTemp.get(i)
 							.getTilePosition(), cellsTemp.get(i).getCell_ID());
 			}
 		}
@@ -488,21 +472,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		GameData.share().setSeconds(900);
 		UserData.share(mContext).myBroomstick();
 		
-		//타일 오픈 애니메이션 초기화
-		InputStream is;
-		try {
-			is = CCDirector.theApp.getAssets().open("60game/01.png");
-			mBitmap = BitmapFactory.decodeStream(is);
-			is.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		mScaleAction = CCScaleTo.action(0.1f, 1.8f);
-		CCAnimation animation = CCAnimation.animation("dance");
-		for( int i=1;i<=7;i++) {
-			animation.addFrame(String.format("60game/%02d.png", i));
-		}
-		mOpenAction = CCAnimate.action(0.2f, animation, false);
+
 		
 		//대지마법 애니메이션 초기화
 		mEarthBomb = CCAnimation.animation("EarthBomb");
@@ -526,7 +496,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		} else if (GameData.share().isGuestMode) {
 			gameStart();
 		}
-		SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
+		//SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
 	}
 
 	private void gameReady() {
@@ -545,14 +515,6 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		// Game.HudLayer.testText.setString("게임 시작! testText"); // 느린 기기에서는
 		// 뻗어버림...
 	}
-
-	/********************************************************/
-	/**
-	 * 문제지점 애니메이션
-	 * 
-	 * 이모티콘 애니는 위치가 정해지지 않았습니다. Game 또는 Hud중 무난한 곳에 넣어주시면 됩니다.
-	 **/
-
 	
 	// public CCScene scene() {
 	public static CCScene scene() {
@@ -878,8 +840,8 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	CGPoint currentLocation2 = null;
 	CGPoint previousLocation1 = null;
 	CGPoint previousLocation2 = null;
-	CGSize mapSize = null;
-	CGSize tileSize = null;
+	public CGSize mapSize = null;
+	public CGSize tileSize = null;
 
 	// CCLabel mapLabel;
 
@@ -1155,94 +1117,98 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		if (Config.getInstance().isDisableButton())
 			return;
 
-			// Log.e("Game / handleDoubleTap", "enableButton");
+		// Log.e("Game / handleDoubleTap", "enableButton");
 
-			CGPoint location = null;
-			CGPoint coord = null;
+		CGPoint location = null;
+		CGPoint coord = null;
 
-			// GL 좌표
-			location = CGPoint.ccp(event.getRawX(), event.getRawY());
-			// cocos2d 좌표로 변환
-			CGPoint glLocation = CCDirector.sharedDirector().convertToGL(location);
-			
-			// layer 좌측 하단으로 부터 좌표까지의 거리
-			location = this.convertToNodeSpace(glLocation);
-			// 타일의 어느 좌표인지 확인하여 값 불러오기
-			coord = this.tileCoordForPosition(location);
+		// GL 좌표
+		location = CGPoint.ccp(event.getRawX(), event.getRawY());
+		// cocos2d 좌표로 변환
+		CGPoint glLocation = CCDirector.sharedDirector().convertToGL(location);
 
-			CopyOnWriteArrayList<MineCell> copyCells = new CopyOnWriteArrayList<MineCell>();
-			copyCells.addAll(cells);
-			
-			for (final MineCell cell : copyCells) {
+		// layer 좌측 하단으로 부터 좌표까지의 거리
+		location = this.convertToNodeSpace(glLocation);
+		// 타일의 어느 좌표인지 확인하여 값 불러오기
+		coord = this.tileCoordForPosition(location);
+
+		CopyOnWriteArrayList<MineCell> copyCells = new CopyOnWriteArrayList<MineCell>();
+		copyCells.addAll(cells);
+
+		for (final MineCell cell : copyCells) {
+			// 전체 타일을 검색하여 터치한 위치와 타일의 위치값이 일치할시
+			if (CGPoint.equalToPoint(cell.getTileCoord(), coord)
+					&& !cell.isCollidable()) {
 				int numberOfMine = cell.getNumberOfMushroomAndPumpkinAround();
-
-				// 전체 타일을 검색하여 터치한 위치와 타일의 위치값이 일치할시
-				if (CGPoint.equalToPoint(cell.getTileCoord(), coord)
-						&& !cell.isCollidable()) {
-					// 오픈된 셀 누르면
-					if (cell.isOpened()) {
-						// 셀 저장된 주변 마인수를 얻어내 1이상이면
-						if (numberOfMine > 0) {
-							cell.roundOpen();
+				
+				// 오픈된 셀 누르면
+				if (cell.isOpened()) {
+					// 셀 저장된 주변 마인수를 얻어내 1이상이면
+					if (numberOfMine > 0) {
+						cell.roundOpen();
+					}
+					// 닫혀있는 셀 누르면
+				} else {
+					// 지정된 셀을 열어준다.(tile의 fg를 제거)
+					new TileOpenTask() {
+						@Override
+						public void run() {
+							cell.open();
 						}
-						// 닫혀있는 셀 누르면
-					} else {
-						// 지정된 셀을 열어준다.(tile의 fg를 제거)
-						new TileOpenTask() {
-							@Override
-							public void run() {
-								cell.open();
-							}
-						}.execute();
-//						new Thread(new Runnable() {
-//							@Override
-//							public void run() {
-//								cell.open();
-//							}
-//						}).start();
-					}
-					break;
-					// k = size;
+					}.execute();
+					// new Thread(new Runnable() {
+					// @Override
+					// public void run() {
+					// cell.open();
+					// }
+					// }).start();
 				}
+				break;
+				// k = size;
 			}
-
-			//
-			// 모두 열린 수정구가 있는지 확인한다.
-			float startDelay = 0;
-			for (MineCell cell : sphereBaseCells) {
-				//
-				// -1 : none
-				// 0 : empty
-				// > 0 : sphereType
-				int sphereType = cell.getSphereItem();
-				if (sphereType > 0) {
-
-					// 새로 열려진 셀들에 수정구가 열렸다.
-					// 빈 수정구로 지정하고,
-					cell.setSphereType(kSphereTypeEmpty);
-
-					// Log.e("Game / handleDoubleTap", "check 1 / 아이템 타일 변경");
-					// 빈 수정구 타일로 바꾼다.
-					Log.e("Game", "수정구 획득");
-					this.addSphereTo(tmxMineLayer, kSphereTypeGetMagic, cell, false); // 빈 수정구는 백그라운드에 심기
-
-					//유리병 터지는 애니메이션
-					if (!createSphere) { // 수정구 생성하는게 아님.(수정구 획득)
-						startOpenBottle(cell.getTilePosition());
-					}
-					
-					//정령석 아래 HUD로 이동하는 애니메이션
-					mHud.startMoveSpirit(sphereType, glLocation);
-				}
-			}
-			// end 모두 열린 수정구가 있는지 확인한다.
-			if (getClosedCell() <= GameData.share().getMineNumber()) {
-				Log.e("Game / handleDoubleTap", "handleDoubleTap Game Over");
-				Log.e("Game","unopenedTile : " + getClosedCell() + ", Max Mine : "+ GameData.share().getMineNumber());
-				mHud.gameOver(sumScore(), -1);
-			}
-			// end Config.getInstance().isDisableButton()
 		}
+
+		//
+		// 모두 열린 수정구가 있는지 확인한다.
+		float startDelay = 0;
+		for (MineCell cell : sphereBaseCells) {
+			//
+			// -1 : none
+			// 0 : empty
+			// > 0 : sphereType
+			int sphereType = cell.getSphereItem();
+			if (sphereType > 0) {
+
+				// 새로 열려진 셀들에 수정구가 열렸다.
+				// 빈 수정구로 지정하고,
+				cell.setSphereType(kSphereTypeEmpty);
+
+				// Log.e("Game / handleDoubleTap", "check 1 / 아이템 타일 변경");
+				// 빈 수정구 타일로 바꾼다.
+				Log.e("Game", "수정구 획득");
+				this.addSphereTo(tmxMineLayer, kSphereTypeGetMagic, cell, false); // 빈
+																					// 수정구는
+																					// 백그라운드에
+																					// 심기
+
+				// 유리병 터지는 애니메이션
+				if (!createSphere) { // 수정구 생성하는게 아님.(수정구 획득)
+					startOpenBottle(cell.getTilePosition());
+				}
+
+				// 정령석 아래 HUD로 이동하는 애니메이션
+				mHud.startMoveSpirit(sphereType, glLocation);
+			}
+		}
+		// end 모두 열린 수정구가 있는지 확인한다.
+		if (getClosedCell() <= GameData.share().getMineNumber()) {
+			Log.e("Game / handleDoubleTap", "handleDoubleTap Game Over");
+			Log.e("Game", "unopenedTile : " + getClosedCell() + ", Max Mine : "
+					+ GameData.share().getMineNumber());
+			mHud.gameOver(sumScore(), -1);
+		}
+		// end Config.getInstance().isDisableButton()
+	}
 
 	@Override
 	public boolean ccTouchesBegan(MotionEvent event) {
@@ -1654,93 +1620,15 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		}
 	}
 
-	public boolean updateHeart() {
-		return mHud.updateHeart();
-	}
 
-	// 주변 지뢰 수
-	public void displayMineNumber(int numberOfMine, CGPoint position, int tag) {
-		if (this.isCollidable(this.tileCoordForPosition(position))) {
-			return;
-		}
-		// 글자 크기 기존의 2/3로 감소(사유 : 수정구 바닦에 숫자가 겹쳐야 되서 수정구에 의해 숫자가 가려짐. - 박정렬 팀장님)
-		CCLabel label = CCLabel.makeLabel("" + numberOfMine + " ",
-				"Arial-Bold", (int) ((70 * (2 / 3.0) * tileSize.width) / 128));
-		this.addChild(label, 100000, tag);
-		label.setAnchorPoint(0.5f, 0.5f);
-		label.setPosition(position);
-		label.setColor(ccColor3B.ccc3((int) (75 / 255f), (int) (51 / 255f),
-				(int) (9 / 255f)));
-	}
+
+
 
 	
 	// 소리 파일이 여기서 나면 안되고 MineCell클래스에 if (numberOfArroundMine > pumpkinMine)문 에서 결정 되야합니다.
 	
 	//
-	// MineCell Delegate
-	public void removeTile(CGPoint tileCoord, int depth) {
-		if(depth == 1) {
-			mCount = 1;
-		} else {
-			++mCount;
-		}
-		Log.d("LDK", "depth:" + depth + " , mCount:" + mCount);
-		// Global ID // Globally unique IDentifier
-		int tileGid = this.tmxMeta.tileGIDAt(tileCoord);
-		tileGid = CCFormatter.swapIntToLittleEndian(tileGid);
-		// 0 : 일시 타일값 없음
-		
-		if (tileGid > 0) {
-			HashMap<String, String> properties = this.tileMap.propertiesForGID(tileGid);
-
-			// Log.e("Game / removeTile", "properties:" + properties);
-			if (properties != null && properties.size() != 0) {
-				String collisionValue = properties.get("Collidable");
-
-				if (collisionValue != null && collisionValue.equals("true")) {
-					SoundEngine.sharedEngine().playEffect(mContext, R.raw.pumpkin); // hit
-				} else {
-					SoundEngine.sharedEngine().playEffect(mContext, R.raw.game_open2); // pickup // 뭐에 쓰는 거지?
-					this.getFg().removeTileAt(tileCoord);
-				}
-
-			} else {
-				// 폭탄은 없는데 타일이 안없어지는 에러
-				// Log.e("Game / removeTile", "properties - boom empty");
-			}
-		} else {
-			//타일 오픈 애니메이션
-			CCSprite tile = CCSprite.sprite(mBitmap, "01");
-			addChild(tile, 5);
-			tile.setPosition(CGPoint.ccp(tileCoord.x * tileSize.width + tileSize.width / 2, 
-					mapSize.height - (tileCoord.y * tileSize.height + tileSize.height / 2)));
-			
-			tile.runAction(CCSequence.actions(mScaleAction, mOpenAction, CCCallFuncND.action(this, "removeTileAni", tileCoord)));
-			
-			if(depth == 1) {
-				SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01);
-			} else {
-				if(mCount%4 == 0) {
-					int effect = mCount/4;
-					if ((effect/17)%2 == 0) {
-						effect = effect%17;
-					} else {
-						effect = 16 - effect%17;
-					}
-					SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01 + effect);
-					Log.d("LDK", "effect:" + effect);
-				}
-			}
-		}
-	}
 	
-	public void removeTileAni(Object sender, Object coord) {
-		CCSprite obj = (CCSprite)sender;
-		CGPoint tileCoord = (CGPoint)coord;
-		
-		this.getFg().removeTileAt(tileCoord);
-		obj.removeFromParentAndCleanup(false);
-	}
 
 	// HudLayer inner class end
 
@@ -2091,7 +1979,11 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 	
 	//gameOver 애니메이션 : map zoomout 후 폭탄 터지는 애니메이션
 	public void gameOverAnimation() {
-
+		CCScaleTo scale = CCScaleTo.action(2.0f, 0.43f); 
+		CCMoveTo move = CCMoveTo.action(2.0f, CGPoint.ccp(0, 0));
+		
+		this.runAction(move);
+		this.runAction(scale);
 	}
 
 	abstract class TileOpenTask extends AsyncTask<Void, Void, Void> {
