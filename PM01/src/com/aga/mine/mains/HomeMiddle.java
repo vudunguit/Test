@@ -120,14 +120,14 @@ public class HomeMiddle {
 		gaugeBar.setPosition(2, levelProgressBar.getContentSize().height / 2);
 		gaugeBar.setScaleX(scale / gaugeBar.getContentSize().width);
 		
-		CCLabel exp = CCLabel.makeLabel(expStr, "Arial", 11); // 경험치 (게이지로 변경필요)
-		levelProgressBar.addChild(exp);
-//		exp.setColor(ccColor3B.ccc3(194, 216, 233));
-//		exp.setColor(ccColor3B.ccc3(0, 35, 102));
-		exp.setColor(ccColor3B.ccc3(50, 50, 0x8c));
-		exp.setPosition(
-				levelProgressBar.getContentSize().width/2,
-				levelProgressBar.getContentSize().height/2);
+//		CCLabel exp = CCLabel.makeLabel(expStr, "Arial", 11); // 경험치 (게이지로 변경필요)
+//		levelProgressBar.addChild(exp);
+////		exp.setColor(ccColor3B.ccc3(194, 216, 233));
+////		exp.setColor(ccColor3B.ccc3(0, 35, 102));
+//		exp.setColor(ccColor3B.ccc3(50, 50, 0x8c));
+//		exp.setPosition(
+//				levelProgressBar.getContentSize().width/2,
+//				levelProgressBar.getContentSize().height/2);
 		
 		CCLabel userRanking = CCLabel.makeLabel("0", "Arial", 30); // 순위
 		userRanking.setPosition(

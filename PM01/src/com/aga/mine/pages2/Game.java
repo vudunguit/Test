@@ -526,7 +526,7 @@ public class Game extends CCLayer implements MineCell.MineCellDelegate {
 		} else if (GameData.share().isGuestMode) {
 			gameStart();
 		}
-		//SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
+		SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
 	}
 
 	private void gameReady() {

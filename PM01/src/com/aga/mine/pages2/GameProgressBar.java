@@ -116,7 +116,20 @@ public class GameProgressBar extends CCLayer {
 	void stopTime() {
 		this.unschedule("tick");
 	}
-
+	
+	public void pauseTime(boolean isPause) {
+		_isPause = isPause;
+		if (isPause) {
+			mPauseTime = mPastTime;
+		} else {
+			mInitialTime = System.currentTimeMillis() - mPauseTime;
+		}
+	}
+	
+	boolean _isPause = false;
+	long mPauseTime;
+	
+	
 	//private void tick(ccTime dt) {
 	public void tick(float dt) {
 		mPastTime = System.currentTimeMillis() - mInitialTime;
@@ -139,7 +152,10 @@ public class GameProgressBar extends CCLayer {
 		}
 		//String timerString = min + ":" + secStr;
 		String timerString = time[0] + ":" + time[1];
-		progressedTime.setString(timerString);
+		if (!_isPause) {
+			progressedTime.setString(timerString);	
+		}
+		
 
 		//
 		// 게임시간이 종료하면 타이머를 멈추고 게임종료 메서드 호출한다.
