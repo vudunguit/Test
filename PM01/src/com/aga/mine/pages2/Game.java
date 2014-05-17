@@ -155,9 +155,8 @@ public class Game extends CCLayer {
 
 		//
 		// 사운드 (로드)
-		int effect = R.raw.landopen_01;
-		for (int i = 0; i < 8; i++) {
-			SoundEngine.sharedEngine().preloadEffect(mContext, effect + i); // 이펙트 (효과음) // (타일)pickup	
+		for (int i = 0; i < 17; i++) {
+			SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.landopen_01 + i); // 이펙트 (효과음) // (타일)pickup	
 		}
 		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.pumpkin); // 이펙트 (효과음) // (호박)hit
 		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.mushroom); // 이펙트 (효과음) // (버섯)move
@@ -1979,11 +1978,15 @@ public class Game extends CCLayer {
 	
 	//gameOver 애니메이션 : map zoomout 후 폭탄 터지는 애니메이션
 	public void gameOverAnimation() {
+		//zoom out
 		CCScaleTo scale = CCScaleTo.action(2.0f, 0.43f); 
 		CCMoveTo move = CCMoveTo.action(2.0f, CGPoint.ccp(0, 0));
 		
 		this.runAction(move);
 		this.runAction(scale);
+		
+		//폭탄 터지기 : 타일 오픈후 pumpkin 애니메이션
+		//for(MineCell)
 	}
 
 	abstract class TileOpenTask extends AsyncTask<Void, Void, Void> {

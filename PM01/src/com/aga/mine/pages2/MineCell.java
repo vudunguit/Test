@@ -36,7 +36,7 @@ import com.aga.mine.mains.R;
 //this.delegate.removeTile(this.tileCoord);
 public class MineCell extends CCLayer{
 	
-	private int mCount;
+	volatile public static int mCount;
 	
 	//Tile animation
 	Bitmap mBitmap;
@@ -322,9 +322,8 @@ public class MineCell extends CCLayer{
 		
 		// 지뢰는 -1로 지정했음
 		int pumpkinMine = -1;
-		if (numberOfArroundMine > pumpkinMine) { // 주변의 지뢰 수량을 표시
-			if (numberOfArroundMine != 0)
-				showAroundMine(depth);
+		if (numberOfArroundMine > pumpkinMine) { 
+			startOpenTile(depth);
 			// 프로그레스 하나 증가			
 			mGame.mHud.updateProgress();
 		} else { // 지뢰 밟음
@@ -406,7 +405,24 @@ public class MineCell extends CCLayer{
 		}
 	}
 	
-	private void showAroundMine(int depth) {
+	private void startOpenTile(int depth) {
+		Log.w("LDK", "showAroundMine:"  + ", mcount:" + mCount);
+		if(depth == 1) {
+			SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01);
+			Log.e("LDK", "mcount:" + mCount);
+		} else {
+			if(mCount%2 == 0) {
+				int effect = mCount/2;
+				if ((effect/17)%2 == 0) {
+					effect = effect%17;
+				} else {
+					effect = 16 - effect%17;
+				}
+				SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01 + effect);
+				Log.e("LDK", "effect:" + effect + ", mcount:" + mCount);
+			}
+		}
+		
 		//타일 오픈 애니메이션
 		CCSprite tile = CCSprite.sprite(mBitmap, "01");
 		mGame.addChild(tile, 5);
@@ -414,29 +430,16 @@ public class MineCell extends CCLayer{
 				 mGame.mapSize.height - (tileCoord.y *  mGame.tileSize.height +  mGame.tileSize.height / 2)));
 		
 		tile.runAction(CCSequence.actions(mScaleAction, mOpenAction, CCCallFuncND.action(this, "removeTileAni", tileCoord)));
-		
-		if(depth == 1) {
-			SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01);
-		} else {
-			if(mCount%4 == 0) {
-				int effect = mCount/4;
-				if ((effect/17)%2 == 0) {
-					effect = effect%17;
-				} else {
-					effect = 16 - effect%17;
-				}
-				SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01 + effect);
-				Log.d("LDK", "effect:" + effect);
-			}
-		}
 	}
 	
 	public void removeTileAni(Object sender, Object coord) {
 		CCSprite obj = (CCSprite)sender;
 		obj.removeFromParentAndCleanup(false);
 		
-		displayMineNumber(numberOfArroundMine, tilePosition, Cell_ID);
-		Log.e("MineCell / open", "주변 마인 갯수 : " + numberOfArroundMine);
+		if(numberOfArroundMine>0) {
+			displayMineNumber(numberOfArroundMine, tilePosition, Cell_ID);
+			Log.e("MineCell / open", "주변 마인 갯수 : " + numberOfArroundMine);
+		}
 	}
 	
 	// 주변 지뢰 수
