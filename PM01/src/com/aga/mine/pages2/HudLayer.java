@@ -474,102 +474,102 @@ public class HudLayer extends CCLayer {
 		if (!Config.getInstance().isDisableButton()) {
 			 Log.e("clicked", "Button Enable");
 			 Log.e("HudLayer", "clicked2 : " + Config.getInstance().isDisableButton());
-//			String effectName = "";
+			String effectName = "";
 			switch (tag) {
 			case Game.kButtonMinimap:
 //				// Log.e("button pressed", "kButtonMinimap");
 				Config.getInstance().setDisableButton(true);
-//				if (GameData.share().isMultiGame) {
-////					String a = GameConfig.share().isMinimapPanelOn() ? "true" : "false";
-//					
-//					// this.addChild(GameMinimap.getInstance().tileon(),
-//					// GameConfig.share().kDepthPopup);
-//					mGameMinimap.setVisible(true);
-//					// Log.e("minimap flag is", a);
-//				} else {
+				if (GameData.share().isMultiGame) {
+//					String a = GameConfig.share().isMinimapPanelOn() ? "true" : "false";
+					
+					// this.addChild(GameMinimap.getInstance().tileon(),
+					// GameConfig.share().kDepthPopup);
+					mGameMinimap.setVisible(true);
+					// Log.e("minimap flag is", a);
+				} else {
 					pausePopup();
-//				}
+				}
 				break;
-//			case Game.kButtonFire:
-//				 Log.e("button pressed", "kButtonFire");
-//				effectName = "불마법";
-//				StartAniFireAttack();
-////				StartAniFireDefense(); //test
-//				break;
-//			case Game.kButtonWind:
-//				// Log.e("button pressed", "kButtonWind");
-//				effectName = "바람마법";
-//				StartAniWindAttack();
-////				StartAniWindDefense(); //test
-//				break;
-//			case Game.kButtonCloud:
-//				// Log.e("button pressed", "kButtonCloud");
-//				effectName = "구름마법";
-//				StartAniCloudAttack();
-////				StartAniCloudDefense(); //test
-//				break;
-//			case Game.kButtonDivine:
-//				// Log.e("button pressed", "kButtonDivine");
-//				effectName = "신성마법";
-//				StartAniRune(4);
-//				break;
-//			case Game.kButtonEarth:
-//				// Log.e("button pressed", "kButtonEarth");
-//				effectName = "대지마법";
-//				StartAniRune(5);
-//				break;
-//			case Game.kButtonMirror:
-//				// Log.e("button pressed", "kButtonMirror");
-//				effectName = "반사마법";
-//				StartAniRune(6);
-//				break;
-//
-//			default:
-//				// Log.e("button pressed", "default");
-//				effectName = "마법지정 오류";
-//				break;
+			case Game.kButtonFire:
+				 Log.e("button pressed", "kButtonFire");
+				effectName = "불마법";
+				StartAniFireAttack();
+//				StartAniFireDefense(); //test
+				break;
+			case Game.kButtonWind:
+				// Log.e("button pressed", "kButtonWind");
+				effectName = "바람마법";
+				StartAniWindAttack();
+//				StartAniWindDefense(); //test
+				break;
+			case Game.kButtonCloud:
+				// Log.e("button pressed", "kButtonCloud");
+				effectName = "구름마법";
+				StartAniCloudAttack();
+//				StartAniCloudDefense(); //test
+				break;
+			case Game.kButtonDivine:
+				// Log.e("button pressed", "kButtonDivine");
+				effectName = "신성마법";
+				StartAniRune(4);
+				break;
+			case Game.kButtonEarth:
+				// Log.e("button pressed", "kButtonEarth");
+				effectName = "대지마법";
+				StartAniRune(5);
+				break;
+			case Game.kButtonMirror:
+				// Log.e("button pressed", "kButtonMirror");
+				effectName = "반사마법";
+				StartAniRune(6);
+				break;
+
+			default:
+				// Log.e("button pressed", "default");
+				effectName = "마법지정 오류";
+				break;
 			}
-//			final String alertText = effectName;
-//			//
-//			// 수정구아이템 버튼 클릭 공통
-//			if (((CCMenuItem) button).getTag() >= 1
-//					&& ((CCMenuItem) button).getTag() <= 6) {
-//				//
-//				// 마법사 액션
-//				// - 애니메이션을 위에 올렸닥 끝나면 지워버린다.
-//				// - 본래 캐릭터는 가렸다가 애니메이션이 끝난 후에 (0.4초 이후) 다시 보이도록 한다.
-//				Utility.getInstance().animationMagicianAction(this);
-//				magician.setVisible(false);
-//				final CCNode layer = this;
-//				
-//				schedule(new UpdateCallback() {
-//					@Override
-//					public void update(float d) {
-//						magician.setVisible(true);
-//						layer.removeChildByTag(888, true);
-//						//
-//						// 아이템수를 감소시키고
-//						// 라벨 디스플레이를 업데이트 시키고
-//						// 버튼 클릭 효과
-//
-//						// 디펜스와 어택 구분 필요 이유????
-//						if (GameData.share().isMultiGame) {
-//							try {
-//								NetworkController.getInstance().sendPlayDataMagicAttack((tag * 1000) + 23);
-//							} catch (IOException e) {
-//								e.printStackTrace();
-//							}
-//						}
-//
-//						GameData.share().decreaseItemByType(tag);
-//						updateSphereItemNumber();
-//						clickEffect(tag);
-//						
-//						unschedule(this);
-//					}
-//				}, 0.4f);
-//
-//			}
+			final String alertText = effectName;
+			//
+			// 수정구아이템 버튼 클릭 공통
+			if (((CCMenuItem) button).getTag() >= 1
+					&& ((CCMenuItem) button).getTag() <= 6) {
+				//
+				// 마법사 액션
+				// - 애니메이션을 위에 올렸닥 끝나면 지워버린다.
+				// - 본래 캐릭터는 가렸다가 애니메이션이 끝난 후에 (0.4초 이후) 다시 보이도록 한다.
+				Utility.getInstance().animationMagicianAction(this);
+				magician.setVisible(false);
+				final CCNode layer = this;
+				
+				schedule(new UpdateCallback() {
+					@Override
+					public void update(float d) {
+						magician.setVisible(true);
+						layer.removeChildByTag(888, true);
+						//
+						// 아이템수를 감소시키고
+						// 라벨 디스플레이를 업데이트 시키고
+						// 버튼 클릭 효과
+
+						// 디펜스와 어택 구분 필요 이유????
+						if (GameData.share().isMultiGame) {
+							try {
+								NetworkController.getInstance().sendPlayDataMagicAttack((tag * 1000) + 23);
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+
+						GameData.share().decreaseItemByType(tag);
+						updateSphereItemNumber();
+						clickEffect(tag);
+						
+						unschedule(this);
+					}
+				}, 0.4f);
+
+			}
 		} else {
 			Log.e("HudLayer", "clicked3 : " + Config.getInstance().isDisableButton());
 			switch (tag) {
