@@ -38,11 +38,7 @@ public class MineCell extends CCLayer{
 	
 	volatile public static int mCount;
 	
-	//Tile animation
-	Bitmap mBitmap;
-	CCScaleTo mScaleAction;
-	private CCAnimate mOpenAction;
-	private CCAnimate mPumpkinBomb;
+
 	// 지뢰
 	private boolean isMine;
 	// 열어본 맵의 Tile
@@ -90,28 +86,7 @@ public class MineCell extends CCLayer{
 		isSphereBasePossible = true;
 		sphereType = -1; // none
 		
-		//타일 오픈 애니메이션 초기화
-		InputStream is;
-		try {
-			is = CCDirector.theApp.getAssets().open("60game/01.png");
-			mBitmap = BitmapFactory.decodeStream(is);
-			is.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		mScaleAction = CCScaleTo.action(0.1f, 1.8f);
-		CCAnimation animation = CCAnimation.animation("dance");
-		for( int i=1;i<=7;i++) {
-			animation.addFrame(String.format("60game/%02d.png", i));
-		}
-		mOpenAction = CCAnimate.action(0.2f, animation, false);
-		
-		//호박폭발 애니메이션
-		CCAnimation pumpkin = CCAnimation.animation("pumpkin");
-		for( int i=1;i<=7;i++) {
-			pumpkin.addFrame(String.format("60game/pumpkinbomb_%02d.png", i));
-		}
-		mPumpkinBomb = CCAnimate.action(0.5f, pumpkin, false);
+
 	}
 	
 	private Game mGame;
@@ -424,12 +399,12 @@ public class MineCell extends CCLayer{
 		}
 		
 		//타일 오픈 애니메이션
-		CCSprite tile = CCSprite.sprite(mBitmap, "01");
+		CCSprite tile = CCSprite.sprite(mGame.mBitmap, "01");
 		mGame.addChild(tile, 5);
 		tile.setPosition(CGPoint.ccp(tileCoord.x * mGame.tileSize.width + mGame.tileSize.width / 2, 
 				 mGame.mapSize.height - (tileCoord.y *  mGame.tileSize.height +  mGame.tileSize.height / 2)));
 		
-		tile.runAction(CCSequence.actions(mScaleAction, mOpenAction, CCCallFuncND.action(this, "removeTileAni", tileCoord)));
+		tile.runAction(CCSequence.actions(mGame.mScaleAction, mGame.mOpenAction, CCCallFuncND.action(this, "removeTileAni", tileCoord)));
 	}
 	
 	public void removeTileAni(Object sender, Object coord) {
@@ -567,7 +542,7 @@ public class MineCell extends CCLayer{
 		mGame.addChild(bomb, 100);
 		
 		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemovePumpkinBomb");
-		bomb.runAction(CCSequence.actions(mPumpkinBomb, remove));
+		bomb.runAction(CCSequence.actions(mGame.mPumpkinBomb, remove));
 		
 		SoundEngine.sharedEngine().playEffect(mContext, R.raw.pumpkin);
 	}

@@ -1,6 +1,7 @@
 ﻿package com.aga.mine.pages2;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -29,6 +30,8 @@ import org.cocos2d.types.CGSize;
 import org.cocos2d.utils.CCFormatter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -99,6 +102,12 @@ public class Game extends CCLayer {
 	
 	private CCAnimation mEarthBomb;
 	private CCAnimation mBottle;
+	
+	//Tile animation
+	public Bitmap mBitmap;
+	public CCScaleTo mScaleAction;
+	public CCAnimate mOpenAction;
+	public CCAnimate mPumpkinBomb;
 
 	private int mineNumber;
 	public CCTMXTiledMap getTileMap() {
@@ -471,7 +480,28 @@ public class Game extends CCLayer {
 		GameData.share().setSeconds(900);
 		UserData.share(mContext).myBroomstick();
 		
-
+		//타일 오픈 애니메이션 초기화
+		InputStream is;
+		try {
+			is = CCDirector.theApp.getAssets().open("60game/01.png");
+			mBitmap = BitmapFactory.decodeStream(is);
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		mScaleAction = CCScaleTo.action(0.1f, 1.8f);
+		CCAnimation animation = CCAnimation.animation("dance");
+		for( int i=1;i<=7;i++) {
+			animation.addFrame(String.format("60game/%02d.png", i));
+		}
+		mOpenAction = CCAnimate.action(0.2f, animation, false);
+		
+		//호박폭발 애니메이션
+		CCAnimation pumpkin = CCAnimation.animation("pumpkin");
+		for( int i=1;i<=7;i++) {
+			pumpkin.addFrame(String.format("60game/pumpkinbomb_%02d.png", i));
+		}
+		mPumpkinBomb = CCAnimate.action(0.5f, pumpkin, false);
 		
 		//대지마법 애니메이션 초기화
 		mEarthBomb = CCAnimation.animation("EarthBomb");
