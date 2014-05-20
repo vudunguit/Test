@@ -12,7 +12,7 @@
     <application
         android:name="com.aga.mine.mains.MainApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/pmines_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity

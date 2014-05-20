@@ -17,10 +17,14 @@ public class BottomImage {
 		return CCDirector.sharedDirector().winSize();
 	}
 	
-	// 하단 이미지
 	public static void setBottomImage(CCNode nodeThis) {
+		setBottomImage(nodeThis, 999);
+	}
+	
+	// 하단 이미지
+	public static void setBottomImage(CCNode nodeThis, int tag) {
 		CCSprite pumpkinL = CCSprite.sprite(commonfolder + "pumpkinL" + fileExtension);
-		nodeThis.addChild(pumpkinL);
+		nodeThis.addChild(pumpkinL, tag, tag);
 		pumpkinL.setAnchorPoint(0, 0);
 		pumpkinL.setPosition(0, 0);
 		

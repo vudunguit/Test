@@ -13,8 +13,12 @@ public class BottomMenu3 {
 	public BottomMenu3() {
 	}
 	
-	// 하단 메뉴
 	public static void setBottomMenu(CCSprite parentSprite, String imageFolder, CCNode nodeThis) {
+		setBottomMenu(parentSprite, imageFolder, nodeThis, 999);
+	}
+	
+	// 하단 메뉴
+	public static void setBottomMenu(CCSprite parentSprite, String imageFolder, CCNode nodeThis, int tag) {
 		
 		// 좌측 버튼(랜덤매칭)
 		CCMenuItem button1 = CCMenuItemImage.item(
@@ -22,7 +26,7 @@ public class BottomMenu3 {
 				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "random-button1" + fileExtension), 
 				nodeThis, "randomMatch");
 		CCMenu bottomMenu = CCMenu.menu(button1);
-		nodeThis.addChild(bottomMenu);
+		nodeThis.addChild(bottomMenu, tag, tag);
 		bottomMenu.setPosition(0.0f, 0.0f);
 		
 		button1.setPosition(5, 30);

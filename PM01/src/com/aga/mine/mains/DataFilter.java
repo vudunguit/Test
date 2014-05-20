@@ -140,6 +140,7 @@ public class DataFilter {
 	// 3
 	public static void setUserDBData(String facebookID) {
 		Log.e("DataFilter", "setUserDBData");
+		Log.e("DataFilter", "아이디 최초 생성시 우편으로 3500 Gold 보내야됨.");
 					new DataController().execute(
 							"0,RequestModeUpdate" +
 							"*1,"  + facebookID + 
@@ -264,7 +265,14 @@ public class DataFilter {
 			// 각 유저별 데이터 상세 자르기
 			int count = 1;
 			for (String strings : array) {
+//				Log.e("DataFilter", "strings : " + strings);
 				String[] userScoreData = strings.split("-");
+				
+//				for (String string : userScoreData) { // 테스트용
+//					if (string != null)
+//						Log.e("DataFilter", "userScoreData : " + string);						
+//				}
+				
 				gameScoreModel = new GameScore();
 				gameScoreModel.id = userScoreData[0];
 
@@ -277,13 +285,11 @@ public class DataFilter {
 							break;
 						}
 					}
-				
-				gameScoreModel.level = Integer.parseInt(userScoreData[1]);
-				gameScoreModel.score = Integer.parseInt(userScoreData[2]);
+				gameScoreModel.level = 	checkValue(userScoreData[1]);
+				gameScoreModel.score = 	checkValue(userScoreData[2]);
 				sourceList.add(gameScoreModel);
 				count ++;
 			}
-			
 			// 스코어 내림차순 정렬
 			Collections.sort(sourceList, new ClothesComparator());
 			
@@ -299,6 +305,13 @@ public class DataFilter {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	
+	private static int checkValue(String data) {
+		if (data == null || data.equals("") )
+			return 0;
+		return Integer.parseInt(data);
 	}
 	
 	// 남은 시간을 초로 리턴
@@ -330,7 +343,7 @@ public class DataFilter {
 		final static int level = 1;
 		final static int sphere = 3;
 		final static int exp = 0;
-		final static int gold = 3000;
+		final static int gold = 0; // 우편으로 3500Gold 보내야됨.
 		final static int gameScore = 0;
 		final static int win = 0;
 		final static int lose = 0;

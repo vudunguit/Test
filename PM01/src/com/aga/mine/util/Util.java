@@ -200,13 +200,7 @@ public final class Util {
 	
 	public static void count(CCSprite parentSprite){
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
-		CCSprite tornado = CCSprite.sprite(randomfolder + "Tornado.png");
-//		tornado.setAnchorPoint(0.5f, 0.5f);
-		tornado.setPosition(parentSprite.getContentSize().width/2, parentSprite.getContentSize().height * 0.28f);
-		parentSprite.addChild(tornado);
-		CCRepeatForever repeat = CCRepeatForever.action(CCRotateBy.action(16, 360));
-		tornado.runAction(repeat);
-		
+		CCSprite tornado = tornado(parentSprite, 347); // tag는 무의미함.
 		counter = CCSprite.sprite(randomfolder + "n05.png");
 		counter.setPosition(tornado.getPosition());
 		parentSprite.addChild(counter);
@@ -217,6 +211,15 @@ public final class Util {
 			}
 		}, 1000);
 		
+	}
+	
+	public static CCSprite tornado(CCSprite parentSprite, int tag) {
+		CCSprite tornado = CCSprite.sprite(randomfolder + "Tornado.png");
+		tornado.setPosition(parentSprite.getContentSize().width/2, parentSprite.getContentSize().height * 0.28f);
+		parentSprite.addChild(tornado, tag, tag);
+		CCRepeatForever repeat = CCRepeatForever.action(CCRotateBy.action(16, -360));
+		tornado.runAction(repeat);
+		return tornado;
 	}
 	
 	public static  void countdown(long time) {

@@ -225,6 +225,7 @@ public class GameData {
 	}
 	
 	public int getSeconds() {
+		// 최초설정시간에서 1초씩 감소함.
 		int seconds = getGameData("Seconds");
 		Log.e("GameData", "getSeconds : " + seconds);
 		return seconds;
@@ -238,7 +239,7 @@ public class GameData {
 	public boolean isTimeOut() {
 		if (this.getSeconds() <= 0)
 			return true;
-			return false;
+		return false;
 	}
 
 	public boolean resetItem(){
@@ -251,17 +252,12 @@ public class GameData {
 	}
 	
 	public int getItemNumberByType(int sphereType){
-		//
-		// sphereType from 1 to 6
-		//","로 구분하여 스트링 배열로 만든다?
 		String keyString = "ItemFire,ItemWind,ItemCloud,ItemDivine,ItemEarth,ItemMirror";
 		String[] keyArray = keyString.split(",",6);
-		//Log.e("GameData", "구슬 종류:" + (sphereType) + ":" + keyArray[sphereType-1]);
-		//Log.e("GameData", "getGameData:" + getGameData(keyArray[sphereType-1]));
 		return getGameData(keyArray[sphereType-1]);
 	}
 
-	public int getGameData(String key) {
+	private int getGameData(String key) {
 		return data.get(key);
 	}
 
@@ -275,9 +271,9 @@ public class GameData {
 	}
 
 	public void increaseItemByType(int sphereType){
-		Log.e("Game / increaseItemBy", "itemType before : "+ sphereType + " / " + getItemNumberByType(sphereType));
+//		Log.e("Game / increaseItemBy", "itemType before : "+ sphereType + " / " + getItemNumberByType(sphereType));
 		this.setItemNumberByType(sphereType, getItemNumberByType(sphereType) + 1);
-		Log.e("Game / increaseItemBy", "itemType after : "+ sphereType + " / " + getItemNumberByType(sphereType));
+//		Log.e("Game / increaseItemBy", "itemType after : "+ sphereType + " / " + getItemNumberByType(sphereType));
 	}
 	
 	public void decreaseItemByType(int sphereType){

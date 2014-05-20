@@ -85,7 +85,7 @@ public class HudLayer extends CCLayer {
 	public GameEnding mGameEnding;
 	HudLayer controlHudLayer;
 	
-	private Game mGame;
+	public Game mGame;
 	public GameMinimap mGameMinimap;
 	public GameProgressBar mGameProgressBar;
 	
@@ -145,7 +145,7 @@ public class HudLayer extends CCLayer {
 //		this.addChild(testText); //
 		//
 		// 상단 중앙 게임진행시간 및 진행 막대기
-		mGameProgressBar = new GameProgressBar();
+		mGameProgressBar = new GameProgressBar(this);
 		addChild(mGameProgressBar);
 		// gameProgressBar.startTime(gameEnding);
 		// Log.e("HudLayer / ", "minimap setting complete");adsa
@@ -207,20 +207,16 @@ public class HudLayer extends CCLayer {
 		CCMenuItemImage itemOff = null;
 		CCMenuItemToggle itemToggle;
 		itemMenu = CCMenu.menu();
-		String[] fileNames = { "Fire", "Wind", "Cloud", "Divine", "Earth",
-				"Mirror" };
+		String[] fileNames = { "Fire", "Wind", "Cloud", "Divine", "Earth", "Mirror" };
 		int counter = 1;
 		for (int i = 0; i < fileNames.length; i++) {
-			String fOn = hudLayerFolder + "game-item" + fileNames[i]
-					+ "On-hd.png";
-			String fOff = hudLayerFolder + "game-item" + fileNames[i]
-					+ "Off-hd.png";
-			// Log.e("fOn", fOn);
-			// Log.e("fOff", fOff);
+			String fOn = hudLayerFolder + "game-item" + fileNames[i] + "On-hd.png";
+			String fOff = hudLayerFolder + "game-item" + fileNames[i] + "Off-hd.png";
+			
 			itemOn = CCMenuItemImage.item(fOn, fOn);
 			itemOff = CCMenuItemImage.item(fOff, fOff);
-			itemToggle = CCMenuItemToggle.item(this, "clicked", itemOff,
-					itemOn);
+			
+			itemToggle = CCMenuItemToggle.item(this, "clicked", itemOff, itemOn);
 			itemToggle.setSelectedIndex(kButtonOff);
 			itemToggle.setTag(counter);
 			itemMenu.addChild(itemToggle);
@@ -229,8 +225,7 @@ public class HudLayer extends CCLayer {
 		itemMenu.alignItemsHorizontally(0.0f);
 		itemMenu.setPosition(
 				itemBase.getContentSize().width / 2,
-				itemOn.getContentSize().height / 2
-						+ itemOn.getContentSize().height / 8);
+				itemOn.getContentSize().height / 2 + itemOn.getContentSize().height / 8);
 		itemBase.addChild(itemMenu);
 
 		// 추가하면 터치가 안됨. 확인할 것
@@ -438,15 +433,14 @@ public class HudLayer extends CCLayer {
 	public void clickEffect(int sphereType, float startDelay) {
 		//
 		// 활성화된 아이템버튼의 클릭 효과 오버레이를 일정시간 켰다 끈다.
-		CCSprite overlay = CCSprite.sprite(hudLayerFolder
-				+ "game-itemOver-hd.png");
+		CCSprite overlay = CCSprite.sprite(hudLayerFolder + "game-itemOver-hd.png");
 
 		for (CCNode itemNode : itemMenu.getChildren()) {
 			CCMenuItemToggle item = (CCMenuItemToggle) itemNode;
-			if (item.getTag() == sphereType
-					&& item.selectedIndex() == kButtonOn) {
+			if (item.getTag() == sphereType && item.selectedIndex() == kButtonOn) {
 				item.addChild(overlay);
-				overlay.setPosition(item.getContentSize().width / 2,
+				overlay.setPosition(
+						item.getContentSize().width / 2,
 						item.getContentSize().height / 2);
 				// flashOut 메소드가 안되는 부분이 있어 막아뒀음.(remove node) 대신 다른것 넣어서
 				// 테스트중...
@@ -783,7 +777,21 @@ public class HudLayer extends CCLayer {
 		for (int i = 0; i < 6; i++) {
 			this.removeChildByTag(999, true);
 		}
-
+		
+		// 아이템 수량이 0개일시 버튼 클릭 비활성화
+		// 아랫쪽 for문과 합쳐도 될 것 같음.
+		int sphereTypes = 1;
+		for (CCNode child : itemMenu.getChildren()) {
+			CCMenuItemToggle button = (CCMenuItemToggle) child;
+			Log(child);
+			if (GameData.share().getItemNumberByType(sphereTypes) > 0) {
+				button.setIsEnabled(true);
+			} else {
+				button.setIsEnabled(false);
+			}
+			sphereTypes ++;
+		}
+		
 		for (int i = 0; i < 6; i++) {
 			//
 			// 새 라벨 추가
@@ -801,10 +809,14 @@ public class HudLayer extends CCLayer {
 
 			//
 			// 버튼 상태 설정
-			this.setSphereItemState(sphereType, itemNumber > 0 ? kButtonOn
-					: kButtonOff);
+			this.setSphereItemState(sphereType, itemNumber > 0 ? kButtonOn : kButtonOff);
 		}
 		// Log.e("Game / updateSphereItemNumber", "end");
+	}
+
+	private void Log(Object child) {
+		String objStr = String.valueOf(child);
+		Log.e("HudLayer", objStr + " : " + child);
 	}
 
 	// 원래 코드에서 자동이 하도 많아서

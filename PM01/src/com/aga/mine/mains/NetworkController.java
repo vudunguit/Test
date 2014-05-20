@@ -43,6 +43,8 @@ public class NetworkController extends Activity {
 	final int inviteOwner = 3;
 	final int inviteGuest= 4;
 	
+	
+	
 	// 네트워크 상황
 	final static int kNetworkStateNotAvailable = 0;
 	final static int kNetworkStateTryingStreamOpen = 1;
@@ -496,8 +498,7 @@ public class NetworkController extends Activity {
 			switch (matchMode) {
 			case randomOwner:
 			case inviteOwner: // ok!
-    			Log.e("NetworkController", "randomOwner");
-    			Log.e("NetworkController", "inviteOwner");
+    			Log.e("NetworkController", "random or invite Owner");
 	    		if(mMatchCallback != null) {
 	    			Log.e("NetworkController", "Callback_6 - mInviteCallback != null");
 	    			mMatchCallback.setEntry(matchedOppenentFacebookId, matchedOppenentName, _owner);
@@ -507,9 +508,8 @@ public class NetworkController extends Activity {
 				break;
 			case randomGuest:
 			case inviteGuest:
-    			Log.e("NetworkController", "randomGuest");
-    			Log.e("NetworkController", "inviteGuest");
-    			scene = GameInvite.scene(matchedOppenentFacebookId, matchedOppenentName, sendRoomOwner(guest));
+    			Log.e("NetworkController", "random or invite Guest / matchMode : " + matchMode);
+    			scene = GameInvite.scene(matchedOppenentFacebookId, matchedOppenentName, sendRoomOwner(guest), matchMode);
     			CCDirector.sharedDirector().replaceScene(scene);
 				break;
 			}

@@ -315,10 +315,10 @@ public class MineCell extends CCLayer{
 			Log.e("MineCell", "new gameover : score 1000");
 			if (GameData.share().isMultiGame) {
 				gameOverType = continueGame;
-				sendRequestGameOver(1000);
+				sendRequestGameOver(mGame.sumScore());
 			} else {
 				gameOverType = singleCompleted;
-				gameOver(1000);
+				gameOver(mGame.sumScore());
 			}
 		}
 		
@@ -491,17 +491,15 @@ public class MineCell extends CCLayer{
 			float openedCell = GameData.share().getOpenedCell();
 //			float foundMine = mGame.getFoundMine();
 			float foundMine = GameData.share().getCurrentMine(); // 올바르게 버섯이 심겨진 지뢰만(찾은 호박)
-			Log.e("Game", "markedMine() 값이 의문스러움. 아이폰에 물어볼 것 : " + foundMine);
-			Log.e("Game", "MineCell.java에도 같은 값 존재");
 			float maxMine = GameData.share().getMineNumber(); // 테스트중
 			float heart = GameData.share().getHeartNumber();
-			float remainTime = GameData.share().getSeconds(); // 소요 시간
+			float spentTime = 900 - GameData.share().getSeconds(); // 소요 시간
 
 			if (heart > 0) {
-				myScore = (int) ((((foundMine + heart) * maxMine) + remainTime) * maxMine * 0.006f);
+				myScore = (int) ((((foundMine + heart) * maxMine) + spentTime) * maxMine * 0.006f);
 			}
 			
-			Log.e("MineCell", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", maxMine : " + maxMine + ", heart : " + heart + ", remainTime : " + remainTime);
+			Log.e("MineCell", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", maxMine : " + maxMine + ", heart : " + heart + ", remainTime : " + spentTime);
 			
 			if (GameData.share().isMultiGame) {
 				gameOverType = continueGame;
@@ -717,7 +715,6 @@ public class MineCell extends CCLayer{
 	public void setTileCoord(CGPoint tileCoord) {
 		this.tileCoord = tileCoord;
 	}
-	
 	
 	
 	/*		

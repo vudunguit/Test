@@ -32,6 +32,10 @@ public class GameInvite extends CCLayer {
 	final int randomMode = 2;
 	final int inviteMode = 3;
 	
+	final int titleTag = 345;
+	final int bottomItemTag = 346;
+	final int tornadoTag = 347;
+	
 	String matchedOppenentFacebookId;
 	String matchedOppenentName;
 	public boolean isOwner = false;
@@ -52,9 +56,9 @@ public class GameInvite extends CCLayer {
 		return scene;
 	}
 	
-	public static CCScene scene(String id, String name, boolean owner) {
+	public static CCScene scene(String id, String name, boolean owner, int matchMode) {
 		scene = CCScene.node();
-		CCLayer layer = new GameInvite(id, name, owner);
+		CCLayer layer = new GameInvite(id, name, owner, matchMode);
 		scene.addChild(layer);
 		return scene;
 	}
@@ -72,18 +76,19 @@ public class GameInvite extends CCLayer {
 		setBoardFrameMenu(commonfolder + "frameMatching-hd.png");
 
 		if (gameMode == random) {
-			FrameTitle2.setTitle(boardFrame, "52random/");
+			FrameTitle2.setTitle(boardFrame, "52random/", titleTag);
 			TopMenu2.setSceneMenu(this);
-			BottomImage.setBottomImage(this);
+			BottomImage.setBottomImage(this, bottomItemTag);
+			Util.tornado(backboard, tornadoTag);
 			try {
 				NetworkController.getInstance().sendRequestMatch(GameData.share().getGameDifficulty()); // 난이도 주입
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		} else if (gameMode == invite) {
-			FrameTitle2.setTitle(boardFrame, "53invite/");
+			FrameTitle2.setTitle(boardFrame, "53invite/", titleTag);
 			TopMenu2.setSceneMenu(this);
-			BottomMenu3.setBottomMenu(null, folder, this);
+			BottomMenu3.setBottomMenu(null, folder, this, bottomItemTag);
 			mMatchCallback.setEntry(null, null, true);
 			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_MATCHLIST);
 		}
@@ -109,7 +114,7 @@ public class GameInvite extends CCLayer {
 		// 상단 메뉴
 		TopMenu2.setSceneMenu(this);
 		// 하단 이미지
-		BottomMenu3.setBottomMenu(null, folder, this); 
+		BottomMenu3.setBottomMenu(null, folder, this, bottomItemTag); 
 		
 ////		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 //		//display scroll view
@@ -119,16 +124,23 @@ public class GameInvite extends CCLayer {
 	String oppenentId;
 	String oppenentName;
 	
-	private GameInvite(String id, String name, boolean owner) {
+	private GameInvite(String id, String name, boolean owner, int matchMode) {
 		oppenentId = id;
 		oppenentName = name;
 		isOwner = owner;
+		final int randomGuest = 2;
+		final int inviteGuest= 4;
 		//배경 그림 설정
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1.png");	
 		setBackBoardMenu(commonfolder + "bb1.png");
 		setBoardFrameMenu(commonfolder + "frameMatching-hd.png");
-		TopMenu2.setSceneMenu(this);
-		BottomMenu3.setBottomMenu(null, folder, this); 
+		if (matchMode == randomGuest) {
+			FrameTitle2.setTitle(boardFrame, "52random/", titleTag);
+		} else if (matchMode == inviteGuest) {
+			FrameTitle2.setTitle(boardFrame, "53invite/", titleTag);
+		}  
+//		TopMenu2.setSceneMenu(this); // 불필요한데, 다시 넣으라고 할 것 같다. 까라면 깜.
+		BottomImage.setBottomImage(this);
 		mMatchCallback.setEntry(id, name, owner);
 	}
 	
@@ -214,6 +226,11 @@ public class GameInvite extends CCLayer {
 	// BottomMenu3.setBottomMenu
 	public void randomMatch(Object sender) {
 		MainApplication.getInstance().getActivity().click();
+		this.removeChildByTag(titleTag, true);
+		this.removeChildByTag(bottomItemTag, true);
+		FrameTitle2.setTitle(boardFrame, "52random/", titleTag);
+		BottomImage.setBottomImage(this, bottomItemTag);
+		Util.tornado(backboard, tornadoTag);
 		// hide scroll view
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 		try {
@@ -226,9 +243,10 @@ public class GameInvite extends CCLayer {
 	// ok!
 	private static ImageDownloader mDownloader;
 	public MatchCallback mMatchCallback = new MatchCallback() {
-
+		
 		@Override
 		public void setEntry(String matchedOppenentFacebookId, String matchedOppenentName, boolean owner) {
+
 			int[] location = {0,1};
 			String[] urls = {FacebookData.getinstance().getUserInfo().getId(), matchedOppenentFacebookId}; 
 			String[] names = {FacebookData.getinstance().getUserInfo().getName(), matchedOppenentName};
@@ -255,7 +273,9 @@ public class GameInvite extends CCLayer {
 				tempName.setString(names[i]);
 				
 				if (location[i] == 1) {
-					Util.count(backboard);
+					Config.getInstance().setDisableButton(true); // 대전이 되는 순간 버튼 잠그기(도망 못 감)
+					backboard.removeChildByTag(tornadoTag, true); // 기존 애니 제거
+					Util.count(backboard); // 
 				}
 			}
 		}

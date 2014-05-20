@@ -13,10 +13,14 @@ public class FrameTitle2 {
 	}
 	
 	public static void setTitle(CCSprite parentSprite, String imageFolder) {
+		setTitle(parentSprite, imageFolder, 999);
+	}
+	
+	public static void setTitle(CCSprite parentSprite, String imageFolder, int tag) {
 		//
 		// 타이틀 판넬
 		CCSprite titlePanel = CCSprite.sprite(commonfolder + "frame-titlePanel" + fileExtension);
-		parentSprite.addChild(titlePanel);
+		parentSprite.addChild(titlePanel, tag, tag);
 		titlePanel.setAnchorPoint(0.5f, 0.5f);
 		titlePanel.setPosition(
 			parentSprite.getContentSize().width / 2,

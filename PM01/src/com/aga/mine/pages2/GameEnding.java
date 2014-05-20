@@ -393,10 +393,16 @@ public class GameEnding extends CCLayer {
 //				basket.put("Exp",String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Exp")) + mLeftExp));	
 			} else { // 패배(스코어 및 경험치, 골드, 승률 ok)
 				Log.e("GameEnding", "패배 패널티");
-				if (usedGold)
+				if (usedGold) {
 					basket.put("Gold", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Gold")) - myGold));					
-				else
-					DataFilter.addGameScore(String.valueOf(-myScore));
+				} else {
+					int mPastScore = Integer.valueOf(FacebookData.getinstance().getDBData("Point"));
+					if (mPastScore < myScore) {
+						DataFilter.addGameScore(String.valueOf(-mPastScore));
+					} else {
+						DataFilter.addGameScore(String.valueOf(-myScore));
+					}
+				}
 //					basket.put("Score", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Score")) - decreaseScore));
 				basket.put("HistoryLose", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryLose")) + 1));	
 			}

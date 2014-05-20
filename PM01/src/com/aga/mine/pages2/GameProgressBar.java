@@ -1,5 +1,7 @@
 ﻿package com.aga.mine.pages2;
 
+import java.io.IOException;
+
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
@@ -11,6 +13,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.aga.mine.mains.Config;
+import com.aga.mine.mains.NetworkController;
 
 //일단 완료(중간에 gameover game.release 빼고)
 public class GameProgressBar extends CCLayer {
@@ -41,7 +44,9 @@ public class GameProgressBar extends CCLayer {
 	private long mGameTime;
 	private long mLeftTime;
 
-	public GameProgressBar() {
+	HudLayer mHud;
+	public GameProgressBar(HudLayer hudLayer) {
+		mHud = hudLayer;
 		mContext = CCDirector.theApp.getApplicationContext();
 		CGSize winSize = CCDirector.sharedDirector().winSize();
 
@@ -188,6 +193,20 @@ public class GameProgressBar extends CCLayer {
 	
 	public void gameover() {
 		Config.getInstance().setDisableButton(true);
+		if (GameData.share().isMultiGame) {
+			Log.e("GameProgressBar", "대전 - 시간 초과시 상대방과 점수 비교");
+			try {
+				NetworkController.getInstance().sendRequestGameOver(mHud.mGame.sumScore());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			Log.e("GameProgressBar", "싱글 - 시간 초과시 무조건 승리");
+			Config.getInstance().setVs(Config.getInstance().vsWin);
+			mHud.gameOver(mHud.mGame.sumScore(), 0);
+		}
+//		mHud.gameOver(mHud.mGame.sumScore(), -1);
+
 		((com.aga.mine.pages2.HudLayer)getParent()).setVisible(true);
 		//hudLayer.getChildByTag(1234).setVisible(false);
 		
@@ -201,7 +220,6 @@ public class GameProgressBar extends CCLayer {
 		*/
 		
 	}
-	
 	
 	// CGFloat 없어서 float 대체
 	public void progress(float value, int tag) {

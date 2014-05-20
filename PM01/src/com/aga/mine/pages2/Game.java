@@ -670,10 +670,9 @@ public class Game extends CCLayer {
 	// 인자 추가
 	public void scatterSpheres(ArrayList<MineCell> cells, CCTMXLayer tmx, boolean isAi) {
 		
-		int numberOfSphere = Integer.parseInt(FacebookData.getinstance().getDBData("SphereNumber"));
-		if (GameData.share().isGuestMode) {
-			numberOfSphere = GameData.share().kNumberOfSphere;
-		}
+		int numberOfSphere = GameData.share().kNumberOfSphere;
+		if (!GameData.share().isGuestMode)
+			numberOfSphere = Integer.parseInt(FacebookData.getinstance().getDBData("SphereNumber"));
 		
 		for (int i = 0; i < numberOfSphere; i++) {
 			int location = 0;
@@ -821,11 +820,11 @@ public class Game extends CCLayer {
 			if (!createSphere)
 				tmx.removeTileAt(cell.getTileCoord());
 			tmx.setTileGID(gid, cell.getTileCoord());
-			if (createSphere) {
+			this.getFg().removeTileAt(cell.getTileCoord());
+			cell.setOpened(true); // 수정구가 있는 좌표는 Fg오픈하기
+			removeCell();
+			if (createSphere && GameData.share().isMultiGame) {
 				try {
-					this.getFg().removeTileAt(cell.getTileCoord());
-					cell.setOpened(true); // 수정구가 있는 좌표는 Fg오픈하기
-					removeCell();
 					NetworkController.getInstance().sendPlayDataCellOpen(cell.getCell_ID());
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -1112,12 +1111,13 @@ public class Game extends CCLayer {
 		}
 		
 		mineCell.setMarked(true);
-		try {
-			this.markFlag(coord);
-			if (GameData.share().isMultiGame)
-				NetworkController.getInstance().sendPlayDataMushroomOn(mineCell.getCell_ID());
-		} catch (IOException e) {
-			e.printStackTrace();
+		this.markFlag(coord);
+		if (GameData.share().isMultiGame) {
+			try {
+					NetworkController.getInstance().sendPlayDataMushroomOn(mineCell.getCell_ID());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		// Log.e("Game / handleLongPress", "지뢰 없음");
 	}
@@ -1130,12 +1130,13 @@ public class Game extends CCLayer {
 		}
 		
 		mineCell.setMarked(false);
-		try {
-			this.removeFlag(coord); // tmx에 적용
-			if (GameData.share().isMultiGame)
-				NetworkController.getInstance().sendPlayDataMushroomOff(mineCell.getCell_ID());
-		} catch (IOException e) {
-			e.printStackTrace();
+		this.removeFlag(coord); // tmx에 적용
+		if (GameData.share().isMultiGame) {
+			try {
+					NetworkController.getInstance().sendPlayDataMushroomOff(mineCell.getCell_ID());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -1841,23 +1842,21 @@ public class Game extends CCLayer {
 	}
 	
 	// 다시 체크 해볼 것 
-	private int  sumScore() {
+	public int  sumScore() {
 		int myScore = 0;
 		
 		float openedCell = GameData.share().getOpenedCell();
 //		float foundMine = mGame.getFoundMine();
 		float foundMine = GameData.share().getCurrentMine(); // 올바르게 버섯이 심겨진 지뢰만(찾은 호박)
-		Log.e("Game", "markedMine() 값이 의문스러움. 아이폰에 물어볼 것 : " + foundMine);
-		Log.e("Game", "MineCell.java에도 같은 값 존재");
 		float maxMine = GameData.share().getMineNumber(); // 테스트중
 		float heart = GameData.share().getHeartNumber();
-		float remainTime = GameData.share().getSeconds(); // 소요 시간
+		float spentTime = 900 - GameData.share().getSeconds(); // 소요 시간
 		
 		if (heart > 0) {
-			myScore = (int) ((((foundMine + heart) * maxMine) + remainTime) * maxMine * 0.006f);
+			myScore = (int) ((((foundMine + heart) * maxMine) + spentTime) * maxMine * 0.006f);
 		}
 		
-		Log.e("MineCell", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", maxMine : " + maxMine + ", heart : " + heart + ", remainTime : " + remainTime);
+		Log.e("MineCell", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", heart : " + heart + ", maxMine : " + maxMine + ", remainTime : " + spentTime);
 		
 		return myScore;
 	}
@@ -1884,10 +1883,12 @@ public class Game extends CCLayer {
 		
 		switch (messageType) {
 		case kmessageRequestScore:
-			try {
-				NetworkController.getInstance().sendRequestGameOver(myScore);
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (GameData.share().isMultiGame) { // 막을필요는 없지만 의외로 실행 되는것을 방지하기위해 막아놓음
+				try {
+					NetworkController.getInstance().sendRequestGameOver(myScore);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			break;
 			
@@ -1973,7 +1974,9 @@ public class Game extends CCLayer {
 		pos = CGPoint.ccp(pos.x + tileSize.width/2, pos.y - tileSize.height/2);
 		
 		bottle.setPosition(pos);
-		addChild(bottle);
+		// 기본 z값은 -1이며 지뢰숫자는 100000으로 설정되어있어 애니가 숫자보다 밑에 보이는겁니다.
+		addChild(bottle); 
+//		addChild(bottle, mineNumberLayer + 1); // 지뢰숫자보다 높게 설정함. //원래대로 돌려 놨습니다. 
 		
 		CCAnimate action = CCAnimate.action(1.0f, mBottle, false);
 		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite"); // 익셉션 발생에 따른 막아둠.
@@ -2030,7 +2033,6 @@ public class Game extends CCLayer {
 		public abstract void run();
 		
 	}
-
 
 
 
