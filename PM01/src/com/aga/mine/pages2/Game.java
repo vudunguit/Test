@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.interval.CCAnimate;
@@ -102,12 +104,21 @@ public class Game extends CCLayer {
 	
 	private CCAnimation mEarthBomb;
 	private CCAnimation mBottle;
+	private CCAnimation mMagma;
+	private CCAnimation mMagmaFire;
 	
 	//Tile animation
 	public Bitmap mBitmap;
 	public CCScaleTo mScaleAction;
 	public CCAnimate mOpenAction;
 	public CCAnimate mPumpkinBomb;
+	
+	//마법 공격 및 피해 변수
+	public long mAttackTime = 30;  //공격 지속 시간
+	public long startTimeOfAttack; //공격 시작 시간
+	public long mDefenseTime = 30; //방어 지속 시간(상대방공격시간)
+	
+	ArrayList<Integer> mDeleteTags; //삭제하기위해 태그를 저장하는 컬렉션
 
 	private int mineNumber;
 	public CCTMXTiledMap getTileMap() {
@@ -516,6 +527,22 @@ public class Game extends CCLayer {
     		CCSprite bottle = CCSprite.sprite(String.format("61hud/spirit_%02d.png", i));
     		mBottle.addFrame(bottle.getTexture());
 		}
+		
+		//불피해시 용암 애니
+		mMagma = CCAnimation.animation("magma");
+		for(int i=1; i<=9; i++) {
+    		CCSprite magma = CCSprite.sprite(String.format("60game/magma_%02d.png", i));
+    		mMagma.addFrame(magma.getTexture());
+		}
+		
+		//불피해시 불기동 애니
+		mMagmaFire = CCAnimation.animation("magmafire");
+		for(int i=1; i<=4; i++) {
+    		CCSprite magmafire = CCSprite.sprite(String.format("60game/magmafire_%02d.png", i));
+    		mMagmaFire.addFrame(magmafire.getTexture());
+		}
+		
+		mDeleteTags = new ArrayList<Integer>();
 		
 		//이모티콘 test : 실제로는 NetworkController에서 전송된 이모티콘 id를 던져준다.
 		//mHud.startEmoticonAni(5);
@@ -2020,6 +2047,67 @@ public class Game extends CCLayer {
 		
 		//폭탄 터지기 : 타일 오픈후 pumpkin 애니메이션
 		//for(MineCell)
+	}
+	
+	//불 피해 애니 : 열려진 땅을 cracklayer로 변환
+	public void startFire() {
+		//int crackGID = tmxEarthLayer.tileGIDAt(CGPoint.ccp(0, 0));
+		//crackGID = CCFormatter.swapIntToLittleEndian(crackGID);
+		
+		CCAnimate magma = CCAnimate.action(1.5f, mMagma, false);
+		CCRepeatForever magmaAni = CCRepeatForever.action(magma);
+		
+		CCAnimate magmafire = CCAnimate.action(1.0f, mMagmaFire, false);
+		CCRepeatForever magmafireAni = CCRepeatForever.action(magmafire);
+		
+		for(MineCell cell : cells) {
+			if(cell.isOpened()) {
+				int tag = 10000 + cell.getCell_ID();
+				//깨진 대지 타일 세팅
+				//this.tmxFlagLayer.setTileGID(crackGID, cell.getTileCoord());
+				CCSprite crack = CCSprite.sprite("60game/crackearth.png");
+				this.addChild(crack, 20, tag);
+				crack.setPosition(cell.getTilePosition());
+				crack.setAnchorPoint(0.5f, 0.5f);
+				Log.d("LDK", "crack earth position:" + cell.getPosition().x + "," + cell.getPosition().y);
+				
+				//용암 애니
+				CCSprite sprite = CCSprite.sprite("60game/magma_01.png");
+				sprite.setScale(0.5f);
+				crack.addChild(sprite, -1);
+				sprite.setPosition(crack.getContentSize().width/2, crack.getContentSize().height/2);
+				sprite.runAction(magmaAni.copy());
+				
+				//불기둥 애니
+				Random rand = new Random();
+				if(rand.nextFloat() < 0.3f) { //30%
+					CCSprite sprite2 = CCSprite.sprite("60game/magmafire_01.png");
+					crack.addChild(sprite2, 1);
+					sprite2.setPosition(crack.getContentSize().width/2, crack.getContentSize().height/2);
+					sprite2.setAnchorPoint(0.5f, 0.2f);
+					sprite2.runAction(magmafireAni.copy());
+				}
+				
+				//삭제하기 위해 태그를 저장
+				mDeleteTags.add(tag);
+			}
+		}
+		
+		schedule(new UpdateCallback() {
+			@Override
+			public void update(float d) {
+				stopAttack();
+				unschedule(this);
+			}
+		}, mDefenseTime);
+	}
+	
+	public void stopAttack() {
+		for(Integer i : mDeleteTags) {
+			removeChildByTag(i, true);
+		}
+		//삭제후 컬렉션 초기화
+		mDeleteTags.clear();
 	}
 
 	abstract class TileOpenTask extends AsyncTask<Void, Void, Void> {

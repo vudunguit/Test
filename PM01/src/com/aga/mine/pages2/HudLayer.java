@@ -929,7 +929,7 @@ public class HudLayer extends CCLayer {
 			public void update(float d) {
 				// TODO
 				unschedule(this);
-				Log.d("LDK", "fire attack");
+				mGame.startFire();
 			}
 		}, 2.0f);
 	}
@@ -1106,8 +1106,7 @@ public class HudLayer extends CCLayer {
 		
 		switch(kind) {
 		case 4: //신성 마법
-			
-			
+			mGame.stopAttack();
 			break;
 		case 5:
 			//마법진 사라진 후 대지 폭발 효과
