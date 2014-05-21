@@ -62,8 +62,8 @@ public class Login extends CCLayer{
 	public Login() {
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0), folder + "appload-bg" + fileExtension);
 		cache = CCSpriteFrameCache.sharedSpriteFrameCache();
-		cache.addSpriteFrames("loading-magician.plist");
-		CCSpriteSheet.spriteSheet("loading-magician.png"); 
+		cache.addSpriteFrames(folder + "loading-magician.plist");
+		CCSpriteSheet.spriteSheet(folder + "loading-magician.png"); 
 		
 		//progress 애니메이션
 		CCAnimation progress = CCAnimation.animation("progress");
@@ -306,7 +306,7 @@ public class Login extends CCLayer{
 	}
 	
 	private void aniEffect() {
-		CCScaleTo action1 = CCScaleTo.action(0.5f, 1);
+		CCScaleTo action1 = CCScaleTo.action(0.6f, 1);
 		CCCallFunc action2 = CCCallFunc.action(this, "buttonTouch");		
 		loginMenu.runAction(CCSequence.actions(action1, action2));
 	}
