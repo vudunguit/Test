@@ -3,28 +3,36 @@
 //import org.cocos2d.layers.CCColorLayer; // 이게 왜 들어가있지??
 import java.util.Locale;
 
+import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFunc;
+import org.cocos2d.actions.interval.CCAnimate;
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
+import org.cocos2d.events.CCTouchDispatcher;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.menus.CCMenuItemToggle;
+import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCSpriteFrameCache;
+import org.cocos2d.nodes.CCSpriteSheet;
 import org.cocos2d.types.CGPoint;
-//import org.cocos2d.types.ccColor4B; // 이게 왜 들어가있지??
 
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
 import com.aga.mine.pages2.GameData;
+//import org.cocos2d.types.ccColor4B; // 이게 왜 들어가있지??
 
 public class Login extends CCLayer{
+	
+    private static final String TAG = "Login";
 	
 	final String folder = "02appload/";
 	final String fileExtension = ".png";
@@ -33,11 +41,13 @@ public class Login extends CCLayer{
 	
 	final int kButtonOff = 0;
 	final int kButtonOn = 1;
-	final int termsTag = 10;
+	final int aniTag = 100;
+	final int termsTag = 200;
 	final int disableButtonTag = 100;
 	final int toggleButtonTag = 200;
 	
 	CCSprite bg;
+	CCMenu loginMenu;
 	CCMenuItem termsOK;
 	
 	public static CCScene scene() {
@@ -46,9 +56,33 @@ public class Login extends CCLayer{
 		scene.addChild(layer);
 		return scene;	
 	}
-
+	
+	CCSpriteFrameCache cache;
+	
 	public Login() {
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0), folder + "appload-bg" + fileExtension);
+		cache = CCSpriteFrameCache.sharedSpriteFrameCache();
+		cache.addSpriteFrames("loading-magician.plist");
+		CCSpriteSheet.spriteSheet("loading-magician.png"); 
+		
+		//progress 애니메이션
+		CCAnimation progress = CCAnimation.animation("progress");
+		for( int i=1;i<=12;i++) {
+			progress.addFrame(cache.getSpriteFrame((String.format("f%02d.png", i))));
+		}
+		
+		//마법사 애니메이션
+		CCAnimation wizard = CCAnimation.animation("wizard");
+		for( int i=1;i<=2;i++) {
+			wizard.addFrame(cache.getSpriteFrame((String.format("loading-magician%02d.png", i))));
+//			wizard.addFrame((String.format(folder + "wizard%02d.png", i)));
+		}
+		
+		mCircularProgress = CCAnimate.action(1.2f, progress, false);
+//		mWizard = CCAnimate.action(0.3f, wizard, false);
+		mWizard = CCAnimate.action(0.6f, wizard, false);
+		
+		
 		terms(bg);
 		setMain(bg);
 		setForeground(bg);
@@ -118,33 +152,36 @@ public class Login extends CCLayer{
 		//게임이름
 		CCSprite title = CCSprite.sprite(
 				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "game-Woodtitle" + fileExtension));
-		bg.addChild(title);
 		title.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2);
 		title.setAnchorPoint(0.5f ,0.5f);
+		bg.addChild(title, aniTag, aniTag);
 		
 		//로딩바 배경
 		CCSprite loadingMap = CCSprite.sprite(folder + "countbg" + fileExtension);
-		bg.addChild(loadingMap);
 		loadingMap.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2);
 		loadingMap.setAnchorPoint(0.5f ,0.5f);
+		bg.addChild(loadingMap, aniTag + 1,  aniTag + 1);
 		
-		// 로딩바
-		CCSprite loadingBar = CCSprite.sprite(folder + "c01" + fileExtension);
-		bg.addChild(loadingBar);
-		loadingBar.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 0);
-		loadingBar.setAnchorPoint(0.5f ,0.5f);
+//		// 로딩바
+//		CCSprite loadingBar = CCSprite.sprite(folder + "c01" + fileExtension);
+//		loadingBar.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 0);
+//		loadingBar.setAnchorPoint(0.5f ,0.5f);
+//		bg.addChild(loadingBar, aniTag + 2,  aniTag + 2);
 		
 		// 냄비
 		CCSprite pot = CCSprite.sprite(folder + "pot" + fileExtension);
-		bg.addChild(pot);
 		pot.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 116);
 		pot.setAnchorPoint(0.5f ,0.5f);
+		bg.addChild(pot, aniTag + 3,  aniTag + 3);
 
-		// 마법사
-		CCSprite wizard = CCSprite.sprite(folder + "wizard01" + fileExtension);
-		bg.addChild(wizard);
-		wizard.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 116);
-		wizard.setAnchorPoint(0.5f ,0.5f);
+//		// 마법사
+//		CCSprite wizard = CCSprite.sprite(folder + "wizard01" + fileExtension);
+//		bg.addChild(wizard);
+//		wizard.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 116);
+//		wizard.setAnchorPoint(0.5f ,0.5f);
+		
+		actionWizard();
+		actionProgress();
 	}
 	
 	private void setForeground(CCSprite bg) {
@@ -176,7 +213,41 @@ public class Login extends CCLayer{
 		bg.addChild(loginMenu);
 	}
 	
-	CCMenu loginMenu;
+	
+	public CCAnimate mWizard;
+	public CCAnimate mCircularProgress;
+	
+	public void actionProgress() {
+		CCSprite loadingBar = CCSprite.sprite(folder + "c01" + fileExtension);
+//		loadingBar.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 0);
+		// plist이미지(f01~12)와 낱개(c01) 이미지의 위치가 다름
+		// plist를 만지는 툴이 없으므로 위치를 변경함.
+		loadingBar.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 114);
+		loadingBar.setAnchorPoint(0.5f ,0.5f);
+		bg.addChild(loadingBar, aniTag + 2,  aniTag + 2);
+		CCRepeatForever repeat = CCRepeatForever.action(CCSequence.actions(mCircularProgress));
+		loadingBar.runAction(repeat);
+	}
+	
+	public void actionWizard() {
+		CCSprite wizard = CCSprite.sprite(folder + "wizard01" + fileExtension);
+		// 마법사 위치는 맞기때문에 그냥 놔둠.(신기신기)
+		// 안물어보면 안물어봤다고 추궁들어오고, 왜 다르냐고 물어보면 귀찮은듯 "문제있나?" 이런식으로 대충 넘길테고  늘 그래왔다. 
+		wizard.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 116);
+		wizard.setAnchorPoint(0.5f ,0.5f);
+		bg.addChild(wizard, aniTag + 4, aniTag + 4);
+//		CCCallFuncN _removeAction = CCCallFuncN.action(this, "removeAction");
+//		wizard.runAction(CCSequence.actions(mPumpkinBomb, _removeAction));
+		CCRepeatForever repeat = CCRepeatForever.action(CCSequence.actions(mWizard));
+		wizard.runAction(repeat);
+	}
+	
+	public void removeAction(Object sender) {
+		CCSprite sprite = (CCSprite)sender;
+		sprite.removeFromParentAndCleanup(true);
+	}
+	
+	
 	
 	public void facebookCallback(Object sender){
 		MainApplication.getInstance().getActivity().click();
@@ -193,7 +264,7 @@ public class Login extends CCLayer{
 	public void cilcked(Object sender) {
 		MainApplication.getInstance().getActivity().click();
 		int tag = ((CCNode)sender).getTag();
-		Log.e("Login", "tag : " + tag);
+		Log.e(TAG, "tag : " + tag);
 		switch (tag) {
 		case 0:
 			String address = "http://agatong.co.kr/policy/policy_eng.html";
@@ -235,7 +306,7 @@ public class Login extends CCLayer{
 	}
 	
 	private void aniEffect() {
-		CCScaleTo action1 = CCScaleTo.action(1, 1);
+		CCScaleTo action1 = CCScaleTo.action(0.5f, 1);
 		CCCallFunc action2 = CCCallFunc.action(this, "buttonTouch");		
 		loginMenu.runAction(CCSequence.actions(action1, action2));
 	}
@@ -244,5 +315,24 @@ public class Login extends CCLayer{
 		loginMenu.setIsTouchEnabled(true);
 	}
 	
+	@Override
+	public void onExit() {
+		Log.e(TAG, "onExit");
+		// 뭔지 대부분 모름.
+		cache.removeAllSpriteFrames();
+		
+//		CCDirector.sharedDirector().purgeCachedData(); // 전부 다 날아감.
+		
+//		this.removeAllChildren(true); //removeAllChildrenWithCleanup 이게 없어서 대신 씀.
+		this.removeSelf(); // 이걸로 해야될 것 같음.
+		
+		this.unscheduleAllSelectors();
+		
+//		this.unschedule(timeOutCheck()); // 없음
+//		this.unschedule(checkFacebookLoginFinish()); // 없음
+
+		CCTouchDispatcher.sharedDispatcher().removeAllDelegates();
+		super.onExit();
+	}
 
 }
