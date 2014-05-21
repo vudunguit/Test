@@ -2119,9 +2119,9 @@ public class Game extends CCLayer {
 		CGPoint location = CGPoint.ccp(winSize.width * 0.5f, winSize.height * 0.2f);
 		CGPoint pos = this.convertToNodeSpace(location);
 		clouds.add(pos);
-		clouds.add(CGPoint.ccpAdd(pos, CGPoint.ccp(0, tileSize.height * 6)));
-		clouds.add(CGPoint.ccpAdd(pos, CGPoint.ccp(tileSize.width * -3, tileSize.height*3)));
-		clouds.add(CGPoint.ccpAdd(pos, CGPoint.ccp(tileSize.width * 3, tileSize.height*3)));
+		clouds.add(CGPoint.ccpAdd(pos, CGPoint.ccp(0, tileSize.height * 8)));
+		clouds.add(CGPoint.ccpAdd(pos, CGPoint.ccp(tileSize.width * -4, tileSize.height*4)));
+		clouds.add(CGPoint.ccpAdd(pos, CGPoint.ccp(tileSize.width * 4, tileSize.height*4)));
 		
 		Log.d("LDK","CGPoint:" + winSize.width * 0.5f + "," + winSize.height * 0.2f);
 		Log.d("LDK","pos:" + pos.x + "," + pos.y);
