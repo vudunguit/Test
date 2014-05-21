@@ -1252,16 +1252,17 @@ public class HudLayer extends CCLayer {
 
 		//정령석 애니메이션, 점점 커지면서 위로 잠깐 솟았다가 아래 아이콘 영역으로 이동
 		spirit.setPosition(pos);
-		spirit.setScale(0);
-		addChild(spirit, 100);
+		spirit.setScale(0.3f);
+		addChild(spirit, 200);
 		
 		CCScaleTo scale = CCScaleTo.action(1.5f, 1.0f);
 		spirit.runAction(scale);
 		
-		CCMoveBy moveby = CCMoveBy.action(0.5f, CGPoint.ccp(0, 100));
-		CCMoveTo moveto = CCMoveTo.action(1.0f, pos2);
+		CCMoveBy moveby = CCMoveBy.action(0.35f, CGPoint.ccp(0, 150));
+		CCMoveTo moveto = CCMoveTo.action(1.15f, pos2);
+		CCFadeOut out = CCFadeOut.action(0.2f);
 		CCCallFuncND increase = CCCallFuncND.action(this, "cbIncreaseNumber", kind);
-		spirit.runAction(CCSequence.actions(moveby, moveto, increase));
+		spirit.runAction(CCSequence.actions(moveby, moveto, out, increase));
 	}
 
 	public void cbIncreaseNumber(Object sender, Object k) {

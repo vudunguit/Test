@@ -1187,7 +1187,7 @@ public class Game extends CCLayer {
 	//
 	// 더블터치 : 셀 오픈
 	public void handleDoubleTap(MotionEvent event) {
-		mHud.StartAniCloudDefense();
+		//mHud.StartAniCloudDefense();
 		Log.e("Game / handleDoubleTap", "마인 갯수 : " + getMineNumber());
 		if (Config.getInstance().isDisableButton())
 			return;
@@ -1266,7 +1266,7 @@ public class Game extends CCLayer {
 				}
 
 				// 정령석 아래 HUD로 이동하는 애니메이션
-				mHud.startMoveSpirit(sphereType, CGPoint.ccpAdd(cell.getTilePosition(), this.getPosition()));
+				mHud.startMoveSpirit(sphereType, this.convertToWorldSpace(cell.getTilePosition().x, cell.getTilePosition().y));
 			}
 		}
 		// end 모두 열린 수정구가 있는지 확인한다.
