@@ -40,7 +40,7 @@
  레벨up 팝업을 3초간 띄운다.
  그리고, 남은 경험치 2000을 2초동안 애니메이션 시켜준다.
  
- 4. Game.java
+5. Game.java
  GameLoading은 지금 별도의 씬인데, Game에 컴포지션으로 포함시켜야 로딩바 구현이가능함
  전체 구조를 그리면 아래와 같다.
  하위 레이어를 생성시 인스턴스를 주입시켜서 하위레이어가 상위레이어를 접근가능하게 한다. 델리게이트는 필요없음
@@ -54,113 +54,21 @@
                  |
                  - GameEnding
                  
-
-*temp 
-private void startVictory() {
-    		CCSprite backLight = CCSprite.sprite("70game_ending/back-light.png");
-    		CCSprite backSearch = CCSprite.sprite("70game_ending/back-search.png");
-    		CCSprite rybon = CCSprite.sprite("70game_ending/rybon.png");
-    		
-    		//백라이트 배치
-    		addChild(backLight);
-    		backLight.setPosition(width*0.5f, height*0.5f);
-    		
-    		//회전 섬광 배치
-    		addChild(backSearch);
-    		backSearch.setPosition(width*0.5f, height*0.5f);
-    		
-    		//리본 배치
-    		rybon.setPosition(width*0.5f, height*0.5f);
-    		addChild(rybon);
-    		
-    		//별배치
-    		for (int i = 0; i< 100 ; i++) {
-	    		CCSprite star = CCSprite.sprite("70game_ending/star.png");
-	    		
-	    		CCDelayTime delay = CCDelayTime.action(new Random().nextFloat() * 5.0f);
-	    		CCCallFuncN show = CCCallFuncN.action(this, "cbShowSprite");
-	    		star.runAction(CCSequence.actions(delay, show));
-    		}
-    		
-    		//배경 회전
-    		CCRotateBy rot = CCRotateBy.action(4, 360);
-    		CCCallFuncN end = CCCallFuncN.action(this, "cbEndVictory");
-    		backSearch.runAction(rot);
-    		
-    		//리본 확대->축소 
-    		rybon.setScale(1.5f);
-    		CCScaleTo scale = CCScaleTo.action(0.5f, 1.0f);
-    		CCCallFuncN call = CCCallFuncN.action(this, "cbCallHeartLeft");
-    		rybon.runAction(CCSequence.actions(scale, call));
-    	}
-    	
-    	public void cbShowSprite(Object sender) {
-    		CCSprite star = (CCSprite) sender;
-    		//star.setOpacity(0);
-    		star.setScale(0.5f +  new Random().nextFloat()*1.0f);
-    		star.setPosition(new Random().nextFloat()*width, new Random().nextFloat()*height);
-    		
-    		//CCFadeIn in = CCFadeIn.action(1.0f);
-    		CCFadeOut out = CCFadeOut.action(1.0f);
-    		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite");
-    		addChild(star);
-    		star.runAction(CCSequence.actions(out, remove));
-    	}
-    	
-    	public void cbEndVictory(Object sender) {
-    		Log.d("LDK", "cbEndVictory");
-    	}
-    	
-    	public void cbCallHeartLeft(Object sender) {
-    		CCSprite heartLeft = CCSprite.sprite("70game_ending/heart-left.png");
-    		addChild(heartLeft);
-    		heartLeft.setPosition(width*0.5f, height*0.5f);
-    		
-    		heartLeft.setScale(1.5f);
-    		CCScaleTo scale = CCScaleTo.action(0.5f, 1.0f);
-    		CCCallFuncN call = CCCallFuncN.action(this, "cbCallHeartRight");
-    		heartLeft.runAction(CCSequence.actions(scale, call));
-    	}
-    	
-    	public void cbCallHeartRight(Object sender) {
-    		CCSprite heartRight = CCSprite.sprite("70game_ending/heart-right.png");
-    		addChild(heartRight);
-    		heartRight.setPosition(width*0.5f, height*0.5f);
-    		
-    		heartRight.setScale(1.5f);
-    		CCScaleTo scale = CCScaleTo.action(0.5f, 1.0f);
-    		CCCallFuncN call = CCCallFuncN.action(this, "cbCallHeartCenter");
-    		heartRight.runAction(CCSequence.actions(scale, call));
-    	}
-    	
-    	public void cbCallHeartCenter(Object sender) {
-    		CCSprite heartCenter = CCSprite.sprite("70game_ending/heart-center.png");
-    		addChild(heartCenter);
-    		heartCenter.setPosition(width*0.5f, height*0.5f);
-    		
-    		heartCenter.setScale(1.5f);
-    		CCScaleTo scale = CCScaleTo.action(0.5f, 1.0f);
-    		CCCallFuncN call = CCCallFuncN.action(this, "cbCallScore");
-    		heartCenter.runAction(CCSequence.actions(scale, call));
-    	}
-    	
-    	public void cbCallScore(Object sender) {
-    		int k = 3;
-    		CCSprite score = null;
-    		if (k == 1) {
-    			score = CCSprite.sprite("70game_ending/x1.png");
-    		} else if (k == 2) {
-    			score = CCSprite.sprite("70game_ending/x2.png");
-    		} else {
-    			score = CCSprite.sprite("70game_ending/x3.png");
-    		}
-    		
-    		addChild(score);
-    		score.setPosition(width*0.5f, height*0.3f);
-    		
-    		score.setScale(1.5f);
-    		CCScaleTo scale = CCScaleTo.action(0.5f, 1.0f);
-
-    		score.runAction(scale);
-    	}
+6. 공격 쿨타임 및 방어 지속 시간 로직----------------------------------------------------------
+* 공격시간 쿨타임 계산 로직
+- 공격지속 시간은 아래 변수에서 초기화
+	public long mFireAttackTime = 30;
+	public long mWindAttackTime = 30;
+	public long mCloudAttackTime = 30;
+- 아래 변수는 공격 쿨타임을 계산하기 위한 시작 시간 변수
+public long startTimeOfAttack;
+만일 현재 공격중이 아니면 이 변수는 0이다.
+공격을 시작하면 시작 시간을 System.CurrentTime()을 넣고, 매 프레임마다 경과시간을 계산한다.	
+공격이 끝나면 다시 0으로 초기화
+	
+* 방어시간
+- 방어 지속 시간은 아래 변수에서 초기화
+	public long mFireDefenseTime = 30; //불방어 지속 시간(상대방공격시간)
+	public long mWindDefenseTime = 30;
+	public long mCloudDefenseTime = 30;
       

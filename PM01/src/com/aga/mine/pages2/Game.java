@@ -29,6 +29,7 @@ import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
+import org.cocos2d.types.ccColor3B;
 import org.cocos2d.utils.CCFormatter;
 
 import android.content.Context;
@@ -1176,7 +1177,7 @@ public class Game extends CCLayer {
 	//
 	// 더블터치 : 셀 오픈
 	public void handleDoubleTap(MotionEvent event) {
-		//mHud.StartAniFireDefense();
+		//mHud.StartAniWindDefense();
 		Log.e("Game / handleDoubleTap", "마인 갯수 : " + getMineNumber());
 		if (Config.getInstance().isDisableButton())
 			return;
@@ -1635,66 +1636,6 @@ public class Game extends CCLayer {
 		mHud.updateMineNumber(decreaseMineNumber());
 	}
 
-	//
-	// effects
-	public void rotateAllMineNumberLabel() {
-		//
-		// 현재 보이는 번호들을 2바퀴 2초간 돌리고 멈춘다.
-		ArrayList<MineCell> cellsTemp = cells;
-		int size = cellsTemp.size();
-		for (int k = 0; k < size; k++) {
-			// rotateBy rot = ~~~~~
-			// 지속시간, 회전각도
-			CCRotateBy rot = CCRotateBy.action(2f, 360f);
-			CCLabel label = (CCLabel) this.getChildByTag(cellsTemp.get(k)
-					.getCell_ID()); // 될랑가 몰라??
-			label.runAction(CCSequence.actions(rot, rot, rot));
-		}
-	}
-
-	public void stopRotationOfMineNumberLabel() {
-		// Log.e("stop", "rot");
-		ArrayList<MineCell> cellsTemp = cells;
-		int size = cellsTemp.size();
-		for (int k = 0; k < size; k++) {
-			CCRotateBy rot = CCRotateBy.action(5f, 360f);
-			CCLabel label = (CCLabel) this.getChildByTag(cellsTemp.get(k)
-					.getCell_ID());
-			label.runAction(rot);
-		}
-	}
-
-	public void showAllMineNumberLabel() {
-		ArrayList<MineCell> cellsTemp = cells;
-		int size = cellsTemp.size();
-		for (int k = 0; k < size; k++) {
-			CCLabel label = (CCLabel) this.getChildByTag(cellsTemp.get(k)
-					.getCell_ID());
-			label.setVisible(true);
-		}
-	}
-
-	public void hideAllMineNumberLabel() {
-		ArrayList<MineCell> cellsTemp = cells;
-		int size = cellsTemp.size();
-		for (int k = 0; k < size; k++) {
-			CCLabel label = (CCLabel) this.getChildByTag(cellsTemp.get(k)
-					.getCell_ID());
-			label.setVisible(false);
-		}
-	}
-
-
-
-
-
-	
-	// 소리 파일이 여기서 나면 안되고 MineCell클래스에 if (numberOfArroundMine > pumpkinMine)문 에서 결정 되야합니다.
-	
-	//
-	
-
-	// HudLayer inner class end
 
 	public CGPoint tileCoordForPosition(CGPoint position) {
 		CGSize mapSize = this.mapSize;
@@ -2117,6 +2058,56 @@ public class Game extends CCLayer {
 		}, mFireDefenseTime);
 	}
 	
+	public void startWind() {
+		CCRotateBy rot = CCRotateBy.action(0.1f, 18f); //1초당 18도 회전
+		CCRepeatForever repeat = CCRepeatForever.action(rot);
+		
+		for(MineCell cell : cells) {
+			if(cell.isOpened()) {
+				if(cell.numberOfArroundMine > 0) {
+					//셀위에 숫자가 있다면 감춘다.
+					this.getChildByTag(cell.getCell_ID()).setVisible(false);
+					mNumberTags.add(cell.getCell_ID());
+					
+					//셀에 숫자를 생성하고 애니메이션 시킨다.
+					int tag = 10000 + cell.getCell_ID();
+					
+					//라벨 스프라이트 생성
+					final CCLabel label = CCLabel.makeLabel("1", "Arial-Bold", (int) ((70 * (2 / 3.0) * tileSize.width) / 128));
+					addChild(label, 10, tag);
+					label.setAnchorPoint(0.5f, 0.5f);
+					label.setPosition(cell.getTilePosition());
+					label.setColor(ccColor3B.ccc3((int) (75 / 255f), (int) (51 / 255f), (int) (9 / 255f)));
+					label.runAction(repeat.copy());
+					mDeleteTags.add(tag);
+				}
+			}
+		}
+		
+		schedule("increaseNumber", 0.1f); //숫자 증가시키는 콜백
+		
+		schedule(new UpdateCallback() {
+			@Override
+			public void update(float d) {
+				stopAttack();
+				unschedule(this);
+				unschedule("increaseNumber");
+			}
+		}, mWindDefenseTime);
+	}
+	
+	public float mIncreaseTime = 0;
+	public void increaseNumber(float dt) {
+		mIncreaseTime += dt;
+		
+		int number = (int)mIncreaseTime % 8;
+		
+		for(Integer i : mDeleteTags) {
+			CCLabel label = (CCLabel) getChildByTag(i);
+			label.setString(String.valueOf(number+1));
+		}
+	}
+	
 	public void stopAttack() {
 		//애니메이션 삭제
 		for(Integer i : mDeleteTags) {
@@ -2133,6 +2124,8 @@ public class Game extends CCLayer {
 		
 		//마법사 감전 애니 정지
 		mHud.stopShockAni();
+		
+		unschedule("increaseNumber");
 	}
 
 	abstract class TileOpenTask extends AsyncTask<Void, Void, Void> {

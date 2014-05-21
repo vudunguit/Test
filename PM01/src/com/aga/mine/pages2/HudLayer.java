@@ -971,6 +971,8 @@ public class HudLayer extends CCLayer {
 	
 	//바람 방어 애니메이션
 	public void StartAniWindDefense() {
+		startShockAni(); //마법사 감전 애니
+		
 		for(int k=0; k<20; k++) {
 			CCSprite wind = CCSprite.sprite("61hud/wind01_0.1.png");
 			//x 위치 랜덤
@@ -989,14 +991,14 @@ public class HudLayer extends CCLayer {
 			wind.runAction(repeat);
 			wind.runAction(CCSequence.actions(delay, move, remove));
 		}
-		//2초(시간은  조정 필요) 후에 맵에 표시되는 부분 구현
+		//1초(시간은  조정 필요) 후에 맵에 표시되는 부분 구현
 		schedule(new UpdateCallback() {
 			@Override
 			public void update(float d) {
-				// TODO
 				unschedule(this);
+				mGame.startWind();
 			}
-		}, 2.0f);
+		}, 1.0f);
 	}
 	
 	//구름공격 애니메이션------------------------------------------------------------
