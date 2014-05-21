@@ -425,7 +425,7 @@ public class MineCell extends CCLayer{
 		// 글자 크기 기존의 2/3로 감소(사유 : 수정구 바닦에 숫자가 겹쳐야 되서 수정구에 의해 숫자가 가려짐. - 박정렬 팀장님)
 		CCLabel label = CCLabel.makeLabel("" + numberOfMine + " ",
 				"Arial-Bold", (int) ((70 * (2 / 3.0) * mGame.tileSize.width) / 128));
-		mGame.addChild(label, 10, tag);
+		mGame.addChild(label, 5, tag);
 		label.setAnchorPoint(0.5f, 0.5f);
 		label.setPosition(position);
 		label.setColor(ccColor3B.ccc3((int) (75 / 255f), (int) (51 / 255f),

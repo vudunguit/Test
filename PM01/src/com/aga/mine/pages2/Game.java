@@ -8,9 +8,12 @@ import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.cocos2d.actions.UpdateCallback;
+import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.interval.CCAnimate;
+import org.cocos2d.actions.interval.CCFadeIn;
+import org.cocos2d.actions.interval.CCFadeOut;
 import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.actions.interval.CCRotateBy;
 import org.cocos2d.actions.interval.CCScaleTo;
@@ -113,6 +116,7 @@ public class Game extends CCLayer {
 	public CCScaleTo mScaleAction;
 	public CCAnimate mOpenAction;
 	public CCAnimate mPumpkinBomb;
+	public CCAnimation cloudDefense;
 	
 	//마법 공격 및 피해 변수
 	public long mFireAttackTime = 30; //불공공격 지속 시간
@@ -546,6 +550,12 @@ public class Game extends CCLayer {
 		for(int i=1; i<=4; i++) {
     		CCSprite magmafire = CCSprite.sprite(String.format("60game/magmafire_%02d.png", i));
     		mMagmaFire.addFrame(magmafire.getTexture());
+		}
+		
+		cloudDefense = CCAnimation.animation("cloudDefense");
+		for(int i=1; i<=4; i++) {
+    		CCSprite cloudframe = CCSprite.sprite(String.format("61hud/fx-cloud%d.png", i));
+    		cloudDefense.addFrame(cloudframe.getTexture());
 		}
 		
 		mDeleteTags = new ArrayList<Integer>();
@@ -1177,7 +1187,7 @@ public class Game extends CCLayer {
 	//
 	// 더블터치 : 셀 오픈
 	public void handleDoubleTap(MotionEvent event) {
-		//mHud.StartAniWindDefense();
+		mHud.StartAniCloudDefense();
 		Log.e("Game / handleDoubleTap", "마인 갯수 : " + getMineNumber());
 		if (Config.getInstance().isDisableButton())
 			return;
@@ -1221,12 +1231,6 @@ public class Game extends CCLayer {
 							cell.open();
 						}
 					}.execute();
-					// new Thread(new Runnable() {
-					// @Override
-					// public void run() {
-					// cell.open();
-					// }
-					// }).start();
 				}
 				break;
 				// k = size;
@@ -1262,7 +1266,7 @@ public class Game extends CCLayer {
 				}
 
 				// 정령석 아래 HUD로 이동하는 애니메이션
-				mHud.startMoveSpirit(sphereType, glLocation);
+				mHud.startMoveSpirit(sphereType, CGPoint.ccpAdd(cell.getTilePosition(), this.getPosition()));
 			}
 		}
 		// end 모두 열린 수정구가 있는지 확인한다.
@@ -2058,6 +2062,7 @@ public class Game extends CCLayer {
 		}, mFireDefenseTime);
 	}
 	
+	//바람 피해 애니===========================================================
 	public void startWind() {
 		CCRotateBy rot = CCRotateBy.action(0.1f, 18f); //1초당 18도 회전
 		CCRepeatForever repeat = CCRepeatForever.action(rot);
@@ -2106,8 +2111,51 @@ public class Game extends CCLayer {
 			CCLabel label = (CCLabel) getChildByTag(i);
 			label.setString(String.valueOf(number+1));
 		}
+	} //------------------------------
+	
+	//구름 피해 애니
+	public void startCloud() {
+		ArrayList<CGPoint> clouds = new ArrayList<CGPoint>();
+		CGPoint location = CGPoint.ccp(winSize.width * 0.5f, winSize.height * 0.2f);
+		CGPoint pos = this.convertToNodeSpace(location);
+		clouds.add(pos);
+		clouds.add(CGPoint.ccpAdd(pos, CGPoint.ccp(0, tileSize.height * 6)));
+		clouds.add(CGPoint.ccpAdd(pos, CGPoint.ccp(tileSize.width * -3, tileSize.height*3)));
+		clouds.add(CGPoint.ccpAdd(pos, CGPoint.ccp(tileSize.width * 3, tileSize.height*3)));
+		
+		Log.d("LDK","CGPoint:" + winSize.width * 0.5f + "," + winSize.height * 0.2f);
+		Log.d("LDK","pos:" + pos.x + "," + pos.y);
+		Log.d("LDK","this.position:" + this.getPosition().x + "," + this.getPosition().y);
+
+		CCFadeOut out = CCFadeOut.action(0.01f);
+		CCFadeIn in = CCFadeIn.action(2f);
+		
+		CCAnimate action = CCAnimate.action(1f, cloudDefense, false);
+		CCAction repeat = CCRepeatForever.action(action);
+		
+		for(int k=0; k<4; k++) {
+			int tag = 10000 + k;
+
+			CCSprite cloud = CCSprite.sprite("61hud/fx-cloud1.png");
+			cloud.setPosition(clouds.get(k)); //구름 생성 위치
+			cloud.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
+			addChild(cloud, 8, tag);
+			mDeleteTags.add(tag);
+	
+			cloud.runAction(repeat.copy());
+			cloud.runAction(CCSequence.actions(out.copy(), in.copy()));
+		}
+		
+		schedule(new UpdateCallback() {
+			@Override
+			public void update(float d) {
+				stopAttack();
+				unschedule(this);
+			}
+		}, mCloudDefenseTime);
 	}
 	
+	//마법 피해 애니 종료============================
 	public void stopAttack() {
 		//애니메이션 삭제
 		for(Integer i : mDeleteTags) {

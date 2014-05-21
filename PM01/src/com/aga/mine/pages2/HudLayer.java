@@ -94,7 +94,6 @@ public class HudLayer extends CCLayer {
 	private CCSprite wind;
 	private CCAnimation windAttack;
 	private CCSprite cloud;
-	private CCAnimation cloudAttack;
 	//private CCSprite rune;
 	private CCAnimation runeAni;
 	//private CCSprite divine;
@@ -289,11 +288,6 @@ public class HudLayer extends CCLayer {
 		}
 		
 		cloud = CCSprite.sprite("61hud/fx-cloud1.png");
-		cloudAttack = CCAnimation.animation("cloudAttack");
-		for(int i=1; i<=4; i++) {
-    		CCSprite cloudframe = CCSprite.sprite(String.format("61hud/fx-cloud%d.png", i));
-    		cloudAttack.addFrame(cloudframe.getTexture());
-		}
 		
 //		rune = CCSprite.sprite("61hud/rune-01.png");
 		runeAni = CCAnimation.animation("rune");
@@ -1016,7 +1010,7 @@ public class HudLayer extends CCLayer {
 	public void cbCloudMove(Object sender) {
 		CCSprite cloud1 = (CCSprite) sender;
 		
-		CCAnimate action = CCAnimate.action(0.7f, cloudAttack, false);
+		CCAnimate action = CCAnimate.action(0.7f, mGame.cloudDefense, false);
 		CCRepeatForever repeat = CCRepeatForever.action(action);
 		
 		CCMoveBy move = CCMoveBy.action(2, CGPoint.ccp(0, winSize.height));
@@ -1028,41 +1022,9 @@ public class HudLayer extends CCLayer {
 	
 	//구름 방어 애니메이션---------------------------------------------------------
 	public void StartAniCloudDefense() {
-		CCSprite cloud = CCSprite.sprite("61hud/fx-cloud1.png");
+		startShockAni(); //마법사 감전 애니
 		
-		//구름객체들의 움직이기 이전 좌표값과 이동후의 좌표값들
-		ArrayList<Cloud> mCloudList = new ArrayList<Cloud>(); 
-		mCloudList.add(new Cloud(-cloud.getContentSize().width * 0.5f, winSize.height*0.9f, winSize.width*0.3f, winSize.height*0.7f));
-		mCloudList.add(new Cloud(-cloud.getContentSize().width * 0.5f, winSize.height*0.1f, winSize.width*0.3f, winSize.height*0.3f));
-		mCloudList.add(new Cloud(winSize.width+cloud.getContentSize().width * 0.5f, winSize.height*0.9f, winSize.width*0.7f, winSize.height*0.7f));
-		mCloudList.add(new Cloud(winSize.width+cloud.getContentSize().width * 0.5f, winSize.height*0.1f, winSize.width*0.7f, winSize.height*0.3f));
-		
-		for(int k=0; k<4; k++) {
-			CCSprite cloud1 = CCSprite.sprite("61hud/fx-cloud1.png");
-			cloud1.setScale(0.5f + new Random().nextFloat() * 0.5f);
-			cloud1.setPosition(mCloudList.get(k).preX, mCloudList.get(k).preY); //이동전 랜덤 위치
-			cloud1.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
-			addChild(cloud1);
-			
-			CCAnimate action = CCAnimate.action(1f, cloudAttack, false);
-			CCAction repeat = CCRepeatForever.action(action);
-			CCDelayTime delay = CCDelayTime.action(new Random().nextFloat() * 1.5f);
-			CCMoveTo move = CCMoveTo.action(1.2f, CGPoint.ccp(mCloudList.get(k).postX, mCloudList.get(k).postY)); //이동후 위치
-			CCDelayTime delay2 = CCDelayTime.action(1.0f + new Random().nextFloat() * 2.0f);
-			CCFadeOut fadeout = CCFadeOut.action(1.5f+new Random().nextFloat() * 1.5f);
-			CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite");
-	
-			cloud1.runAction(repeat);
-			cloud1.runAction(CCSequence.actions(delay, move, delay2, fadeout, remove));
-		}
-		//2초(시간은  조정 필요) 후에 맵에 표시되는 부분 구현
-		schedule(new UpdateCallback() {
-			@Override
-			public void update(float d) {
-				// TODO
-				unschedule(this);
-			}
-		}, 2.0f);
+		mGame.startCloud();
 	}
 	
 	//룬(마법진) 애니메이션-----------------------------------------------------
@@ -1322,7 +1284,7 @@ public class HudLayer extends CCLayer {
 		CCRepeatForever shockAni = CCRepeatForever.action(shock);
 		
 		CCSprite sprite = CCSprite.sprite("61hud/Shock-1.png");
-		this.addChild(sprite, 10, 2001);
+		this.addChild(sprite, 11, 2001);
 		sprite.setPosition(winSize.width * 0.5f, winSize.height * 0.25f);
 		sprite.runAction(shockAni);
 		
