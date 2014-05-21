@@ -110,12 +110,12 @@ public class GameMode extends CCLayer {
 		
 		if (GameData.share().isGuestMode) {
 			//x표시 2
-			CCSprite lock2 = CCSprite.sprite("90guest/" + "modeLock" + fileExtension);
+			CCSprite lock2 = CCSprite.sprite("10home/" + "modeLock" + fileExtension);
 			button2.addChild(lock2);
 			lock2.setPosition(button2.getContentSize().width / 2, button2.getContentSize().height / 2);
 			
 			//x표시 3
-			CCSprite lock3 = CCSprite.sprite("90guest/" + "modeLock" + fileExtension);
+			CCSprite lock3 = CCSprite.sprite("10home/" + "modeLock" + fileExtension);
 			button3.addChild(lock3);
 			lock3.setPosition(button3.getContentSize().width / 2, button3.getContentSize().height / 2);
 			
