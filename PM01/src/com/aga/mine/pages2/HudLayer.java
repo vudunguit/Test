@@ -1323,7 +1323,7 @@ public class HudLayer extends CCLayer {
 		
 		CCSprite sprite = CCSprite.sprite("61hud/Shock-1.png");
 		this.addChild(sprite, 10, 2001);
-		sprite.setPosition(winSize.width * 0.57f, winSize.height * 0.3f);
+		sprite.setPosition(winSize.width * 0.5f, winSize.height * 0.25f);
 		sprite.runAction(shockAni);
 		
 		//기존 마법사는 안보이게 한다.
