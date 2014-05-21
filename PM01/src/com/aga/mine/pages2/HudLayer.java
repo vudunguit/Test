@@ -103,6 +103,7 @@ public class HudLayer extends CCLayer {
 	private CCAnimation earthAni;
 	//private CCSprite mirror;
 	private CCAnimation mirrorAni;
+	private CCAnimation mShockAni; //마법사 감전 애니
 	
 	private CCSprite mBg;
 
@@ -320,6 +321,13 @@ public class HudLayer extends CCLayer {
 		for(int i=1; i<=6; i++) {
     		CCSprite mirrorframe = CCSprite.sprite(String.format("61hud/mirror-%02d.png", i));
     		mirrorAni.addFrame(mirrorframe.getTexture());
+		}
+		
+		//마법사 감전 애니
+		mShockAni = CCAnimation.animation("shock");
+		for(int i=1; i<=4; i++) {
+    		CCSprite shockframe = CCSprite.sprite(String.format("61hud/Shock-%d.png", i));
+    		mShockAni.addFrame(shockframe.getTexture());
 		}
 		
 		//test
@@ -905,6 +913,8 @@ public class HudLayer extends CCLayer {
 	
 	//불 방어 애니메이션
 	public void StartAniFireDefense() {
+		startShockAni(); //마법사 감전 애니
+		
 		for(int k=0; k<20; k++) {
 			CCSprite fire = CCSprite.sprite("61hud/fire-01.png");
 			//x 위치 랜덤
@@ -923,7 +933,7 @@ public class HudLayer extends CCLayer {
 			fire.runAction(repeat);
 			fire.runAction(CCSequence.actions(delay, move, remove));
 		}
-		//2초(시간은  조정 필요) 후에 맵에 표시되는 부분 구현
+		//1초(시간은  조정 필요) 후에 맵에 표시되는 부분 구현
 		schedule(new UpdateCallback() {
 			@Override
 			public void update(float d) {
@@ -931,7 +941,7 @@ public class HudLayer extends CCLayer {
 				unschedule(this);
 				mGame.startFire();
 			}
-		}, 2.0f);
+		}, 1.0f);
 	}
 	
 	//바람공격 애니메이션------------------------------------------------------------
@@ -1302,5 +1312,23 @@ public class HudLayer extends CCLayer {
 
 		// 버튼에 클릭효과를 넣는다.
 		clickEffect(kind);
+	}
+	
+	//마법사 감전 애니
+	public void startShockAni() {
+		CCAnimate shock = CCAnimate.action(0.4f, mShockAni, false);
+		CCRepeatForever shockAni = CCRepeatForever.action(shock);
+		
+		CCSprite sprite = CCSprite.sprite("61hud/Shock-1.png");
+		this.addChild(sprite, 10, 2001);
+		sprite.setPosition(winSize.width * 0.57f, winSize.height * 0.3f);
+		sprite.runAction(shockAni);
+		
+		//기존 마법사는 안보이게 한다.
+		magician.setVisible(false);
+	}
+	public void stopShockAni() {
+		this.removeChildByTag(2001, true);
+		magician.setVisible(true);
 	}
 }

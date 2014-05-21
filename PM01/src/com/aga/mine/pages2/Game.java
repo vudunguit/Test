@@ -114,11 +114,16 @@ public class Game extends CCLayer {
 	public CCAnimate mPumpkinBomb;
 	
 	//마법 공격 및 피해 변수
-	public long mAttackTime = 30;  //공격 지속 시간
+	public long mFireAttackTime = 30; //불공공격 지속 시간
+	public long mWindAttackTime = 30;
+	public long mCloudAttackTime = 30;
 	public long startTimeOfAttack; //공격 시작 시간
-	public long mDefenseTime = 30; //방어 지속 시간(상대방공격시간)
+	public long mFireDefenseTime = 30; //불방어 지속 시간(상대방공격시간)
+	public long mWindDefenseTime = 30;
+	public long mCloudDefenseTime = 30;
 	
 	ArrayList<Integer> mDeleteTags; //삭제하기위해 태그를 저장하는 컬렉션
+	ArrayList<Integer> mNumberTags; //애니메이션시 셀에 있는 숫자를 저장하는 컬렉션
 
 	private int mineNumber;
 	public CCTMXTiledMap getTileMap() {
@@ -543,6 +548,7 @@ public class Game extends CCLayer {
 		}
 		
 		mDeleteTags = new ArrayList<Integer>();
+		mNumberTags = new ArrayList<Integer>();
 		
 		//이모티콘 test : 실제로는 NetworkController에서 전송된 이모티콘 id를 던져준다.
 		//mHud.startEmoticonAni(5);
@@ -1170,6 +1176,7 @@ public class Game extends CCLayer {
 	//
 	// 더블터치 : 셀 오픈
 	public void handleDoubleTap(MotionEvent event) {
+		//mHud.StartAniFireDefense();
 		Log.e("Game / handleDoubleTap", "마인 갯수 : " + getMineNumber());
 		if (Config.getInstance().isDisableButton())
 			return;
@@ -2062,34 +2069,42 @@ public class Game extends CCLayer {
 		
 		for(MineCell cell : cells) {
 			if(cell.isOpened()) {
+				//셀위에 숫자가 있다면 감춘다.
+				if(cell.numberOfArroundMine > 0) {
+					this.getChildByTag(cell.getCell_ID()).setVisible(false);
+					mNumberTags.add(cell.getCell_ID());
+				}
+				
+				//애니가 멈출때 애니를 삭제하기 위해 태그 할당
 				int tag = 10000 + cell.getCell_ID();
-				//깨진 대지 타일 세팅
-				//this.tmxFlagLayer.setTileGID(crackGID, cell.getTileCoord());
-				CCSprite crack = CCSprite.sprite("60game/crackearth.png");
-				this.addChild(crack, 20, tag);
-				crack.setPosition(cell.getTilePosition());
-				crack.setAnchorPoint(0.5f, 0.5f);
-				Log.d("LDK", "crack earth position:" + cell.getPosition().x + "," + cell.getPosition().y);
-				
-				//용암 애니
-				CCSprite sprite = CCSprite.sprite("60game/magma_01.png");
-				sprite.setScale(0.5f);
-				crack.addChild(sprite, -1);
-				sprite.setPosition(crack.getContentSize().width/2, crack.getContentSize().height/2);
-				sprite.runAction(magmaAni.copy());
-				
-				//불기둥 애니
+
 				Random rand = new Random();
 				if(rand.nextFloat() < 0.3f) { //30%
+					//깨진 대지 타일 세팅
+					//this.tmxFlagLayer.setTileGID(crackGID, cell.getTileCoord());
+					CCSprite crack = CCSprite.sprite("60game/crackearth.png");
+					this.addChild(crack, 20, tag);
+					crack.setPosition(cell.getTilePosition());
+					crack.setAnchorPoint(0.5f, 0.5f);
+					Log.d("LDK", "crack earth position:" + cell.getPosition().x + "," + cell.getPosition().y);
+					
+					//용암 애니
+					CCSprite sprite = CCSprite.sprite("60game/magma_01.png");
+					sprite.setScale(0.5f);
+					crack.addChild(sprite, -1);
+					sprite.setPosition(crack.getContentSize().width/2, crack.getContentSize().height/2);
+					sprite.runAction(magmaAni.copy());
+					
+					//불기둥 애니
 					CCSprite sprite2 = CCSprite.sprite("60game/magmafire_01.png");
 					crack.addChild(sprite2, 1);
 					sprite2.setPosition(crack.getContentSize().width/2, crack.getContentSize().height/2);
 					sprite2.setAnchorPoint(0.5f, 0.2f);
 					sprite2.runAction(magmafireAni.copy());
+					
+					//삭제하기 위해 태그를 저장
+					mDeleteTags.add(tag);
 				}
-				
-				//삭제하기 위해 태그를 저장
-				mDeleteTags.add(tag);
 			}
 		}
 		
@@ -2099,15 +2114,25 @@ public class Game extends CCLayer {
 				stopAttack();
 				unschedule(this);
 			}
-		}, mDefenseTime);
+		}, mFireDefenseTime);
 	}
 	
 	public void stopAttack() {
+		//애니메이션 삭제
 		for(Integer i : mDeleteTags) {
 			removeChildByTag(i, true);
 		}
 		//삭제후 컬렉션 초기화
 		mDeleteTags.clear();
+		
+		//셀 숫자 복원
+		for(Integer i : mNumberTags) {
+			getChildByTag(i).setVisible(true);
+		}
+		mNumberTags.clear();
+		
+		//마법사 감전 애니 정지
+		mHud.stopShockAni();
 	}
 
 	abstract class TileOpenTask extends AsyncTask<Void, Void, Void> {
