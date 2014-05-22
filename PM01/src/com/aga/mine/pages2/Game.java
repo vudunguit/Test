@@ -120,14 +120,25 @@ public class Game extends CCLayer {
 	public CCAnimate mPumpkinBomb;
 	public CCAnimation cloudDefense;
 	
+	final int offenceDefaultTime = 10; // 공격마법만 기본 10초, 방어는 0초입니다.
+	int UserLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelCharacter")) - 1; // 1레벨때는 추가 시간 0초입니다.
+	
+	int offence_FireLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelFire"));
+	int offence_WindLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelWind"));
+	int offence_CloudLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelCloud"));
+	
+	int defence_FireLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelDivine"));
+	int defence_WindLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelEarth"));
+	int defence_CloudLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelMirror"));
+			
 	//마법 공격 및 피해 변수
-	public long mFireAttackTime = 30; //불공공격 지속 시간
-	public long mWindAttackTime = 30;
-	public long mCloudAttackTime = 30;
+	public long mFireAttackTime = UserLevel +  offence_FireLevel + offenceDefaultTime; //불공공격 지속 시간
+	public long mWindAttackTime = UserLevel +  offence_WindLevel + offenceDefaultTime;
+	public long mCloudAttackTime = UserLevel +  offence_CloudLevel + offenceDefaultTime;
 	public long startTimeOfAttack; //공격 시작 시간
-	public long mFireDefenseTime = 30; //불방어 지속 시간(상대방공격시간)
-	public long mWindDefenseTime = 30;
-	public long mCloudDefenseTime = 30;
+	public long mFireDefenseTime = UserLevel +  defence_FireLevel; //불방어 지속 시간(상대방공격시간)
+	public long mWindDefenseTime = UserLevel +  defence_WindLevel;
+	public long mCloudDefenseTime = UserLevel +  defence_CloudLevel;
 	
 	ArrayList<Integer> mDeleteTags; //삭제하기위해 태그를 저장하는 컬렉션
 	ArrayList<Integer> mNumberTags; //애니메이션시 셀에 있는 숫자를 저장하는 컬렉션
