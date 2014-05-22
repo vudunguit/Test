@@ -6,15 +6,21 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.cocos2d.actions.instant.CCCallFuncN;
+import org.cocos2d.actions.interval.CCAnimate;
+import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
+import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCSpriteFrameCache;
+import org.cocos2d.nodes.CCSpriteSheet;
 import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
@@ -29,36 +35,39 @@ import com.aga.mine.util.Popup;
 // 전체적인 변수명 정리와 리팩토링이 필요함. (급하니 코드가 더 더러워짐.)
 public class ShopItem2 extends CCLayer {
 
-	final String commonfolder = "00common/";
-	final String folder = "22item/";
-	final String fileExtension = ".png";
+	private String tag = "ShopItem2";
+	private final String commonfolder = "00common/";
+	private final String folder = "22item/";
+	private final String fileExtension = ".png";
 	
-	CCSprite bg;
-	CCSprite bb;
+	private CCSprite bg;
+	private CCSprite bb;
 	
-	CCSprite itemOver = CCSprite.sprite(folder + "item-buttoncover" + fileExtension);
+	private CCSprite itemOver = CCSprite.sprite(folder + "item-buttoncover" + fileExtension);
 	private Context mContext;
-	UserData userData;
+	private UserData userData;
 	
-	int attackAttribute = 1;
-	int defenseAttribute = 1;
-	int price ;
+	private int attackAttribute = 1;
+	private int defenseAttribute = 1;
+	private int price ;
 	
-	
-	CCLabel  sphereNumber1;
-	CCLabel  sphereNumber2;
-	CCLabel  offenseAttributeSelected1;
-	CCLabel  offenseAttributeSelected2;
-	CCLabel  defenseAttributeSelected1;
-	CCLabel  defenseAttributeSelected2;
+	private CCLabel  sphereNumber1;
+	private CCLabel  sphereNumber2;
+	private CCLabel  offenseAttributeSelected1;
+	private CCLabel  offenseAttributeSelected2;
+	private CCLabel  defenseAttributeSelected1;
+	private CCLabel  defenseAttributeSelected2;
 
-	CCLabel  levelFire;
-	CCLabel  levelWind;
-	CCLabel  levelCloud;
-	CCLabel  levelDivine;
-	CCLabel  levelEarth;
-	CCLabel  levelMirror;
-	CCLabel gold;
+	private CCLabel  levelFire;
+	private CCLabel  levelWind;
+	private CCLabel  levelCloud;
+	private CCLabel  levelDivine;
+	private CCLabel  levelEarth;
+	private CCLabel  levelMirror;
+	private CCLabel gold;
+	
+	private CCAnimate mItemLevelUp;
+	private CCSpriteFrameCache cache;
 	
 	static CCScene scene() {
 		CCScene scene = CCScene.node();
@@ -70,6 +79,19 @@ public class ShopItem2 extends CCLayer {
 	public ShopItem2() {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
+		
+		
+		cache = CCSpriteFrameCache.sharedSpriteFrameCache();
+		cache.addSpriteFrames("60game/fxMushroomItem.plist");
+		CCSpriteSheet.spriteSheet("60game/fxMushroomItem.png"); 
+		
+		//호박폭발 애니메이션
+		CCAnimation itemLevelUp = CCAnimation.animation("itemLevelUp");
+		for( int i=1;i<=7;i++) {
+			itemLevelUp.addFrame(cache.getSpriteFrame((String.format("item%02d.png", i))));
+		}
+		mItemLevelUp = CCAnimate.action(0.21f, itemLevelUp, false);
+		
 		
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
 		setBackBoardMenu(folder + "item-backboard" + fileExtension);
@@ -120,7 +142,7 @@ public class ShopItem2 extends CCLayer {
 				this, "buyMagicCallback");
 		itemDefenseBuy.setTag(defense);
 		
-		CCMenuItem o_fire = CCMenuItemImage.item(
+		CCMenuItemImage o_fire = CCMenuItemImage.item(
 				folder + "item-buttonFire-hd" + fileExtension,
 				folder + "item-buttonFire-select-hd" + fileExtension,
 				this, "selectMagicCallback");		
@@ -128,19 +150,19 @@ public class ShopItem2 extends CCLayer {
 		o_fire.addChild(itemOver);
 		o_fire.setIsEnabled(false);
 		
-		CCMenuItem o_wind = CCMenuItemImage.item(
+		CCMenuItemImage o_wind = CCMenuItemImage.item(
 				folder + "item-buttonWind-hd" + fileExtension,
 				folder + "item-buttonWind-select-hd" + fileExtension,
 				this, "selectMagicCallback");
 		o_wind.setTag(1);
 		
-		CCMenuItem o_cloud = CCMenuItemImage.item(
+		CCMenuItemImage o_cloud = CCMenuItemImage.item(
 				folder + "item-buttonCloud-hd" + fileExtension,
 				folder + "item-buttonCloud-select-hd" + fileExtension,
 				this, "selectMagicCallback");
 		o_cloud.setTag(2);
 		
-		CCMenuItem d_fire = CCMenuItemImage.item(
+		CCMenuItemImage d_fire = CCMenuItemImage.item(
 				folder + "item-buttonFire-hd" + fileExtension,
 				folder + "item-buttonFire-select-hd" + fileExtension,
 				this, "selectMagicCallback");		
@@ -148,13 +170,13 @@ public class ShopItem2 extends CCLayer {
 		d_fire.addChild(itemOver);
 		d_fire.setIsEnabled(false);
 		
-		CCMenuItem d_wind = CCMenuItemImage.item(
+		CCMenuItemImage d_wind = CCMenuItemImage.item(
 				folder + "item-buttonWind-hd" + fileExtension,
 				folder + "item-buttonWind-select-hd" + fileExtension,
 				this, "selectMagicCallback");
 		d_wind.setTag(4);
 		
-		CCMenuItem d_cloud = CCMenuItemImage.item(
+		CCMenuItemImage d_cloud = CCMenuItemImage.item(
 				folder + "item-buttonCloud-hd" + fileExtension,
 				folder + "item-buttonCloud-select-hd" + fileExtension,
 				this, "selectMagicCallback");
@@ -202,43 +224,43 @@ public class ShopItem2 extends CCLayer {
 		itemDefenseBuy.addChild(buyText);
 		
 		levelFire = CCLabel.makeLabel("Lv" + FacebookData.getinstance().getDBData("LevelFire"), "Arial", 20);
-//		levelFire.setColor(ccColor3B.ccYELLOW);
-		levelFire.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
+		levelFire.setColor(ccColor3B.ccYELLOW);
+//		levelFire.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
 		levelFire.setPosition(CGPoint.make(o_fire.getContentSize().width - 12, o_fire.getContentSize().height - 7));
 		levelFire.setAnchorPoint(1, 1);
 		o_fire.addChild(levelFire);
 		
 		levelWind = CCLabel.makeLabel("Lv"+FacebookData.getinstance().getDBData("LevelWind"), "Arial", 20);
-//		levelWind.setColor(ccColor3B.ccYELLOW);
-		levelWind.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
+		levelWind.setColor(ccColor3B.ccYELLOW);
+//		levelWind.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
 		levelWind.setPosition(CGPoint.make(o_fire.getContentSize().width - 12, o_fire.getContentSize().height - 7));
 		levelWind.setAnchorPoint(1, 1);
 		o_wind.addChild(levelWind);				
 		
 		levelCloud = CCLabel.makeLabel("Lv"+FacebookData.getinstance().getDBData("LevelCloud"), "Arial", 20);
-//		levelCloud.setColor(ccColor3B.ccYELLOW);
-		levelCloud.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
+		levelCloud.setColor(ccColor3B.ccYELLOW);
+//		levelCloud.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
 		levelCloud.setPosition(CGPoint.make(o_fire.getContentSize().width - 12, o_fire.getContentSize().height - 7));
 		levelCloud.setAnchorPoint(1, 1);
 		o_cloud.addChild(levelCloud);				
 		
 		levelDivine = CCLabel.makeLabel("Lv"+FacebookData.getinstance().getDBData("LevelDivine"), "Arial", 20);
-//		levelDivine.setColor(ccColor3B.ccYELLOW);
-		levelDivine.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
+		levelDivine.setColor(ccColor3B.ccYELLOW);
+//		levelDivine.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
 		levelDivine.setPosition(CGPoint.make(o_fire.getContentSize().width - 12, o_fire.getContentSize().height - 7));
 		levelDivine.setAnchorPoint(1, 1);
 		d_fire.addChild(levelDivine);						
 		
 		levelEarth = CCLabel.makeLabel("Lv"+FacebookData.getinstance().getDBData("LevelEarth"), "Arial", 20);
-//		levelEarth.setColor(ccColor3B.ccYELLOW);
-		levelEarth.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
+		levelEarth.setColor(ccColor3B.ccYELLOW);
+//		levelEarth.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
 		levelEarth.setPosition(CGPoint.make(o_fire.getContentSize().width - 12, o_fire.getContentSize().height - 7));
 		levelEarth.setAnchorPoint(1, 1);
 		d_wind.addChild(levelEarth);					
 		
 		levelMirror = CCLabel.makeLabel("Lv"+FacebookData.getinstance().getDBData("LevelMirror"), "Arial", 20);
-//		levelMirror.setColor(ccColor3B.ccYELLOW);
-		levelMirror.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
+		levelMirror.setColor(ccColor3B.ccYELLOW);
+//		levelMirror.setColor(ccColor3B.ccBLACK); // 스트록이 없어서 잘 안보임. 임시용
 		levelMirror.setPosition(CGPoint.make(o_fire.getContentSize().width - 12, o_fire.getContentSize().height - 7));
 		levelMirror.setAnchorPoint(1, 1);
 		d_cloud.addChild(levelMirror);						
@@ -432,12 +454,18 @@ public class ShopItem2 extends CCLayer {
 						break;
 					}
 			}
-			if (isSphere)
+			if (isSphere) {
 				refreshSphere();
-			 else {
-				refreshMagic(offenseTag);
-				refreshMagic(defenseTag);
-			 }
+			} else {
+				if (buttonTag == offense) {
+					refreshMagic(offenseTag);
+					actionWizard(offenseTag);
+				} else {
+					refreshMagic(defenseTag);
+					actionWizard(defenseTag);
+				}
+			}
+				
 //				 for (int i = 0; i < itemType.length; i++) {
 					 //  맞는것만 돌리기
 //					 if (itemType[i].equals(object)) {
@@ -515,10 +543,11 @@ public class ShopItem2 extends CCLayer {
 		basket.put("Gold", String.valueOf(gold - spherePrice));				
 	}
 	
-	
+	int buttonTag; 
+	// 구매 버튼(공격or방어 마법)
 	public void buyMagicCallback(Object sender) {
 		MainApplication.getInstance().getActivity().click();
-		int buttonTag = ((CCNode)sender).getTag();
+		buttonTag = ((CCNode)sender).getTag();
 		int _tag;
 		
 		if (buttonTag == offense) {
@@ -588,6 +617,7 @@ public class ShopItem2 extends CCLayer {
 		button.setIsEnabled(false);
 		Log.e("ShopItem2", "button _ tag : " + button.getTag());
 		refreshMagic(buttonTag);
+//		actionWizard((CCNode) sender);
 	}
 	
 //	final int  levelFire = 0;
@@ -662,5 +692,50 @@ public class ShopItem2 extends CCLayer {
 		}
 		
 	}
+	
+	public void actionWizard(int labelTag) {
+		CCMenuItem button = null;
+		switch (labelTag) {
+		case 0:
+			button = (CCMenuItemImage) levelFire.getParent();
+			break;
+		case 1:
+			button = (CCMenuItemImage) levelWind.getParent();
+			break;
+		case 2:
+			button = (CCMenuItemImage) levelCloud.getParent();
+			break;
+		case 3:
+			button = (CCMenuItemImage) levelDivine.getParent();
+			break;
+		case 4:
+			button = (CCMenuItemImage) levelEarth.getParent();
+			break;
+		case 5:
+			button = (CCMenuItemImage) levelMirror.getParent();
+			break;
+		}
+		Log.e(tag, "button : " + button);
+		actionBuy(button);
+	}
+	
+	public void actionBuy(CCNode parent) {
+		Log.e(tag, "parent : " + parent);
+		Log.e(tag, "parent.getAnchorPoint() : " + parent.getAnchorPoint());
+		CCSprite bomb = CCSprite.sprite(cache.getSpriteFrame("item01.png"));
+//		CCSprite bomb = CCSprite.sprite("60game/pumpkinbomb_01.png");
+//		bomb.setPosition(0,0);
+		bomb.setPosition(parent.getContentSize().width/2,parent.getContentSize().height/2);
+		bomb.setScale(2);
+		parent.addChild(bomb, 100);
+		
+		CCCallFuncN _removeAction = CCCallFuncN.action(this, "removeAction");
+		bomb.runAction(CCSequence.actions(mItemLevelUp, _removeAction));
+	}
+	
+	public void removeAction(Object sender) {
+		((CCSprite)sender).removeFromParentAndCleanup(true);
+	}
+	
 
 }

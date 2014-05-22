@@ -1,6 +1,5 @@
 ﻿package com.aga.mine.mains;
 
-//import org.cocos2d.layers.CCColorLayer; // 이게 왜 들어가있지??
 import java.util.Locale;
 
 import org.cocos2d.actions.base.CCRepeatForever;
@@ -28,7 +27,6 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.aga.mine.pages2.GameData;
-//import org.cocos2d.types.ccColor4B; // 이게 왜 들어가있지??
 
 public class Login extends CCLayer{
 	
@@ -75,13 +73,10 @@ public class Login extends CCLayer{
 		CCAnimation wizard = CCAnimation.animation("wizard");
 		for( int i=1;i<=2;i++) {
 			wizard.addFrame(cache.getSpriteFrame((String.format("loading-magician%02d.png", i))));
-//			wizard.addFrame((String.format(folder + "wizard%02d.png", i)));
 		}
 		
 		mCircularProgress = CCAnimate.action(1.2f, progress, false);
-//		mWizard = CCAnimate.action(0.3f, wizard, false);
 		mWizard = CCAnimate.action(0.6f, wizard, false);
-		
 		
 		terms(bg);
 		setMain(bg);
@@ -232,7 +227,6 @@ public class Login extends CCLayer{
 	public void actionWizard() {
 		CCSprite wizard = CCSprite.sprite(folder + "wizard01" + fileExtension);
 		// 마법사 위치는 맞기때문에 그냥 놔둠.(신기신기)
-		// 안물어보면 안물어봤다고 추궁들어오고, 왜 다르냐고 물어보면 귀찮은듯 "문제있나?" 이런식으로 대충 넘길테고  늘 그래왔다. 
 		wizard.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 116);
 		wizard.setAnchorPoint(0.5f ,0.5f);
 		bg.addChild(wizard, aniTag + 4, aniTag + 4);
