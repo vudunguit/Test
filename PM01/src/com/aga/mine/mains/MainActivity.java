@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
+import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -57,6 +58,8 @@ public class MainActivity extends Activity {
 
     private CCGLSurfaceView mGLSurfaceView;
     CCDirector director = CCDirector.sharedDirector();
+    public Vibrator mVibrator;
+    
     
     private RelativeLayout main;
     public ListView mListView;
@@ -221,7 +224,7 @@ public class MainActivity extends Activity {
         Log.e("MainActivity", "onCreate");
 
         MainApplication.getInstance().setActivity(this);
-
+        
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -250,6 +253,8 @@ public class MainActivity extends Activity {
 		SoundEngine.sharedEngine().preloadSound(this, R.raw.bgm); // 배경음악
 		SoundEngine.sharedEngine().preloadEffect(this, R.raw.click); // 클릭음
 		SoundEngine.sharedEngine().preloadEffect(this, R.raw.buy); // 구입음
+//		SoundEngine.sharedEngine().preloadEffect(this, R.raw.mushroom); // 게임 효과음 (버섯)
+		mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 		
         CCScene scene = Logo.scene();
         director.runWithScene(scene);
@@ -587,8 +592,17 @@ public class MainActivity extends Activity {
     		DataFilter.dailyFilter(director, FacebookData.getinstance().getUserInfo().getId());
         }
     }
+    
+    public void vibe() {
+    	if (mVibrator != null && mVibrator.hasVibrator()) {
+    		mVibrator.vibrate(200);
+		} else {
+			Log.e(TAG, "진동기능이 제공되지 않습니다.");
+//			SoundEngine.sharedEngine().playEffect(this, R.raw.mushroom);
+		}
+	}
 
     public void click() {
-		SoundEngine.sharedEngine().playEffect(this, R.raw.click); // click
+		SoundEngine.sharedEngine().playEffect(this, R.raw.click); // buttonClick
 	}
 }

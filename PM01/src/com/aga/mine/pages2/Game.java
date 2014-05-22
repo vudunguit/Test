@@ -39,12 +39,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.aga.mine.mains.Config;
 import com.aga.mine.mains.FacebookData;
+import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.R;
 
@@ -1113,6 +1115,9 @@ public class Game extends CCLayer {
 			if (!mineCell.isOpened() && !mineCell.isCollidable() && CGPoint.equalToPoint(mineCell.getTileCoord(), coord)) {
 				// effect sound play
 				SoundEngine.sharedEngine().playEffect(mContext, R.raw.mushroom);
+				// 버섯 설치음 대신 진동으로 변경입니다. (일단 둘다 열어둡니다.)
+				MainApplication.getInstance().getActivity().vibe();
+				
 				int isMine = -1;
 				
 				// 꽂아져있는 버섯(깃발)을 취소할때 버섯(깃발)을 없애줌
