@@ -351,7 +351,7 @@ public class MineCell extends CCLayer{
 		} else {
 			++mCount;
 		}
-		Log.d("LDK", "depth:" + depth + " , mCount:" + mCount);
+
 		// Global ID // Globally unique IDentifier
 		int tileGid = mGame.tmxMeta.tileGIDAt(tileCoord);
 		tileGid = CCFormatter.swapIntToLittleEndian(tileGid);
@@ -364,8 +364,8 @@ public class MineCell extends CCLayer{
 			// Log.e("Game / removeTile", "properties:" + properties);
 			if (properties != null && properties.size() != 0) {
 				String isDontSetMine = properties.get("isDontSetMine");
-
-				if (isDontSetMine != null && isDontSetMine.equals("true")) {
+				
+				if (isDontSetMine != null && isDontSetMine.equals("YES")) {
 					//SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01); // pickup // 뭐에 쓰는 거지?
 					mGame.getFg().removeTileAt(tileCoord);
 					GameData.share().addOpenedCell(); // 오픈된 셀 수량 누적

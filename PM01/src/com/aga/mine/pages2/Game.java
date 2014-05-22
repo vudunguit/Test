@@ -1203,7 +1203,7 @@ public class Game extends CCLayer {
 	//
 	// 더블터치 : 셀 오픈
 	public void handleDoubleTap(MotionEvent event) {
-		//mHud.StartAniCloudDefense();
+		//mHud.StartAniFireDefense();
 		Log.e("Game / handleDoubleTap", "마인 갯수 : " + getMineNumber());
 		if (Config.getInstance().isDisableButton())
 			return;
@@ -2034,12 +2034,13 @@ public class Game extends CCLayer {
 					this.getChildByTag(cell.getCell_ID()).setVisible(false);
 					mNumberTags.add(cell.getCell_ID());
 				}
-				
+
 				//애니가 멈출때 애니를 삭제하기 위해 태그 할당
 				int tag = 10000 + cell.getCell_ID();
 
 				Random rand = new Random();
-				if(rand.nextFloat() < 0.3f) { //30%
+				int r = rand.nextInt(100);
+				if(r < 30) { //30%
 					//깨진 대지 타일 세팅
 					//this.tmxFlagLayer.setTileGID(crackGID, cell.getTileCoord());
 					CCSprite crack = CCSprite.sprite("60game/crackearth.png");
