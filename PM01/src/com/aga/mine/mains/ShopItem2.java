@@ -722,15 +722,15 @@ public class ShopItem2 extends CCLayer {
 	public void actionBuy(CCNode parent) {
 		Log.e(tag, "parent : " + parent);
 		Log.e(tag, "parent.getAnchorPoint() : " + parent.getAnchorPoint());
-		CCSprite bomb = CCSprite.sprite(cache.getSpriteFrame("item01.png"));
+		CCSprite glittering = CCSprite.sprite(cache.getSpriteFrame("item01.png"));
 //		CCSprite bomb = CCSprite.sprite("60game/pumpkinbomb_01.png");
 //		bomb.setPosition(0,0);
-		bomb.setPosition(parent.getContentSize().width/2,parent.getContentSize().height/2);
-		bomb.setScale(2);
-		parent.addChild(bomb, 100);
+		glittering.setPosition(parent.getContentSize().width/2,parent.getContentSize().height/2);
+		glittering.setScale(2);
+		parent.addChild(glittering, 100);
 		
 		CCCallFuncN _removeAction = CCCallFuncN.action(this, "removeAction");
-		bomb.runAction(CCSequence.actions(mItemLevelUp, _removeAction));
+		glittering.runAction(CCSequence.actions(mItemLevelUp, _removeAction));
 	}
 	
 	public void removeAction(Object sender) {

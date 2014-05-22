@@ -594,12 +594,15 @@ public class MainActivity extends Activity {
     }
     
     public void vibe() {
-    	if (mVibrator != null && mVibrator.hasVibrator()) {
-    		mVibrator.vibrate(200);
-		} else {
-			Log.e(TAG, "진동기능이 제공되지 않습니다.");
-//			SoundEngine.sharedEngine().playEffect(this, R.raw.mushroom);
-		}
+    	if (android.os.Build.VERSION.SDK_INT  >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+//    		if (mVibrator != null && mVibrator.hasVibrator()) {
+        	if (mVibrator.hasVibrator()) {
+        		mVibrator.vibrate(200);
+    		} else {
+    			Log.e(TAG, "진동기능이 제공되지 않습니다.");
+//    			SoundEngine.sharedEngine().playEffect(this, R.raw.mushroom);
+    		}
+    	}
 	}
 
     public void click() {

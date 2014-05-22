@@ -381,6 +381,11 @@ public class Config {
 	public boolean getVs() {
 		return vsResult; 
 	}
+
+	public boolean isOwner() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 	
 	
 }

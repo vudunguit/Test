@@ -33,6 +33,7 @@ import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrame;
 import org.cocos2d.nodes.CCSpriteFrameCache;
+import org.cocos2d.nodes.CCSpriteSheet;
 import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.opengl.CCTexture2D;
 import org.cocos2d.sound.SoundEngine;
@@ -55,7 +56,7 @@ import com.aga.mine.mains.Utility;
 
 public class HudLayer extends CCLayer {
 
-	String hudLayerFolder = "61hud/";
+	String folder = "61hud/";
 	int maxMineNumber;
 
 	CGSize winSize;
@@ -112,6 +113,10 @@ public class HudLayer extends CCLayer {
 	public HudLayer(Game game) {
 		mGame = game;
 		
+		cache = CCSpriteFrameCache.sharedSpriteFrameCache();
+		cache.addSpriteFrames(folder + "magician.plist");
+		CCSpriteSheet.spriteSheet(folder + "magician.png"); 
+		 
 //		mGameEnding = new GameEnding();
 		
 //		addChild(mGameEnding, GameConfig.share().kDepthPopup, 1234);
@@ -154,7 +159,7 @@ public class HudLayer extends CCLayer {
 
 		//
 		// 좌상단 찾은 지뢰 갯수 및 생명 표시
-		CCSprite statusBase = CCSprite.sprite(hudLayerFolder
+		CCSprite statusBase = CCSprite.sprite(folder
 				+ "game-statusBase-hd.png");
 		statusBase.setPosition(statusBase.getContentSize().width / 2
 				+ margin, winSize.height
@@ -180,8 +185,8 @@ public class HudLayer extends CCLayer {
 		//
 		// 우상단 미니맵 버튼
 		CCMenuItem item = CCMenuItemImage.item(
-				hudLayerFolder + MinimapImageNormal, 
-				hudLayerFolder + MinimapImageSelect, this, "clicked");
+				folder + MinimapImageNormal, 
+				folder + MinimapImageSelect, this, "clicked");
 		item.setTag(Game.kButtonMinimap);
 		
 		minimap = CCMenu.menu(item);
@@ -196,7 +201,7 @@ public class HudLayer extends CCLayer {
 
 		//
 		// 하단 수정구 아이템
-		itemBase = CCSprite.sprite(hudLayerFolder
+		itemBase = CCSprite.sprite(folder
 				+ "game-itemBase-hd.png");
 		this.addChild(itemBase);
 		itemBase.setPosition(
@@ -210,8 +215,8 @@ public class HudLayer extends CCLayer {
 		String[] fileNames = { "Fire", "Wind", "Cloud", "Divine", "Earth", "Mirror" };
 		int counter = 1;
 		for (int i = 0; i < fileNames.length; i++) {
-			String fOn = hudLayerFolder + "game-item" + fileNames[i] + "On-hd.png";
-			String fOff = hudLayerFolder + "game-item" + fileNames[i] + "Off-hd.png";
+			String fOn = folder + "game-item" + fileNames[i] + "On-hd.png";
+			String fOff = folder + "game-item" + fileNames[i] + "Off-hd.png";
 			
 			itemOn = CCMenuItemImage.item(fOn, fOn);
 			itemOff = CCMenuItemImage.item(fOff, fOff);
@@ -251,11 +256,16 @@ public class HudLayer extends CCLayer {
 
 		//
 		// 마법사
-		CCSpriteFrameCache.sharedSpriteFrameCache().addSpriteFrames(
-				hudLayerFolder + "magician.plist");
-		magician = CCSprite.sprite(hudLayerFolder + "R-WizardAngle-0.png");
+		String magicianColor = "ra0.png";
+		if (!Config.getInstance().isOwner())
+			magicianColor = "br0.png";
+		
+//		magician.setDisplayFrame(frame);
+		
+		magician = CCSprite.sprite(cache.getSpriteFrame(magicianColor));
+		magician.setScale(2);
 		this.addChild(magician, -1);
-		magician.setPosition(winSize.width * 0.57f, winSize.height * 0.3f);
+		magician.setPosition(winSize.width * 0.57f, winSize.height * 0.2f);
 
 		// this.addChild(point1);
 		// point1.setPosition(winSize.width/2,winSize.height/2 + 100);
@@ -378,9 +388,9 @@ public class HudLayer extends CCLayer {
 		for (int i = 0; i < GameData.share().kMaxHeartNumber; i++) {
 			z = (i < value) ? 10 : 0;
 
-			CCSprite heartOn = CCSprite.sprite(hudLayerFolder
+			CCSprite heartOn = CCSprite.sprite(folder
 					+ "game-heartOn-hd.png");
-			CCSprite heartOff = CCSprite.sprite(hudLayerFolder
+			CCSprite heartOff = CCSprite.sprite(folder
 					+ "game-heartOff-hd.png");
 
 			this.addChild(heartOff, z);
@@ -404,20 +414,13 @@ public class HudLayer extends CCLayer {
 
 	// updateHeart() end
 
+	CCSpriteFrameCache cache;
+	
 	public void setMagicianTo(int direction) {
-		// Log.e("direction", " " + direction);
-		String frameName = hudLayerFolder + "R-WizardAngle-" + direction
-				+ ".png";
-		// Log.e("frameName", frameName);
-		// CCSpriteFrame frame =
-		// CCSpriteFrameCache.sharedSpriteFrameCache().spriteFrameByName(frameName);
-
-		// 저사양 기기에서는 버벅거림.
-		CCTexture2D t2d = CCTextureCache.sharedTextureCache().addImage(
-				frameName);
-		CCSpriteFrame frame = CCSpriteFrame.frame(t2d,
-				CGRect.make(0, 0, 301, 277), CGPoint.ccp(0, 0));
-
+		String magicianColor = "ra";
+		if (!Config.getInstance().isOwner())
+			magicianColor = "br";
+		CCSpriteFrame frame = cache.getSpriteFrame(magicianColor + direction + ".png");
 		magician.setDisplayFrame(frame);
 	}
 
@@ -435,7 +438,7 @@ public class HudLayer extends CCLayer {
 	public void clickEffect(int sphereType, float startDelay) {
 		//
 		// 활성화된 아이템버튼의 클릭 효과 오버레이를 일정시간 켰다 끈다.
-		CCSprite overlay = CCSprite.sprite(hudLayerFolder + "game-itemOver-hd.png");
+		CCSprite overlay = CCSprite.sprite(folder + "game-itemOver-hd.png");
 
 		for (CCNode itemNode : itemMenu.getChildren()) {
 			CCMenuItemToggle item = (CCMenuItemToggle) itemNode;
@@ -632,7 +635,7 @@ public class HudLayer extends CCLayer {
 			opacitybg.setPosition(this.getContentSize().width/2, this.getContentSize().height/2);
 			this.addChild(opacitybg, pausePopupTag, pausePopupTag);
 			
-			CCSprite panel = CCSprite.sprite(hudLayerFolder + Utility.getInstance().getNameWithIsoCodeSuffix("pausebg.png"));
+			CCSprite panel = CCSprite.sprite(folder + Utility.getInstance().getNameWithIsoCodeSuffix("pausebg.png"));
 			panel.setPosition(opacitybg.getContentSize().width/2, opacitybg.getContentSize().height/2);
 			opacitybg.addChild(panel);
 			
@@ -641,8 +644,8 @@ public class HudLayer extends CCLayer {
 			String continue2Str = Utility.getInstance().getNameWithIsoCodeSuffix("continue2.png"); 
 			
 			CCMenuItem continueButton = CCMenuItemImage.item(
-					hudLayerFolder + continue1Str, 
-					hudLayerFolder + continue2Str, this, "clicked");
+					folder + continue1Str, 
+					folder + continue2Str, this, "clicked");
 			continueButton.setTag(continueTag);
 			continueButton.setAnchorPoint(0.5f, 0.5f);
 			
@@ -659,8 +662,8 @@ public class HudLayer extends CCLayer {
 			String quit2Str = Utility.getInstance().getNameWithIsoCodeSuffix("quit2.png"); 
 			
 			CCMenuItem quitButton = CCMenuItemImage.item(
-					hudLayerFolder + quit1Str, 
-					hudLayerFolder + quit2Str, this, "clicked");
+					folder + quit1Str, 
+					folder + quit2Str, this, "clicked");
 			quitButton.setTag(quitTag);
 			quitButton.setAnchorPoint(0.5f, 0.5f);
 			

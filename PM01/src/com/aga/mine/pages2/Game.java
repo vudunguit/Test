@@ -1767,7 +1767,6 @@ public class Game extends CCLayer {
 	final int kDirectionRight = 270;
 	/*** → ***/
 	final int kDirectionRightDown = 315;
-
 	/*** ↘ ***/
 
 	//
