@@ -118,12 +118,12 @@ public class GameData {
 		   data.put("HeartNumber", 3);	 // 생명수
 		   data.put("MineNumber", 0);	 // 남아있는 지뢰수
 		   data.put("Seconds", 900); 		// 15 min, 남은 게임 진행시간 // Game에서 다시 값을 넣어서 무의미 하다.
-		   data.put("ItemFire", 0);				// 획득한 수정구, 불	
-		   data.put("ItemWind", 0);			// 획득한 수정구, 바람	
-		   data.put("ItemCloud", 0);			// 획득한 수정구, 구름
-		   data.put("ItemDivine", 0);			// 획득한 수정구, 신성
-		   data.put("ItemEarth", 0);			// 획득한 수정구, 대지
-		   data.put("ItemMirror", 0);			// 획득한 수정구, 반사
+		   data.put("ItemFire", 50);				// 획득한 수정구, 불	
+		   data.put("ItemWind", 50);			// 획득한 수정구, 바람	
+		   data.put("ItemCloud", 50);			// 획득한 수정구, 구름
+		   data.put("ItemDivine", 50);			// 획득한 수정구, 신성
+		   data.put("ItemEarth", 50);			// 획득한 수정구, 대지
+		   data.put("ItemMirror", 50);			// 획득한 수정구, 반사
 		   data.put("GameDifficulty", 1);	// 게임 난이도 // 임시로 1
 		   
 		   data.put("GameMode", 1);		// 게임 모드 // 임시로 1
