@@ -621,12 +621,12 @@ public class Utility extends CCLayer {
 
 	
 	public void animationMagicianAction(CCNode parentNode) {
-		String path = "61hud/";
+		String path = "60game/";
 		CGSize winSize = CCDirector.sharedDirector().winSize();
-        String rWizard1 =  path + "R-WizardAction-1.png";
-        String rWizard2 = path + "R-WizardAction-2.png";
+        String rWizard1 =  path + "R-WizardAction-2.png";
+        String rWizard2 = path + "R-WizardAction-1.png";
         
-			sprite = CCSprite.sprite(path + "R-WizardAngle-0.png");
+			sprite = CCSprite.sprite(rWizard2);
 			sprite.setPosition(winSize.width * 0.57f, winSize.height * 0.3f);
 			parentNode.addChild(sprite, 1, 888);
 			
