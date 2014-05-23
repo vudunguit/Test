@@ -312,7 +312,16 @@ public class Game extends CCLayer {
 		GameData.share().setMineNumber(getClosedCell());
 		mineNumber = GameData.share().getMineNumber();
 		Log.e("Game", "mineNumber : " + mineNumber);
-		//
+		
+		//전체 셀중에서 벗길수 있는 셀만 등록한다.
+		ArrayList<MineCell> tempCells = new ArrayList<MineCell>();
+		for(MineCell cell : cells) {
+			if(cell.isCollidable()) {
+				tempCells.add(cell);
+			}
+		}
+		cells.removeAll(tempCells);
+		
 		// 주변타일 등록(선택지점)
 		ArrayList<MineCell> cellsTemp = cells;
 		int size = cellsTemp.size();
