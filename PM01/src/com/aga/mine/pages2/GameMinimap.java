@@ -319,15 +319,15 @@ public class GameMinimap extends CCLayer{
 //				mHudLayer.testText.setString("불마법을 사용. type : " + data);
 				
 //				mHudLayer.StartAniFireDefense(data % 1000); // 나머지 값을 지속시간으로 사용
-				mHudLayer.StartAniFireDefense();
+				mHudLayer.StartAniFireDefense(data%1000);
 				break;
 			case 2:
 //				mHudLayer.testText.setString("바람마법을 사용. type : " + data);
-				mHudLayer.StartAniWindDefense();
+				mHudLayer.StartAniWindDefense(data%1000);
 				break;
 			case 3:
 //				mHudLayer.testText.setString("구름마법을 사용. type : " + data);
-				mHudLayer.StartAniCloudDefense();
+				mHudLayer.StartAniCloudDefense(data%1000);
 				break;
 			case 4:
 				mHudLayer.testText.setString("신성마법을 사용. type : " + data);

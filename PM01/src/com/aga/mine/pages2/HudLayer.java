@@ -909,7 +909,7 @@ public class HudLayer extends CCLayer {
 	}
 	
 	//불 방어 애니메이션
-	public void StartAniFireDefense() {
+	public void StartAniFireDefense(final int time) {
 		startShockAni(); //마법사 감전 애니
 		
 		for(int k=0; k<20; k++) {
@@ -936,7 +936,7 @@ public class HudLayer extends CCLayer {
 			public void update(float d) {
 				// TODO
 				unschedule(this);
-				mGame.startFire();
+				mGame.startFire(time);
 			}
 		}, 1.0f);
 	}
@@ -967,7 +967,7 @@ public class HudLayer extends CCLayer {
 	}
 	
 	//바람 방어 애니메이션
-	public void StartAniWindDefense() {
+	public void StartAniWindDefense(final int time) {
 		startShockAni(); //마법사 감전 애니
 		
 		for(int k=0; k<20; k++) {
@@ -993,7 +993,7 @@ public class HudLayer extends CCLayer {
 			@Override
 			public void update(float d) {
 				unschedule(this);
-				mGame.startWind();
+				mGame.startWind(time);
 			}
 		}, 1.0f);
 	}
@@ -1024,10 +1024,10 @@ public class HudLayer extends CCLayer {
 	}
 	
 	//구름 방어 애니메이션---------------------------------------------------------
-	public void StartAniCloudDefense() {
+	public void StartAniCloudDefense(final int time) {
 		startShockAni(); //마법사 감전 애니
 		
-		mGame.startCloud();
+		mGame.startCloud(time);
 	}
 	
 	//룬(마법진) 애니메이션-----------------------------------------------------

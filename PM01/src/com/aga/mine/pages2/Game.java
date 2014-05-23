@@ -2017,7 +2017,7 @@ public class Game extends CCLayer {
 	}
 	
 	//불 피해 애니 : 열려진 땅을 cracklayer로 변환
-	public void startFire() {
+	public void startFire(int attackTime) {
 		//int crackGID = tmxEarthLayer.tileGIDAt(CGPoint.ccp(0, 0));
 		//crackGID = CCFormatter.swapIntToLittleEndian(crackGID);
 		
@@ -2075,11 +2075,11 @@ public class Game extends CCLayer {
 				stopAttack();
 				unschedule(this);
 			}
-		}, mFireDefenseTime);
+		}, mFireDefenseTime - attackTime);
 	}
 	
 	//바람 피해 애니===========================================================
-	public void startWind() {
+	public void startWind(int attackTime) {
 		CCRotateBy rot = CCRotateBy.action(0.1f, 18f); //1초당 18도 회전
 		CCRepeatForever repeat = CCRepeatForever.action(rot);
 		
@@ -2114,7 +2114,7 @@ public class Game extends CCLayer {
 				unschedule(this);
 				unschedule("increaseNumber");
 			}
-		}, mWindDefenseTime);
+		}, mWindDefenseTime - attackTime);
 	}
 	
 	public float mIncreaseTime = 0;
@@ -2130,7 +2130,7 @@ public class Game extends CCLayer {
 	} //------------------------------
 	
 	//구름 피해 애니
-	public void startCloud() {
+	public void startCloud(int attackTime) {
 		ArrayList<CGPoint> clouds = new ArrayList<CGPoint>();
 		CGPoint location = CGPoint.ccp(winSize.width * 0.5f, winSize.height * 0.2f);
 		CGPoint pos = this.convertToNodeSpace(location);
@@ -2168,7 +2168,7 @@ public class Game extends CCLayer {
 				stopAttack();
 				unschedule(this);
 			}
-		}, mCloudDefenseTime);
+		}, mCloudDefenseTime - attackTime);
 	}
 	
 	//마법 피해 애니 종료============================
