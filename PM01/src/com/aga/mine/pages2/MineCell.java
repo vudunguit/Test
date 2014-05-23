@@ -598,7 +598,7 @@ public class MineCell extends CCLayer{
 		}
 		
 		for (MineCell cell : getSphereRoundCells()) {
-				if (cell.isOpened() || cell.isOpened())
+				if (cell.isOpened() || cell.isMarked())
 					continue;
 				else
 					return -1;

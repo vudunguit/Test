@@ -618,39 +618,37 @@ public class Utility extends CCLayer {
 	 * parentNode.contentSize.height/2); }
 	 */ 
 	
-
-	
-	public void animationMagicianAction(CCNode parentNode) {
-		String path = "60game/";
-		CGSize winSize = CCDirector.sharedDirector().winSize();
-        String rWizard1 =  path + "R-WizardAction-2.png";
-        String rWizard2 = path + "R-WizardAction-1.png";
-        
-			sprite = CCSprite.sprite(rWizard2);
-			sprite.setPosition(winSize.width * 0.57f, winSize.height * 0.3f);
-			parentNode.addChild(sprite, 1, 888);
-			
-			frames = new ArrayList<CCSpriteFrame>();
-			t2d = CCTextureCache.sharedTextureCache().addImage(rWizard1);
-			CCSpriteFrame frame = CCSpriteFrame.frame(
-					t2d,CGRect.make(0,0,t2d.getContentSize().width,t2d.getContentSize().height),CGPoint.ccp(0,0));
-			frames.add(frame);
-			frames.add(frame);
-			frames.add(frame);
-	        t2d = CCTextureCache.sharedTextureCache().addImage(rWizard2); 
-			frame = CCSpriteFrame.frame(
-					t2d,CGRect.make(0,0,t2d.getContentSize().width,t2d.getContentSize().height),CGPoint.ccp(0,0));
-			frames.add(frame);
-		
-		
-		CCAnimation animation = CCAnimation.animation("", 0.1f, frames);
-		CCAnimate animate = CCAnimate.action(animation);
-//		Log.e("Utility / animationMagicianAction", "sequence");
-		CCSequence sequence = CCSequence.actions(
-				//animate,CCCallFunc.action(this, "removeCap"));
-				animate);
-		sprite.runAction(sequence);
-	}
+//	public void animationMagicianAction(CCNode parentNode) {
+//		String path = "60game/";
+//		CGSize winSize = CCDirector.sharedDirector().winSize();
+//        String rWizard1 =  path + "R-WizardAction-2.png";
+//        String rWizard2 = path + "R-WizardAction-1.png";
+//        
+//			sprite = CCSprite.sprite(rWizard2);
+//			sprite.setPosition(winSize.width * 0.57f, winSize.height * 0.3f);
+//			parentNode.addChild(sprite, 1, 888);
+//			
+//			frames = new ArrayList<CCSpriteFrame>();
+//			t2d = CCTextureCache.sharedTextureCache().addImage(rWizard1);
+//			CCSpriteFrame frame = CCSpriteFrame.frame(
+//					t2d,CGRect.make(0,0,t2d.getContentSize().width,t2d.getContentSize().height),CGPoint.ccp(0,0));
+//			frames.add(frame);
+//			frames.add(frame);
+//			frames.add(frame);
+//	        t2d = CCTextureCache.sharedTextureCache().addImage(rWizard2); 
+//			frame = CCSpriteFrame.frame(
+//					t2d,CGRect.make(0,0,t2d.getContentSize().width,t2d.getContentSize().height),CGPoint.ccp(0,0));
+//			frames.add(frame);
+//		
+//		
+//		CCAnimation animation = CCAnimation.animation("", 0.1f, frames);
+//		CCAnimate animate = CCAnimate.action(animation);
+////		Log.e("Utility / animationMagicianAction", "sequence");
+//		CCSequence sequence = CCSequence.actions(
+//				//animate,CCCallFunc.action(this, "removeCap"));
+//				animate);
+//		sprite.runAction(sequence);
+//	}
 	
 CCNode papa;
 	public void removeCap(){

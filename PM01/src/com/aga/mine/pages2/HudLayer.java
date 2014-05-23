@@ -265,7 +265,7 @@ public class HudLayer extends CCLayer {
 		magician = CCSprite.sprite(cache.getSpriteFrame(magicianColor));
 		magician.setScale(2);
 		this.addChild(magician, -1);
-		magician.setPosition(winSize.width * 0.57f, winSize.height * 0.2f);
+		magician.setPosition(winSize.width * 0.57f, winSize.height * 0.25f);
 
 		// this.addChild(point1);
 		// point1.setPosition(winSize.width/2,winSize.height/2 + 100);
@@ -544,7 +544,7 @@ public class HudLayer extends CCLayer {
 			// 마법사 액션
 			// - 애니메이션을 위에 올렸닥 끝나면 지워버린다.
 			// - 본래 캐릭터는 가렸다가 애니메이션이 끝난 후에 (0.4초 이후) 다시 보이도록 한다.
-			Utility.getInstance().animationMagicianAction(this);
+			animationMagicianAction(this);
 			magician.setVisible(false);
 			final CCNode layer = this;
 			
@@ -1298,8 +1298,50 @@ public class HudLayer extends CCLayer {
 		//기존 마법사는 안보이게 한다.
 		magician.setVisible(false);
 	}
+	
 	public void stopShockAni() {
 		this.removeChildByTag(2001, true);
 		magician.setVisible(true);
 	}
+	
+	// 이동 하였습니다.
+	public void animationMagicianAction(CCNode parentNode) {
+		String aniTime = "1,2,3,4,5,6,6,6,6,7,8,8";
+		String[] array = aniTime.split(",");
+		
+		CCSprite sprite = CCSprite.sprite(cache.getSpriteFrame("ra01.png"));
+		sprite.setScale(2);
+		sprite.setPosition(parentNode.getContentSize().width * 0.57f, parentNode.getContentSize().height * 0.25f );
+		parentNode.addChild(sprite);
+		
+		ArrayList<CCSpriteFrame> frames = new ArrayList<CCSpriteFrame>();
+		for (int i = 0; i < array.length; i++) {
+			frames.add(cache.getSpriteFrame((String.format("ra%02d.png", i+1))));
+		}
+		CCAnimation animation = CCAnimation.animation("magicAction", 0.05f, frames);
+		CCAnimate animate = CCAnimate.action(animation);
+		CCSequence sequence = CCSequence.actions(animate);
+//		sprite.runAction(sequence);
+		CCCallFuncN _removeAction = CCCallFuncN.action(this, "removeAction");
+		sprite.runAction(CCSequence.actions(sequence, _removeAction));
+	}
+
+	public void removeAction(Object sender) {
+		((CCSprite)sender).removeFromParentAndCleanup(true);
+	}
+	
+//	public void animationMagicianAction(CCNode parentNode) {
+//		ArrayList<CCSpriteFrame> frames = new ArrayList<CCSpriteFrame>();
+//		frames.add(cache.getSpriteFrame("loading-magician01.png"));
+//		frames.add(cache.getSpriteFrame("loading-magician02.png"));
+//		
+//		CCAnimation animation = CCAnimation.animation("magic", 0.3f, frames); 
+//		CCAnimate animate = CCAnimate.action(animation);
+//		CCSprite sprite = CCSprite.sprite(cache.getSpriteFrame("loading-magician01.png"));
+//		CCSequence sequence = CCSequence.actions(animate);
+//		CCRepeatForever repeat = CCRepeatForever.action(sequence);
+//		sprite.runAction(repeat);
+//		parentNode.addChild(sprite);
+//		sprite.setPosition(parentNode.getContentSize().width/2,parentNode.getContentSize().height * 0.6f); 
+//	}
 }
