@@ -313,15 +313,6 @@ public class Game extends CCLayer {
 		mineNumber = GameData.share().getMineNumber();
 		Log.e("Game", "mineNumber : " + mineNumber);
 		
-		//전체 셀중에서 벗길수 있는 셀만 등록한다.
-		ArrayList<MineCell> tempCells = new ArrayList<MineCell>();
-		for(MineCell cell : cells) {
-			if(cell.isCollidable()) {
-				tempCells.add(cell);
-			}
-		}
-		cells.removeAll(tempCells);
-		
 		// 주변타일 등록(선택지점)
 		ArrayList<MineCell> cellsTemp = cells;
 		int size = cellsTemp.size();
@@ -442,16 +433,14 @@ public class Game extends CCLayer {
 		}
 		// 주변타일 등록 for(i) end
 
-		//
-		// debug
-		cellsTemp = cells;
-		size = cellsTemp.size();
-		for (int i = 0; i < size; i++) {
-
-			// coord
-			// isSphereBasePossible
+		//전체 셀중에서 벗길수 있는 셀만 등록한다.
+		ArrayList<MineCell> tempCells = new ArrayList<MineCell>();
+		for(MineCell cell : cells) {
+			if(cell.isCollidable()) {
+				tempCells.add(cell);
+			}
 		}
-		// debug end
+		cells.removeAll(tempCells);
 
 		// //
 		// //지뢰 설치
