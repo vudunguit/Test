@@ -520,9 +520,10 @@ public class HudLayer extends CCLayer {
 			}
 			break;
 		case Game.kButtonEarth:
-			// Log.e("button pressed", "kButtonEarth");
-			effectName = "대지마법";
-			StartAniRune(5);
+			Log.d("LDK", "earth button is clicked");
+			if (mGame.mIsClickedEarth == false) {
+				mGame.mIsClickedEarth = true;
+			}
 			break;
 		case Game.kButtonMirror:
 			//공격이 올때 자동 발동
@@ -1084,8 +1085,8 @@ public class HudLayer extends CCLayer {
 			mGame.stopAttack();
 			break;
 		case 5:
-			//마법진 사라진 후 대지 폭발 효과
-			//mGame.startEarthBomb();
+			//마법진 사라진 후 타일 벗기기
+			//mGame.startEarth(MotionEvent event)
 			break;
 		case 6: //반사 마법, 마법 자동 소멸
 			mGame.stopAttack();

@@ -142,6 +142,10 @@ public class Game extends CCLayer {
 	
 	ArrayList<Integer> mDeleteTags; //삭제하기위해 태그를 저장하는 컬렉션
 	ArrayList<Integer> mNumberTags; //애니메이션시 셀에 있는 숫자를 저장하는 컬렉션
+	
+	//대지마법이 사용중인지를 체크하는 변수
+	public boolean mIsClickedEarth;
+	public CCSprite mEarthGuide;
 
 	private int mineNumber;
 	public CCTMXTiledMap getTileMap() {
@@ -571,6 +575,9 @@ public class Game extends CCLayer {
 		
 		mDeleteTags = new ArrayList<Integer>();
 		mNumberTags = new ArrayList<Integer>();
+		
+		//대지마법 9칸 가이드
+		mEarthGuide = CCSprite.sprite("61hud/earth_guide.png");
 		
 		//이모티콘 test : 실제로는 NetworkController에서 전송된 이모티콘 id를 던져준다.
 		//mHud.startEmoticonAni(5);
@@ -1206,8 +1213,6 @@ public class Game extends CCLayer {
 		if (Config.getInstance().isDisableButton())
 			return;
 
-		// Log.e("Game / handleDoubleTap", "enableButton");
-
 		CGPoint location = null;
 		CGPoint coord = null;
 
@@ -1251,9 +1256,7 @@ public class Game extends CCLayer {
 			}
 		}
 
-		//
 		// 모두 열린 수정구가 있는지 확인한다.
-		float startDelay = 0;
 		for (MineCell cell : sphereBaseCells) {
 			//
 			// -1 : none
@@ -1295,31 +1298,32 @@ public class Game extends CCLayer {
 
 	@Override
 	public boolean ccTouchesBegan(MotionEvent event) {
+		CGPoint location = null;
+		CGPoint coord = null;
+
+		// GL 좌표
+		location = CGPoint.ccp(event.getRawX(), event.getRawY());
+		CGPoint glLocation = CCDirector.sharedDirector().convertToGL(location);
+		location = this.convertToNodeSpace(glLocation);
+		coord = this.tileCoordForPosition(location);
 		
-		/************* 테스트 코드 ******************/
-
-
-			CGPoint location = null;
-			CGPoint coord = null;
-
-			// GL 좌표
-			location = CGPoint.ccp(event.getRawX(), event.getRawY());
-			// cocos2d 좌표로 변환
-			location = CCDirector.sharedDirector().convertToGL(location);
-			// layer 좌측 하단으로 부터 좌표까지의 거리
-			location = this.convertToNodeSpace(location);
-			// 타일의 어느 좌표인지 확인하여 값 불러오기
-			coord = this.tileCoordForPosition(location);
-			int gid = CCFormatter.swapIntToLittleEndian(tmxMeta.tileGIDAt(coord));
-			
-			
-			ArrayList<MineCell> ad = cells;
-			for (MineCell mineCell : ad) {
-				mineCell.getTilePosition();
-//				mineCell.getTileCoord()
+		Log.d("LDK", "coord: " + coord.x + "," + coord.y + "     misclickedEarth:" + mIsClickedEarth);
+		
+		if(mIsClickedEarth) {
+			ArrayList<MineCell> copyCells = new ArrayList<MineCell>();
+			copyCells.addAll(cells);
+			for (MineCell cell : copyCells) {
+				// 전체 타일을 검색하여 터치한 위치와 타일의 위치값이 일치할시
+				if (CGPoint.equalToPoint(cell.getTileCoord(), coord)) {
+					mEarthGuide.setAnchorPoint(0.5f, 0.5f);
+					addChild(mEarthGuide, 10);
+					mEarthGuide.setPosition(cell.getTilePosition());
+					Log.e("LDK", "cell: " + cell.getTilePosition().x + "," + cell.getTilePosition().y + "     ");
+					return true;
+				}
 			}
-		/*******************************/
-			
+		}
+		
 		// device 좌표를 읽어온다. (openGL x)
 		currentTouchLocation = CCDirector.sharedDirector().convertToGL(
 				CGPoint.make(event.getRawX(), event.getRawY()));
@@ -1359,7 +1363,24 @@ public class Game extends CCLayer {
 	// 화면이동 과 줌인 아웃시
 	@Override
 	public boolean ccTouchesMoved(MotionEvent event) {
+		
 		if (!Config.getInstance().isDisableButton()) {
+			
+			if(mIsClickedEarth) {
+				CGPoint glLocation = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(event.getRawX(), event.getRawY()));
+				CGPoint coord = this.tileCoordForPosition(convertToNodeSpace(glLocation));
+				
+				ArrayList<MineCell> copyCells = new ArrayList<MineCell>();
+				copyCells.addAll(cells);
+				for (MineCell cell : copyCells) {
+					// 전체 타일을 검색하여 터치한 위치와 타일의 위치값이 일치할시
+					if (CGPoint.equalToPoint(cell.getTileCoord(), coord)) {
+						mEarthGuide.setPosition(cell.getTilePosition());
+						Log.e("LDK", "cell: " + cell.getTilePosition().x + "," + cell.getTilePosition().y + "     ");
+						return true;
+					}
+				}
+			}
 
 			//
 			// 조절 할 레이어 지정
@@ -1593,7 +1614,23 @@ public class Game extends CCLayer {
 	boolean isMove2 = false;
 
 	@Override
-	public boolean ccTouchesEnded(MotionEvent event) {
+	public boolean ccTouchesEnded(final MotionEvent event) {
+		if(mIsClickedEarth) {
+			mIsClickedEarth = false;
+			
+			mHud.StartAniRune(Game.kButtonEarth);
+			
+			schedule(new UpdateCallback() {
+				@Override
+				public void update(float d) {
+					unschedule(this);
+					startEarth(event);
+				}
+			}, 2.4f);
+			
+			return true;
+		}
+		
 		// Log.e("Game Touch", "Ended");
 		currentTouchLocation = null;
 		previousTouchLocation = null;
@@ -1604,6 +1641,39 @@ public class Game extends CCLayer {
 		mHud.setMagicianTo(kDirectionDown);
 		isMove2 = false;
 		return CCTouchDispatcher.kEventHandled;
+	}
+	
+	public void startEarth(MotionEvent event) {
+		removeChild(mEarthGuide, true);
+		
+		CGPoint glLocation = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(event.getRawX(), event.getRawY()));
+		CGPoint coord = this.tileCoordForPosition(convertToNodeSpace(glLocation));
+		
+		ArrayList<MineCell> copyCells = new ArrayList<MineCell>();
+		copyCells.addAll(cells);
+		for (MineCell cell : copyCells) {
+			// 전체 타일을 검색하여 터치한 위치와 타일의 위치값이 일치할시
+			if (CGPoint.equalToPoint(cell.getTileCoord(), coord)) {
+				final ArrayList<MineCell> cells = new ArrayList<MineCell>();
+				cells.add(cell);
+				cells.addAll(cell.getRoundCells());
+				
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						for(MineCell c : cells) {
+							if(!c.isCollidable() && !c.isOpened()) {
+								if(c.isMine()) {
+									markMushroom(c, c.getTileCoord(), -1);
+								} else {
+									c.open();
+								}
+							}
+						}
+					}
+				}).start();
+			}
+		}
 	}
 
 	// handle touches
