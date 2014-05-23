@@ -58,7 +58,7 @@ public class HudLayer extends CCLayer {
 
 	String folder = "61hud/";
 	int maxMineNumber;
-
+	final float magicianPositionY = 0.217f;
 	CGSize winSize;
 
 	CCLabel label;
@@ -201,13 +201,11 @@ public class HudLayer extends CCLayer {
 
 		//
 		// 하단 수정구 아이템
-		itemBase = CCSprite.sprite(folder
-				+ "game-itemBase-hd.png");
+		itemBase = CCSprite.sprite(folder + "game-itemBase-hd.png");
 		this.addChild(itemBase);
 		itemBase.setPosition(
 				winSize.width / 2,
-				itemBase.getContentSize().height / 2
-						+ itemBase.getContentSize().height / 12);
+				itemBase.getContentSize().height / 2 + itemBase.getContentSize().height / 12);
 		CCMenuItemImage itemOn = null;
 		CCMenuItemImage itemOff = null;
 		CCMenuItemToggle itemToggle;
@@ -265,7 +263,7 @@ public class HudLayer extends CCLayer {
 		magician = CCSprite.sprite(cache.getSpriteFrame(magicianColor));
 		magician.setScale(2);
 		this.addChild(magician, -1);
-		magician.setPosition(winSize.width * 0.57f, winSize.height * 0.25f);
+		magician.setPosition(winSize.width * 0.57f, winSize.height * magicianPositionY);
 
 		// this.addChild(point1);
 		// point1.setPosition(winSize.width/2,winSize.height/2 + 100);
@@ -1311,7 +1309,7 @@ public class HudLayer extends CCLayer {
 		
 		CCSprite sprite = CCSprite.sprite(cache.getSpriteFrame("ra01.png"));
 		sprite.setScale(2);
-		sprite.setPosition(parentNode.getContentSize().width * 0.57f, parentNode.getContentSize().height * 0.25f );
+		sprite.setPosition(parentNode.getContentSize().width * 0.57f, parentNode.getContentSize().height * magicianPositionY );
 		parentNode.addChild(sprite);
 		
 		ArrayList<CCSpriteFrame> frames = new ArrayList<CCSpriteFrame>();
