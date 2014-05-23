@@ -16,7 +16,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.aga.mine.mains.ImageDownloader.ImageLoaderListener;
-import com.aga.mine.pages.UserData;
+import com.aga.mine.pages2.UserData;
 
 public class HomeMiddle {
 

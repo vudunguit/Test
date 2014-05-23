@@ -29,7 +29,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.aga.mine.pages.UserData;
+import com.aga.mine.pages2.UserData;
 import com.aga.mine.util.Popup;
 
 // 전체적인 변수명 정리와 리팩토링이 필요함. (급하니 코드가 더 더러워짐.)

@@ -17,7 +17,7 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
 import com.aga.mine.mains.MainActivity.InviteCallback;
-import com.aga.mine.pages.UserData;
+import com.aga.mine.pages2.UserData;
 import com.aga.mine.util.Util;
 
 import android.content.Context;

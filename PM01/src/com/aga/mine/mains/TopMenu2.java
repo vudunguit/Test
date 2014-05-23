@@ -8,7 +8,7 @@ import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.types.CGSize;
 
-import com.aga.mine.pages.UserData;
+import com.aga.mine.pages2.UserData;
 
 import android.content.Context;
 

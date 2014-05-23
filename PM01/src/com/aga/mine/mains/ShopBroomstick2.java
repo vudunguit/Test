@@ -21,7 +21,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.aga.mine.mains.MainActivity.InviteCallback;
-import com.aga.mine.pages.UserData;
+import com.aga.mine.pages2.UserData;
 import com.aga.mine.util.Popup;
 
 public class ShopBroomstick2 extends CCLayer {

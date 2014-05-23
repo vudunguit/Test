@@ -1,4 +1,4 @@
-﻿package com.aga.mine.pages2;
+﻿package com.aga.mine.mains;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -17,14 +17,13 @@ import java.util.Set;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.types.CGPoint;
 
-import com.facebook.model.GraphUser;
 import com.sromku.simple.fb.entities.Profile;
 
 import android.content.Context;
 import android.util.Log;
 
 //일단 완료(테스트 중)
-public class UserData{
+public class UserData_backup{
 
 	public static String userID = "";
 	public static String userName = "Guest";
@@ -119,6 +118,7 @@ public class UserData{
 	
 	public int offenceMagic = 0;
 	public int defenceMagic = 3;
+	
 	
 	// 불마법 구입 비용(공격)
 	final public int[] buyOffenseFire = {
@@ -224,7 +224,7 @@ public class UserData{
 	
 	
 	// 레벨당 경험치 및 레벨업 보상(골드)
-	public static final int[] expPerLevel = {
+	public final int[] expPerLevel = {
 			7000,			7350,			7710,			8090,			8490,
 			8910,			9350,			9810,			10300,		10810,
 			11350,		11910,		12500,		13120,		13770,
@@ -256,19 +256,19 @@ public class UserData{
 	private Context mContext;
 	private HashMap<String, Object> data;
 	
-	private static UserData userData;
+	private static UserData_backup userData;
 
 	// #pragma mark - Singleton Methods
-	public static synchronized UserData share(Context context) {
+	public static synchronized UserData_backup share(Context context) {
 		if (userData == null) {
-			userData = new UserData(CCDirector.sharedDirector().getActivity().getApplicationContext());
+			userData = new UserData_backup(CCDirector.sharedDirector().getActivity().getApplicationContext());
 			Log.e("** UserData **", "make Single Instance");
 		}
 		return userData;
 	}
 
 	// 파일이 존재시 데이터를 가지고 오고, 없을시 데이터 생성(File생성x)
-	private UserData(Context context) {
+	private UserData_backup(Context context) {
 		mContext = context;
 
 		
@@ -294,9 +294,9 @@ public class UserData{
 						Log.e("mapType", mapType);
 						*/
 						String mapType = key[1].substring(1, key[1].indexOf(")"));
-						Log.e("mapType", mapType);
+//						Log.e("mapType", mapType);
 						String typeValue = key[1].substring(key[1].indexOf(")")+1);
-						Log.e("typeValue", typeValue);
+//						Log.e("typeValue", typeValue);
 						
 						int i = key[1].indexOf(")"); // 시작값은 -1
 						
@@ -347,7 +347,7 @@ public class UserData{
 			
 			//Toast.makeText(mContext, "최초 데이터 만들기", Toast.LENGTH_SHORT).show();
 			// e.printStackTrace();
-			Log.e("Exception", "FileNotFoundException");
+//			Log.e("Exception", "FileNotFoundException");
 			// 없으면, 초기값으로 지정한다.
 			this.data = new HashMap<String, Object>();
 			data.put("LevelCharacter", 1); // 값은 임시 넣음. Default값은 0임
@@ -534,6 +534,8 @@ public class UserData{
 	}
 
 	long nextLevelExp = 5000; // temporary
+	private int gameMode;
+	private int gameDifficulty;
 
 	public void addExp(long number) {
 		// 할일 : 레벨업경험치에 따른 레벨업
@@ -708,6 +710,22 @@ public class UserData{
 
 	public void setDailyCount(int dailyCount) {
 		this.setByKey("daily", dailyCount);
+	}
+
+	public int getGameMode() {
+		return gameMode;
+	}
+
+	public void setGameMode(int gameMode) {
+		this.gameMode = gameMode;
+	}
+
+	public int getGameDifficulty() {
+		return gameDifficulty;
+	}
+
+	public void setGameDifficulty(int gameDifficulty) {
+		this.gameDifficulty = gameDifficulty;
 	}
 	
 	

@@ -1848,7 +1848,7 @@ public class Game extends CCLayer {
 			myScore = (int) ((((foundMine + heart) * maxMine) + spentTime) * maxMine * 0.006f);
 		}
 		
-		Log.e("MineCell", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", heart : " + heart + ", maxMine : " + maxMine + ", remainTime : " + spentTime);
+		Log.e("MineCell", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", heart : " + heart + ", maxMine : " + maxMine + ", spentTime : " + spentTime);
 		
 		return myScore;
 	}

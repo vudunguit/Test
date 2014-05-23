@@ -13,7 +13,7 @@ import org.cocos2d.types.ccColor3B;
 
 import android.content.Context;
 
-import com.aga.mine.pages.UserData;
+import com.aga.mine.pages2.UserData;
 
 public class TopMenu1 extends CCLayer{
 

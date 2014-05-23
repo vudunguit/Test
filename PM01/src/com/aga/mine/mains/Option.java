@@ -18,7 +18,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import com.aga.mine.pages.UserData;
+import com.aga.mine.pages2.UserData;
 import com.aga.mine.pages2.GameData;
 //
 public class Option extends CCLayer {

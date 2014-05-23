@@ -499,7 +499,7 @@ public class MineCell extends CCLayer{
 				myScore = (int) ((((foundMine + heart) * maxMine) + spentTime) * maxMine * 0.006f);
 			}
 			
-			Log.e("MineCell", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", maxMine : " + maxMine + ", heart : " + heart + ", remainTime : " + spentTime);
+			Log.e("MineCell", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", maxMine : " + maxMine + ", heart : " + heart + ", spentTime : " + spentTime);
 			
 			if (GameData.share().isMultiGame) {
 				gameOverType = continueGame;

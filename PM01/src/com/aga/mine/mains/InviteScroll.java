@@ -24,7 +24,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.aga.mine.pages.UserData;
+import com.aga.mine.pages2.UserData;
 import com.aga.mine.pages2.GameData;
 import com.sromku.simple.fb.entities.Profile;
 

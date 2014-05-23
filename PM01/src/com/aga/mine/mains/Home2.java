@@ -14,7 +14,7 @@ import org.cocos2d.types.ccColor3B;
 import android.content.Context;
 import android.util.Log;
 
-import com.aga.mine.pages.UserData;
+//import com.aga.mine.pages.UserData;
 
 public class Home2 extends CCLayer {
 	
@@ -40,7 +40,7 @@ public class Home2 extends CCLayer {
 	int currentTime = 0;
 	
 	private Context mContext;
-	UserData userData;
+//	UserData userData;
 	
 	public static CCScene scene() {
 		CCScene scene = CCScene.node();
@@ -51,7 +51,7 @@ public class Home2 extends CCLayer {
 		
 	public Home2() {
 		mContext = CCDirector.sharedDirector().getActivity();
-		userData = UserData.share(mContext);
+//		userData = UserData.share(mContext);
 		
 		//배경 그림 설정
 		CCSprite bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);

@@ -17,7 +17,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.aga.mine.mains.NetworkController;
-import com.aga.mine.pages.UserData;
+import com.aga.mine.pages2.UserData;
 import com.facebook.model.GraphUser;
 import com.sromku.simple.fb.entities.Profile;
 
