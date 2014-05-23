@@ -136,9 +136,9 @@ public class Game extends CCLayer {
 	public long mWindAttackTime = UserLevel +  offence_WindLevel + offenceDefaultTime;
 	public long mCloudAttackTime = UserLevel +  offence_CloudLevel + offenceDefaultTime;
 	public long startTimeOfAttack; //공격 시작 시간
-	public long mFireDefenseTime = UserLevel +  defence_FireLevel; //불방어 지속 시간(상대방공격시간)
-	public long mWindDefenseTime = UserLevel +  defence_WindLevel;
-	public long mCloudDefenseTime = UserLevel +  defence_CloudLevel;
+	public long mFireDefenseTime = defence_FireLevel; //불방어 지속 시간(상대방공격시간)
+	public long mWindDefenseTime = defence_WindLevel;
+	public long mCloudDefenseTime = defence_CloudLevel;
 	
 	ArrayList<Integer> mDeleteTags; //삭제하기위해 태그를 저장하는 컬렉션
 	ArrayList<Integer> mNumberTags; //애니메이션시 셀에 있는 숫자를 저장하는 컬렉션
@@ -2078,13 +2078,16 @@ public class Game extends CCLayer {
 			}
 		}
 		
+		long spanTime = (attackTime - mFireDefenseTime - UserLevel);
+		spanTime = spanTime > 0 ? spanTime : 0;
+		
 		schedule(new UpdateCallback() {
 			@Override
 			public void update(float d) {
 				stopAttack();
 				unschedule(this);
 			}
-		}, mFireDefenseTime - attackTime);
+		}, spanTime);
 	}
 	
 	//바람 피해 애니===========================================================
@@ -2116,6 +2119,9 @@ public class Game extends CCLayer {
 		
 		schedule("increaseNumber", 0.1f); //숫자 증가시키는 콜백
 		
+		long spanTime = (attackTime - mWindDefenseTime - UserLevel);
+		spanTime = spanTime > 0 ? spanTime : 0;
+		
 		schedule(new UpdateCallback() {
 			@Override
 			public void update(float d) {
@@ -2123,7 +2129,7 @@ public class Game extends CCLayer {
 				unschedule(this);
 				unschedule("increaseNumber");
 			}
-		}, mWindDefenseTime - attackTime);
+		}, spanTime);
 	}
 	
 	public float mIncreaseTime = 0;
@@ -2171,13 +2177,16 @@ public class Game extends CCLayer {
 			cloud.runAction(CCSequence.actions(out.copy(), in.copy()));
 		}
 		
+		long spanTime = (attackTime - mCloudDefenseTime - UserLevel);
+		spanTime = spanTime > 0 ? spanTime : 0;
+		
 		schedule(new UpdateCallback() {
 			@Override
 			public void update(float d) {
 				stopAttack();
 				unschedule(this);
 			}
-		}, mCloudDefenseTime - attackTime);
+		}, spanTime);
 	}
 	
 	//마법 피해 애니 종료============================

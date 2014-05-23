@@ -516,9 +516,10 @@ public class HudLayer extends CCLayer {
 //			StartAniCloudDefense(); //test
 			break;
 		case Game.kButtonDivine:
-			// Log.e("button pressed", "kButtonDivine");
-			effectName = "신성마법";
-			StartAniRune(4);
+			if(GameData.share().getItemNumberByType(Game.kButtonDivine) > 0) {
+				StartAniRune(Game.kButtonDivine);
+				GameData.share().decreaseItemByType(Game.kButtonDivine);
+			}
 			break;
 		case Game.kButtonEarth:
 			// Log.e("button pressed", "kButtonEarth");
@@ -526,9 +527,8 @@ public class HudLayer extends CCLayer {
 			StartAniRune(5);
 			break;
 		case Game.kButtonMirror:
-			// Log.e("button pressed", "kButtonMirror");
-			effectName = "반사마법";
-			StartAniRune(6);
+			//공격이 올때 자동 발동
+			//StartAniRune(6);
 			break;
 
 		default:
@@ -1087,7 +1087,10 @@ public class HudLayer extends CCLayer {
 			break;
 		case 5:
 			//마법진 사라진 후 대지 폭발 효과
-			mGame.startEarthBomb();
+			//mGame.startEarthBomb();
+			break;
+		case 6: //반사 마법, 마법 자동 소멸
+			mGame.stopAttack();
 			break;
 		}
 		
