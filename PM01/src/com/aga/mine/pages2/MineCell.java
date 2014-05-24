@@ -304,8 +304,8 @@ public class MineCell extends CCLayer{
 			
 			// 현재셀 주변에 지뢰나 수정구가 없다면 , 주변 셀을 모두 연다.
 			// 지뢰가 없는 곳만 열기 또는 지뢰와 아이템이 없는 곳만 열기
-			int numberOfSphere = this.getNumberOfSphereAround();
-			Log.e("MineCell", "open _ getNumberOfSphereAround : " + numberOfSphere);
+			//int numberOfSphere = this.getNumberOfSphereAround();
+			//Log.e("MineCell", "open _ getNumberOfSphereAround : " + numberOfSphere);
 			// 지뢰 없는 곳만 열어주기
 			if(numberOfArroundMine  == 0){
 //			if(numberOfArroundMine  + numberOfSphere == 0){
