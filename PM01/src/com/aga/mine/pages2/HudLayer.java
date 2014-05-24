@@ -496,22 +496,38 @@ public class HudLayer extends CCLayer {
 			}
 			break;
 		case Game.kButtonFire:
-			 Log.e("button pressed", "kButtonFire");
+			Log.e("button pressed", "kButtonFire");
 			effectName = "불마법";
 			StartAniFireAttack();
-//			StartAniFireDefense(); //test
+			schedule(new UpdateCallback() {
+				@Override
+				public void update(float d) {
+					startCoolTime(mGame.mFireAttackTime);
+					unschedule(this);
+				}
+			}, 1.0f);
 			break;
 		case Game.kButtonWind:
-			// Log.e("button pressed", "kButtonWind");
 			effectName = "바람마법";
 			StartAniWindAttack();
-//			StartAniWindDefense(); //test
+			schedule(new UpdateCallback() {
+				@Override
+				public void update(float d) {
+					startCoolTime(mGame.mWindAttackTime);
+					unschedule(this);
+				}
+			}, 1.0f);
 			break;
 		case Game.kButtonCloud:
-			// Log.e("button pressed", "kButtonCloud");
 			effectName = "구름마법";
 			StartAniCloudAttack();
-//			StartAniCloudDefense(); //test
+			schedule(new UpdateCallback() {
+				@Override
+				public void update(float d) {
+					startCoolTime(mGame.mCloudAttackTime);
+					unschedule(this);
+				}
+			}, 1.0f);
 			break;
 		case Game.kButtonDivine:
 			if(GameData.share().getItemNumberByType(Game.kButtonDivine) > 0) {
@@ -573,6 +589,70 @@ public class HudLayer extends CCLayer {
 				}
 			}, 0.4f);
 
+		}
+	}
+	
+	private void startCoolTime(final long attackTime) {
+		mGame.mStartTimeOfAttack = System.currentTimeMillis();
+		
+		final CCLabel label1 = CCLabel.makeLabel(" ", "verdana-Bold", 48);
+		label1.setAnchorPoint(0.5f, 0.5f);
+		final CCMenuItemToggle item1 = (CCMenuItemToggle) itemMenu.getChildByTag(Game.kButtonFire);
+		item1.addChild(label1, 10, 201);
+		label1.setPosition(item1.getContentSize().width/2, item1.getContentSize().height/2);
+		
+		final CCLabel label2 = CCLabel.makeLabel(" ", "verdana-Bold", 48);
+		label2.setAnchorPoint(0.5f, 0.5f);
+		final CCMenuItemToggle item2 = (CCMenuItemToggle) itemMenu.getChildByTag(Game.kButtonWind);
+		item2.addChild(label2, 10, 202);
+		label2.setPosition(item2.getContentSize().width/2, item2.getContentSize().height/2);
+		
+		final CCLabel label3 = CCLabel.makeLabel(" ", "verdana-Bold", 48);
+		label3.setAnchorPoint(0.5f, 0.5f);
+		final CCMenuItemToggle item3 = (CCMenuItemToggle) itemMenu.getChildByTag(Game.kButtonCloud);
+		item3.addChild(label3, 10, 203);
+		label3.setPosition(item3.getContentSize().width/2, item3.getContentSize().height/2);
+		
+		disableButton();
+		
+		schedule(new UpdateCallback() {
+			@Override
+			public void update(float d) {
+				long pastTime = System.currentTimeMillis() - mGame.mStartTimeOfAttack; //경과시간
+				long coolTime = attackTime - pastTime/1000;
+				if(coolTime<=0) {
+					//공격시간이 종료되면 공격시간을 다시 초기화
+					unschedule(this);
+					mGame.mStartTimeOfAttack = 0;
+					item1.removeChildByTag(201, true);
+					item2.removeChildByTag(202, true);
+					item3.removeChildByTag(203, true);
+					enableButton();
+				} else {
+					label1.setString(String.valueOf(coolTime));
+					label2.setString(String.valueOf(coolTime));
+					label3.setString(String.valueOf(coolTime));
+				}
+			}
+		});
+	}
+	
+	private void disableButton() {
+		//공격 버튼을 비활성화 및 dim 처리
+		for(int i = 1; i<=3; i++) {
+			CCMenuItemToggle item = (CCMenuItemToggle) itemMenu.getChildByTag(i);
+			item.setSelectedIndex(kButtonOff);
+			item.setIsEnabled(false);
+		}
+	}
+	
+	private void enableButton() {
+		for(int i = 1; i<=3; i++) {
+			CCMenuItemToggle item = (CCMenuItemToggle) itemMenu.getChildByTag(i);
+			item.setIsEnabled(true);
+			if(GameData.share().getItemNumberByType(i) > 0) {
+				item.setSelectedIndex(kButtonOn);
+			}
 		}
 	}
 	

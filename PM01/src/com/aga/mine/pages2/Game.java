@@ -132,10 +132,10 @@ public class Game extends CCLayer {
 	int defence_CloudLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelMirror"));
 			
 	//마법 공격 및 피해 변수
-	public long mFireAttackTime = UserLevel +  offence_FireLevel + offenceDefaultTime; //불공공격 지속 시간
+	public long mFireAttackTime = UserLevel +  offence_FireLevel + offenceDefaultTime; //불공공격 지속 시간, 단위는 second
 	public long mWindAttackTime = UserLevel +  offence_WindLevel + offenceDefaultTime;
 	public long mCloudAttackTime = UserLevel +  offence_CloudLevel + offenceDefaultTime;
-	public long startTimeOfAttack; //공격 시작 시간
+	public long mStartTimeOfAttack; //공격 시작 시간(단위는 ms)
 	public long mFireDefenseTime = defence_FireLevel; //불방어 지속 시간(상대방공격시간)
 	public long mWindDefenseTime = defence_WindLevel;
 	public long mCloudDefenseTime = defence_CloudLevel;
