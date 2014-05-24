@@ -808,7 +808,7 @@ public class HudLayer extends CCLayer {
 					popupEnding();
 				}
 			}
-		}, 2.0f);  //2초후에 엔딩 팝업 
+		}, 4.5f);  //2초후에 엔딩 팝업 
 	}
 	
 	private void popupEnding() {

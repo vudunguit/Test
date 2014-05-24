@@ -2080,8 +2080,31 @@ public class Game extends CCLayer {
 		this.runAction(move);
 		this.runAction(scale);
 		
+		CCAnimation pumpkin = CCAnimation.animation("pumpkin");
+		for( int i=1;i<=7;i++) {
+			pumpkin.addFrame(String.format("60game/pumpkinbomb_%02d.png", i));
+		}
+		final CCAnimate pumpkinBomb = CCAnimate.action(1.2f, pumpkin, true);
+		
 		//폭탄 터지기 : 타일 오픈후 pumpkin 애니메이션
-		//for(MineCell)
+		schedule(new UpdateCallback() {
+			@Override
+			public void update(float d) {
+				unschedule(this);
+				for(MineCell cell : cells) {
+					if(cell.isMine()) {
+						getFg().removeTileAt(cell.getTileCoord());
+						
+						CCSprite bomb = CCSprite.sprite("60game/pumpkinbomb_01.png");
+						bomb.setPosition(cell.getTilePosition());
+						theLayer.addChild(bomb, 100);
+						
+						bomb.runAction(pumpkinBomb.copy());
+					}
+				}
+			}
+		}, 2.0f);
+		
 	}
 	
 	//불 피해 애니 : 열려진 땅을 cracklayer로 변환
