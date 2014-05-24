@@ -301,6 +301,29 @@ public class MineCell extends CCLayer{
 			startOpenTile(depth);
 			// 프로그레스 하나 증가			
 			mGame.mHud.updateProgress();
+			
+			// 현재셀 주변에 지뢰나 수정구가 없다면 , 주변 셀을 모두 연다.
+			// 지뢰가 없는 곳만 열기 또는 지뢰와 아이템이 없는 곳만 열기
+			int numberOfSphere = this.getNumberOfSphereAround();
+			Log.e("MineCell", "open _ getNumberOfSphereAround : " + numberOfSphere);
+			// 지뢰 없는 곳만 열어주기
+			if(numberOfArroundMine  == 0){
+//			if(numberOfArroundMine  + numberOfSphere == 0){
+			// 지뢰 없는 곳과 수정구까지 열어주기
+			//if (numberOfMine == 0) {
+				//ArrayList 동기화 문제로 죽지 않도록 셀을 카피해서 사용
+				ArrayList<MineCell> cells = new ArrayList<MineCell>();
+				cells.addAll(getRoundCells());
+				
+				for (final MineCell cell : cells) {
+					try {
+						Thread.sleep(5);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					cell.open(++depth);
+				}
+			}
 		} else { // 지뢰 밟음
 			touchMine();
 		}
@@ -322,26 +345,6 @@ public class MineCell extends CCLayer{
 			}
 		}
 		
-		//Log.e("MineCell / open", "쭉~~~~~~~~~~~~~~~~~~");
-		//
-		// 현재셀 주변에 지뢰나 수정구가 없다면 , 주변 셀을 모두 연다.
-		// 지뢰가 없는 곳만 열기 또는 지뢰와 아이템이 없는 곳만 열기
-		int numberOfSphere = this.getNumberOfSphereAround();
-		Log.e("MineCell", "open _ getNumberOfSphereAround : " + numberOfSphere);
-		// 지뢰 없는 곳만 열어주기
-		if(numberOfArroundMine  == 0){
-//		if(numberOfArroundMine  + numberOfSphere == 0){
-		// 지뢰 없는 곳과 수정구까지 열어주기
-		//if (numberOfMine == 0) {
-			for (final MineCell cell : getRoundCells()) {
-				try {
-					Thread.sleep(5);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				cell.open(++depth);
-			}
-		}
 		return numberOfArroundMine;
 	}
 	
