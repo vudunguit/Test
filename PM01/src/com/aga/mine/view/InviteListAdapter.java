@@ -24,12 +24,14 @@ public class InviteListAdapter extends BaseAdapter {
 	private List<Profile> notAPlayers; // GameScore로 변환
 //	private List<GameScore> friends;
 	private AQuery mAq;
+	String myName = null;
 	
 	public InviteListAdapter(Context context) {
 //		List<GameScore> adfa = new ArrayList<GameScore>(); // 수정중
 		mContext = context;
 		List<Profile> friends = FacebookData.getinstance().getFriendsInfo();
 		List<GameScore> gameScore = FacebookData.getinstance().getGameScore();
+		myName = FacebookData.getinstance().getUserInfo().getName();
 		notAPlayers = friends;
 		
 //		GameScore game; // 수정중
@@ -105,14 +107,13 @@ public class InviteListAdapter extends BaseAdapter {
 			public void onClick(View v) {
 			    MainActivity mMainActivity = MainApplication.getInstance().getActivity();
 			    mMainActivity.click();
-				String friend = notAPlayers.get(position).getId();
 				//	mMainActivity.mSimpleFacebook.invite(friend, "I invite you to use this app", onInviteListener, "secret data");
 				// 메시지가 정확하게 전달 되는지는 모르겠네요.
 				
 				// 로그인 안되어 있을 경우 '취소'처리(이런경우가 없는데...) 
 				// 
 				Log.e("InviteListAapter", "Callback_3 - imgInviteBtn.setOnClickListener()");
-				mMainActivity.sendInvite(friend, "이(가) 귀하를 초대합니다. _test", null);
+				mMainActivity.sendInvite(myName, "이(가) 귀하를 초대합니다.", null);
 				// 이(가) 귀하를 초대합니다.
 				// 이(가) 빗자루 하나를 보냈습니다.
 				// 이(가) xxxx 골드를 보냈습니다.

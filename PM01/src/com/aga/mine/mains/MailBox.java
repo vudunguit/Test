@@ -2,6 +2,7 @@
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Locale;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.menus.CCMenu;
@@ -63,12 +64,20 @@ public class MailBox {
 	}
 
 	private String getFacebookName(String id) {
+		if (Locale.getDefault().getLanguage().toString().equals("ko")) {
+			
+		}
+		else {
+			
+		}
+		
+		
 		if (id.equals("0")) {
-//			return "보상";
-			return "reward";
-		} else if (id.equals("1")) {
 //			return "호박을찾아라";
 			return "PumpkinMines";
+		} else if (id.equals("1")) {
+//			return "이벤트 보상";
+			return "Event Reward";
 		} else if (FacebookData.getinstance().getUserInfo().getId().equals(id)) {
 //			return FacebookData.getinstance().getUserInfo().getName();
 			return "구 매";

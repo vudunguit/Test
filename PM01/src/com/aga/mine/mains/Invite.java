@@ -67,7 +67,7 @@ public class Invite extends CCLayer {
 			//To Do:
 			Log.e("Invite", "Callback_7 - onInvited" );
 //			Log.d("LDK", "requestId:" + requestId);
-			int inviteCount = 	Integer.parseInt(FacebookData.getinstance().getDBData("InviteNumber"));
+			int inviteCount = Integer.parseInt(FacebookData.getinstance().getDBData("InviteNumber"));
 			for (String string : invitedFriends) {
 //				Log.e("Invite", "invitedFriend : " + string);
 				String requestID = requestId;
@@ -86,6 +86,15 @@ public class Invite extends CCLayer {
 				inviteCount++;
 				
 			}
+			
+			if (inviteCount == 30) { // 30번째 초대시 3천gold 보상
+				inviteRewardGold(3000);
+			} else if (inviteCount == 50) { // 50번째 초대시 7천gold 보상 
+				inviteRewardGold(7000);
+			} else if (inviteCount == 70) { // 70명째 초대시 1만gold 보상
+				inviteRewardGold(10000);
+			}
+			
 			FacebookData.getinstance().modDBData("InviteNumber", String.valueOf(inviteCount));
 			inviteQuantity.setString(String.valueOf(inviteCount));
 			//refresh invite scrollview
@@ -93,6 +102,15 @@ public class Invite extends CCLayer {
 		}
     };
 
+    private void inviteRewardGold(int gold) {
+		long requestID = (long) (Math.random() * 72036854775807L);
+		String recipientID = FacebookData.getinstance().getUserInfo().getId();
+		String senderID = "1";
+		String data = 
+				"0,RequestModeMailBoxAdd*22," + requestID + "*1," + recipientID + "*19," + senderID + "*20,Gold*21," + gold;				
+		DataFilter.sendMail(data);
+	}
+    
 	public static synchronized Invite getInstance() {
 		if (inviteLayer == null) {
 			inviteLayer = new Invite();
