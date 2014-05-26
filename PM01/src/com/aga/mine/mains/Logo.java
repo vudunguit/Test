@@ -9,9 +9,10 @@ import org.cocos2d.types.CGPoint;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 
 public class Logo extends CCLayer {
-
+	String tag = "Logo";
 	final String folder = "01trademark/";
 	final String fileExtension = ".png";
 	
@@ -31,11 +32,19 @@ public class Logo extends CCLayer {
 	}
 	
 	private void versionCheck(CCSprite parentSprite) {
-		CCLabel ccVersion = CCLabel.makeLabel("version  " + version, "Arial", 20);
-//		parentSprite.addChild(ccVersion);
-		ccVersion.setPosition(parentSprite.getContentSize().width - 80, 70);
-		
 		String webVersion = DataFilter.getGameVersionData();
+
+		CCLabel ccWebVersion = CCLabel.makeLabel("webVersion  " + webVersion, "Arial", 20);
+		ccWebVersion.setPosition(parentSprite.getContentSize().width - 80, 140);
+		parentSprite.addChild(ccWebVersion);
+		Log.e(tag, "webVersion : " + webVersion);
+		
+		CCLabel ccVersion = CCLabel.makeLabel("version  " + version, "Arial", 20);
+		ccVersion.setPosition(parentSprite.getContentSize().width - 80, 70);
+		parentSprite.addChild(ccVersion);
+		Log.e(tag, "Version : " + version);
+		
+
 		if (webVersion == null || !version.equals(webVersion)) {
 			Uri uri = Uri.parse("https://play.google.com/store/apps");
 			Intent intent = new Intent(Intent.ACTION_VIEW, uri);
