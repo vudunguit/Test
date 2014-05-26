@@ -1,18 +1,14 @@
 ﻿package com.aga.mine.pages2;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.instant.CCCallFuncND;
-import org.cocos2d.actions.interval.CCAnimate;
-import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
-import org.cocos2d.nodes.CCAnimation;
-import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.sound.SoundEngine;
@@ -21,8 +17,6 @@ import org.cocos2d.types.ccColor3B;
 import org.cocos2d.utils.CCFormatter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.aga.mine.mains.Config;
@@ -134,15 +128,15 @@ public class MineCell extends CCLayer{
 		}
 		*/
 		if (getRoundCells() != null && getRoundCells().size() != 0) {
-			ArrayList<MineCell> cellArray = getRoundCells();
-			int size = getRoundCells().size();
-			for (int k = 0; k < size; k++) {
+			CopyOnWriteArrayList<MineCell> cellArray = new CopyOnWriteArrayList<MineCell>();
+			cellArray.addAll(getRoundCells());
+			
+			//int size = getRoundCells().size();
+			for (MineCell c : cellArray) {
 
 				// cellsTemp.get(k) 이 null이라 에러 발생
 				// cellArray.get(k)이 null이 나오면 roundcell로 등록시 문제가 있는것
-				if (cellArray.get(k) != null && (
-						(cellArray.get(k).isMarked() || (cellArray.get(k).isMine() && cellArray.get(k).isOpened())
-								))) 
+				if (c != null && ( (c.isMarked() || (c.isMine() && c.isOpened())))) 
 					count++;
 			}	
 		}
@@ -312,7 +306,7 @@ public class MineCell extends CCLayer{
 			// 지뢰 없는 곳과 수정구까지 열어주기
 			//if (numberOfMine == 0) {
 				//ArrayList 동기화 문제로 죽지 않도록 셀을 카피해서 사용
-				ArrayList<MineCell> cells = new ArrayList<MineCell>();
+				CopyOnWriteArrayList<MineCell> cells = new CopyOnWriteArrayList<MineCell>();
 				cells.addAll(getRoundCells());
 				
 				for (final MineCell cell : cells) {

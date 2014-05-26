@@ -1315,31 +1315,56 @@ public class HudLayer extends CCLayer {
 		
 		CCSprite spirit = null;
 		CCNode item = null;
+		CCAnimation ani = CCAnimation.animation("spirit");
 		
 		switch(kind) {
 		case Game.kButtonFire:
-			spirit = CCSprite.sprite("61hud/game-itemFireOn-hd.png");
+			spirit = CCSprite.sprite("60game/sprit1_01.png");
 			item = itemMenu.getChildByTag(Game.kButtonFire);
+			for(int i=1; i<=5; i++) {
+	    		CCSprite frame = CCSprite.sprite(String.format("60game/sprit1_%02d.png", i));
+	    		ani.addFrame(frame.getTexture());
+			}
 			break;
 		case Game.kButtonWind:
-			spirit = CCSprite.sprite("61hud/game-itemWindOn-hd.png");
+			spirit = CCSprite.sprite("60game/sprit2_01.png");
 			item = itemMenu.getChildByTag(Game.kButtonWind);
+			for(int i=1; i<=5; i++) {
+	    		CCSprite frame = CCSprite.sprite(String.format("60game/sprit2_%02d.png", i));
+	    		ani.addFrame(frame.getTexture());
+			}
 			break;
 		case Game.kButtonCloud:
-			spirit = CCSprite.sprite("61hud/game-itemCloudOn-hd.png");
+			spirit = CCSprite.sprite("60game/sprit3_01.png");
 			item = itemMenu.getChildByTag(Game.kButtonCloud);
+			for(int i=1; i<=5; i++) {
+	    		CCSprite frame = CCSprite.sprite(String.format("60game/sprit3_%02d.png", i));
+	    		ani.addFrame(frame.getTexture());
+			}
 			break;
 		case Game.kButtonDivine:
-			spirit = CCSprite.sprite("61hud/game-itemDivineOn-hd.png");
+			spirit = CCSprite.sprite("60game/sprit4_01.png");
 			item = itemMenu.getChildByTag(Game.kButtonDivine);
+			for(int i=1; i<=5; i++) {
+	    		CCSprite frame = CCSprite.sprite(String.format("60game/sprit4_%02d.png", i));
+	    		ani.addFrame(frame.getTexture());
+			}
 			break;
 		case Game.kButtonEarth:
-			spirit = CCSprite.sprite("61hud/game-itemEarthOn-hd.png");
+			spirit = CCSprite.sprite("60game/sprit5_01.png");
 			item = itemMenu.getChildByTag(Game.kButtonEarth);
+			for(int i=1; i<=5; i++) {
+	    		CCSprite frame = CCSprite.sprite(String.format("60game/sprit5_%02d.png", i));
+	    		ani.addFrame(frame.getTexture());
+			}
 			break;
 		case Game.kButtonMirror:
-			spirit = CCSprite.sprite("61hud/game-itemMirrorOn-hd.png");
+			spirit = CCSprite.sprite("60game/sprit6_01.png");
 			item = itemMenu.getChildByTag(Game.kButtonMirror);
+			for(int i=1; i<=5; i++) {
+	    		CCSprite frame = CCSprite.sprite(String.format("60game/sprit6_%02d.png", i));
+	    		ani.addFrame(frame.getTexture());
+			}
 			break;
 		}
 		
@@ -1355,12 +1380,15 @@ public class HudLayer extends CCLayer {
 		
 		CCMoveBy moveby = CCMoveBy.action(0.35f, CGPoint.ccp(0, 150));
 		CCMoveTo moveto = CCMoveTo.action(1.15f, pos2);
-		CCFadeOut out = CCFadeOut.action(0.2f);
+		CCAnimate action = CCAnimate.action(0.3f, ani, false);
 		CCCallFuncND increase = CCCallFuncND.action(this, "cbIncreaseNumber", kind);
-		spirit.runAction(CCSequence.actions(moveby, moveto, out, increase));
+		spirit.runAction(CCSequence.actions(moveby, moveto, action, increase));
 	}
 
 	public void cbIncreaseNumber(Object sender, Object k) {
+		CCSprite sprite = (CCSprite) sender;
+		removeChild(sprite, true);
+		
 		int kind = (Integer) k;
 		
 		// 수정구 획득수를 타입별로 하나 증가시킨다.
@@ -1369,9 +1397,6 @@ public class HudLayer extends CCLayer {
 		// UI 업데이트를 한다.
 		// 수정구를 클릭해서 활성화시키면 +1 씩 라벨에 넣어준다.
 		updateSphereItemNumber();
-
-		// 버튼에 클릭효과를 넣는다.
-		clickEffect(kind);
 	}
 	
 	//마법사 감전 애니
