@@ -295,7 +295,7 @@ public class HudLayer extends CCLayer {
     		windAttack.addFrame(windframe.getTexture());
 		}
 		
-		cloud = CCSprite.sprite("61hud/fx-cloud1.png");
+		cloud = CCSprite.sprite("61hud/fx-passingcloud1.png");
 		
 //		rune = CCSprite.sprite("61hud/rune-01.png");
 		runeAni = CCAnimation.animation("rune");
@@ -1090,12 +1090,12 @@ public class HudLayer extends CCLayer {
 	
 	//구름공격 애니메이션------------------------------------------------------------
 	public void StartAniCloudAttack() {
-		cloud.setPosition(winSize.width * 0.62f, winSize.height * 0.3f);
+		cloud.setPosition(winSize.width * 0.57f, winSize.height * 0.26f);
 		cloud.setAnchorPoint(CGPoint.ccp(0.5f, 0));
 		cloud.setScale(0);
 		addChild(cloud);
 		
-		CCScaleTo scale = CCScaleTo.action(0.4f, 1.0f);
+		CCScaleTo scale = CCScaleTo.action(0.7f, 0.8f);
 		CCCallFuncN action2 = CCCallFuncN.action(this, "cbCloudMove");
 		cloud.runAction(CCSequence.actions(scale, action2));
 	}
@@ -1103,13 +1103,9 @@ public class HudLayer extends CCLayer {
 	public void cbCloudMove(Object sender) {
 		CCSprite cloud1 = (CCSprite) sender;
 		
-		CCAnimate action = CCAnimate.action(0.7f, mGame.cloudDefense, false);
-		CCRepeatForever repeat = CCRepeatForever.action(action);
-		
-		CCMoveBy move = CCMoveBy.action(2, CGPoint.ccp(0, winSize.height));
+		CCMoveBy move = CCMoveBy.action(0.5f, CGPoint.ccp(0, winSize.height));
 		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite");
 		
-		cloud1.runAction(repeat);
 		cloud1.runAction(CCSequence.actions(move, remove));
 	}
 	
