@@ -629,9 +629,9 @@ public class HudLayer extends CCLayer {
 					item3.removeChildByTag(203, true);
 					enableButton();
 				} else {
-					label1.setString(String.valueOf(coolTime));
-					label2.setString(String.valueOf(coolTime));
-					label3.setString(String.valueOf(coolTime));
+					label1.setString(String.format("%02d", (int)coolTime));
+					label2.setString(String.format("%02d", (int)coolTime));
+					label3.setString(String.format("%02d", (int)coolTime));
 				}
 			}
 		});
@@ -963,27 +963,33 @@ public class HudLayer extends CCLayer {
 
 	//불 공격 애니메이션-------------------------------------------------------------
 	public void StartAniFireAttack() {
-		fire.setPosition(winSize.width * 0.62f, winSize.height * 0.3f);
+		fire.setPosition(winSize.width * 0.57f, winSize.height * 0.26f);
 		fire.setAnchorPoint(CGPoint.ccp(0.5f, 1.0f));
 		fire.setScale(0);
 		addChild(fire);
 		
 		CCRotateTo rot	= CCRotateTo.action(0.01f, 180);
-		CCScaleTo scale = CCScaleTo.action(0.4f, 1.0f);
+		CCScaleTo scale = CCScaleTo.action(0.7f, 0.8f); //0.7초 동안 0.8스케일
 		CCCallFuncN action2 = CCCallFuncN.action(this, "cbFireMove");
+		
+		CCAnimate action = CCAnimate.action(0.7f, fireAttack, false);
+		CCRepeatForever repeat = CCRepeatForever.action(action);
+		
+		//프레임애니메이션 하면서 0.7초동안 0.8로 스케일 애니메이션
+		fire.runAction(repeat);
 		fire.runAction(CCSequence.actions(rot, scale, action2));
 	}
 	
 	public void cbFireMove(Object sender) {
 		CCSprite fire1 = (CCSprite) sender;
 
-		CCAnimate action = CCAnimate.action(1f, fireAttack, false);
-		CCRepeatForever repeat = CCRepeatForever.action(action);
+//		CCAnimate action = CCAnimate.action(0.5f, fireAttack, false);
+//		CCRepeatForever repeat = CCRepeatForever.action(action);
 		
-		CCMoveBy move = CCMoveBy.action(2, CGPoint.ccp(0, winSize.height));
+		CCMoveBy move = CCMoveBy.action(0.5f, CGPoint.ccp(0, winSize.height));
 		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite");
 		
-		fire1.runAction(repeat);
+		//fire1.runAction(repeat);
 		fire1.runAction(CCSequence.actions(move, remove));
 	}
 	
@@ -1022,26 +1028,31 @@ public class HudLayer extends CCLayer {
 	
 	//바람공격 애니메이션------------------------------------------------------------
 	public void StartAniWindAttack() {
-		wind.setPosition(winSize.width * 0.62f, winSize.height * 0.3f);
+		wind.setPosition(winSize.width * 0.57f, winSize.height * 0.26f);
 		wind.setAnchorPoint(CGPoint.ccp(0.5f, 0));
 		wind.setScale(0);
 		addChild(wind);
 		
-		CCScaleTo scale = CCScaleTo.action(0.4f, 1.0f);
+		CCScaleTo scale = CCScaleTo.action(0.7f, 0.8f);
 		CCCallFuncN action2 = CCCallFuncN.action(this, "cbWindMove");
+		
+		CCAnimate action = CCAnimate.action(0.7f, windAttack, false);
+		CCRepeatForever repeat = CCRepeatForever.action(action);
+		
+		wind.runAction(repeat);
 		wind.runAction(CCSequence.actions(scale, action2));
 	}
 	
 	public void cbWindMove(Object sender) {
 		CCSprite wind1 = (CCSprite) sender;
 
-		CCAnimate action = CCAnimate.action(1.4f, windAttack, false);
-		CCRepeatForever repeat = CCRepeatForever.action(action);
+//		CCAnimate action = CCAnimate.action(1.4f, windAttack, false);
+//		CCRepeatForever repeat = CCRepeatForever.action(action);
 		
-		CCMoveBy move = CCMoveBy.action(2, CGPoint.ccp(0, winSize.height));
+		CCMoveBy move = CCMoveBy.action(0.5f, CGPoint.ccp(0, winSize.height));
 		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite");
 		
-		wind1.runAction(repeat);
+		//wind1.runAction(repeat);
 		wind1.runAction(CCSequence.actions(move, remove));
 	}
 	
