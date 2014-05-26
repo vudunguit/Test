@@ -33,17 +33,15 @@ public class Logo extends CCLayer {
 	
 	private void versionCheck(CCSprite parentSprite) {
 		String webVersion = DataFilter.getGameVersionData();
-
-		CCLabel ccWebVersion = CCLabel.makeLabel("webVersion  " + webVersion, "Arial", 20);
-		ccWebVersion.setPosition(parentSprite.getContentSize().width - 80, 140);
-		parentSprite.addChild(ccWebVersion);
-		Log.e(tag, "webVersion : " + webVersion);
-		
-		CCLabel ccVersion = CCLabel.makeLabel("version  " + version, "Arial", 20);
-		ccVersion.setPosition(parentSprite.getContentSize().width - 80, 70);
-		parentSprite.addChild(ccVersion);
-		Log.e(tag, "Version : " + version);
-		
+//		CCLabel ccWebVersion = CCLabel.makeLabel("webVersion  " + webVersion, "Arial", 20);
+//		ccWebVersion.setPosition(parentSprite.getContentSize().width - 80, 140);
+//		parentSprite.addChild(ccWebVersion);
+//		Log.e(tag, "webVersion : " + webVersion);
+//		
+//		CCLabel ccVersion = CCLabel.makeLabel("version  " + version, "Arial", 20);
+//		ccVersion.setPosition(parentSprite.getContentSize().width - 80, 70);
+//		parentSprite.addChild(ccVersion);
+//		Log.e(tag, "Version : " + version);
 
 		if (webVersion == null || !version.equals(webVersion)) {
 			Uri uri = Uri.parse("https://play.google.com/store/apps");
