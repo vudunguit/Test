@@ -997,19 +997,20 @@ public class HudLayer extends CCLayer {
 	public void StartAniFireDefense(final int time) {
 		startShockAni(); //마법사 감전 애니
 		
-		for(int k=0; k<20; k++) {
+		for(int k=0; k<10; k++) {
 			CCSprite fire = CCSprite.sprite("61hud/fire-01.png");
 			//x 위치 랜덤
 			Random rand = new Random();
-			fire.setPosition(rand.nextInt((int)(winSize.width)), winSize.height); //랜덤
+			float fireWidth = fire.getContentSize().width;
+			fire.setPosition(fireWidth/2 +  rand.nextInt((int)(winSize.width - fireWidth)), winSize.height); //랜덤
 			fire.setAnchorPoint(CGPoint.ccp(0.5f, 0));
-			fire.setScale(0.5f + new Random().nextFloat() * 0.5f); //크기 랜덤
+			//fire.setScale(0.5f + new Random().nextFloat() * 0.5f); //크기 랜덤
 			addChild(fire);
 			
 			CCAnimate action = CCAnimate.action(1f, fireAttack, false);
 			CCAction repeat = CCRepeatForever.action(action);
-			CCDelayTime delay = CCDelayTime.action(new Random().nextFloat() * 3.0f);
-			CCMoveBy move = CCMoveBy.action(2, CGPoint.ccp(0, - winSize.height-fire.getContentSize().height));
+			CCDelayTime delay = CCDelayTime.action(new Random().nextFloat() * 2.0f);
+			CCMoveBy move = CCMoveBy.action(3.0f, CGPoint.ccp(0, - winSize.height-fire.getContentSize().height));
 			CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite");
 	
 			fire.runAction(repeat);
@@ -1060,19 +1061,20 @@ public class HudLayer extends CCLayer {
 	public void StartAniWindDefense(final int time) {
 		startShockAni(); //마법사 감전 애니
 		
-		for(int k=0; k<20; k++) {
+		for(int k=0; k<10; k++) {
 			CCSprite wind = CCSprite.sprite("61hud/wind01_0.1.png");
 			//x 위치 랜덤
 			Random rand = new Random();
-			wind.setPosition(rand.nextInt((int)(winSize.width)), winSize.height); //랜덤
+			float windWidth = fire.getContentSize().width;
+			wind.setPosition(windWidth/2 +  rand.nextInt((int)(winSize.width - windWidth)), winSize.height); //랜덤
 			wind.setAnchorPoint(CGPoint.ccp(0.5f, 0));
-			wind.setScale(0.5f + new Random().nextFloat() * 0.5f); //크기 랜덤
+			//wind.setScale(0.5f + new Random().nextFloat() * 0.5f); //크기 랜덤
 			addChild(wind);
 			
 			CCAnimate action = CCAnimate.action(1f, windAttack, false);
 			CCAction repeat = CCRepeatForever.action(action);
 			CCDelayTime delay = CCDelayTime.action(new Random().nextFloat() * 3.0f);
-			CCMoveBy move = CCMoveBy.action(2, CGPoint.ccp(0, - winSize.height-fire.getContentSize().height));
+			CCMoveBy move = CCMoveBy.action(2.0f, CGPoint.ccp(0, - winSize.height-fire.getContentSize().height));
 			CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite");
 	
 			wind.runAction(repeat);
