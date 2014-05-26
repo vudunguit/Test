@@ -12,6 +12,8 @@ import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.interval.CCAnimate;
+import org.cocos2d.actions.interval.CCBezierBy;
+import org.cocos2d.actions.interval.CCDelayTime;
 import org.cocos2d.actions.interval.CCFadeIn;
 import org.cocos2d.actions.interval.CCFadeOut;
 import org.cocos2d.actions.interval.CCMoveTo;
@@ -30,6 +32,7 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrame;
 import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.sound.SoundEngine;
+import org.cocos2d.types.CCBezierConfig;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
@@ -1212,7 +1215,7 @@ public class Game extends CCLayer {
 	//
 	// 더블터치 : 셀 오픈
 	public void handleDoubleTap(MotionEvent event) {
-		//mHud.StartAniFireDefense();
+		mHud.StartAniCloudDefense(10);
 		Log.e("Game / handleDoubleTap", "마인 갯수 : " + getMineNumber());
 		if (Config.getInstance().isDisableButton())
 			return;
@@ -2178,7 +2181,6 @@ public class Game extends CCLayer {
 	
 	//바람 피해 애니===========================================================
 	public void startWind(int attackTime) {
-
 		
 		for(MineCell cell : cells) {
 			if(cell.isOpened()) {
@@ -2200,15 +2202,15 @@ public class Game extends CCLayer {
 					label.setColor(ccColor3B.ccc3((int) (75 / 255f), (int) (51 / 255f), (int) (9 / 255f)));
 					
 					//회전하는 속도를 랜덤하게 조정 0.1f, 18f는 0.1초당 18도회전이 기본 + 랜덤 18도
-					CCRotateBy rot = CCRotateBy.action(0.1f, 18f + tag%19);
-					CCRepeatForever repeat = CCRepeatForever.action(rot);
-					label.runAction(repeat);
+					CCRotateBy rot = CCRotateBy.action(0.1f, 18f + new Random().nextInt(36));
+					CCRepeatForever repeat = CCRepeatForever.action(rot.copy());
+					label.runAction(repeat.copy());
 					mDeleteTags.add(tag);
 				}
 			}
 		}
 		
-		schedule("increaseNumber", 0.5f); //숫자 증가시키는 콜백
+		schedule("increaseNumber", 0.1f); //숫자 증가시키는 콜백
 		
 		long spanTime = (attackTime - mWindDefenseTime - UserLevel);
 		spanTime = spanTime > 0 ? spanTime : 0;
@@ -2227,10 +2229,13 @@ public class Game extends CCLayer {
 	public void increaseNumber(float dt) {
 		mIncreaseTime += dt;
 		
-		for(Integer i : mDeleteTags) {
-			CCLabel label = (CCLabel) getChildByTag(i);
-			int value = Integer.parseInt(label.getString());
-			label.setString(String.valueOf((value+1)%8));
+		while (mIncreaseTime >= 0.5f) {
+			for(Integer i : mDeleteTags) {
+				CCLabel label = (CCLabel) getChildByTag(i);
+				int value = Integer.parseInt(label.getString());
+				label.setString(String.valueOf(value%8 + 1));
+			}
+			mIncreaseTime -= 0.5f;
 		}
 	} //------------------------------
 	
@@ -2248,23 +2253,29 @@ public class Game extends CCLayer {
 		Log.d("LDK","pos:" + pos.x + "," + pos.y);
 		Log.d("LDK","this.position:" + this.getPosition().x + "," + this.getPosition().y);
 
-		CCFadeOut out = CCFadeOut.action(0.01f);
-		CCFadeIn in = CCFadeIn.action(2f);
+		//CCFadeOut out = CCFadeOut.action(0.01f);
+		//CCFadeIn in = CCFadeIn.action(2f);
 		
-		CCAnimate action = CCAnimate.action(1f, cloudDefense, false);
-		CCAction repeat = CCRepeatForever.action(action);
+//		CCAnimate action = CCAnimate.action(1f, cloudDefense, false);
+//		CCAction repeat = CCRepeatForever.action(action);
+		CCScaleTo scale1 = CCScaleTo.action(0.1f, 0.98f);
+		CCScaleTo scale2 = CCScaleTo.action(0.1f, 1.0f);
+		CCAction repeat = CCRepeatForever.action(CCSequence.actions(scale1, scale2));
 		
 		for(int k=0; k<4; k++) {
 			int tag = 10000 + k;
 
 			CCSprite cloud = CCSprite.sprite("61hud/fx-cloud1.png");
+			cloud.setOpacity(128 + new Random().nextInt(128));
 			cloud.setPosition(clouds.get(k)); //구름 생성 위치
 			cloud.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
 			addChild(cloud, 8, tag);
 			mDeleteTags.add(tag);
 	
 			cloud.runAction(repeat.copy());
-			cloud.runAction(CCSequence.actions(out.copy(), in.copy()));
+			
+			CCDelayTime delay = CCDelayTime.action(k*0.15f);
+			cloud.runAction(delay);
 		}
 		
 		long spanTime = (attackTime - mCloudDefenseTime - UserLevel);
