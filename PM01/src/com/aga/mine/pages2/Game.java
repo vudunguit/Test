@@ -2178,8 +2178,7 @@ public class Game extends CCLayer {
 	
 	//바람 피해 애니===========================================================
 	public void startWind(int attackTime) {
-		CCRotateBy rot = CCRotateBy.action(0.1f, 18f); //1초당 18도 회전
-		CCRepeatForever repeat = CCRepeatForever.action(rot);
+
 		
 		for(MineCell cell : cells) {
 			if(cell.isOpened()) {
@@ -2192,18 +2191,24 @@ public class Game extends CCLayer {
 					int tag = 10000 + cell.getCell_ID();
 					
 					//라벨 스프라이트 생성
-					final CCLabel label = CCLabel.makeLabel("1", "Arial-Bold", (int) ((70 * (2 / 3.0) * tileSize.width) / 128));
+					Random rand = new Random();
+					int r = rand.nextInt(8);
+					final CCLabel label = CCLabel.makeLabel(String.valueOf(r+1), "Arial-Bold", (int) ((70 * (2 / 3.0) * tileSize.width) / 128));
 					addChild(label, 10, tag);
 					label.setAnchorPoint(0.5f, 0.5f);
 					label.setPosition(cell.getTilePosition());
 					label.setColor(ccColor3B.ccc3((int) (75 / 255f), (int) (51 / 255f), (int) (9 / 255f)));
-					label.runAction(repeat.copy());
+					
+					//회전하는 속도를 랜덤하게 조정 0.1f, 18f는 0.1초당 18도회전이 기본 + 랜덤 18도
+					CCRotateBy rot = CCRotateBy.action(0.1f, 18f + tag%19);
+					CCRepeatForever repeat = CCRepeatForever.action(rot);
+					label.runAction(repeat);
 					mDeleteTags.add(tag);
 				}
 			}
 		}
 		
-		schedule("increaseNumber", 0.1f); //숫자 증가시키는 콜백
+		schedule("increaseNumber", 0.5f); //숫자 증가시키는 콜백
 		
 		long spanTime = (attackTime - mWindDefenseTime - UserLevel);
 		spanTime = spanTime > 0 ? spanTime : 0;
@@ -2222,11 +2227,10 @@ public class Game extends CCLayer {
 	public void increaseNumber(float dt) {
 		mIncreaseTime += dt;
 		
-		int number = (int)mIncreaseTime % 8;
-		
 		for(Integer i : mDeleteTags) {
 			CCLabel label = (CCLabel) getChildByTag(i);
-			label.setString(String.valueOf(number+1));
+			int value = Integer.parseInt(label.getString());
+			label.setString(String.valueOf((value+1)%8));
 		}
 	} //------------------------------
 	
