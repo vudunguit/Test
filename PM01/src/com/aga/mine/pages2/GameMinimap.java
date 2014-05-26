@@ -73,6 +73,14 @@ public class GameMinimap extends CCLayer{
 			this.layout();
 //			Config.getInstance().setDisableButton(true);
 //		}
+			
+			Log.e("Game", "I'm Ready! - 미니맵을 전부 그린후에 데이터 호출 테스트를 위해 옮김");
+			try {
+				NetworkController.getInstance().sendGameReady();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 			List<GameData.MessageData> playData = GameData.share().getplayData();
 			
 			for (GameData.MessageData data: playData) {

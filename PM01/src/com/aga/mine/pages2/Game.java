@@ -582,22 +582,30 @@ public class Game extends CCLayer {
 		//이모티콘 test : 실제로는 NetworkController에서 전송된 이모티콘 id를 던져준다.
 		//mHud.startEmoticonAni(5);
 		
-		if (GameData.share().isMultiGame) {
-			gameReady();
-		} else if (GameData.share().isGuestMode) {
+//		if (GameData.share().isMultiGame) {
+//			schedule(new UpdateCallback() {
+//				@Override
+//				public void update(float d) {
+//					unschedule(this);
+//					gameReady();
+//				}
+//			}, 5);
+////			gameReady();
+//		} else 
+			if (!GameData.share().isMultiGame) {
 			gameStart();
 		}
 		//SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
 	}
 
-	private void gameReady() {
-		Log.e("Game", "I'm Ready!");
-		try {
-			NetworkController.getInstance().sendGameReady();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+//	private void gameReady() {
+//		Log.e("Game", "I'm Ready!");
+//		try {
+//			NetworkController.getInstance().sendGameReady();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	public void gameStart() {
 		// 게임시간 초기화
