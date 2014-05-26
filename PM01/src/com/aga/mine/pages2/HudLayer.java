@@ -1113,6 +1113,7 @@ public class HudLayer extends CCLayer {
 	//parameter : 4:신성, 5:대지, 6:반사
 	public void StartAniRune(int kind) {
 		CCSprite rune = CCSprite.sprite("61hud/rune-01.png");
+		rune.setScale(0.55f);
 		rune.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
 		rune.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
 		addChild(rune);

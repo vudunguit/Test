@@ -545,7 +545,7 @@ public class Game extends CCLayer {
 		//정령석 병 여는 애니메이션
 		mBottle = CCAnimation.animation("bottle");
 		for(int i=1; i<=10; i++) {
-    		CCSprite bottle = CCSprite.sprite(String.format("61hud/spirit_%02d.png", i));
+    		CCSprite bottle = CCSprite.sprite(String.format("61hud/bottle_%02d.png", i));
     		mBottle.addFrame(bottle.getTexture());
 		}
 		
@@ -2035,7 +2035,7 @@ public class Game extends CCLayer {
 	
 	//정령석 유리병 여는 애니메이션
 	public void startOpenBottle(CGPoint pos) {
-		CCSprite bottle = CCSprite.sprite("61hud/spirit_01.png");
+		CCSprite bottle = CCSprite.sprite("61hud/bottle_01.png");
 		
 		pos = CGPoint.ccp(pos.x + tileSize.width/2, pos.y - tileSize.height/2);
 		
