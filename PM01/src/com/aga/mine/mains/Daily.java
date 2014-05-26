@@ -1,7 +1,6 @@
 ﻿package com.aga.mine.mains;
 
 import org.cocos2d.actions.instant.CCCallFunc;
-import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
@@ -19,6 +18,7 @@ import android.view.MotionEvent;
 
 public class Daily extends CCLayer {
 
+	final String tag = "Daily";
 	final String folder = "03daily/";
 	final String fileExtension = ".png";
 
@@ -112,8 +112,7 @@ public class Daily extends CCLayer {
 					Log.e("Daily", "도장찍기 애니메이션 넣을 곳 입니다.");
 					Log.e("Daily", "stamp animation");
 
-					stamp = CCSprite.sprite(folder + "stampKo"
-							+ fileExtension); // 임시 이미지
+					stamp = CCSprite.sprite(folder + "stampKo" + fileExtension);
 					parent.addChild(stamp, 100);
 					stamp.setPosition(goldX[i], goldY[k]);
 					stamp.setAnchorPoint(0.5f, 0.5f);
@@ -166,6 +165,13 @@ public class Daily extends CCLayer {
 
 		Log.e("Daily", "우편 보내기 / Gold " + reward[dailyCount - 1]);
 		// 우편 보내기
+		String gold = String.valueOf(reward[dailyCount - 1]);
+		long requestID = (long) (Math.random() * 72036854775807L);  //facebook 알림글번호로 대체할 것
+		String recipientID = FacebookData.getinstance().getUserInfo().getId(); // 상점 이동 방식에 따른 ID 변경
+		String senderID = "1";
+		String data = 
+				"0,RequestModeMailBoxAdd*22," + requestID + "*1," + recipientID + "*19," + senderID + "*20,Gold*21," + gold;				
+		DataFilter.sendMail(data);
 	}
 
 	@Override
