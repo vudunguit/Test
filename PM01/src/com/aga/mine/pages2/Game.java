@@ -437,19 +437,6 @@ public class Game extends CCLayer {
 		}
 		// 주변타일 등록 for(i) end
 
-		//전체 셀중에서 벗길수 있는 셀만 등록한다.
-		ArrayList<MineCell> tempCells = new ArrayList<MineCell>();
-		for(MineCell cell : cells) {
-			if(cell.isCollidable()) {
-				tempCells.add(cell);
-			}
-		}
-		cells.removeAll(tempCells);
-
-		// //
-		// //지뢰 설치
-		// this.scatterMines();
-
 		// 원래 순서는 수정구부터
 		//
 		// 수정구 설치 (전체 셀, foreground TileMap, Ai)
@@ -458,6 +445,15 @@ public class Game extends CCLayer {
 		//
 		// 지뢰 설치
 		this.scatterMines();
+		
+		//전체 셀중에서 벗길수 있는 셀만 등록한다.
+		ArrayList<MineCell> tempCells = new ArrayList<MineCell>();
+		for(MineCell cell : cells) {
+			if(cell.isCollidable()) {
+				tempCells.add(cell);
+			}
+		}
+		cells.removeAll(tempCells);
 
 		//
 		// 사전에 열려진 셀 주변에 지뢰가 설치되었으면 지뢰수 표시를 한다.
@@ -2127,7 +2123,7 @@ public class Game extends CCLayer {
 		CCRepeatForever magmafireAni = CCRepeatForever.action(magmafire);
 		
 		for(MineCell cell : cells) {
-			if(cell.isOpened()) {
+			if(cell.isOpened() && !cell.isSphere()) {
 				//셀위에 숫자가 있다면 감춘다.
 				if(cell.numberOfArroundMine > 0) {
 					this.getChildByTag(cell.getCell_ID()).setVisible(false);
@@ -2139,7 +2135,7 @@ public class Game extends CCLayer {
 
 				Random rand = new Random();
 				int r = rand.nextInt(100);
-				if(r < 30) { //30%
+				if(r < 40) { //30%
 					//깨진 대지 타일 세팅
 					//this.tmxFlagLayer.setTileGID(crackGID, cell.getTileCoord());
 					CCSprite crack = CCSprite.sprite("60game/crackearth.png");
