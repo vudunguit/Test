@@ -55,7 +55,8 @@ public class GameEnding extends CCLayer {
 	private float mExpX; //경험치 충전 상태
 	private int mLeftExp; //초기: 획득 경험치, 애니메이션이 진행됨에 따라 점점 줄어듬.
 	
-
+	public int mUserLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelCharacter"));
+	
 //	public static CCScene scene() {
 //		CCScene scene = CCScene.node();
 ////		GameEnding2 layer = new GameEnding();
@@ -188,7 +189,7 @@ public class GameEnding extends CCLayer {
 		
 		/*********************************************************/
 		//현재 레벨 위치 : (현재레벨/현재레벨Max)% * 322px, 
-		mExpX = (myExp/(float)UserData.expPerLevel[0]); //단위는 0 ~ 1.0
+		mExpX = (myExp/(float)UserData.expPerLevel[mUserLevel-1]); //단위는 0 ~ 1.0
 		//test : 획득 경험치는 8000이라 가정함. 
 //		mLeftExp = 8000;
 		
@@ -287,7 +288,7 @@ public class GameEnding extends CCLayer {
 			unschedule("expAni");
 			return;
 		}
-		int gainedExp = (int)(dt * 1000);
+		int gainedExp = (int)(dt * 50);
 		myExp += gainedExp;
 		mLeftExp -= gainedExp;
 		//만일 mLeftExp가 음수가 되면 보정
@@ -297,9 +298,9 @@ public class GameEnding extends CCLayer {
 		}
 		
 		//늘어난 경험치가 현재 레벨의 최대 경험치를 넘지 않으면 애니메이션 넘으면 레벨 팝업
-		if(myExp <= UserData.expPerLevel[0]) {
+		if(myExp <= UserData.expPerLevel[mUserLevel-1]) {
 			//경험치 애니메이션
-			mExpX = (myExp/(float)UserData.expPerLevel[0]);
+			mExpX = (myExp/(float)UserData.expPerLevel[mUserLevel-1]);
 			expBar.setPosition((int)(mExpX * 322) + 172, 45);
 			expTail.setScaleX((expBar.getPosition().x - 172) / 322);
 			expHead.setPosition(expBar.getPosition());
@@ -307,7 +308,7 @@ public class GameEnding extends CCLayer {
 		} else {
 			//레벨 팝업
 			unschedule("expAni");
-			myExp = myExp - UserData.expPerLevel[0];
+			myExp = myExp - UserData.expPerLevel[mUserLevel-1];
 			final CCSprite levelUp = CCSprite.sprite("lv_up_popup/lvup.png");
 			bg.addChild(levelUp, 2000);
 			levelUp.setAnchorPoint(0.5f, 0.5f);
