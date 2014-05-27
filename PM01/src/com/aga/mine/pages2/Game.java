@@ -210,7 +210,7 @@ public class Game extends CCLayer {
 		}
 		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.pumpkin); // 이펙트 (효과음) // (호박)hit
 		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.mushroom); // 이펙트 (효과음) // (버섯)move
-		
+		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.landopen_22); 
 		//
 		// 타일맵 로드
 		if (!GameData.share().isMultiGame)

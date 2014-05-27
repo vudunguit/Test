@@ -395,8 +395,9 @@ public class MineCell extends CCLayer{
 			}
 		}
 		
-		//타일 오픈 애니메이션
-		CCSprite tile = CCSprite.sprite(mGame.mBitmap, "01");
+		//타일 오픈 애니메이션"60game/01.png"
+		//CCSprite tile = CCSprite.sprite(mGame.mBitmap, "01");
+		CCSprite tile = CCSprite.sprite("60game/01.png");
 		mGame.addChild(tile, 5);
 		tile.setPosition(CGPoint.ccp(tileCoord.x * mGame.tileSize.width + mGame.tileSize.width / 2, 
 				 mGame.mapSize.height - (tileCoord.y *  mGame.tileSize.height +  mGame.tileSize.height / 2)));
