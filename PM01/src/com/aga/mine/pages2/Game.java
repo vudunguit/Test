@@ -873,7 +873,9 @@ public class Game extends CCLayer {
 			}
 		}
 		
-		for (MineCell cell : baseCell.getSphereCells()) {
+		CopyOnWriteArrayList<MineCell> copiedSphereCells = new CopyOnWriteArrayList<MineCell>();
+		copiedSphereCells.addAll(baseCell.getSphereCells());
+		for (MineCell cell : copiedSphereCells) {
 			cell.setSphere(true);
 
 //			if (sphereType == kSphereTypeEmpty)
@@ -1262,16 +1264,17 @@ public class Game extends CCLayer {
 				// k = size;
 			}
 		}
-
+		
 		// 모두 열린 수정구가 있는지 확인한다.
-		for (MineCell cell : sphereBaseCells) {
+		CopyOnWriteArrayList<MineCell> copiedSphereCell = new CopyOnWriteArrayList<MineCell>();
+		copiedSphereCell.addAll(sphereBaseCells);	
+		for (MineCell cell : copiedSphereCell) {
 			//
 			// -1 : none
 			// 0 : empty
 			// > 0 : sphereType
 			int sphereType = cell.getSphereItem();
 			if (sphereType > 0) {
-
 				// 새로 열려진 셀들에 수정구가 열렸다.
 				// 빈 수정구로 지정하고,
 				cell.setSphereType(kSphereTypeEmpty);
@@ -1279,10 +1282,7 @@ public class Game extends CCLayer {
 				// Log.e("Game / handleDoubleTap", "check 1 / 아이템 타일 변경");
 				// 빈 수정구 타일로 바꾼다.
 				Log.e("Game", "수정구 획득");
-				this.addSphereTo(tmxMineLayer, kSphereTypeGetMagic, cell, false); // 빈
-																					// 수정구는
-																					// 백그라운드에
-																					// 심기
+				this.addSphereTo(tmxMineLayer, kSphereTypeGetMagic, cell, false); // 빈수정구는백그라운드에 심기
 
 				// 유리병 터지는 애니메이션
 				if (!createSphere) { // 수정구 생성하는게 아님.(수정구 획득)

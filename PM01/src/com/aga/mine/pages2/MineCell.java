@@ -589,39 +589,21 @@ public class MineCell extends CCLayer{
 
 	
 	public int getSphereItem() {
-		
-		for (MineCell cell : getSphereCells()) {
+		CopyOnWriteArrayList<MineCell> copiedSphereCells = new CopyOnWriteArrayList<MineCell>();
+		copiedSphereCells.addAll(getSphereCells());
+		for (MineCell cell : copiedSphereCells) {
 			if(!cell.isOpened()) return -1;
 		}
 		
-		for (MineCell cell : getSphereRoundCells()) {
+		CopyOnWriteArrayList<MineCell> copiedSphereRoundCells = new CopyOnWriteArrayList<MineCell>();
+		copiedSphereRoundCells.addAll(getSphereRoundCells());
+		for (MineCell cell : copiedSphereRoundCells) {
 				if (cell.isOpened() || cell.isMarked())
 					continue;
 				else
 					return -1;
 		}
 		
-		/*
-		if (getSphereCells() != null && getSphereCells().size() > 0) {
-			ArrayList<MineCell> cellArray = getSphereCells();
-			int size2 = getSphereCells().size();
-			for (int k = 0; k < size2; k++) {
-				if(!cellArray.get(k).isOpened())
-					return -1;
-			}
-		}
-		
-		if (getSphereRoundCells() != null && getSphereRoundCells().size() > 0) {
-			ArrayList<MineCell> cellArray = getSphereRoundCells();
-			int size = getSphereRoundCells().size();
-			for (int k = 0; k < size; k++) {
-				if (cellArray.get(k).isOpened() || cellArray.get(k).isOpened())
-					continue;
-				else
-					return -1;
-			}
-		}
-		*/
 		return getSphereType();
 	}
 
