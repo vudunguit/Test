@@ -1288,7 +1288,7 @@ public class Game extends CCLayer {
 				
 				//정령병 타일 없애기
 				CopyOnWriteArrayList<MineCell> sphereCells = new CopyOnWriteArrayList<MineCell>();
-				cells.addAll(cell.getSphereCells());
+				sphereCells.addAll(cell.getSphereCells());
 				for (MineCell c : sphereCells) {
 					//int gid = CCFormatter.swapIntToLittleEndian(tmxMineLayer.tileGIDAt(CGPoint.make(counter, sphereType))); // 아이템 레이어에서 가지고 오기
 					tmxMineLayer.removeTileAt(c.getTileCoord());
@@ -2076,7 +2076,7 @@ public class Game extends CCLayer {
 		int counter = 0;
 		int sphereType = kSphereTypeGetMagic;
 		CopyOnWriteArrayList<MineCell> sphereCells = new CopyOnWriteArrayList<MineCell>();
-		cells.addAll(cell.getSphereCells());
+		sphereCells.addAll(cell.getSphereCells());
 		for (MineCell c : sphereCells) {
 			int gid = CCFormatter.swapIntToLittleEndian(tmxItemLayer.tileGIDAt(CGPoint.make(counter, sphereType))); // 아이템 레이어에서 가지고 오기
 			tmxMineLayer.setTileGID(gid, c.getTileCoord());
