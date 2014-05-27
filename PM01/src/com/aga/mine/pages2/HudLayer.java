@@ -555,6 +555,7 @@ public class HudLayer extends CCLayer {
 		//
 		// 수정구아이템 버튼 클릭 공통
 		if (tag >= 1 && tag <= 6) {
+		
 			//
 			// 마법사 액션
 			// - 애니메이션을 위에 올렸닥 끝나면 지워버린다.
@@ -574,9 +575,9 @@ public class HudLayer extends CCLayer {
 					// 버튼 클릭 효과
 
 					// 디펜스와 어택 구분 필요 이유????
-					if (GameData.share().isMultiGame) {
+					if (GameData.share().isMultiGame && tag < 4) { // 공격용 아이템(마법)만 보냄)
 						try {
-							NetworkController.getInstance().sendPlayDataMagicAttack((tag * 1000) + 23);
+							NetworkController.getInstance().sendPlayDataMagicAttack((tag * 1000) + 23); // 23대신 각각의 공격 시간을 더해야됨.
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
