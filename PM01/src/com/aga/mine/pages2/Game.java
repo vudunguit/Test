@@ -1621,17 +1621,19 @@ public class Game extends CCLayer {
 	boolean isMove2 = false;
 
 	@Override
-	public boolean ccTouchesEnded(final MotionEvent event) {
+	public boolean ccTouchesEnded(MotionEvent event) {
 		if(mIsClickedEarth) {
 			mIsClickedEarth = false;
 			
 			mHud.StartAniRune(Game.kButtonEarth);
 			
+			final float x = event.getX();
+			final float y = event.getY();
 			schedule(new UpdateCallback() {
 				@Override
 				public void update(float d) {
 					unschedule(this);
-					startEarth(event);
+					startEarth(x,y);
 				}
 			}, 2.4f);
 			
@@ -1650,10 +1652,10 @@ public class Game extends CCLayer {
 		return CCTouchDispatcher.kEventHandled;
 	}
 	
-	public void startEarth(MotionEvent event) {
+	public void startEarth(float x, float y) {
 		removeChild(mEarthGuide, true);
 		
-		CGPoint glLocation = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(event.getRawX(), event.getRawY()));
+		CGPoint glLocation = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(x, y));
 		CGPoint coord = this.tileCoordForPosition(convertToNodeSpace(glLocation));
 		
 		ArrayList<MineCell> copyCells = new ArrayList<MineCell>();
