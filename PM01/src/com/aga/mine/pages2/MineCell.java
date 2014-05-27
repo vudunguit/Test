@@ -234,12 +234,15 @@ public class MineCell extends CCLayer{
 		int mushroomSum = 0;*/
 		if (numberOfMine == getNumberOfMushroomAround) {
 			// 더블탭을 했을때 더블 탭한곳의 숫자가 있으면 탐??
-			ArrayList<MineCell> cells = getRoundCells();
-			int size = cells.size();
-			for (int i = 0; i < size; i++) {
-				if (!cells.get(i).isOpened() && !cells.get(i).isMarked()) {
-					cells.get(i).open();
+			CopyOnWriteArrayList<MineCell> cells = new CopyOnWriteArrayList<MineCell>();
+			cells.addAll(getRoundCells());
+			
+			for(MineCell c : cells) {
+				if(!c.isOpened && !c.isMarked) {
+					c.open();
 				}
+			}
+
 		}
 
 /*			//Log.e("mineCell For", "" + cells.get(i));
@@ -262,7 +265,6 @@ public class MineCell extends CCLayer{
 			Log.e("MineCell / roundOpen", "폭탄 노출됨");
 			
 			*/
-		}
 		return numberOfMine;
 	}
 	
@@ -379,11 +381,11 @@ public class MineCell extends CCLayer{
 		}
 	}
 	
-	private void startOpenTile(int depth) {
-		Log.w("LDK", "showAroundMine:"  + ", mcount:" + mCount);
+	synchronized private void startOpenTile(int depth) {
+		//Log.w("LDK", "showAroundMine:"  + ", mcount:" + mCount);
 		if(depth == 1) {
 			SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01);
-			Log.e("LDK", "mcount:" + mCount);
+			//Log.e("LDK", "mcount:" + mCount);
 		} else {
 			if(mCount%2 == 0) {
 				int effect = mCount/2;
@@ -393,13 +395,13 @@ public class MineCell extends CCLayer{
 					effect = 16 - effect%17;
 				}
 				SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01 + effect);
-				Log.e("LDK", "effect:" + effect + ", mcount:" + mCount);
+				//Log.e("LDK", "effect:" + effect + ", mcount:" + mCount);
 			}
 		}
 		
 		//타일 오픈 애니메이션
 		CCSprite tile = CCSprite.sprite(mGame.mTex);
-		while (tile == null) { //로딩 실패가 자주 생김.
+		while (tile == null) {
 			try {
 				Thread.sleep(5);
 			} catch (InterruptedException e) {
@@ -408,7 +410,8 @@ public class MineCell extends CCLayer{
 			CCTexture2D tex = CCTextureCache.sharedTextureCache().addImage("60game/01.png");
 			tile = CCSprite.sprite(tex);
 		}
-		mGame.addChild(tile, 5);
+		mGame.addChild(tile, 5); // cocos2d 라이브러리 동기화 문제, 타일을 삭제하지 않고 보이지 않게 처리
+		
 		tile.setPosition(CGPoint.ccp(tileCoord.x * mGame.tileSize.width + mGame.tileSize.width / 2, 
 				 mGame.mapSize.height - (tileCoord.y *  mGame.tileSize.height +  mGame.tileSize.height / 2)));
 		
@@ -417,7 +420,8 @@ public class MineCell extends CCLayer{
 	
 	public void removeTileAni(Object sender, Object coord) {
 		CCSprite obj = (CCSprite)sender;
-		obj.removeFromParentAndCleanup(false);
+		//obj.removeFromParentAndCleanup(true);
+		obj.setVisible(false);
 		
 		if(numberOfArroundMine>0) {
 			displayMineNumber(numberOfArroundMine, tilePosition, Cell_ID);

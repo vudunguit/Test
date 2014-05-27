@@ -512,7 +512,6 @@ public class Game extends CCLayer {
 					countOfMine++;
 			}
 			cell.numberOfArroundMine = countOfMine;
-			Log.d("LDK", "arround mine number:" + cell.numberOfArroundMine);
 		}
 
 		// 게임시간 초기화
@@ -1148,6 +1147,8 @@ public class Game extends CCLayer {
 					unmarkMushroom(mineCell, coord, isMine);
 				else
 					markMushroom(mineCell, coord, isMine);
+				
+				checkSphereCell();
 				break;
 			}
 		}
@@ -1246,7 +1247,14 @@ public class Game extends CCLayer {
 				if (cell.isOpened()) {
 					// 셀 저장된 주변 마인수를 얻어내 1이상이면
 					if (numberOfMine > 0) {
-						cell.roundOpen();
+						new Thread(new Runnable() {
+							@Override
+							public void run() {
+								cell.roundOpen();
+								checkSphereCell();
+								checkGameOver();
+							}
+						}).start();
 					}
 					// 닫혀있는 셀 누르면
 				} else {
@@ -1394,7 +1402,7 @@ public class Game extends CCLayer {
 					// 전체 타일을 검색하여 터치한 위치와 타일의 위치값이 일치할시
 					if (CGPoint.equalToPoint(cell.getTileCoord(), coord)) {
 						mEarthGuide.setPosition(cell.getTilePosition());
-						Log.e("LDK", "cell: " + cell.getTilePosition().x + "," + cell.getTilePosition().y + "     ");
+						//Log.e("LDK", "cell: " + cell.getTilePosition().x + "," + cell.getTilePosition().y + "     ");
 						return true;
 					}
 				}
