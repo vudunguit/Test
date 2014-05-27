@@ -11,6 +11,8 @@ import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
+import org.cocos2d.opengl.CCTexture2D;
 import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
@@ -395,9 +397,17 @@ public class MineCell extends CCLayer{
 			}
 		}
 		
-		//타일 오픈 애니메이션"60game/01.png"
-		//CCSprite tile = CCSprite.sprite(mGame.mBitmap, "01");
-		CCSprite tile = CCSprite.sprite("60game/01.png");
+		//타일 오픈 애니메이션
+		CCSprite tile = CCSprite.sprite(mGame.mTex);
+		while (tile == null) { //로딩 실패가 자주 생김.
+			try {
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			CCTexture2D tex = CCTextureCache.sharedTextureCache().addImage("60game/01.png");
+			tile = CCSprite.sprite(tex);
+		}
 		mGame.addChild(tile, 5);
 		tile.setPosition(CGPoint.ccp(tileCoord.x * mGame.tileSize.width + mGame.tileSize.width / 2, 
 				 mGame.mapSize.height - (tileCoord.y *  mGame.tileSize.height +  mGame.tileSize.height / 2)));

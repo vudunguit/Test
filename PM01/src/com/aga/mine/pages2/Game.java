@@ -11,6 +11,7 @@ import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFuncN;
+import org.cocos2d.actions.instant.CCCallFuncND;
 import org.cocos2d.actions.interval.CCAnimate;
 import org.cocos2d.actions.interval.CCBezierBy;
 import org.cocos2d.actions.interval.CCDelayTime;
@@ -31,6 +32,8 @@ import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrame;
 import org.cocos2d.nodes.CCSpriteFrameCache;
+import org.cocos2d.nodes.CCTextureCache;
+import org.cocos2d.opengl.CCTexture2D;
 import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CCBezierConfig;
 import org.cocos2d.types.CGPoint;
@@ -117,7 +120,7 @@ public class Game extends CCLayer {
 	private CCAnimation mMagmaFire;
 	
 	//Tile animation
-	public Bitmap mBitmap;
+	public CCTexture2D mTex;
 	public CCScaleTo mScaleAction;
 	public CCAnimate mOpenAction;
 	public CCAnimate mPumpkinBomb;
@@ -517,14 +520,8 @@ public class Game extends CCLayer {
 		UserData.share(mContext).myBroomstick();
 		
 		//타일 오픈 애니메이션 초기화
-		InputStream is;
-		try {
-			is = CCDirector.theApp.getAssets().open("60game/01.png");
-			mBitmap = BitmapFactory.decodeStream(is);
-			is.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		mTex = CCTextureCache.sharedTextureCache().addImage("60game/01.png");
+		
 		mScaleAction = CCScaleTo.action(0.1f, 1.8f);
 		CCAnimation animation = CCAnimation.animation("dance");
 		for( int i=1;i<=7;i++) {
@@ -1271,9 +1268,9 @@ public class Game extends CCLayer {
 	
 	// 모두 열린 수정구가 있는지 확인한다.
 	private void checkSphereCell() {
-		CopyOnWriteArrayList<MineCell> copiedSphereCell = new CopyOnWriteArrayList<MineCell>();
-		copiedSphereCell.addAll(sphereBaseCells);	
-		for (MineCell cell : copiedSphereCell) {
+		CopyOnWriteArrayList<MineCell> baseCells = new CopyOnWriteArrayList<MineCell>();
+		baseCells.addAll(sphereBaseCells);	
+		for (MineCell cell : baseCells) {
 			//
 			// -1 : none
 			// 0 : empty
@@ -1287,12 +1284,19 @@ public class Game extends CCLayer {
 				// Log.e("Game / handleDoubleTap", "check 1 / 아이템 타일 변경");
 				// 빈 수정구 타일로 바꾼다.
 				Log.e("Game", "수정구 획득");
-				this.addSphereTo(tmxMineLayer, kSphereTypeGetMagic, cell, false); // 빈수정구는백그라운드에 심기
+				//this.addSphereTo(tmxMineLayer, kSphereTypeGetMagic, cell, false); // 빈수정구는백그라운드에 심기
+				
+				//정령병 타일 없애기
+				CopyOnWriteArrayList<MineCell> sphereCells = new CopyOnWriteArrayList<MineCell>();
+				cells.addAll(cell.getSphereCells());
+				for (MineCell c : sphereCells) {
+					//int gid = CCFormatter.swapIntToLittleEndian(tmxMineLayer.tileGIDAt(CGPoint.make(counter, sphereType))); // 아이템 레이어에서 가지고 오기
+					tmxMineLayer.removeTileAt(c.getTileCoord());
+					//tmxMineLayer.setTileGID(gid, cell.getTileCoord());
+				}
 
 				// 유리병 터지는 애니메이션
-				if (!createSphere) { // 수정구 생성하는게 아님.(수정구 획득)
-					startOpenBottle(cell.getTilePosition());
-				}
+				startOpenBottle(cell);
 
 				// 정령석 아래 HUD로 이동하는 애니메이션
 				mHud.startMoveSpirit(sphereType, this.convertToWorldSpace(cell.getTilePosition().x, cell.getTilePosition().y));
@@ -1321,7 +1325,7 @@ public class Game extends CCLayer {
 		location = this.convertToNodeSpace(glLocation);
 		coord = this.tileCoordForPosition(location);
 		
-		Log.d("LDK", "coord: " + coord.x + "," + coord.y + "     misclickedEarth:" + mIsClickedEarth);
+		//Log.d("LDK", "coord: " + coord.x + "," + coord.y + "     misclickedEarth:" + mIsClickedEarth);
 		
 		if(mIsClickedEarth) {
 			ArrayList<MineCell> copyCells = new ArrayList<MineCell>();
@@ -1488,7 +1492,7 @@ public class Game extends CCLayer {
 						GameConfig.share().kMaxScale * 128 / tileSize.width);
 				float positionScale = newScale - theLayer.getScale();
 				theLayer.setScale(newScale); // 줌아웃을 하게해줌
-				Log.e("Game / game", "cLocation1 : ("
+/*				Log.e("Game / game", "cLocation1 : ("
 						+ (int) currentLocation1.x + ", "
 						+ (int) currentLocation1.y + "), pLocation1 : ("
 						+ (int) previousLocation1.x + ", "
@@ -1499,7 +1503,7 @@ public class Game extends CCLayer {
 						+ (int) previousLocation2.x + ", "
 						+ (int) previousLocation2.y);
 				Log.e("Game / game",
-						"MapCurrentPosition : " + this.getMapCurrentPosition());
+						"MapCurrentPosition : " + this.getMapCurrentPosition());*/
 				// theLayer.setPosition(this.getMapCurrentPosition()); // 선택한
 				// 화면에서 줌아웃을 함
 				theLayer.setPosition(CGPoint.ccpSub(theLayer.getPosition(),
@@ -2046,7 +2050,8 @@ public class Game extends CCLayer {
 //	}
 	
 	//정령석 유리병 여는 애니메이션
-	public void startOpenBottle(CGPoint pos) {
+	public void startOpenBottle(MineCell cell) {
+		CGPoint pos = cell.getTilePosition();
 		CCSprite bottle = CCSprite.sprite("61hud/bottle_01.png");
 		
 		pos = CGPoint.ccp(pos.x + tileSize.width/2, pos.y - tileSize.height/2);
@@ -2057,14 +2062,26 @@ public class Game extends CCLayer {
 //		addChild(bottle, mineNumberLayer + 1); // 지뢰숫자보다 높게 설정함. //원래대로 돌려 놨습니다. 
 		
 		CCAnimate action = CCAnimate.action(1.0f, mBottle, false);
-		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite"); // 익셉션 발생에 따른 막아둠.
+		CCCallFuncND remove = CCCallFuncND.action(this, "cbRemoveSprite", cell); // 익셉션 발생에 따른 막아둠.
 		bottle.runAction(CCSequence.actions(action, remove));
-		bottle.runAction(CCSequence.actions(action));
 	}
 	
-	public void cbRemoveSprite(Object sender) {
+	public void cbRemoveSprite(Object sender, Object data) {
 		CCSprite sprite = (CCSprite)sender;
 		sprite.removeFromParentAndCleanup(true);
+		
+		MineCell cell = (MineCell) data;
+		
+		//빈병 마인레이어에 심기
+		int counter = 0;
+		int sphereType = kSphereTypeGetMagic;
+		CopyOnWriteArrayList<MineCell> sphereCells = new CopyOnWriteArrayList<MineCell>();
+		cells.addAll(cell.getSphereCells());
+		for (MineCell c : sphereCells) {
+			int gid = CCFormatter.swapIntToLittleEndian(tmxItemLayer.tileGIDAt(CGPoint.make(counter, sphereType))); // 아이템 레이어에서 가지고 오기
+			tmxMineLayer.setTileGID(gid, c.getTileCoord());
+			counter++;
+		}
 	}
 	
 	
