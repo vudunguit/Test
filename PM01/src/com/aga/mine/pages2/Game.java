@@ -210,6 +210,7 @@ public class Game extends CCLayer {
 		}
 		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.pumpkin); // 이펙트 (효과음) // (호박)hit
 		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.mushroom); // 이펙트 (효과음) // (버섯)move
+		
 		//
 		// 타일맵 로드
 		if (!GameData.share().isMultiGame)
@@ -1253,19 +1254,23 @@ public class Game extends CCLayer {
 					// 닫혀있는 셀 누르면
 				} else {
 					// 지정된 셀을 열어준다.(tile의 fg를 제거)
-					new TileOpenTask() {
+					new Thread(new Runnable() {
 						@Override
 						public void run() {
 							cell.open();
+							checkSphereCell();
+							checkGameOver();
 						}
-					}.execute();
+					}).start();
 				}
 				break;
 				// k = size;
 			}
 		}
-		
-		// 모두 열린 수정구가 있는지 확인한다.
+	}
+	
+	// 모두 열린 수정구가 있는지 확인한다.
+	private void checkSphereCell() {
 		CopyOnWriteArrayList<MineCell> copiedSphereCell = new CopyOnWriteArrayList<MineCell>();
 		copiedSphereCell.addAll(sphereBaseCells);	
 		for (MineCell cell : copiedSphereCell) {
@@ -1293,14 +1298,16 @@ public class Game extends CCLayer {
 				mHud.startMoveSpirit(sphereType, this.convertToWorldSpace(cell.getTilePosition().x, cell.getTilePosition().y));
 			}
 		}
-		// end 모두 열린 수정구가 있는지 확인한다.
+	}
+	
+	// 게임 오버인지 확인
+	private void checkGameOver() {
 		if (getClosedCell() <= GameData.share().getMineNumber()) {
 			Log.e("Game / handleDoubleTap", "handleDoubleTap Game Over");
 			Log.e("Game", "unopenedTile : " + getClosedCell() + ", Max Mine : "
 					+ GameData.share().getMineNumber());
 			mHud.gameOver(sumScore(), -1);
 		}
-		// end Config.getInstance().isDisableButton()
 	}
 
 	@Override
