@@ -400,22 +400,10 @@ public class MineCell extends CCLayer{
 		}
 		
 		//타일 오픈 애니메이션
-		CCSprite tile = CCSprite.sprite(mGame.mTex);
-		while (tile == null) {
-			try {
-				Thread.sleep(5);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			CCTexture2D tex = CCTextureCache.sharedTextureCache().addImage("60game/01.png");
-			tile = CCSprite.sprite(tex);
-		}
-		mGame.addChild(tile, 5); // cocos2d 라이브러리 동기화 문제, 타일을 삭제하지 않고 보이지 않게 처리
+		CCSprite tile = mGame.mAnimationTiles.get(getCell_ID()+2000);
+		tile.setVisible(true);
 		
-		tile.setPosition(CGPoint.ccp(tileCoord.x * mGame.tileSize.width + mGame.tileSize.width / 2, 
-				 mGame.mapSize.height - (tileCoord.y *  mGame.tileSize.height +  mGame.tileSize.height / 2)));
-		
-		tile.runAction(CCSequence.actions(mGame.mScaleAction, mGame.mOpenAction, CCCallFuncND.action(this, "removeTileAni", tileCoord)));
+		tile.runAction(CCSequence.actions(mGame.mScaleAction.copy(), mGame.mOpenAction.copy(), CCCallFuncND.action(this, "removeTileAni", tileCoord)));
 	}
 	
 	public void removeTileAni(Object sender, Object coord) {

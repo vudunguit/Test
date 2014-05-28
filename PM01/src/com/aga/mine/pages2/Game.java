@@ -152,6 +152,9 @@ public class Game extends CCLayer {
 	//대지마법이 사용중인지를 체크하는 변수
 	public boolean mIsClickedEarth;
 	public CCSprite mEarthGuide;
+	
+	//애니메이션용 타일
+	public HashMap<Integer, CCSprite> mAnimationTiles;
 
 	private int mineNumber;
 	public CCTMXTiledMap getTileMap() {
@@ -461,7 +464,7 @@ public class Game extends CCLayer {
 			}
 		}
 		cells.removeAll(tempCells);
-
+		
 		//
 		// 사전에 열려진 셀 주변에 지뢰가 설치되었으면 지뢰수 표시를 한다.
 		cellsTemp = cells;
@@ -574,6 +577,19 @@ public class Game extends CCLayer {
 		
 		//대지마법 9칸 가이드
 		mEarthGuide = CCSprite.sprite("61hud/earth_guide.png");
+		
+		//애니메이션 타일을 미리 생성한다. 태그는 2000 + 셀아이디
+		mAnimationTiles = new HashMap<Integer, CCSprite>();
+		for(MineCell cell : cells) {
+			int tag = 2000 + cell.getCell_ID();
+			CCSprite tile = CCSprite.sprite(mTex);
+			addChild(tile, 5, tag); // cocos2d 라이브러리 동기화 문제, 타일을 삭제하지 않고 보이지 않게 처리
+			
+			tile.setPosition(cell.getTilePosition());
+			tile.setVisible(false);
+			
+			mAnimationTiles.put(tag, tile);
+		}
 		
 		//이모티콘 test : 실제로는 NetworkController에서 전송된 이모티콘 id를 던져준다.
 		//mHud.startEmoticonAni(5);
