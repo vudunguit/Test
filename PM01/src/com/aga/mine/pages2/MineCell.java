@@ -11,8 +11,6 @@ import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
-import org.cocos2d.nodes.CCTextureCache;
-import org.cocos2d.opengl.CCTexture2D;
 import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
@@ -25,64 +23,43 @@ import com.aga.mine.mains.Config;
 import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.R;
 
-// for문 돌리면 서 size 또는 length로 얻어온 객체 있으면 별도로 size 변수 만들어서 그값으로 할것
-// 잘못하면 큰일남 ㅇㅇ
-//그냥 이해 안되도 적당히 포트중... 나중에 안돌아갈것같음.
-//너무 심각해서 어디가 문제인지 못찾을까봐 심히 걱정됨
-//this.delegate.removeTile(this.tileCoord);
 public class MineCell extends CCLayer{
 	
 	volatile public static int mCount;
 	
-
-	// 지뢰
 	private boolean isMine;
-	// 열어본 맵의 Tile
 	private boolean isOpened;
-//	private boolean isMarked = false;
-	// 지뢰가 있을것 같은 곳 체크
 	private boolean isMarked = false;
-	// 구슬
 	private boolean isSphere;
-	// 선택 못하는 영역
 	private boolean isCollidable;
 	
 	private int Cell_ID;
 	private int sphereCell_ID;
-
+	
 	private  CGPoint tilePosition;
 	private  boolean isSphereBasePossible;
 	private  int sphereType;
 	
 	private CGPoint tileCoord;
-	//int plusMine;
 	
 	Context mContext;
 
-	
 	ArrayList<MineCell> sphereCells;
 	ArrayList<MineCell> roundCells  = new ArrayList<MineCell>();
 	ArrayList<MineCell> sphereRoundCells;
 	
 	public int numberOfArroundMine; //자기 주변의 지뢰 숫자
 	
-	//
-	//	MineCell(Context context) {
 	MineCell() {
-		//mContext = context;
-		//delegate = new MineCellDelegate(context);
-		//roundCells = new ArrayList<MineCell>();
 		isMine = false;
 		isOpened = false;
-		//isMarked = false;
+		//isMarked = false; // 뭔가 이유가 있을것 같은데 기억이 안남.
 		isSphere = false;
 		isCollidable = false;
 		sphereCells =new ArrayList<MineCell>();
 		sphereRoundCells = new ArrayList<MineCell>();	
 		isSphereBasePossible = true;
 		sphereType = -1; // none
-		
-
 	}
 	
 	private Game mGame;
@@ -117,27 +94,13 @@ public class MineCell extends CCLayer{
 
 	// 선택된 지점의 주변 셀의 마크?? 된것의 갯수를 검사하여 검사된 값을 돌려준다.(Flag 지뢰 체크)
 	public int getNumberOfMushroomAndPumpkinAround() {
-		//Log.e("지뢰 주변 숫자","" + isMine());
-		// 호박은 -1을 넣었다.
-		if (isMarked()) return -1;
-		
+		if (isMarked()) return -1; 		// 호박은 -1을 넣었다.
 		int count = 0;
-		/*
-		if (getRoundCells() == null) {
-			Log.e("MineCell / getNumberOfMushroomAround","주변에 셀이 없음. / getRoundCells() == null");
-		} else if(getRoundCells().size() == 0){
-			Log.e("MineCell / getNumberOfMushroomAround","주변에 셀의 갯수가 0개 / getRoundCells().size() == 0");
-		}
-		*/
 		if (getRoundCells() != null && getRoundCells().size() != 0) {
 			CopyOnWriteArrayList<MineCell> cellArray = new CopyOnWriteArrayList<MineCell>();
 			cellArray.addAll(getRoundCells());
 			
-			//int size = getRoundCells().size();
 			for (MineCell c : cellArray) {
-
-				// cellsTemp.get(k) 이 null이라 에러 발생
-				// cellArray.get(k)이 null이 나오면 roundcell로 등록시 문제가 있는것
 				if (c != null && ( (c.isMarked() || (c.isMine() && c.isOpened())))) 
 					count++;
 			}	
@@ -145,11 +108,8 @@ public class MineCell extends CCLayer{
 		return count;
 	}
 	
-	// 숫자 주변의 마인 수 (ㄷㄷㄷ)
-	//ArrayList는 쓰레드 세이프하지 않기 때문에 동기화문제로 타일 오픈시 indexOutOfBound 초래함.
-	//또한 계산할때 부하도 많기 때문에 Game 생성자에서 미리 계산하여 numberOfArroundMine 변수에 저장하여 사용한다.
+	// 숫자 주변의 마인 수
 	public int getNumberOfMineAround() {
-		//Log.e("지뢰 주변 숫자","" + isMine());
 		if (isMine()) return -1;
 
 		int count = 0;
@@ -166,7 +126,6 @@ public class MineCell extends CCLayer{
 
 		int count = 0;
 		for (MineCell cell : getRoundCells()) {
-//			if (cell.isSphere())
 			if (cell.isSphere() || cell.isOpened() || cell.isMine())
 				count++;
 		}
@@ -185,29 +144,6 @@ public class MineCell extends CCLayer{
 		}
 		return true;
 	}
-		
-	/*
-		if (getSphereCells() != null && getSphereCells().size() != 0) {
-			ArrayList<MineCell> cellArray = getSphereCells();
-			int size = cellArray.size();
-			for (int k = 0; k < size; k++) {
-				if (cellArray.get(k) != null) { // null 값이 나와서는 안된다. 
-					if (!cellArray.get(k).isMine() && !cellArray.get(k).isOpened() && !cellArray.get(k).isCollidable() && !cellArray.get(k).isSphere()) {
-						//	return true;
-						} else {
-							// 하나라도 true이면 false 반환
-							return false;
-					}
-//				} else {
-		//			return false;
-	//			}
-			}
-			//getSphereCells 이 null이거나 데이터가 없으면 어떻게 해야되지???
-			//Log.e("MineCell isSphereCellsClear", "null or size 0");
-			//return true; // 임시
-		}
-		return true;
-	}*/
 	
 	public void setToSphereCells(int sphereType) {
 		int counter = 1;
@@ -225,13 +161,11 @@ public class MineCell extends CCLayer{
 		}
 	}
 	
-	// sdfsdf
+	
 	public int roundOpen() {
 		int numberOfMine = this.numberOfArroundMine;
 		int getNumberOfMushroomAround = this.getNumberOfMushroomAndPumpkinAround();
 		//Log.e("폭탄 노출됨", "" + numberOfMine + "," + plusMine + ",");
-/*		int boom = 0;
-		int mushroomSum = 0;*/
 		if (numberOfMine == getNumberOfMushroomAround) {
 			// 더블탭을 했을때 더블 탭한곳의 숫자가 있으면 탐??
 			CopyOnWriteArrayList<MineCell> cells = new CopyOnWriteArrayList<MineCell>();
@@ -244,27 +178,7 @@ public class MineCell extends CCLayer{
 			}
 
 		}
-
-/*			//Log.e("mineCell For", "" + cells.get(i));
-			
-			if(cells.get(i).isOpened()) {
-				// 오픈 한 셀을 누를때 셀주변에 노출된 지뢰가 있으면 그 지뢰 만큼 + 해준다.
-				if(cells.get(i).getNumberOfMineAround() == -1) {
-					boom ++;
-				}
-				//Log.e("폭탄 노출됨 ", " ");
-			}
-			mushroomSum = getNumberOfMushroomAround + boom;
-			//Log.e("getNumber", mushroomSum + ", boom :" + boom);
-			if (numberOfMine == getNumberOfMushroomAround) {
-				cells.get(i).open();
-			} else if (numberOfMine == mushroomSum) {
-				//Log.e("왜 안타지 ", "?????????????????????????");
-				cells.get(i).open();
-			}
-			Log.e("MineCell / roundOpen", "폭탄 노출됨");
-			
-			*/
+		
 		return numberOfMine;
 	}
 	
@@ -302,20 +216,15 @@ public class MineCell extends CCLayer{
 			
 			// 현재셀 주변에 지뢰나 수정구가 없다면 , 주변 셀을 모두 연다.
 			// 지뢰가 없는 곳만 열기 또는 지뢰와 아이템이 없는 곳만 열기
-			//int numberOfSphere = this.getNumberOfSphereAround();
-			//Log.e("MineCell", "open _ getNumberOfSphereAround : " + numberOfSphere);
 			// 지뢰 없는 곳만 열어주기
 			if(numberOfArroundMine  == 0){
-//			if(numberOfArroundMine  + numberOfSphere == 0){
-			// 지뢰 없는 곳과 수정구까지 열어주기
-			//if (numberOfMine == 0) {
 				//ArrayList 동기화 문제로 죽지 않도록 셀을 카피해서 사용
 				CopyOnWriteArrayList<MineCell> cells = new CopyOnWriteArrayList<MineCell>();
 				cells.addAll(getRoundCells());
 				
 				for (final MineCell cell : cells) {
 					try {
-						Thread.sleep(5);
+						Thread.sleep(10);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -330,7 +239,6 @@ public class MineCell extends CCLayer{
 		Log.e("MineCell", "getClosedCell : " + mGame.getClosedCell());
 		Log.e("MineCell", "getMineNumber() : " + GameData.share().getMineNumber());
 		
-//		int foundMines = GameData.share().getCurrentMine();
 		int closedTiles = mGame.getClosedCell();
 		if (closedTiles <= GameData.share().getMineNumber()) {
 			Log.e("MineCell", "new gameover : score 1000");
@@ -367,7 +275,6 @@ public class MineCell extends CCLayer{
 				String isDontSetMine = properties.get("isDontSetMine");
 				
 				if (isDontSetMine != null && isDontSetMine.equals("YES")) {
-					//SoundEngine.sharedEngine().playEffect(mContext, R.raw.landopen_01); // pickup // 뭐에 쓰는 거지?
 					mGame.getFg().removeTileAt(tileCoord);
 					GameData.share().addOpenedCell(); // 오픈된 셀 수량 누적
 					mGame.removeCell(); // 남은 총 cell 수량 감소
@@ -408,7 +315,6 @@ public class MineCell extends CCLayer{
 	
 	public void removeTileAni(Object sender, Object coord) {
 		CCSprite obj = (CCSprite)sender;
-		//obj.removeFromParentAndCleanup(true);
 		obj.setVisible(false);
 		
 		if(numberOfArroundMine>0) {
@@ -436,9 +342,6 @@ public class MineCell extends CCLayer{
 		//호박폭탄 애니메이션
 		startPumpkinBomb();
 		
-		// 주변 지뢰수를 숫자로 표현했으며, 주변에 지뢰가 없는 땅은 0으로 표현
-		//Log.e("MineCell / open", "plusMine : " + plusMine);
-		
 		// 지뢰로 표시
 		this.setMine(true);
 		
@@ -450,19 +353,7 @@ public class MineCell extends CCLayer{
 		
 		// 화면에 지뢰 갯수 갱신
 		mGame.mHud.updateMineNumber(mineNumber);
-					
-//		try {
-//			mGame.mHud.showMessage(this.getCell_ID());
-//			if (GameData.share().isMultiGame) {
-//				NetworkController.getInstance().sendPlayDataMine(this.getCell_ID()); // 사용 안함
-//			}				
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 		
-		// 지뢰를 누르면 실제 지뢰갯수(currentMineNumber)에 +1를 해줌.
-		// +1을 안해주면~  안알랴줌 (노출지뢰가 실제 지뢰에 포함이 안됨)
-		//int currentMine = GameData.share().currentMineNumber() + 1;
 		GameData.share().markMine();
 		int currentMine = GameData.share().getCurrentMine(); // 로그용.
 		Log.e("MineCell / open", "최대 지뢰 수 : " + GameData.share().getMineNumber());
@@ -473,23 +364,10 @@ public class MineCell extends CCLayer{
 		
 		if (GameData.share().getCurrentMine() == GameData.share().getMineNumber()) {
 			Log.e("MineCell / open", "delegate - gameOver *** mission complete ***");
-//			this.delegate.gameOver();
-			
-//			float openedCell = GameData.share().getOpenedCell();
-////			float foundMine = mGame.getFoundMine();
-//			float mine = GameData.share().getCurrentMine();
-//			Log.e("MineCell", "markedMine() 값이 의문스러움. 아이폰에 물어볼 것 : " + mine);
-//			Log.e("MineCell", "Game.java에도 같은 값 존재");
-//			float mushroom = mGame.getMineNumber(); // 잘못된 데이터
-//			float heart = GameData.share().getHeartNumber();
-//			float remainTime = GameData.share().getSeconds();
-//			
-//			int myScore = 0;
-
 			int myScore = 0;
 			
 			float openedCell = GameData.share().getOpenedCell();
-//			float foundMine = mGame.getFoundMine();
+//			float foundMine = mGame.getFoundMine(); // 지우는건 일단 보류
 			float foundMine = GameData.share().getCurrentMine(); // 올바르게 버섯이 심겨진 지뢰만(찾은 호박)
 			float maxMine = GameData.share().getMineNumber(); // 테스트중
 			float heart = GameData.share().getHeartNumber();
@@ -511,7 +389,7 @@ public class MineCell extends CCLayer{
 			
 		}
 		
-		// 지뢰를 누르면 생명 하나 감소 시킨다.(현재셀은 이미 오픈되었음)
+		// 지뢰를 밟을시 생명 하나 감소 시킨다.(현재셀은 이미 오픈되었음)
 		// 지뢰를 밟을시 생명 감소 (-1)
 		GameData.share().decreaseHeartNumber();
 		
@@ -520,7 +398,6 @@ public class MineCell extends CCLayer{
 		updateHeart();
 
 		// 생명수 다없어지면 게임오버
-		//if (true) {
 		if (GameData.share().isHeartOut()) {
 			Log.e("MineCell / open", "delegate - gameOver *** mission failed ***");
 			if (GameData.share().isMultiGame) {
@@ -554,13 +431,9 @@ public class MineCell extends CCLayer{
 		return mGame.mHud.updateHeart();
 	}
 	
-	/*****************************************************/
-	
 	// 대전했을시 게임오버 점수
 	private void sendRequestGameOver(int myScore) {
 		Log.e("MineCell", "myScore : " + myScore);
-//		String str = String.valueOf(point);
-//		int pp 
 		try {
 			NetworkController.getInstance().sendRequestGameOver(myScore);
 		} catch (IOException e) {
@@ -697,19 +570,5 @@ public class MineCell extends CCLayer{
 	public void setTileCoord(CGPoint tileCoord) {
 		this.tileCoord = tileCoord;
 	}
-	
-	
-	/*		
-	//unsigned
-	private int unsigned2(int myByte) {
-		System.out.println(unsigned32(-1) );   // 4294967295
-		return 0;
-	}
-	
-	private int unsigned(int myByte) {
-		int val = myByte < 0 ? ( Byte.MAX_VALUE + 1 ) * 2 + myByte : myByte;
-		return val;
-	}
-	*/
 	
 }

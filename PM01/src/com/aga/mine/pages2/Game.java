@@ -1,7 +1,6 @@
 ﻿package com.aga.mine.pages2;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -13,10 +12,7 @@ import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.instant.CCCallFuncND;
 import org.cocos2d.actions.interval.CCAnimate;
-import org.cocos2d.actions.interval.CCBezierBy;
 import org.cocos2d.actions.interval.CCDelayTime;
-import org.cocos2d.actions.interval.CCFadeIn;
-import org.cocos2d.actions.interval.CCFadeOut;
 import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.actions.interval.CCRotateBy;
 import org.cocos2d.actions.interval.CCScaleTo;
@@ -35,17 +31,13 @@ import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.opengl.CCTexture2D;
 import org.cocos2d.sound.SoundEngine;
-import org.cocos2d.types.CCBezierConfig;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 import org.cocos2d.utils.CCFormatter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -161,50 +153,25 @@ public class Game extends CCLayer {
 		return tileMap;
 	}
 	
-	// gamedata에서 수정하였음.
-	// 지뢰수 수정하여 테스트중 현재 3개로 수정
-	// 수정구 1개로 수정
-	/**
-	 * Game
-	 * 
-	 * @param context
-	 */
 	private Game() {
-		
-		Log.e("** Game **", "Instance");
 		unopenedTile = 0;
-		// 기본 초기화
+		
 		mContext = CCDirector.sharedDirector().getActivity().getApplicationContext();
 		winSize = CCDirector.sharedDirector().winSize();
-
-		//
-		if (GameData.share().isMultiGame) {
+		
+		if (GameData.share().isMultiGame) { // 멀티 게임시 상대방 준비전까지 터치를 잠금.
 			Config.getInstance().setDisableButton(true);
 		} else {
 			Config.getInstance().setDisableButton(false);
 		}
-
-		// 난이도 ( 0~2 초,중,상급)
-//		GameData.share().setGameDifficulty(1);
-//		// 데이터를 들어있는 숫자 깃발 초기화
+		
+		// 데이터를 들어있는 숫자 깃발 초기화
 		GameData.share().resetMineNumber();
-		// 호박에 나타나있는 숫자 깃발 초기화
-//		GameData.share().setMineNumber(GameData.share().maxMineNumber);
-		// GameData.share().setMineNumber(GameData.share().getGameDifficulty());
-		Log.e("Game / game ", "난이도 : " + GameData.share().getGameDifficulty());
 		// 생명수 초기화
 		GameData.share().setHeartNumber(3);
 		// 아이템 초기화
 		GameData.share().resetItem();
-		// // 게임시간 초기화
-		// GameData.share().setSeconds(900); // gameStart로 이동
-
-		//
-		// 탭 제스쳐 등록
-		// 안드로이드 다른방식이라 현재로서는 cocos2D와 어려움.
-		// selector 메소드 확인할것
-		// CCTouchDispatcher a = CCTouchDispatcher.
-		// ?????
+		
 		ArrayList<View> a = new ArrayList<View>();
 		a.add(CCDirector.sharedDirector().getOpenGLView());
 		CCDirector.sharedDirector().getOpenGLView().addTouchables(a);
@@ -222,7 +189,6 @@ public class Game extends CCLayer {
 		if (!GameData.share().isMultiGame)
 			GameData.share().setMap((byte) 0); // 인자값은 무의미
 		this.tileMap = CCTMXTiledMap.tiledMap(GameData.share().gameMap);
-		
 
 		//
 		// 맵 올리고 기본 크기 지정
@@ -230,10 +196,7 @@ public class Game extends CCLayer {
 
 		// texture.setAntiAliasTexParameters();
 		// texture.setAliasTexParameters();
-		/*
-		 * CCTexture2D texture = new CCTexture2D(); for (CCNode child :
-		 * tileMap.getChildren()) { ((CCTMXLayer)child).setTexture(texture); }
-		 */
+		
 		// 64 pixel
 		tileSize = CGSize.make(tileMap.getTileSize().width,
 				tileMap.getTileSize().height);
@@ -242,17 +205,6 @@ public class Game extends CCLayer {
 
 		//
 		// 타일맵 레이어 등록
-		/*
-		 * this.bg = this.tileMap.layerNamed("Background"); // Layer Name in
-		 * Tiled this.meta = this.tileMap.layerNamed("Meta");
-		 * this.meta.setVisible(false); this.fg =
-		 * this.tileMap.layerNamed("Foreground"); this.mineLayer =
-		 * this.tileMap.layerNamed("MineLayer"); // 지뢰 및 아이템 뿌릴 레이어
-		 * this.itemLayer = this.tileMap.layerNamed("ItemLayer"); // 지뢰 및 아이템,
-		 * 깃발 가져오는 레이어 this.flagLayer = this.tileMap.layerNamed("FlagLayer"); //
-		 * 깃발 꽂을 레이어 this.earthLayer = this.tileMap.layerNamed("CrackedEarth");
-		 * // 갈라진대지 레이어
-		 */
 		this.tmxBg = this.tileMap.layerNamed("Background"); // Layer Name in Tiled
 		this.tmxMeta = this.tileMap.layerNamed("Meta"); // 선택 불가 영역
 		this.tmxMeta.setVisible(false);
@@ -263,47 +215,27 @@ public class Game extends CCLayer {
 		this.tmxFlagLayer = this.tileMap.layerNamed("FlagLayer"); // 깃발(버섯) 꽂을 레이어
 		this.tmxEarthLayer = this.tileMap.layerNamed("CrackedEarth"); // 갈라진대지 레이어(아이템 이펙트)
 		
-		theLayer.setScale(GameConfig.share().kDefaultScale * 128
-				/ tileMap.getTileSize().width);
-		theLayer.setPosition(
-				(-mapSize.width / 2 * theLayer.getScale() + winSize.width / 2),
-				0);
-		// theLayer.setPosition(getMapCenterPosition().x,
-		// getMapCenterPosition().y - getMapDeltaSize().height);
+		theLayer.setScale(GameConfig.share().kDefaultScale * 128 / tileMap.getTileSize().width);
+		theLayer.setPosition((-mapSize.width / 2 * theLayer.getScale() + winSize.width / 2),0);
 		currentScale = this.getScale(); // 처음 스케일 저장
 		currentLayerX = this.getPosition().x; // 처음 화면의 x좌표 저장
 		currentLayerY = this.getPosition().y; // 처음 화면의 y좌표 저장
-		//
-		// progress = new GameProgressBar(mContext);
-		// progress.delegate = (GameProgressBarDelegate) this;
-		//
+		
 		// 전체 타일(셀) 등록
 		cells = new ArrayList<MineCell>();
 		sphereBaseCells = new ArrayList<MineCell>();
 		int count = 0;
-
-		float wid = tileMap.getMapSize().width;
-		float hei = tileMap.getMapSize().height;
-
+		
 		for (int x = 0; x < (int) tileMap.getMapSize().width; x++) {
 			for (int y = 0; y < (int) tileMap.getMapSize().height; y++) {
 				MineCell cell = new MineCell(this);
-
-				//cell.delegate = (MineCellDelegate) this;
+				
 				cell.setTileCoord(CGPoint.make(x, y));
 				cell.setCell_ID(count);
 				cell.setTilePosition(CGPoint.ccp(x * tileSize.width
 						+ tileSize.height / 2, mapSize.height
 						- (y * tileSize.height + tileSize.height / 2)));
 				cells.add(cell);
-				//
-				// // test code // 수정구가 숨겨진 타일에 표시한 라벨
-				// CCLabel label = CCLabel.makeLabel(""+ cell.getCell_ID(),
-				// "Arial", (30 * tileSize.width) / 128);
-				// this.addChild(label);
-				// label.setColor(ccColor3B.ccWHITE);
-				// label.setPosition(cell.getTilePosition());
-				//
 				if (!this.isCollidable(CGPoint.make(x, y)) && !this.isPreOpened(CGPoint.make(x, y))) {
 					// 열리지 않은 타일수
 					unopenedTile++;
@@ -591,40 +523,16 @@ public class Game extends CCLayer {
 			mAnimationTiles.put(tag, tile);
 		}
 		
-		//이모티콘 test : 실제로는 NetworkController에서 전송된 이모티콘 id를 던져준다.
-		//mHud.startEmoticonAni(5);
-		
-//		if (GameData.share().isMultiGame) {
-//			schedule(new UpdateCallback() {
-//				@Override
-//				public void update(float d) {
-//					unschedule(this);
-//					gameReady();
-//				}
-//			}, 5);
-////			gameReady();
-//		} else 
-			if (!GameData.share().isMultiGame) {
+		if (!GameData.share().isMultiGame) {
 			gameStart();
 		}
-		//SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
+		SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
 	}
-
-//	private void gameReady() {
-//		Log.e("Game", "I'm Ready!");
-//		try {
-//			NetworkController.getInstance().sendGameReady();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
 
 	public void gameStart() {
 		// 게임시간 초기화
 		GameData.share().setSeconds(900);
 		Config.getInstance().setDisableButton(false);
-		// Game.HudLayer.testText.setString("게임 시작! testText"); // 느린 기기에서는
-		// 뻗어버림...
 	}
 	
 	// public CCScene scene() {
@@ -944,66 +852,13 @@ public class Game extends CCLayer {
 
 	CGPoint currentTouchLocation = null;
 	CGPoint previousTouchLocation = null;
-
-	/********************************************/
-
-	/*************************/
+	
 	CGPoint currentLocation1 = null;
 	CGPoint currentLocation2 = null;
 	CGPoint previousLocation1 = null;
 	CGPoint previousLocation2 = null;
 	public CGSize mapSize = null;
 	public CGSize tileSize = null;
-
-	// CCLabel mapLabel;
-
-	//
-	private CGPoint getConvertToGL(MotionEvent event) {
-		return getConvertToGL(event, 0);
-	}
-
-	//
-	private CGPoint getConvertToGL(MotionEvent event, int pointerID) {
-		int touch = event.findPointerIndex(event.getPointerId(pointerID));
-		return CCDirector.sharedDirector().convertToGL(
-				CGPoint.ccp(event.getX(touch), event.getY(touch)));
-	}
-
-	//
-	private float getDistance(CGPoint point1, CGPoint point2) {
-
-		Log.e("Game / getDistance", "point1:" + point1 + ",point2:" + point2);
-		// sqrt = 제곱근 , pow = 몇 승
-		return (float) Math.sqrt(Math.pow(point1.x - point2.x, 2.0f)
-				+ Math.pow(point1.y - point2.y, 2.0f));
-	}
-
-	//
-	// position을 기기 화면 중심으로 지정해줌.
-	public CGPoint getMapCenterPosition() {
-		// -mapSize : x: -864.0, y: -1280.0
-		// winSize : x: 160.0, y: 284.0
-		// winSize : x: 640.0, y: 1052.0 <-- 1920 x1080 navigation
-
-		CGPoint centerPosition = CGPoint.ccp(-mapSize.width / 2 + winSize.width
-				/ 2, -mapSize.height / 2 + winSize.height / 2);
-		Log.e("Game / getMapCenterPosition", "centerPositionScale:"
-				+ centerPosition);
-		Log.e("Game / getMapCenterPosition", "getMapCenter:" + mapSize
-				+ "getMapCenter:" + winSize);
-		centerPosition.ccpMult(centerPosition, this.getScale());
-		Log.e("Game / getMapCenterPosition", "centerPositionScale:"
-				+ centerPosition);
-
-		// example
-		// return ccp(v.x*s, v.y*s); this.setScale() = 0.23f, centerPositionX =
-		// -704, centerPositionY = -996
-		// this.getScale() = 0.23 ~ 1.0;
-		// centerPosition.x = centerPosition.x * this.getScale();
-		// centerPosition.y = centerPosition.y * this.getScale();
-
-		return centerPosition;
-	}
 
 	public CGSize getMapDeltaSize() {
 		// 변화되는 scale에 따라 map의 사이즈를 변경 (1:1, 3456:5120)
@@ -1026,114 +881,7 @@ public class Game extends CCLayer {
 				+ winSize.width, -this.tileMap.getContentSize().height
 				* getScale() + winSize.height);
 	}
-
-	//
-	private void layerMove(MotionEvent event) {
-
-		if (currentLocation1 != null) {
-			// if (currentLocation1.x > previousLocation1.x + 3 ||
-			// currentLocation1.x < previousLocation1.x - 3 ||
-			// currentLocation1.y > previousLocation1.y + 3 ||
-			// currentLocation1.y < previousLocation1.y - 3)
-			previousLocation1 = currentLocation1;
-		}
-		if (previousLocation1 == null)
-			previousLocation1 = getConvertToGL(event, 0);
-
-		currentLocation1 = getConvertToGL(event, 0);
-		// Log.e("Game / layerMove", "cuLoc1:" + (int)currentLocation1.x + "," +
-		// (int)currentLocation1.y);
-		CGPoint deltaLocation = CGPoint.ccpSub(currentLocation1,
-				previousLocation1);
-		Log.e("Game / layerMove", "deltaLocation : " + deltaLocation);
-
-		// if (deltaLocation.x >= 3 || deltaLocation.y >= 3) {
-		theLayer.setPosition(CGPoint.ccpAdd(theLayer.getPosition(),
-				deltaLocation));
-
-		// scale 사용시 이상 현상 발생
-		theLayer.setPosition(CGPoint.ccp(
-				CGPoint.clampf(theLayer.getPosition().x,
-						this.getMapMinPosition().x, this.getMapMaxPosition().x),
-				CGPoint.clampf(theLayer.getPosition().y,
-						this.getMapMinPosition().y, this.getMapMaxPosition().y)));
-
-		// mapLabel.setString("mapLabel.getPosition() : " +
-		// mapLabel.getPosition());
-		// mapLabel.setPosition(mapLabel.getPosition());
-		/*
-		 * longPressTime = 0; isLongTap = false; isDoubleTap = false;
-		 * 
-		 * } else if (longPressTime + 300 > System.currentTimeMillis()) {
-		 * handleLongPress(event); } else { isDoubleTap = true; }
-		 */
-	}
-
-	// previousLocation에 문제 있는듯 이벤트 받아올때 잘 정리할것
-	private void layerScale(MotionEvent event) {
-
-		if (currentLocation1 != null)
-			previousLocation1 = currentLocation1;
-
-		if (currentLocation2 != null)
-			previousLocation2 = currentLocation2;
-
-		currentLocation1 = getConvertToGL(event, 0);
-		currentLocation2 = getConvertToGL(event, 1);
-
-		Log.e("Game / layerScale", event.getPointerCount() + ", cuLoc1:"
-				+ (int) currentLocation1.x + "," + (int) currentLocation1.y
-				+ ", cuLoc2:" + (int) currentLocation2.x + ","
-				+ (int) currentLocation2.y);
-
-		float currentDistance = getDistance(currentLocation1, currentLocation2);
-		float previousDistance = getDistance(previousLocation1,
-				previousLocation2);
-		float deltaDistance = currentDistance - previousDistance;
-
-		// Log.e("deltaDistance", "current:" +currentDistance+", previous:"
-		// +previousDistance+ ", Distance:"+deltaDistance);
-		CGPoint pinchCenter = this.convertToNodeSpace(CGPoint.ccpMidpoint(
-				currentLocation1, currentLocation2));
-
-		//
-		// 최소/최대 확대율 범위에서 레이어 확대 축소를 핀치 거리에 따라 한다.
-		float newScale = theLayer.getScale()
-				+ (deltaDistance * GameConfig.share().kPinchZoomMultiplier);
-
-		// clampf 그냥 범위 안에 들어가는지 확인후 리턴(128 pixel 기준)
-		newScale = CGPoint.clampf(newScale, GameConfig.share().kMinScale * 128
-				/ tileSize.width, GameConfig.share().kMaxScale * 128
-				/ tileSize.width);
-
-		Log.e("Game / layerScale", "scale:"
-				+ ((int) (theLayer.getScale() * 100) / 100f) + ", new scale:"
-				+ ((int) (newScale * 100) / 100f) + ", delta:"
-				+ (int) deltaDistance);
-		float positionScale = newScale - theLayer.getScale();
-		theLayer.setScale(newScale); // 줌아웃을 하게해줌
-		Log.e("Game / layerScale", "theLayer position" + theLayer.getPosition());
-		Log.e("Game / layerScale",
-				"theLayer getAnchorPoint" + theLayer.getAnchorPoint());
-		theLayer.setPosition(CGPoint.ccpSub(
-				theLayer.getPosition(),
-				CGPoint.make(pinchCenter.x * positionScale, pinchCenter.y
-						* positionScale))); // 선택한 화면에서 줌아웃을 함
-
-		// 여기서 화면 밀림 발생
-		theLayer.setPosition(CGPoint.ccp(
-				CGPoint.clampf(theLayer.getPosition().x,
-						this.getMapMinPosition().x, this.getMapMaxPosition().x),
-				CGPoint.clampf(theLayer.getPosition().y,
-						this.getMapMinPosition().y, this.getMapMaxPosition().y)));
-
-		// mapLabel.setString("mapLabel.getPosition() : " +
-		// mapLabel.getPosition());
-		// mapLabel.setPosition(mapLabel.getPosition());
-	}
-
-	// handle touches
-
+	
 	//
 	// 롱터치 : 깃발 꽂기
 	public void handleLongPress(MotionEvent event) {
@@ -1719,33 +1467,7 @@ public class Game extends CCLayer {
 			}
 		}
 	}
-
-	// handle touches
-
-	/*****************************/
-	private CGPoint displayLimit() {
-		// 화면 중간 좌표
-		float wid = winSize.width / 2;
-		float hei = winSize.height / 2;
-		// layer부터 화면 중간까지의 좌표(GL --> cocos2D --> nodeSpace)
-		return this.convertToNodeSpace(CCDirector.sharedDirector().convertToGL(
-				CGPoint.make(wid, hei)));
-	}
-
-	// current layer position + (변한 좌표 - 기존 좌표) * (before scale - (after 좌표 /
-	// before 좌표))
-	private CGPoint setLayerPosition(CCLayer currentLayer,
-			CGPoint displayBeforePosition, CGPoint displayAfterPosition,
-			float beforeScale, float afterScale) {
-		float x = currentLayer.getPosition().x
-				+ (displayAfterPosition.x - displayBeforePosition.x)
-				* (beforeScale - (displayAfterPosition.x / displayBeforePosition.x));
-		float y = currentLayer.getPosition().y
-				+ (displayAfterPosition.y - displayBeforePosition.y)
-				* (beforeScale - (displayAfterPosition.y / displayBeforePosition.y));
-		return CGPoint.make(x, y);
-	}
-
+	
 	public CGPoint tileCenterPosition(CGPoint position) {
 		CGPoint tileCoord = this.tileCoordForPosition(position);
 
@@ -2376,4 +2098,3 @@ public class Game extends CCLayer {
 
 
 }
-// Game class end
