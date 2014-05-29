@@ -1,6 +1,7 @@
 ﻿package com.aga.mine.mains;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.layers.CCLayer;
@@ -168,7 +169,7 @@ public class HomeTop extends CCLayer{
 		banner.setPosition(titlePanel.getContentSize().width / 2, 10);
 
 		// 주간순위 마감 남은 시간
-		periodText = CCLabel.makeLabel(displayLeftTime(mSecondToRefreshWeek) + " ", "Arial", 20);
+		periodText = CCLabel.makeLabel(displayLeftTime(mSecondToRefreshWeek), "Arial", 21);
 		banner.addChild(periodText);
 		periodText.setColor(ccColor3B.ccYELLOW);
 		periodText.setAnchorPoint(0.5f, 0.5f);
@@ -212,15 +213,20 @@ public class HomeTop extends CCLayer{
 		long hour = (secondOfInt % (60 * 60 * 24)) / (60 * 60);
 		long min = (secondOfInt % (60 * 60)) / 60;
 		long sec = secondOfInt % 60;
-
+		
 		String deadlineText = "";
+		String[] timeStr = {"day ","hour ","min"};
+		if (isKorean()) {
+			timeStr = new String[]{"일 ","시 ","분 후 마감"};
+		}
+		
 		if (day > 0) 
-			deadlineText = day + "일 ";
+			deadlineText = String.format("%01d",day) + timeStr[0];
 		if (hour > 0)
-			deadlineText += hour + "시 ";
+			deadlineText += String.format("%02d",hour) + timeStr[1];
 		if (min > 0) 
-			deadlineText += min + "분 ";
-		deadlineText += sec + "초 후 마감";
+			deadlineText += String.format("%02d",min) + timeStr[2];
+//		deadlineText += sec + "초 후 마감";
 		return deadlineText;
 	}
 	
@@ -311,4 +317,13 @@ public class HomeTop extends CCLayer{
 		broomstickEA.setString("+" + FacebookData.getinstance().getDBData("ReceivedBroomstick"));
 		gold.setString(new NumberComma().numberComma(FacebookData.getinstance().getDBData("Gold")));
 	}
+	
+	private boolean isKorean() {
+		if (Locale.getDefault().getLanguage().toString().equals("ko"))
+			return true;
+		else
+			return false; 
+	}
+
+	
 }
