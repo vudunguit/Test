@@ -432,15 +432,15 @@ public class Game extends CCLayer {
 		UserData.share(mContext).myBroomstick();
 		
 		//타일 오픈 애니메이션 초기화
-		mTex = CCTextureCache.sharedTextureCache().addImage("60game/01.png");
+		mTex = CCTextureCache.sharedTextureCache().addImage("60game/grass00.png");
 		
 		mScaleAction = CCScaleTo.action(0.1f, 1.8f);
 		CCAnimation animation = CCAnimation.animation("dance");
-		for( int i=1;i<=7;i++) {
+		for( int i=0;i<=7;i++) {
 			//animation.addFrame(String.format("60game/%02d.png", i));
-			animation.addFrame(CCTextureCache.sharedTextureCache().addImage(String.format("60game/%02d.png", i)));
+			animation.addFrame(CCTextureCache.sharedTextureCache().addImage(String.format("60game/grass%02d.png", i)));
 		}
-		mOpenAction = CCAnimate.action(0.2f, animation, false);
+		mOpenAction = CCAnimate.action(0.3f, animation, false);
 		
 		//호박폭발 애니메이션
 		CCAnimation pumpkin = CCAnimation.animation("pumpkin");

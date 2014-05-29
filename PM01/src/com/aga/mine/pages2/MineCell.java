@@ -310,7 +310,7 @@ public class MineCell extends CCLayer{
 		CCSprite tile = mGame.mAnimationTiles.get(getCell_ID()+2000);
 		tile.setVisible(true);
 		
-		tile.runAction(CCSequence.actions(mGame.mScaleAction.copy(), mGame.mOpenAction.copy(), CCCallFuncND.action(this, "removeTileAni", tileCoord)));
+		tile.runAction(CCSequence.actions(mGame.mOpenAction.copy(), CCCallFuncND.action(this, "removeTileAni", tileCoord)));
 	}
 	
 	public void removeTileAni(Object sender, Object coord) {
