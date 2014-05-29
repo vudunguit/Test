@@ -459,7 +459,8 @@ public class Game extends CCLayer {
 		mScaleAction = CCScaleTo.action(0.1f, 1.8f);
 		CCAnimation animation = CCAnimation.animation("dance");
 		for( int i=1;i<=7;i++) {
-			animation.addFrame(String.format("60game/%02d.png", i));
+			//animation.addFrame(String.format("60game/%02d.png", i));
+			animation.addFrame(CCTextureCache.sharedTextureCache().addImage(String.format("60game/%02d.png", i)));
 		}
 		mOpenAction = CCAnimate.action(0.2f, animation, false);
 		
