@@ -111,7 +111,6 @@ public class Game extends CCLayer {
 	
 	//Tile animation
 	public CCTexture2D mTex;
-	public CCScaleTo mScaleAction;
 	public CCAnimate mOpenAction;
 	public CCAnimate mPumpkinBomb;
 	public CCAnimation cloudDefense;
@@ -434,9 +433,8 @@ public class Game extends CCLayer {
 		//타일 오픈 애니메이션 초기화
 		mTex = CCTextureCache.sharedTextureCache().addImage("60game/grass00.png");
 		
-		mScaleAction = CCScaleTo.action(0.1f, 1.8f);
-		CCAnimation animation = CCAnimation.animation("dance");
-		for( int i=0;i<=7;i++) {
+		CCAnimation animation = CCAnimation.animation("tile");
+		for( int i=0;i<=8;i++) {
 			//animation.addFrame(String.format("60game/%02d.png", i));
 			animation.addFrame(CCTextureCache.sharedTextureCache().addImage(String.format("60game/grass%02d.png", i)));
 		}

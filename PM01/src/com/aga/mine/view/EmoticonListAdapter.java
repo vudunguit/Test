@@ -2,18 +2,19 @@ package com.aga.mine.view;
 
 import java.util.ArrayList;
 
-import com.aga.mine.mains.FacebookData;
-import com.aga.mine.mains.MainApplication;
-import com.aga.mine.mains.R;
-import com.aga.mine.mains.ShopEmoticon;
-import com.aga.mine.util.Popup;
-
 import android.content.Context;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+
+import com.aga.mine.mains.Constant;
+import com.aga.mine.mains.FacebookData;
+import com.aga.mine.mains.MainApplication;
+import com.aga.mine.mains.R;
+import com.aga.mine.mains.ShopEmoticon;
 
 public class EmoticonListAdapter extends BaseAdapter {
 	private Context mContext;
@@ -81,7 +82,13 @@ public class EmoticonListAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				// TODO 
 				MainApplication.getInstance().getActivity().click();
-				new ShopEmoticon().popup(position+1);
+				
+				Message msg = MainApplication.getInstance().getActivity().mHandler.obtainMessage();
+				msg.what = Constant.MSG_DISPLAY_POPUP;
+				msg.arg1 = position+1;
+				MainApplication.getInstance().getActivity().mHandler.sendMessage(msg);
+				
+				//new ShopEmoticon().popup(position+1);
 //				String emoticons = FacebookData.getinstance().getDBData("Emoticons");
 //				Log.e("EmoticonAdapter", "emoticons [" +emoticons + "] + " + (position+1));
 //				emoticons += "," + (position+1);

@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -27,12 +28,15 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.aga.mine.pages2.GameData;
 import com.aga.mine.view.EmoticonListAdapter;
@@ -213,6 +217,42 @@ public class MainActivity extends Activity {
 			case Constant.MSG_HIDE_SCROLLVIEW:
 				main.removeView(mListView);
 				main.removeView(mGridView);
+				break;
+				
+			case Constant.MSG_DISPLAY_POPUP:
+				final int emoticonID = msg.arg1;
+				
+				View view = View.inflate(MainActivity.this, R.layout.popup, null);
+
+				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+				final AlertDialog dialog = builder.setView(view).create();
+				dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+				dialog.show();
+				
+				(view.findViewById(R.id.ivBuy)).setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						String emoticons = FacebookData.getinstance().getDBData("Emoticons");
+						emoticons += "," + emoticonID;
+						FacebookData.getinstance().modDBData("Emoticons", emoticons);
+						
+						String gold = FacebookData.getinstance().getDBData("Gold");
+						gold = String.valueOf(Long.parseLong(gold) - 100);
+						FacebookData.getinstance().modDBData("Gold", gold);
+						SoundEngine.sharedEngine().playEffect(MainActivity.this, R.raw.buy);
+						mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+						mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_EMOTICONLIST);
+						dialog.dismiss();
+					}
+				});
+				(view.findViewById(R.id.ivBuyCancle)).setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						click();
+						Toast.makeText(MainActivity.this, "구매 취소", Toast.LENGTH_SHORT).show();
+						dialog.dismiss();
+					}
+				});
 				break;
 			}
 		}
