@@ -2,8 +2,11 @@
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
@@ -17,6 +20,7 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
 import com.aga.mine.mains.MainActivity.InviteCallback;
+import com.aga.mine.pages2.GameData;
 import com.aga.mine.pages2.UserData;
 import com.aga.mine.util.Util;
 
@@ -30,8 +34,10 @@ public class ShopGold2 extends CCLayer {
 	final String folder = "21gold/";
 	final String fileExtension = ".png";
 	
+	Map<String, String> basket;
+	
 	CCSprite bg;
-//	CCLabel gold = null; 
+	CCLabel goldLabel = null; 
 	
 	double[][] goldArray = { 
 			{ 0.99, 5000, 0 }, { 4.99, 25000, 6250 },
@@ -70,6 +76,7 @@ public class ShopGold2 extends CCLayer {
 	public ShopGold2() {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
+		basket = new HashMap<String, String>();
 		
 		MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
 		
@@ -98,8 +105,8 @@ public class ShopGold2 extends CCLayer {
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
 		
-		FrameTitle6.setTitle(boardFrame, folder);
-//		gold = FrameTitle6.setTitle(boardFrame, folder);
+//		FrameTitle6.setTitle(boardFrame, folder);
+		goldLabel = FrameTitle6.setTitle(boardFrame, folder);
 //		gold.setString("" + UserData.share(CCDirector.sharedDirector().getActivity()).getGold());
 	}
 	
@@ -236,14 +243,32 @@ public class ShopGold2 extends CCLayer {
 			}
 		}
 		
-		// 자신에게 invite 가능한가요??
+		String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
 		
+		long myGold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
 		
-//		double requestID = Math.random() * 9223372036854775807L;  //facebook 알림글번호로 대체할 것
-//		String senderID = FacebookData.getinstance().getUserInfo().getId();
+		// 받는사람이 본인이면 DB로 바로 저장
+		if (recipientID.equals(FacebookData.getinstance().getUserInfo().getId())) {
+			_mygold = (int) myGold;
+			_price = gold;
+			pps = _price / 2;
+			basket.put("Gold", String.valueOf(myGold + gold));	
+			FacebookData.getinstance().modDBData(basket);
+		} else {
+			double requestID = Math.random() * 9223372036854775807L;  //facebook 알림글번호로 대체할 것
+			String senderID = FacebookData.getinstance().getUserInfo().getId();
+			MainApplication.getInstance().getActivity().sendInvite(recipientID, "선물을 보냈습니다.", null);
+		}
 		
-				String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
-				MainApplication.getInstance().getActivity().sendInvite(recipientID, "우편물 발송", null);
+		//경험치 및 레벨업 애니메이션
+		//경험치 1000당 1초
+		schedule("goldAni");
+		
+//		goldLabel.setString(new NumberComma().numberComma(myGold));
+
+				
+				
+
 //				FacebookData.getinstance().getRequestID(recipientID);  //test용 
 
 //		
@@ -265,5 +290,20 @@ public class ShopGold2 extends CCLayer {
 //    	CCDirector.sharedDirector().getActivity().startActivity(task1);
 	}
 	
+	int _mygold;
+	int _price;
+	int pps;
+	int gamso = 0;
+	
+	public void goldAni(float dt) {
+//		Log.e("ShopGold", "dt : " + dt + ", pps : " + pps + ", gamso : " + gamso + ", _price : " + _price);
+		gamso += dt * pps;
+		goldLabel.setString(new NumberComma().numberComma(_mygold + gamso));
+		if (gamso > _price) {
+			unschedule("goldAni");
+			goldLabel.setString(new NumberComma().numberComma(FacebookData.getinstance().getDBData("Gold")));
+			gamso = 0;
+		}
+	}	
+	
 }
-//end
