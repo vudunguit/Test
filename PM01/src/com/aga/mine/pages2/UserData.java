@@ -17,19 +17,17 @@ import java.util.Set;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.types.CGPoint;
 
-import com.facebook.model.GraphUser;
-import com.sromku.simple.fb.entities.Profile;
-
 import android.content.Context;
 import android.util.Log;
 
-//일단 완료(테스트 중)
+import com.sromku.simple.fb.entities.Profile;
+
 public class UserData{
 
 	public static String userID = "";
 	public static String userName = "Guest";
-	public static  Profile facebookUserInfo = null;
-	public static String accessToken = "";
+//	public static  Profile facebookUserInfo = null;
+//	public static String accessToken = "";
 	
 //	public static ArrayList<String> facebookFriends = new ArrayList<String>();
 	public static  List<Profile> facebookFriendsInfo = new ArrayList<Profile>();
@@ -46,7 +44,6 @@ public class UserData{
 	
 	public static int difficulty = 0; // 게임 난이도
 	
-	//
 	// 최대 기본 지급 빗자루 수
 	final int timeMaxBroomstick = 6; // 6개
 	// 홈에 저장할 수 있는 최대 빗자루 수
@@ -618,8 +615,6 @@ public class UserData{
 			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-							// Toast.makeText(mContext, "빗자루가 가득 찼습니다.",
-							// Toast.LENGTH_SHORT).show();
 						}
 					});
 		}
@@ -646,7 +641,6 @@ public class UserData{
 		this.updateUserData(data);
 	}
 	
-	//
 	// 친구에게 조르기
 	public boolean getPester() {
 		return this.getBoolByKey("Pester");
@@ -657,7 +651,6 @@ public class UserData{
 		this.setBoolByKey("Pester", !state);
 	}
 	
-	//
 	// 친구에게 지팡이 보내기
 	public boolean getSendBroomstick() {
 		return this.getBoolByKey("SendBroomstick");
@@ -668,15 +661,13 @@ public class UserData{
 		this.setBoolByKey("SendBroomstick", !state);
 	}
 	
-	//
 	// Options
 	public boolean getOption(int type) {
 		String keyString = "OptionBGM,OptionSFX,OptionRefuseInvitation,OptionReceiveBloomstick,OptionShowMyPicture,OptionNoviceGuide";
 		String[] keyArray = keyString.split(",");
 		return this.getBoolByKey(keyArray[type]);
 	}
-
-	//
+	
 	// 옵션값을 토글시킨다. YES -> NO, NO -> YES
 	public void toggleOption(int type) {
 		String keyString = "OptionBGM,OptionSFX,OptionRefuseInvitation,OptionReceiveBloomstick,OptionShowMyPicture,OptionNoviceGuide";
@@ -697,10 +688,10 @@ public class UserData{
 		this.setLongByKey("broomstickRenewalTimeData", value);
 	}
 	
-	public void addBroomstickRenewalTimeData() {
-		this.setBroomstickRenewalTimeData(this.getBroomstickRenewalTimeData() + this.broomstickRenewalTime);
-		this.addBroomstick(1);
-	}
+//	public void addBroomstickRenewalTimeData() {
+//		this.setBroomstickRenewalTimeData(this.getBroomstickRenewalTimeData() + this.broomstickRenewalTime);
+//		this.addBroomstick(1);
+//	}
 	
 	public int getDailyCount() {
 		return this.getByKey("daily");
@@ -710,152 +701,4 @@ public class UserData{
 		this.setByKey("daily", dailyCount);
 	}
 	
-	
-	
 }
-// end
-
-
-
-// 풀패스 저장위치 : 패키지/files/파일명
-// 루팅시 저장위치 : data/data/패키지/files/파일명
-
-//MODE_PRIVATE  혼자만 사용하는 배타적인 모드로 파일 생성 .. (디폴트) 
-//MODE_APPEND  파일이 이미 존재할 경우 덮어쓰기 모드로 열지 않고 추가 모드로 연다. ( 기존 내용에 추가 ) 
-//MODE_WORLD_READABLE  다른 응용 프로그램이 읽을 수 있도록 허용 
-//MODE_WORLD_WRITEABLE  다른 응용 프로그램이 쓸 수 있도록 허용 
-
-//Set<Entry<String, Object>> set = hashMap.entrySet();
-//while(set.iterator().hasNext()){
-//	//내용..
-//}
-
-/*
-private void kkk() {
-
-	try{
-		//in memory
-		FileOutputStream fos=openFileOutput("inmemory_out.txt", MODE_PRIVATE);
-		OutputStreamWriter osw=new OutputStreamWriter(fos);
-		osw.write(writeStr);
-		osw.flush();
-		Toast.makeText(getApplicationContext(),
-				"write success!!", 
-				Toast.LENGTH_SHORT)
-				.show();
-		writeET.setText("");
-	}catch (Exception e) {
-		
-		Toast.makeText(getApplicationContext(),
-				e.getMessage(), 
-				Toast.LENGTH_SHORT)
-				.show();
-	}
-}
-	*/
-/*
-private void ooo() {
-
-String FILENAME = "hello_file";
-String string = "hello world!";
-
-try {
-    FileOutputStream fos = getApplicationContext().openFileOutput(FILENAME, Context.MODE_PRIVATE);
-    fos.write(string.getBytes());
-    fos.flush();
-    fos.close();
-} catch (IOException e) {
-    Log.e("STACKOVERFLOW", e.getMessage(), e);
-}
-
-try {
-    FileInputStream fis = getApplicationContext().openFileInput("hello_file");
-    byte[] buffer = new byte[(int) fis.getChannel().size()];
-    fis.read(buffer);
-    String str= "";
-    for(byte b:buffer) str+=(char)b;
-    fis.close();
-    Log.i("STACKOVERFLOW", String.format("GOT: [%s]", str));
-} catch (IOException e) {
-    Log.e("STACKOVERFLOW", e.getMessage(), e);
-}
-}
-*/
-
-/*
-private void aaa() {
-
-	String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-	File dir = new File(sdPath, "testing"); // sd경로에 testing이라는 폴더를 만들 준비
-	dir.mkdir(); // testing 폴더 생성
-	File file = new File(dir, "testFile.txt"); // file.txt 만들기
-
-	FileOutputStream fos;
-	try {
-		fos = new FileOutputStream(file);
-		// file.txt에 입력 스트림(빨대) 꼽기
-		// String str = mEdit.getText().toString(); //editText를 이용하여 글자 입력
-		String str = "입력은 잘 되었는가? 버나지군"; // 임시
-		fos.write(str.getBytes());
-		// 스트링 밀어 넣기
-		fos.close(); // 스트림끊기(빨대 뽑기)
-		// mEdit.setText("write success"); //editText에 완료 문장 출력
-		Log.e("FileOutputStream", "write success");
-	} catch (FileNotFoundException e) {
-		e.printStackTrace();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
-}
-*/
-/*
-private void bbb() {;
- FileInputStream in;
-	try {
-		in = getApplicationContext().openFileInput("filename.txt");
-		InputStreamReader inputStreamReader = new InputStreamReader(in);
-		BufferedReader bufferedReader = new BufferedReader(
-				inputStreamReader);
-		StringBuilder sb = new StringBuilder();
-		String line;
-		while ((line = bufferedReader.readLine()) != null) {
-			sb.append(line);
-		}
-	} catch (FileNotFoundException e) {
-		e.printStackTrace();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
-}
-*/
-/*
-private void ccc() {
-FileOutputStream fos = getApplicationContext().openFileOutput("test.txt", Context.MODE_PRIVATE);
-String str = "Android File IO Test";
-fos.write(str.getBytes());
-fos.close();
-FileInputStream fis = getApplicationContext().openFileInput("test.txt");
-byte[] data = new byte[fis.available());
-while (fis.read(data) != -1){;}
-fis.close();
- 
-InputStream fres = getResources().openRawResource(R.raw.restext);
-byte[] data = new byte[fres.available());
-while(fres.read(data) != -1) { ; }
-fres.close()
- deleteFile("test.txt");
-}
-*/
-
-/*
-public static boolean sync(FileOutputStream stream) {
-	 try {
-		 if (stream != null) {
-			 stream.getFD().sync();
-		 }
-		 return true;
-	 } 
-	 catch (IOException e) { }
-	 return false;
-}
-*/

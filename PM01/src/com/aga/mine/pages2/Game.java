@@ -49,21 +49,19 @@ import com.aga.mine.mains.NetworkController;
 import com.aga.mine.mains.R;
 
 public class Game extends CCLayer {
-
+	
 	String folder = "60game/";
 	String fileExtension = ".png";
-
+	
 	CCLayer theLayer = this;
-
-	/********************/
-
+	
 	private Context mContext;
 	GameProgressBar progress;
 	CGSize winSize;
-
+	
 	ArrayList<MineCell> cells;
 	ArrayList<MineCell> sphereBaseCells;
-
+	
 	public final static int kButtonFire = 1;
 	public final static int kButtonWind = 2;
 	public final static int kButtonCloud = 3;
@@ -72,7 +70,7 @@ public class Game extends CCLayer {
 	public final static int kButtonMirror = 6;
 	public final static int kButtonMinimap = 11;
 	public final static int kButtonEmoticon = 12;
-
+	
 	final int kSphereTypeNone = -1;
 	final int kSphereTypeEmpty = 0;
 	final int kSphereTypeFire = 1;
@@ -82,7 +80,7 @@ public class Game extends CCLayer {
 	final int kSphereTypeEarth = 5;
 	final int kSphereTypeMirror = 6;
 	final int kSphereTypeGetMagic = 7;
-	// ----------------------- Game.m --------------------------//
+	
 	public CCTMXTiledMap tileMap;
 	CCTMXLayer tmxBg;
 	CCTMXLayer tmxMeta;
@@ -92,18 +90,18 @@ public class Game extends CCLayer {
 	CCTMXLayer tmxFlagLayer;
 	CCTMXLayer tmxEarthLayer;
 	CCSprite player;
-
+	
 	public static HudLayer mHud;
-
+	
 	float currentLayerX;
 	float currentLayerY;
 	float currentScale;
-
+	
 	CCLabel win2;
 	float Xscale;
 	float Yscale;
 	CCLabel center3;
-
+	
 	private int unopenedTile;
 	
 	private CCAnimation mEarthBomb;
@@ -128,9 +126,9 @@ public class Game extends CCLayer {
 	int defence_FireLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelDivine"));
 	int defence_WindLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelEarth"));
 	int defence_CloudLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelMirror"));
-			
+	
 	//마법 공격 및 피해 변수
-	public long mFireAttackTime = UserLevel +  offence_FireLevel + offenceDefaultTime; //불공공격 지속 시간, 단위는 second
+	public long mFireAttackTime = UserLevel +  offence_FireLevel + offenceDefaultTime; //불 공격 지속 시간, 단위는 second
 	public long mWindAttackTime = UserLevel +  offence_WindLevel + offenceDefaultTime;
 	public long mCloudAttackTime = UserLevel +  offence_CloudLevel + offenceDefaultTime;
 	public long mStartTimeOfAttack; //공격 시작 시간(단위는 ms)
@@ -175,8 +173,7 @@ public class Game extends CCLayer {
 		ArrayList<View> a = new ArrayList<View>();
 		a.add(CCDirector.sharedDirector().getOpenGLView());
 		CCDirector.sharedDirector().getOpenGLView().addTouchables(a);
-
-		//
+		
 		// 사운드 (로드)
 		for (int i = 0; i < 17; i++) {
 			SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.landopen_01 + i); // 이펙트 (효과음) // (타일)pickup	
@@ -184,13 +181,12 @@ public class Game extends CCLayer {
 		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.pumpkin); // 이펙트 (효과음) // (호박)hit
 		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.mushroom); // 이펙트 (효과음) // (버섯)move
 		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.landopen_22); 
-		//
+		
 		// 타일맵 로드
 		if (!GameData.share().isMultiGame)
 			GameData.share().setMap((byte) 0); // 인자값은 무의미
 		this.tileMap = CCTMXTiledMap.tiledMap(GameData.share().gameMap);
-
-		//
+		
 		// 맵 올리고 기본 크기 지정
 		this.addChild(this.tileMap, -1);
 
@@ -198,12 +194,9 @@ public class Game extends CCLayer {
 		// texture.setAliasTexParameters();
 		
 		// 64 pixel
-		tileSize = CGSize.make(tileMap.getTileSize().width,
-				tileMap.getTileSize().height);
-		mapSize = CGSize.make(tileMap.getMapSize().width * tileSize.width,
-				tileMap.getMapSize().height * tileSize.height);
-
-		//
+		tileSize = CGSize.make(tileMap.getTileSize().width, tileMap.getTileSize().height);
+		mapSize = CGSize.make(tileMap.getMapSize().width * tileSize.width, tileMap.getMapSize().height * tileSize.height);
+		
 		// 타일맵 레이어 등록
 		this.tmxBg = this.tileMap.layerNamed("Background"); // Layer Name in Tiled
 		this.tmxMeta = this.tileMap.layerNamed("Meta"); // 선택 불가 영역
@@ -240,20 +233,19 @@ public class Game extends CCLayer {
 					// 열리지 않은 타일수
 					unopenedTile++;
 				}
-				//
+				
 				// isCollidable은 비활성 셀을 의미한다.
 				if (this.isCollidable(CGPoint.make(x, y)))
 					cell.setCollidable(true);
-
-				//
+				
 				// isPreOpened는 처음부터 열려있는 셀들을 열린셀로 등록한다.
 				if (this.isPreOpened(CGPoint.make(x, y)))
 					cell.setOpened(true);
 
 				count++;
-
 			}
 		}
+		
 		Log.e("Game", "unopenedTile : " + getClosedCell());
 		GameData.share().setMineNumber(getClosedCell());
 		mineNumber = GameData.share().getMineNumber();
@@ -276,22 +268,18 @@ public class Game extends CCLayer {
 							|| cellsTemp.get(i).getTileCoord().x + m >= this.tileMap
 									.getMapSize().height)
 						continue;
-
-					//
+					
 					// 주변 셀
 					MineCell cellRound = this.cellFromCoord(CGPoint.ccp(
 							cellsTemp.get(i).getTileCoord().x + k, cellsTemp
 									.get(i).getTileCoord().y + m));
-
-					//
+					
 					// 비활성 셀
 					if (cellRound != null && cellRound.isCollidable())
 						continue;
-
-					//
+					
 					// 유효한 주변셀 등록(현재 셀 포함)
 					cellsTemp.get(i).addRoundCell(cellRound);
-
 				}
 			}
 			/***************************/
@@ -420,19 +408,9 @@ public class Game extends CCLayer {
 			gid = CCFormatter.swapIntToLittleEndian(gid);
 			this.tmxEarthLayer.setTileGID(gid, cellsTemp.get(i).getTileCoord());
 		}
-
-		// /////////////////////////////////////
-		// Log.e("Game / game", "this.getAnchorPoint : " + this.getAnchorPoint()
-		// + " / this.getPosition : " + (int)this.getPosition().x + ", "
-		// +(int)this.getPosition().y );
+		
 		CCTouchDispatcher.sharedDispatcher().addTargetedDelegate(this, 0, true);
 		this.setIsTouchEnabled(true);
-
-		// mapLabel = CCLabel.makeLabel("map", "Arial", (30 * tileSize.width) /
-		// 128);
-		// this.addChild(mapLabel);
-		// mapLabel.setPosition(getPosition());
-
 		
 		//주변의 지뢰 갯수를 미리 구한다.
 		for(MineCell cell : cells) {
@@ -536,14 +514,9 @@ public class Game extends CCLayer {
 		Config.getInstance().setDisableButton(false);
 	}
 	
-	// public CCScene scene() {
 	public static CCScene scene() {
-		// 기존에는 static으로 멤버 변수로 선언하였었음. 이상시 원래 대로 바꿀것
 		CCScene scene = CCScene.node();
 
-		// 게임 레이어
-		// Game game = Game.getInstance();
-		//Game game = Game.getInstance();
 		Game game = new Game();
 		if (GameData.share().isMultiGame) {
 			NetworkController.getInstance().setGame(game);	
@@ -558,10 +531,7 @@ public class Game extends CCLayer {
 		
 		return scene;
 	}
-	/********************************************************/
 	
-
-
 	// map utility
 	// 현재 화면의 position을 지정
 	public CGPoint getMapCurrentPosition() {
@@ -571,86 +541,73 @@ public class Game extends CCLayer {
 		// CGPoint centerPosition = CGPoint.ccp(currentLayerX / currentScale,
 		// currentLayerY / currentScale);
 		// game Layer의 anchor point값을 얻어 스케일값과 연산
-
-		Log.e("Game / getMapCurrentPosition", "cLayerX : "
-				+ (int) currentLayerX + ", cLayerY : " + (int) currentLayerY
-				+ ", cScale : " + currentScale);
-		// CGPoint centerPosition = CGPoint.ccp((winSize.width + currentLayerX)
-		// / currentScale, (winSize.height + currentLayerY) / currentScale);
-		CGPoint centerPosition = CGPoint.ccp(currentLayerX / currentScale,
-				currentLayerY / currentScale);
-		Log.e("Game / getMapCurrentPosition", "centerPosition1 : "
-				+ centerPosition);
+		
+		CGPoint centerPosition = CGPoint.ccp(currentLayerX / currentScale, currentLayerY / currentScale);
+		Log.e("Game / getMapCurrentPosition", "cLayerX : " + (int) currentLayerX + ", cLayerY : " + (int) currentLayerY + ", cScale : " + currentScale);
+		Log.e("Game / getMapCurrentPosition", "centerPosition1 : " + centerPosition);
+		
 		centerPosition = CGPoint.ccpMult(centerPosition, this.getScale());
-		Log.e("Game / getMapCurrentPosition", "centerPosition2 : "
-				+ centerPosition);
+		Log.e("Game / getMapCurrentPosition", "centerPosition2 : " + centerPosition);
+		
 		return centerPosition;
 	}
 
 	// cell utility
-	public MineCell cellFromCoord(CGPoint coord) {
-		ArrayList<MineCell> cellsTemp = cells;
-		int size = cellsTemp.size();
-		for (int k = 0; k < size; k++) {
-
-			if (CGPoint.equalToPoint(cellsTemp.get(k).getTileCoord(), coord))
-				return cellsTemp.get(k);
+	public MineCell cellFromCoord(CGPoint coord) {		
+//		ArrayList<MineCell> cellsTemp = cells;
+//		int size = cellsTemp.size();
+//		for (int k = 0; k < size; k++) {
+//
+//			if (CGPoint.equalToPoint(cellsTemp.get(k).getTileCoord(), coord))
+//				return cellsTemp.get(k);
+//		}
+		
+		// 수정
+		for (MineCell cell : cells) {
+			if (CGPoint.equalToPoint(cell.getTileCoord(), coord))
+				return cell;
 		}
 		return null;
 	}
 
 	public MineCell cellFromCellId(int unsingedCellId) {
-		ArrayList<MineCell> cellsTemp = cells;
-		int size = cellsTemp.size();
-		for (int k = 0; k < size; k++) {
-			if (cellsTemp.get(k).getCell_ID() == unsingedCellId)
-				return cellsTemp.get(k);
+//		ArrayList<MineCell> cellsTemp = cells;
+//		int size = cellsTemp.size();
+//		for (int k = 0; k < size; k++) {
+//			if (cellsTemp.get(k).getCell_ID() == unsingedCellId)
+//				return cellsTemp.get(k);
+//		}
+		
+		// 수정
+		for (MineCell cell : cells) {
+			if (cell.getCell_ID() == unsingedCellId)
+			return cell;
 		}
 		return null;
 	}
 
-	//
-	// 난이도 설정 (난이도에 따라 지뢰수가 많아짐)
+	// 지뢰 설치 (난이도에 따라 퍼센테이지로 지뢰수 생성됨)
 	public void scatterMines() {
-		// (void)scatterMines:(NSMutableArray *)cells onLayer:(CCTMXLayer
-		// *)layer{ 수정된 것이라는데...
-		//
-		// 난이도에 따라
-		// GameData.share().getMineNumber(gameData.share.getGameDifficulty);
 		final int maxMineNumber = getMineNumber();
-		// Log.e("Game / scatterMines", "getMineNumber : " +
-		// GameData.share().getMineNumber());
 
-		// unsigned
 		// 작은값으로 변환
-		int mineGid = CCFormatter.swapIntToLittleEndian(this.tmxItemLayer
-				.tileGIDAt(CGPoint.make(0f, 0f))); // mind gid
+		int mineGid = CCFormatter.swapIntToLittleEndian(this.tmxItemLayer.tileGIDAt(CGPoint.make(0f, 0f))); // mind gid
 		// Log.e("Game / scatterMines", "mineGid : " + mineGid);
 		for (int i = 0; i < maxMineNumber; i++) {
 			boolean isBoolean = true;
 			while (isBoolean) {
-				//
-				// 무작위 셀 하나 추출
-				// cells들 갯수중에 임의의수 발생???
-				int rand = (int) (Math.random() * cells.size());
-				MineCell cell = cells.get(rand);
+				
+				int randomCell = (int) (Math.random() * cells.size());
+				MineCell cell = cells.get(randomCell);
 				// Log.e("Game / scatterMines", i + "/" + maxMineNumber);
-
-				//
-				// 현재 무작위 추출 셀이 오픈된 셀이 지뢰가 아니고 셀 이면 지뢰로 설정한다.
-				// if (cell.isMine() || cell.isOpened() || cell.isCollidable()
-				// || cell.isSphere()) {
-				if (!cell.isMine() && !cell.isOpened() && !cell.isCollidable()
-						&& !cell.isSphere()
-						&& !this.isDontSetMine(cell.getTileCoord())) {
+				if (!cell.isMine() && !cell.isOpened() && !cell.isCollidable() 
+						&& !cell.isSphere() && !this.isDontSetMine(cell.getTileCoord())) {
 					// if(cell.isMine == NO && cell.isOpened == NO &&
 					// cell.isCollidable == NO && cell.isSphere == NO && [self
 					// isDontSetMine:cell.tileCoord] == NO)
 
 					cell.setMine(true);
-					this.tmxMineLayer.setTileGID(mineGid, cell.getTileCoord()); // 레이어가
-																				// 비어있으면
-																				// 에러남!
+					this.tmxMineLayer.setTileGID(mineGid, cell.getTileCoord());
 					// this.fg.setTileGID(mineGid, cell.tileCoord); // for test
 					isBoolean = false;
 				}
@@ -658,7 +615,7 @@ public class Game extends CCLayer {
 		}
 	}
 
-	// 인자 추가
+	// 수정구 설치 (Ai인자 추가)
 	public void scatterSpheres(ArrayList<MineCell> cells, CCTMXLayer tmx, boolean isAi) {
 		
 		int numberOfSphere = GameData.share().kNumberOfSphere;

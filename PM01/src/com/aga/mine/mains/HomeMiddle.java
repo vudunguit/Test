@@ -174,7 +174,7 @@ public class HomeMiddle {
 		
 			userRanking.setString(String.valueOf(myRank));
 				String[] Ko = {"전 : ","승 / ","패"," 18"};
-				String[] En = {"Played "," : W","/L "," 16"};
+				String[] En = {"P "," : W "," / L "," 18"};
 							
 				String record = null;
 				float recordSize;
