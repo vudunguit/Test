@@ -52,7 +52,8 @@ public class Shop extends CCLayer {
 		bg.addChild(boardFrame);
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
-		FrameTitle6.setTitle(boardFrame, folder);
+		FrameTitle2.setTitle(boardFrame, folder);
+//		FrameTitle6.setTitle(boardFrame, folder);
 	}
 	
 	private void setMainMenu(CCSprite parentSprite){
