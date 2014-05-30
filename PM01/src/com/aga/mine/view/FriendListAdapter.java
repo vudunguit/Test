@@ -139,7 +139,7 @@ public class FriendListAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				MainApplication.getInstance().getActivity().click();
 				MainActivity mMainActivity = MainApplication.getInstance().getActivity();
-				mMainActivity.sendInvite(gameScore.get(position).id, gameScore.get(position).name + "이(가) 빗자루 하나를 보냈습니다", null);
+				mMainActivity.sendInvite(gameScore.get(position).id, user.getName() + "님이 빗자루 하나를 보냈습니다", null);
 			}
 		});
 		

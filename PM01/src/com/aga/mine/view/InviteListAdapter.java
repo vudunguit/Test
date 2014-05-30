@@ -21,6 +21,7 @@ import com.sromku.simple.fb.entities.Profile;
 
 public class InviteListAdapter extends BaseAdapter {
 	private Context mContext;
+	private Profile user;
 	private List<Profile> notAPlayers; // GameScore로 변환
 //	private List<GameScore> friends;
 	private AQuery mAq;
@@ -29,6 +30,7 @@ public class InviteListAdapter extends BaseAdapter {
 	public InviteListAdapter(Context context) {
 //		List<GameScore> adfa = new ArrayList<GameScore>(); // 수정중
 		mContext = context;
+		user = FacebookData.getinstance().getUserInfo();
 		List<Profile> friends = FacebookData.getinstance().getFriendsInfo();
 		List<GameScore> gameScore = FacebookData.getinstance().getGameScore();
 		myName = FacebookData.getinstance().getUserInfo().getName();
@@ -113,7 +115,7 @@ public class InviteListAdapter extends BaseAdapter {
 				// 로그인 안되어 있을 경우 '취소'처리(이런경우가 없는데...) 
 				// 
 				Log.e("InviteListAapter", "Callback_3 - imgInviteBtn.setOnClickListener()");
-				mMainActivity.sendInvite(myName, "이(가) 귀하를 초대합니다.", null);
+				mMainActivity.sendInvite(myName, user.getName() + "님이 귀하를 초대합니다.", null);
 				// 이(가) 귀하를 초대합니다.
 				// 이(가) 빗자루 하나를 보냈습니다.
 				// 이(가) xxxx 골드를 보냈습니다.
