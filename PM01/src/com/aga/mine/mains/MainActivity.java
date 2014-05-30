@@ -11,6 +11,7 @@ import org.cocos2d.sound.SoundEngine;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -224,8 +225,8 @@ public class MainActivity extends Activity {
 				
 				View view = View.inflate(MainActivity.this, R.layout.popup, null);
 
-				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-				final AlertDialog dialog = builder.setView(view).create();
+				final Dialog dialog = new Dialog(MainActivity.this);
+				dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 				dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 				dialog.show();
 				
