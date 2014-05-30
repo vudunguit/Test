@@ -1,8 +1,10 @@
 ﻿package com.aga.mine.mains;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -13,7 +15,6 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
-import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
@@ -31,8 +32,10 @@ public class ShopBroomstick2 extends CCLayer {
 	final String folder = "23broomstick/";
 	final String fileExtension = ".png";
 	
+	Map<String, String> basket;
+	
 	CCSprite bg;
-	CCLabel gold;
+	CCLabel goldLabel;
 	
 	long [][] stickArray = { 
 			{ 1000, 5, 0 }, { 1800, 10, 0 }, { 3400, 20, 0 },
@@ -45,7 +48,6 @@ public class ShopBroomstick2 extends CCLayer {
 		CCScene scene = CCScene.node();
 		CCLayer layer = new ShopBroomstick2();
 		scene.addChild(layer);
-//		scene.addChild(InvitationReceiver.getInstance().getInvitationPopup());
 		return scene;
 	}
 	
@@ -69,6 +71,7 @@ public class ShopBroomstick2 extends CCLayer {
 	public ShopBroomstick2() {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
+		basket = new HashMap<String, String>();
 		
 		MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
 		
@@ -97,7 +100,7 @@ public class ShopBroomstick2 extends CCLayer {
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
 		
-		gold = FrameTitle6.setTitle(boardFrame, folder);
+		goldLabel = FrameTitle6.setTitle(boardFrame, folder);
 	}
 	
 	private void setMainMenu(CCSprite parentSprite){
@@ -125,9 +128,6 @@ public class ShopBroomstick2 extends CCLayer {
 			
 			// 가격
 			CCLabel  gold = CCLabel.makeLabel(new NumberComma().numberComma(ds[0]), "Arial", 28);
-//			gold.setColor(ccColor3B.ccYELLOW);
-//			gold.setAnchorPoint(1, 1);
-//			gold.setPosition(button.getContentSize().width - 15, button.getContentSize().height - 5);
 			gold.setAnchorPoint(1, 0);
 			gold.setPosition(button.getContentSize().width - 15, 14);
 			button.addChild(gold);
@@ -135,12 +135,6 @@ public class ShopBroomstick2 extends CCLayer {
 			//gold Text
 			CCLabel  goldText = CCLabel.makeLabel("Gold", "Arial", 20);
 			goldText.setColor(ccColor3B.ccYELLOW);
-//			goldText.setAnchorPoint(gold.getAnchorPoint());
-//			goldText.setPosition(gold.getPosition().x - gold.getContentSize().width - 10, gold.getPosition().y - 8);
-
-//			goldText.setAnchorPoint(1, 1);
-//			goldText.setPosition(button.getContentSize().width - 60, button.getContentSize().height - 10);
-			
 			goldText.setAnchorPoint(0, 1);
 			goldText.setPosition(
 					gold.getPosition().x - (gold.getContentSize().width * gold.getAnchorPoint().x), 
@@ -180,39 +174,24 @@ public class ShopBroomstick2 extends CCLayer {
 	
 	// sceneCallback들 전부 여기로 옮기기
 	public void clicked(Object sender) {
-		CCScene scene = null;
 		int value = ((CCNode) sender).getTag();
 		if (buttonActive) {
+			MainApplication.getInstance().getActivity().click();
 			switch (value) {
 			case previous:
-				MainApplication.getInstance().getActivity().click();
-				scene = Shop.scene();
-				CCDirector.sharedDirector().replaceScene(scene);
+				CCDirector.sharedDirector().replaceScene(Shop.scene());
 				break;
 
 			case home:
-				MainApplication.getInstance().getActivity().click();
-				scene = Home.scene();
-				CCDirector.sharedDirector().replaceScene(scene);
+				CCDirector.sharedDirector().replaceScene(Home.scene());
 				break;
 				
 			case Constant.PURCHASING_OK:
-				isPurchase = true;
 				makeAPurchase();
 				this.removeChildByTag(Constant.POPUP_LAYER, true);
 				break;
 				
 			case Constant.PURCHASING_CANCEL:
-				MainApplication.getInstance().getActivity().click();
-				isPurchase = false;
-				CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						Toast.makeText(mContext, "구매 취소", Toast.LENGTH_SHORT).show();
-					}
-				});
-//				isPurchase = false;
-//				makeAPurchase();
 				this.removeChildByTag(Constant.POPUP_LAYER, true);
 				break;
 			}
@@ -220,50 +199,38 @@ public class ShopBroomstick2 extends CCLayer {
 		}
 	}
 
-	private boolean  isPurchase = false;
 	private long quantity;
 	private long price;
 	
 	private void makeAPurchase() {
-//				String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
-//				MainApplication.getInstance().getActivity().sendInvite(recipientID, "우편물 발송", null);
-////				FacebookData.getinstance().getRequestID(recipientID);  //test용
-		
-		// 테스트용 (facebook invite에서 requestID 받으면 그것으로 대체 위에 코드)
-		if (isPurchase) {
-			long requestID = (long) (Math.random() * 72036854775807L);  //facebook 알림글번호로 대체할 것
-			String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
-			String senderID = FacebookData.getinstance().getUserInfo().getId();
-			String data = 
-					"0,RequestModeMailBoxAdd*22," + requestID + 
-					"*1," + recipientID + "*19," + senderID + "*20,Broomstick*21," + quantity;
-			long myGold = Long.parseLong(FacebookData.getinstance().getDBData("Gold"));
-//			if (myGold < price) {
-//				CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
-//					@Override
-//					public void run() {
-//						Toast.makeText(mContext, "골드가 부족합니다.", Toast.LENGTH_SHORT).show();
-//					}
-//				});
-//				return;
-//			}
-			
-			String sum = String.valueOf(myGold - price);
-			DataFilter.sendMail(data);
-			FacebookData.getinstance().modDBData("Gold", sum);
-			SoundEngine.sharedEngine().playEffect(mContext, R.raw.buy);
-			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					Toast.makeText(mContext, "구매 완료", Toast.LENGTH_SHORT).show();
-				}
-			});
-			
-			gold.setString(new NumberComma().numberComma(sum));
-			
-		}
-
+		long myGold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
+		int myBroomstick = Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick"));
+		basket.put("Gold", String.valueOf(myGold - price));	
+		basket.put("ReceivedBroomstick", String.valueOf(myBroomstick + quantity));	
+		FacebookData.getinstance().modDBData(basket);
+		_mygold = (int) myGold;
+		_price = (int) -price;
+		pps = _price / 2;
+		// 골드 차감 애니
+		schedule("goldAni");
 	}
+	
+	int _mygold;
+	int _price;
+	int pps;
+	int gamso = 0;
+	
+	public void goldAni(float dt) {
+		gamso += dt * pps;
+		goldLabel.setString(new NumberComma().numberComma(_mygold + gamso));
+		// 골드 차감은 gamso가 작아져야함.
+		if (gamso < _price) {
+			unschedule("goldAni");
+			goldLabel.setString(new NumberComma().numberComma(FacebookData.getinstance().getDBData("Gold")));
+			gamso = 0;
+		}
+	}	
+	
 	
 	public void buttonCallback(Object sender) {
 		MainApplication.getInstance().getActivity().click();
@@ -283,13 +250,7 @@ public class ShopBroomstick2 extends CCLayer {
 			});
 			return;
 		}
-		
 		Popup.popupOfPurchase(this);
-		
-//		// 로그용
-//		for (double d : value) {
-//			Log.e("ShopBroomstick2", "buttonCallback : " + (int)d);
-//		}
 	}
 	
 }
