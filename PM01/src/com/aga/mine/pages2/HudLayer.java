@@ -273,11 +273,11 @@ public class HudLayer extends CCLayer {
 		// point3.setPosition(winSize.width/2,winSize.height/2 - 50);
 		// this.addChild(point4);
 		// point4.setPosition(winSize.width/2,winSize.height/2 - 100);
-
-		mGameMinimap = new GameMinimap(this);
-		
-		this.addChild(mGameMinimap, GameConfig.share().kDepthPopup);
-		mGameMinimap.setVisible(false);
+		if (GameData.share().isMultiGame) {
+			mGameMinimap = new GameMinimap(this);
+			this.addChild(mGameMinimap, GameConfig.share().kDepthPopup);
+			mGameMinimap.setVisible(false);
+		}
 		
 		//불, 바람, 구름 애니메이션
 		fire = CCSprite.sprite("61hud/fire-01.png");
@@ -485,12 +485,7 @@ public class HudLayer extends CCLayer {
 //			// Log.e("button pressed", "kButtonMinimap");
 			Config.getInstance().setDisableButton(true);
 			if (GameData.share().isMultiGame) {
-//				String a = GameConfig.share().isMinimapPanelOn() ? "true" : "false";
-				
-				// this.addChild(GameMinimap.getInstance().tileon(),
-				// GameConfig.share().kDepthPopup);
 				mGameMinimap.setVisible(true);
-				// Log.e("minimap flag is", a);
 			} else {
 				pausePopup();
 			}

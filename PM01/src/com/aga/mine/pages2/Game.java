@@ -116,24 +116,24 @@ public class Game extends CCLayer {
 	public CCAnimation cloudDefense;
 	
 	final int offenceDefaultTime = 10; // 공격마법만 기본 10초, 방어는 0초입니다.
-	int UserLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelCharacter")) - 1; // 1레벨때는 추가 시간 0초입니다.
+	int UserLevel; // 1레벨때는 추가 시간 0초입니다.
 	
-	int offence_FireLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelFire"));
-	int offence_WindLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelWind"));
-	int offence_CloudLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelCloud"));
+	int offence_FireLevel;
+	int offence_WindLevel;
+	int offence_CloudLevel;
 	
-	int defence_FireLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelDivine"));
-	int defence_WindLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelEarth"));
-	int defence_CloudLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelMirror"));
+	int defence_FireLevel;
+	int defence_WindLevel;
+	int defence_CloudLevel;
 	
 	//마법 공격 및 피해 변수
-	public long mFireAttackTime = UserLevel +  offence_FireLevel + offenceDefaultTime; //불 공격 지속 시간, 단위는 second
-	public long mWindAttackTime = UserLevel +  offence_WindLevel + offenceDefaultTime;
-	public long mCloudAttackTime = UserLevel +  offence_CloudLevel + offenceDefaultTime;
+	public long mFireAttackTime; //불 공격 지속 시간, 단위는 second
+	public long mWindAttackTime;
+	public long mCloudAttackTime;
 	public long mStartTimeOfAttack; //공격 시작 시간(단위는 ms)
-	public long mFireDefenseTime = defence_FireLevel; //불방어 지속 시간(상대방공격시간)
-	public long mWindDefenseTime = defence_WindLevel;
-	public long mCloudDefenseTime = defence_CloudLevel;
+	public long mFireDefenseTime; //불방어 지속 시간(상대방공격시간)
+	public long mWindDefenseTime;
+	public long mCloudDefenseTime;
 	
 	ArrayList<Integer> mDeleteTags; //삭제하기위해 태그를 저장하는 컬렉션
 	ArrayList<Integer> mNumberTags; //애니메이션시 셀에 있는 숫자를 저장하는 컬렉션
@@ -155,6 +155,25 @@ public class Game extends CCLayer {
 		
 		mContext = CCDirector.sharedDirector().getActivity().getApplicationContext();
 		winSize = CCDirector.sharedDirector().winSize();
+		
+		if (!GameData.share().isGuestMode) {
+			UserLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelCharacter")) - 1; // 1레벨때는 추가 시간 0초입니다.
+			
+			offence_FireLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelFire"));
+			offence_WindLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelWind"));
+			offence_CloudLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelCloud"));
+			
+			defence_FireLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelDivine"));
+			defence_WindLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelEarth"));
+			defence_CloudLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelMirror"));
+			
+			mFireAttackTime = UserLevel +  offence_FireLevel + offenceDefaultTime;
+			mWindAttackTime = UserLevel +  offence_WindLevel + offenceDefaultTime;
+			mCloudAttackTime = UserLevel +  offence_CloudLevel + offenceDefaultTime;
+			mFireDefenseTime = defence_FireLevel;
+			mWindDefenseTime = defence_WindLevel;
+			mCloudDefenseTime = defence_CloudLevel;
+		}
 		
 		if (GameData.share().isMultiGame) { // 멀티 게임시 상대방 준비전까지 터치를 잠금.
 			Config.getInstance().setDisableButton(true);
@@ -759,7 +778,7 @@ public class Game extends CCLayer {
 //				sphereType = 7; // 빈 수정구값은 0이지만 TMX에 있는 이미지는 7번에 있기때문에 새로 대입
 
 			CCTMXLayer itemLayer = null;
-			if(isAi) // ai일시 자신의 맵을 미니맵에 표현한듯.
+			if(isAi && GameData.share().isMultiGame) // ai일시 자신의 맵을 미니맵에 표현한듯.
 				itemLayer = mHud.mGameMinimap.itemLayer;
 			else
 				itemLayer = tmxItemLayer;

@@ -348,7 +348,7 @@ public class NetworkController extends Activity {
 				playData = reader.readInt();
 				Log.e("NetworkController", "count : " + count + ", playType : " + playType + ",playData : " + playData);
 				
-				if (!GameData.share().createdMinimap) {
+				if (GameData.share().isMultiGame && !GameData.share().createdMinimap) {
 					// 포지션과 리미트 그리고 데이터가 존재하기 때문에 데이터의 문제는 아닌 것 같고,
 					// 아직 미니맵이 생성되지 않아 익셉션이 발생되는 것 같음 
 					// gameData에 담아뒀다가 minimap 생성되면 직접 불러다 쓰는 방식으로 수정해야 될 것 같음.
