@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.cocos2d.actions.instant.CCCallFuncN;
@@ -291,8 +292,17 @@ public class ShopItem2 extends CCLayer {
 		sphereNumber1.setAnchorPoint(1, 1);
 		sphereNumber1.setPosition(464 - 75 - 20, parentSprite.getContentSize().height - 63 - 8);
 		
+		String bottle  = "My Elemental bottle : ";
+		float fontSize = 22;
+		if (Locale.getDefault().getLanguage().toString().equals("ko")) {
+			bottle  = "보유 정령병 : ";
+			fontSize = 25; 
+		}
+		
 		sphereNumber2 = CCLabel.makeLabel(
-				"보유 정령병 :  " + new NumberComma().numberComma(sphereNumber), "Arial", 25);
+				bottle + new NumberComma().numberComma(sphereNumber), "Arial", fontSize);
+		if (!Locale.getDefault().getLanguage().toString().equals("ko"))
+			sphereNumber2.setScaleX(0.9f);
 		sphereNumber2.setPosition(464 - 75 - 20, parentSprite.getContentSize().height - 152 + 8);
 		sphereNumber2.setAnchorPoint(1, 0);
 		
@@ -334,7 +344,11 @@ public class ShopItem2 extends CCLayer {
 		offenseAttributeSelected1.setPosition(464 - 75 - 20, parentSprite.getContentSize().height - 163 - 8);
 //		offenseAttributeSelected1.setColor(ccColor3B.ccYELLOW);
 		
-		offenseAttributeSelected2 = CCLabel.makeLabel("공격 시간 " + levelFire + "초 증가", "Arial", 22);
+		String attack  = "1 sec increment of attacks";
+		if (Locale.getDefault().getLanguage().toString().equals("ko"))
+			attack  = "공격 시간 1초 증가";
+		
+		offenseAttributeSelected2 = CCLabel.makeLabel(attack, "Arial", 23);
 		offenseAttributeSelected2.setUserData("LevelFire");
 		offenseAttributeSelected2.setAnchorPoint(1, 0);
 		offenseAttributeSelected2.setPosition(464 - 75 - 20, parentSprite.getContentSize().height - 248 + 8);
@@ -379,7 +393,11 @@ public class ShopItem2 extends CCLayer {
 		defenseAttributeSelected1.setPosition(464 - 75 - 20, parentSprite.getContentSize().height - 358 - 8);
 //		defenseAttributeSelected1.setColor(ccColor3B.ccYELLOW);
 		
-		defenseAttributeSelected2 = CCLabel.makeLabel("피해 시간 " + LevelDivine + "초 감소", "Arial", 22);
+		String defenses  = "1 sec increment of defenses";
+		if (Locale.getDefault().getLanguage().toString().equals("ko"))
+			defenses  = "방어 시간 1초 증가";
+		
+		defenseAttributeSelected2 = CCLabel.makeLabel(defenses, "Arial", 23);
 		defenseAttributeSelected2.setUserData("LevelDivine");
 		defenseAttributeSelected2.setAnchorPoint(1, 0);
 		defenseAttributeSelected2.setPosition(464 - 75 - 20, parentSprite.getContentSize().height - 444 + 8);
@@ -500,7 +518,13 @@ public class ShopItem2 extends CCLayer {
 			sphereNumber1.setColor(ccColor3B.ccYELLOW);
 		}
 		
-		sphereNumber2.setString("보유 정령병 :  " + new NumberComma().numberComma(sphereNumber));
+		if (Locale.getDefault().getLanguage().toString().equals("ko")) { // 나중에 정리해서 공용으로 넣기
+			sphereNumber2.setString("보유 정령병 :  " + new NumberComma().numberComma(sphereNumber));
+		} else {
+			sphereNumber2.setString("My Elemental bottle : " + new NumberComma().numberComma(sphereNumber));
+		}
+		
+		
 	}
 	
 	
@@ -670,7 +694,12 @@ public class ShopItem2 extends CCLayer {
 		if (type < 3) {
 			offenseAttributeSelected1.setString(
 					new NumberComma().numberComma(price));				
-			offenseAttributeSelected2.setString(magicText2[0][0] + level + magicText2[0][1]);	
+//			offenseAttributeSelected2.setString(magicText2[0][0] + level + magicText2[0][1]);
+			if (Locale.getDefault().getLanguage().toString().equals("ko")) { // 나중에 정리해서 공용으로 넣기
+				offenseAttributeSelected2.setString("공격 시간 1초 증가");
+			} else {
+				offenseAttributeSelected2.setString("1 sec increment of attacks");
+			}
 			userData.offenceMagic =  type;
 			
 			if (price.equals("MAX"))
@@ -680,8 +709,12 @@ public class ShopItem2 extends CCLayer {
 			
 		} else {
 			defenseAttributeSelected1.setString(
-					new NumberComma().numberComma(price));		
-			defenseAttributeSelected2.setString(magicText2[1][0] + level + magicText2[1][1]);
+					new NumberComma().numberComma(price));
+			if (Locale.getDefault().getLanguage().toString().equals("ko")) { // 나중에 정리해서 공용으로 넣기
+				defenseAttributeSelected2.setString("방어 시간 1초 증가");
+			} else {
+				defenseAttributeSelected2.setString("1 sec increment of defenses");
+			}
 			userData.defenceMagic =  type;
 			
 			if (price.equals("MAX"))

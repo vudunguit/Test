@@ -2,6 +2,7 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -147,9 +148,17 @@ public class ShopBroomstick2 extends CCLayer {
 			button.addChild(goldText);
 			
 			// 빗자루
-			CCLabel  stick = CCLabel.makeLabel("빗자루 " + plus((int)ds[1], (int)ds[2]) + "개", "Arial", 26);
+			String broomstick = plus((int)ds[1], (int)ds[2]) + " BROOMSTICK";
+			float positionX = button.getContentSize().width - 117;
+			if (Locale.getDefault().getLanguage().toString().equals("ko")) {
+				broomstick = "빗자루 " + plus((int)ds[1], (int)ds[2]) + "개";
+				positionX = button.getContentSize().width - 132;
+			}
+			CCLabel stick = CCLabel.makeLabel(broomstick, "Arial", 26);
+			if (!Locale.getDefault().getLanguage().toString().equals("ko"))
+				stick.setScaleX(0.85f);
 			stick.setAnchorPoint(1, 0);
-			stick.setPosition(button.getContentSize().width - 132, 15);
+			stick.setPosition(positionX, 15);
 			button.addChild(stick);
 		}
 		
@@ -249,7 +258,9 @@ public class ShopBroomstick2 extends CCLayer {
 					Toast.makeText(mContext, "구매 완료", Toast.LENGTH_SHORT).show();
 				}
 			});
+			
 			gold.setString(new NumberComma().numberComma(sum));
+			
 		}
 
 	}

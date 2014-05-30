@@ -1,6 +1,7 @@
 ﻿package com.aga.mine.mains;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -159,19 +160,37 @@ public class Invite extends CCLayer {
 
 	// 메인 메뉴
 	private void setMainMenu(CCSprite parentSprite){
-		CCLabel  inviteCountText = CCLabel.makeLabel("현재초대인원         명", "Arial", 25); // 현재 초대 인원 (노란색)
-		parentSprite.addChild(inviteCountText);
+		String invite1str = "persons you invited";
+		float invite1PositionX = parentSprite.getContentSize().width * 0.43f;
+		if (Locale.getDefault().getLanguage().toString().equals("ko")) {
+			invite1str  = "현재초대인원             명";
+			invite1PositionX = parentSprite.getContentSize().width * 0.5f;
+		}
+		
+		CCLabel  inviteCountText = CCLabel.makeLabel(invite1str, "Arial", 25); // 현재 초대 인원 (노란색)
 		inviteCountText.setColor(ccColor3B.ccYELLOW);
-		inviteCountText.setPosition(parentSprite.getContentSize().width / 2, 187);
+		inviteCountText.setPosition(invite1PositionX, 187);
+		parentSprite.addChild(inviteCountText);
+		
+		float invite2PositionX = parentSprite.getContentSize().width * 0.78f;
+		if (Locale.getDefault().getLanguage().toString().equals("ko"))
+			invite2PositionX = parentSprite.getContentSize().width * 0.68f;
 		
 		String app_Invite = FacebookData.getinstance().getDBData("InviteNumber");
+//		String app_Invite = "888"; // 테스트 코드
+		
 		inviteQuantity = CCLabel.makeLabel(
 				new NumberComma().numberComma(app_Invite), "Arial", 35); // 현재 초대 인원 (노란색)
-		parentSprite.addChild(inviteQuantity);
+		inviteQuantity.setAnchorPoint(1, 0.5f);
 		inviteQuantity.setColor(ccColor3B.ccYELLOW);
-		inviteQuantity.setPosition(parentSprite.getContentSize().width/2 + 60, 190);
-
-		CCLabel inviteText = CCLabel.makeLabel("초대는 하루 20명까지 가능 합니다.", "Arial", 20); // 흰색
+		inviteQuantity.setPosition(invite2PositionX, 187);
+		parentSprite.addChild(inviteQuantity);
+		
+		String invit2str = "up to 20 persons can be invited a day";
+		if (Locale.getDefault().getLanguage().toString().equals("ko"))
+			invit2str  = "초대는 하루 20명까지 가능 합니다.";
+		
+		CCLabel inviteText = CCLabel.makeLabel(invit2str, "Arial", 20); // 흰색
 		parentSprite.addChild(inviteText);
 		inviteText.setPosition(parentSprite.getContentSize().width/2, 160.0f);		
 
@@ -196,14 +215,22 @@ public class Invite extends CCLayer {
 				statusPanel.getContentSize().width / 2,
 				statusPanel.getContentSize().height - 3);
 		
-		CCLabel  statusPanelText2 = CCLabel.makeLabel("친구 초대", "Arial", 22); // 현재 초대 인원 (노란색)
+		String friendsInvitation1Str = "Invitation";
+		if (Locale.getDefault().getLanguage().toString().equals("ko"))
+			friendsInvitation1Str  = "친구 초대";
+		
+		CCLabel  statusPanelText2 = CCLabel.makeLabel(friendsInvitation1Str, "Arial", 22); // 현재 초대 인원 (노란색)
 		statusPanelText2.setColor(ccColor3B.ccYELLOW);
 		statusPanelText2.setAnchorPoint(0.5f, 1.0f);
 		statusPanelText2.setPosition(
 				statusPanel.getContentSize().width / 2,
 				statusPanel.getContentSize().height - 39f);
 
-		CCLabel  statusPanelText3 = CCLabel.makeLabel(friends + "명", "Arial", 22); // 현재 초대 인원 (노란색)
+		String friendsInvitation2Str = String.valueOf(friends);
+		if (Locale.getDefault().getLanguage().toString().equals("ko"))
+			friendsInvitation2Str  = friends + "명";
+		
+		CCLabel  statusPanelText3 = CCLabel.makeLabel(friendsInvitation2Str, "Arial", 22); // 현재 초대 인원 (노란색)
 		statusPanelText3.setColor(ccColor3B.ccYELLOW);
 		statusPanelText3.setAnchorPoint(0.5f, 1.0f);
 		statusPanelText3.setPosition(
