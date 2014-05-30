@@ -220,11 +220,11 @@ public class HomeTop extends CCLayer{
 			timeStr = new String[]{"일 ","시 ","분 후 마감"};
 		}
 		
-		if (day > 0) 
+//		if (day > 0) 
 			deadlineText = String.format("%01d",day) + timeStr[0];
-		if (hour > 0)
+//		if (hour > 0)
 			deadlineText += String.format("%02d",hour) + timeStr[1];
-		if (min > 0) 
+//		if (min > 0) 
 			deadlineText += String.format("%02d",min) + timeStr[2];
 //		deadlineText += sec + "초 후 마감";
 		return deadlineText;
