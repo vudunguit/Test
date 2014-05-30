@@ -37,6 +37,11 @@ public class EmoticonListAdapter extends BaseAdapter {
 			mItemList.add(item);
 		}
 	}
+	
+	public void refresh(int id) {
+		mItemList.get(id-1).checked = true;
+		notifyDataSetChanged();
+	}
 
 	@Override
 	public int getCount() {

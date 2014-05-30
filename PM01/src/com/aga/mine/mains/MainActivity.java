@@ -19,6 +19,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -32,8 +33,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -69,6 +72,7 @@ public class MainActivity extends Activity {
     private RelativeLayout main;
     public ListView mListView;
     public GridView mGridView;
+    public EmoticonListAdapter mEmoticonAdapter;
 
     private int nMargin = 0;
     private float frameCenterPosition = 0.525f;
@@ -180,8 +184,8 @@ public class MainActivity extends Activity {
 				break;
 				
 			case Constant.MSG_DISPLAY_EMOTICONLIST:
-				EmoticonListAdapter emoticonAdapter = new EmoticonListAdapter(MainActivity.this);
-				mGridView.setAdapter(emoticonAdapter);
+				mEmoticonAdapter = new EmoticonListAdapter(MainActivity.this);
+				mGridView.setAdapter(mEmoticonAdapter);
 				RelativeLayout.LayoutParams emoticonParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 				emoticonParams.setMargins(
 						(int) (emoticonListMarginLeft * scale) + nMargin, 
@@ -221,39 +225,12 @@ public class MainActivity extends Activity {
 				break;
 				
 			case Constant.MSG_DISPLAY_POPUP:
-				final int emoticonID = msg.arg1;
+				int emoticonID = msg.arg1;
 				
-				View view = View.inflate(MainActivity.this, R.layout.popup, null);
+				Intent intent = new Intent(MainActivity.this, PopupActivity.class);
+				intent.putExtra("emoticonID", emoticonID);
+				startActivityForResult(intent, 111);
 
-				final Dialog dialog = new Dialog(MainActivity.this);
-				dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-				dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-				dialog.show();
-				
-				(view.findViewById(R.id.ivBuy)).setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						String emoticons = FacebookData.getinstance().getDBData("Emoticons");
-						emoticons += "," + emoticonID;
-						FacebookData.getinstance().modDBData("Emoticons", emoticons);
-						
-						String gold = FacebookData.getinstance().getDBData("Gold");
-						gold = String.valueOf(Long.parseLong(gold) - 100);
-						FacebookData.getinstance().modDBData("Gold", gold);
-						SoundEngine.sharedEngine().playEffect(MainActivity.this, R.raw.buy);
-						mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
-						mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_EMOTICONLIST);
-						dialog.dismiss();
-					}
-				});
-				(view.findViewById(R.id.ivBuyCancle)).setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						click();
-						Toast.makeText(MainActivity.this, "구매 취소", Toast.LENGTH_SHORT).show();
-						dialog.dismiss();
-					}
-				});
 				break;
 			}
 		}
