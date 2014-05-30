@@ -3,6 +3,7 @@ package com.aga.mine.view;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.cocos2d.nodes.CCDirector;
 
@@ -27,23 +28,22 @@ public class MatchListAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<GameScore> mGameScore;
 	private AQuery mAq;
-   
+	boolean isLocaleKo = false;
+	
 	public MatchListAdapter(Context context, List<GameScore> gameScore) {
 		mContext = context;
+		if (Locale.getDefault().getLanguage().toString().equals("ko"))
+			isLocaleKo = true;
 		mGameScore = new ArrayList<GameScore>();
 		mGameScore.addAll(gameScore);
 		
 		final String myID = FacebookData.getinstance().getUserInfo().getId();
-//		Log.e("MatchListAdapter", "mGameScore.size() before1 : " + mGameScore.size());
 		for (int i = 0; i < mGameScore.size(); i++) {
-//			Log.e("MatchListAdapter", "mGameScore.size() before2 : " + mGameScore.size());
 			if (mGameScore.get(i).getId().equals(myID)) {
-//				Log.e("MatchListAdapter", "mGameScore.size() after : " + mGameScore.size());
 				mGameScore.remove(i);
 				i--;
 			} else {
 				try {
-//					Log.e("MatchListAdapter", "count i : " + i);
 					NetworkController.getInstance().sendRequestIsPlayerConnected(mGameScore.get(i).getId());
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -89,10 +89,16 @@ public class MatchListAdapter extends BaseAdapter {
 		// 초대버튼 disable 처리
 		// 서버에서 데이터 받는 시간보다 화면 그리는 것이 더 빠르면 못받아오는 경우가 있음. 
 		if(!Util.getJoin(mGameScore.get(position).getId())) {
-			holder.imgInviteBtn.setImageResource(R.drawable.invite_button2ko);
+			if (isLocaleKo)
+				holder.imgInviteBtn.setImageResource(R.drawable.invite_button2ko);
+			else
+				holder.imgInviteBtn.setImageResource(R.drawable.invite_button2en);
 			holder.imgInviteBtn.setEnabled(false);
 		} else {
-			holder.imgInviteBtn.setImageResource(R.drawable.invite_button1ko);
+			if (isLocaleKo)
+				holder.imgInviteBtn.setImageResource(R.drawable.invite_button1ko);
+			else
+				holder.imgInviteBtn.setImageResource(R.drawable.invite_button1en);
 			holder.imgInviteBtn.setEnabled(true);
 		}
 		

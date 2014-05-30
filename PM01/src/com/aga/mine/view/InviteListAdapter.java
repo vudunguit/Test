@@ -1,6 +1,7 @@
 package com.aga.mine.view;
 
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.util.Log;
@@ -22,27 +23,20 @@ import com.sromku.simple.fb.entities.Profile;
 public class InviteListAdapter extends BaseAdapter {
 	private Context mContext;
 	private Profile user;
-	private List<Profile> notAPlayers; // GameScore로 변환
-//	private List<GameScore> friends;
+	private List<Profile> notAPlayers;
 	private AQuery mAq;
 	String myName = null;
+	boolean isLocaleKo = false;
 	
 	public InviteListAdapter(Context context) {
-//		List<GameScore> adfa = new ArrayList<GameScore>(); // 수정중
 		mContext = context;
 		user = FacebookData.getinstance().getUserInfo();
+		if (Locale.getDefault().getLanguage().toString().equals("ko"))
+			isLocaleKo = true;
 		List<Profile> friends = FacebookData.getinstance().getFriendsInfo();
 		List<GameScore> gameScore = FacebookData.getinstance().getGameScore();
 		myName = FacebookData.getinstance().getUserInfo().getName();
 		notAPlayers = friends;
-		
-//		GameScore game; // 수정중
-//		for (Profile friend : friends) {
-//			game = new GameScore();
-//			game.setId(friend.getId());
-//			game.setName(friend.getName());
-//			adfa.add(game);
-//		}
 		
 		for (GameScore player : gameScore) {
 			for (int i = 0; i < friends.size(); i++) {
@@ -55,14 +49,9 @@ public class InviteListAdapter extends BaseAdapter {
 		Log.d("LDK", "adpater, notAPlayers size:" + notAPlayers.size());
 		mAq = new AQuery(mContext);
 	}
-	
-//	public InviteListAdapter(MainActivity mainActivity, ArrayList<GameScore> matchList) {
-//		friends = matchList;
-//	}
 
 	@Override
 	public int getCount() {
-		// friends.getid()에서 gameScore.id를 뺀후 남는 친구만 리스트에 넣습니다.
 		return notAPlayers.size();
 	}
 
@@ -96,10 +85,16 @@ public class InviteListAdapter extends BaseAdapter {
 		//초대버튼 disable 처리
 		Log.d("LDK", "id: " + notAPlayers.get(position).getId() + ",초대상태:" + Util.canInvite(notAPlayers.get(position).getId())) ;
 		if(!Util.canInvite(notAPlayers.get(position).getId())) {
-			holder.imgInviteBtn.setImageResource(R.drawable.invite_button2ko);
+			if (isLocaleKo)
+				holder.imgInviteBtn.setImageResource(R.drawable.invite_button2ko);
+			else
+				holder.imgInviteBtn.setImageResource(R.drawable.invite_button2en);
 			holder.imgInviteBtn.setEnabled(false);
 		} else {
-			holder.imgInviteBtn.setImageResource(R.drawable.invite_button1ko);
+			if (isLocaleKo)
+				holder.imgInviteBtn.setImageResource(R.drawable.invite_button1ko);
+			else
+				holder.imgInviteBtn.setImageResource(R.drawable.invite_button1en);
 			holder.imgInviteBtn.setEnabled(true);
 		}
 		
@@ -109,16 +104,11 @@ public class InviteListAdapter extends BaseAdapter {
 			public void onClick(View v) {
 			    MainActivity mMainActivity = MainApplication.getInstance().getActivity();
 			    mMainActivity.click();
-				//	mMainActivity.mSimpleFacebook.invite(friend, "I invite you to use this app", onInviteListener, "secret data");
 				// 메시지가 정확하게 전달 되는지는 모르겠네요.
 				
 				// 로그인 안되어 있을 경우 '취소'처리(이런경우가 없는데...) 
-				// 
 				Log.e("InviteListAapter", "Callback_3 - imgInviteBtn.setOnClickListener()");
 				mMainActivity.sendInvite(myName, user.getName() + "님이 귀하를 초대합니다.", null);
-				// 이(가) 귀하를 초대합니다.
-				// 이(가) 빗자루 하나를 보냈습니다.
-				// 이(가) xxxx 골드를 보냈습니다.
 			}
 		});
 		
