@@ -104,16 +104,18 @@ public class Game extends CCLayer {
 	
 	private int unopenedTile;
 	
+	//Animation
 	private CCAnimation mEarthBomb;
 	private CCAnimation mBottle;
 	private CCAnimation mMagma;
 	private CCAnimation mMagmaFire;
 	
-	//Tile animation
-	public CCTexture2D mTex;
-	public CCAnimate mOpenAction;
-	public CCAnimate mPumpkinBomb;
+	//Animate => this must be .copy() to use multiple
+	public CCTexture2D mTex; //tile
+	public CCAnimate mOpenAction; //tile open
+	public CCAnimate mPumpkinBomb; 
 	public CCAnimation cloudDefense;
+	public CCAnimate mMushroom;
 	
 	final int offenceDefaultTime = 10; // 공격마법만 기본 10초, 방어는 0초입니다.
 	int UserLevel; // 1레벨때는 추가 시간 0초입니다.
@@ -465,6 +467,13 @@ public class Game extends CCLayer {
 			pumpkin.addFrame(String.format("60game/pumpkinbomb_%02d.png", i));
 		}
 		mPumpkinBomb = CCAnimate.action(0.5f, pumpkin, false);
+		
+		//버섯 심기 애니메이션
+		CCAnimation mushroom = CCAnimation.animation("mushroom");
+		for(int i=1; i<=8; i++) {
+			mushroom.addFrame(CCTextureCache.sharedTextureCache().addImage(String.format("60game/mush_red%02d.png", i)));
+		}
+		mMushroom = CCAnimate.action(0.7f, mushroom, false);
 		
 		//대지마법 애니메이션 초기화
 		mEarthBomb = CCAnimation.animation("EarthBomb");
@@ -923,7 +932,7 @@ public class Game extends CCLayer {
 		}
 		
 		mineCell.setMarked(true);
-		this.markFlag(coord);
+		this.markFlag(mineCell);
 		if (GameData.share().isMultiGame) {
 			try {
 					NetworkController.getInstance().sendPlayDataMushroomOn(mineCell.getCell_ID());
@@ -1454,17 +1463,28 @@ public class Game extends CCLayer {
 
 	//
 	// tile methods
-	public void markFlag(CGPoint tileCoord) {
+	public void markFlag(MineCell mineCell) {	
+		CCSprite mushroom = CCSprite.sprite("60game/mush_red01.png");
+		addChild(mushroom, 5);
+		mushroom.setPosition(mineCell.getTilePosition());
+		
+		CCCallFuncND remove = CCCallFuncND.action(this, "cbRemoveMushroom", mineCell);
+		mushroom.runAction(CCSequence.actions(mMushroom.copy(), remove));
 
-		int flagGid = this.tmxItemLayer.tileGIDAt(CGPoint.ccp(1, 0)); // 빨간깃발(방장)
-		flagGid = CCFormatter.swapIntToLittleEndian(flagGid);
-		this.tmxFlagLayer.setTileGID(flagGid, tileCoord);
-
-		//
 		// 지뢰수 하나 감소시킬시 디스플레이 업데이트 시킨다.
 		mHud.updateMineNumber(decreaseMineNumber());
 	}
 
+	public void cbRemoveMushroom (Object sender, Object cell) {
+		CCSprite sprite = (CCSprite) sender;
+		removeChild(sprite, true);
+		
+		MineCell mineCell = (MineCell) cell;
+		
+		int flagGid = this.tmxItemLayer.tileGIDAt(CGPoint.ccp(1, 0)); // 빨간깃발(방장)
+		flagGid = CCFormatter.swapIntToLittleEndian(flagGid);
+		this.tmxFlagLayer.setTileGID(flagGid, mineCell.getTileCoord());
+	}
 
 	public CGPoint tileCoordForPosition(CGPoint position) {
 		CGSize mapSize = this.mapSize;
@@ -2057,19 +2077,5 @@ public class Game extends CCLayer {
 		
 		unschedule("increaseNumber");
 	}
-
-	abstract class TileOpenTask extends AsyncTask<Void, Void, Void> {
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			run();
-			return null;
-		}
-		
-		public abstract void run();
-		
-	}
-
-
 
 }
