@@ -1,6 +1,5 @@
 ﻿package com.aga.mine.mains;
 
-import org.cocos2d.actions.interval.CCScaleTo;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
@@ -11,7 +10,6 @@ import org.cocos2d.types.CGSize;
 import android.util.Log;
 
 import com.aga.mine.pages2.Game;
-import com.aga.mine.util.Util;
 
 public class GameLoading extends CCLayer {
 	
@@ -23,6 +21,8 @@ public class GameLoading extends CCLayer {
 	final String folder = "59gameload/";
 	final String fileExtension = ".png";
 	
+	CCScene mGameScene;
+	
 	private GameLoading() {
 		
 		/************ 잘 사용했는지 모르겠습니다. 확인 부탁드립니다.  ************/
@@ -30,7 +30,7 @@ public class GameLoading extends CCLayer {
 //		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 		setBackground();
 		setMainMenu();
-		schedule("nextSceneCallback", 1.0f);
+		//schedule("nextSceneCallback", 1.0f);
 	}
 
 	public static CCScene scene() {
@@ -77,9 +77,16 @@ public class GameLoading extends CCLayer {
 		wizard.setAnchorPoint(0, 0);
 		bg.addChild(wizard);
 		
-//		CCScaleTo scale = CCScaleTo.action(3, 85, 1);
-//		bar.runAction(scale);
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				mGameScene = Game.scene();
+			}
+		}).start();
+		
 		schedule("update");
+
 	}
 	
 	/**
@@ -88,18 +95,23 @@ public class GameLoading extends CCLayer {
 	 * 루틴으로 가야함.
 	 */
 	public void update(float dt) {
-		mScaleX += dt*30;
-		bar.setScaleX(mScaleX);
-		
+		float limit = bg.getContentSize().width - bar.getPosition().x/2;	
 		float barRight = bar.getPosition().x + bar.getContentSize().width * bar.getScaleX();
-		float limit = bg.getContentSize().width - bar.getPosition().x;
+		
 		Log.d("LDK", "limit:" + limit);
 		
-		if(barRight > limit) {
-			unschedule("update");
-			Log.d("LDK", "update");
+		if(barRight <= limit) {
+			mScaleX += dt*15;
+			bar.setScaleX(mScaleX);
+			barRight = bar.getPosition().x + bar.getContentSize().width * bar.getScaleX();
+			
+			wizard.setPosition(barRight - wizard.getContentSize().width/2, bar.getPosition().y);
 		}
-		wizard.setPosition(barRight - wizard.getContentSize().width/2, bar.getPosition().y);
+		
+		if(mGameScene != null) {
+			unschedule("update");
+			CCDirector.sharedDirector().replaceScene(mGameScene);
+		}
 	}
 	
 	public void nextSceneCallback(float dt) {
