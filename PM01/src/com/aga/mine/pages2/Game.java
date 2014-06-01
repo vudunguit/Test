@@ -13,6 +13,7 @@ import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.instant.CCCallFuncND;
 import org.cocos2d.actions.interval.CCAnimate;
 import org.cocos2d.actions.interval.CCDelayTime;
+import org.cocos2d.actions.interval.CCFadeIn;
 import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.actions.interval.CCRotateBy;
 import org.cocos2d.actions.interval.CCScaleTo;
@@ -964,7 +965,7 @@ public class Game extends CCLayer {
 	//
 	// 더블터치 : 셀 오픈
 	public void handleDoubleTap(MotionEvent event) {
-		//mHud.StartAniCloudDefense(10);
+		mHud.StartAniCloudDefense(10);
 		Log.e("Game / handleDoubleTap", "마인 갯수 : " + getMineNumber());
 		if (Config.getInstance().isDisableButton())
 			return;
@@ -2025,24 +2026,24 @@ public class Game extends CCLayer {
 		
 //		CCAnimate action = CCAnimate.action(1f, cloudDefense, false);
 //		CCAction repeat = CCRepeatForever.action(action);
-		CCScaleTo scale1 = CCScaleTo.action(0.1f, 0.98f);
-		CCScaleTo scale2 = CCScaleTo.action(0.1f, 1.0f);
-		CCAction repeat = CCRepeatForever.action(CCSequence.actions(scale1, scale2));
+		CCScaleTo scale1 = CCScaleTo.action(1f, 0.98f);
+		CCScaleTo scale2 = CCScaleTo.action(1f, 1.0f);
+		CCRepeatForever repeat = CCRepeatForever.action(CCSequence.actions(scale1, scale2));
 		
 		for(int k=0; k<4; k++) {
 			int tag = 10000 + k;
 
 			CCSprite cloud = CCSprite.sprite("61hud/fx-cloud1.png");
-			cloud.setOpacity(128 + new Random().nextInt(128));
+			cloud.setOpacity(255);
 			cloud.setPosition(clouds.get(k)); //구름 생성 위치
 			cloud.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
 			addChild(cloud, 8, tag);
 			mDeleteTags.add(tag);
 	
+			//CCDelayTime delay = CCDelayTime.action(k*0.2f);
+			CCFadeIn fadein = CCFadeIn.action(2f);
+			cloud.runAction(CCSequence.actions(fadein));
 			cloud.runAction(repeat.copy());
-			
-			CCDelayTime delay = CCDelayTime.action(k*0.15f);
-			cloud.runAction(delay);
 		}
 		
 		long spanTime = (attackTime - mCloudDefenseTime - UserLevel);
