@@ -12,6 +12,7 @@ import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.instant.CCCallFuncND;
 import org.cocos2d.actions.interval.CCAnimate;
 import org.cocos2d.actions.interval.CCDelayTime;
+import org.cocos2d.actions.interval.CCFadeIn;
 import org.cocos2d.actions.interval.CCFadeOut;
 import org.cocos2d.actions.interval.CCMoveBy;
 import org.cocos2d.actions.interval.CCMoveTo;
@@ -300,15 +301,16 @@ public class HudLayer extends CCLayer {
 //		rune = CCSprite.sprite("61hud/rune-01.png");
 		runeAni = CCAnimation.animation("rune");
 		for(int i=1; i<=10; i++) {
-    		CCSprite runeframe = CCSprite.sprite(String.format("61hud/rune-%02d.png", i));
-    		runeAni.addFrame(runeframe.getTexture());
+    		runeAni.addFrame(CCTextureCache.sharedTextureCache().addImage(String.format("61hud/rune-%02d.png", i)));
+		}
+		for(int i=1; i<=3; i++) {
+			runeAni.addFrame(CCTextureCache.sharedTextureCache().addImage("61hud/rune-10.png"));
 		}
 		
 		//divine = CCSprite.sprite("61hud/divine-01.png");
 		divineAni = CCAnimation.animation("divine");
 		for(int i=1; i<=6; i++) {
-    		CCSprite divineframe = CCSprite.sprite(String.format("61hud/divine-%02d.png", i));
-    		divineAni.addFrame(divineframe.getTexture());
+    		divineAni.addFrame(CCTextureCache.sharedTextureCache().addImage(String.format("61hud/divine-%02d.png", i)));
 		}
 		
 		//earth = CCSprite.sprite("61hud/earth-01.png");
@@ -1117,44 +1119,48 @@ public class HudLayer extends CCLayer {
 	//룬(마법진) 애니메이션-----------------------------------------------------
 	//parameter : 4:신성, 5:대지, 6:반사
 	public void StartAniRune(int kind) {
+		//룬애니
 		CCSprite rune = CCSprite.sprite("61hud/rune-01.png");
 		rune.setScale(0.55f);
 		rune.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
 		rune.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
 		addChild(rune);
 		
-		CCAnimate action = CCAnimate.action(1.2f, runeAni, false);
-		CCCallFuncND call = CCCallFuncND.action(this, "cbRune", kind);
-		rune.runAction(CCSequence.actions(action, call));
-	}
-	
-	public void cbRune(Object sender, Object k) {
-		CCSprite rune = (CCSprite) sender;
-		int kind = (Integer) k;
+		CCAnimate action = CCAnimate.action(1.04f, runeAni, false);
+		CCFadeOut fadeout = CCFadeOut.action(0.32f);
+		//CCCallFuncND call = CCCallFuncND.action(this, "cbRune", kind);
+		rune.runAction(CCSequence.actions(action, fadeout));
+		
+		//정령 애니 ( 룬애니와 동시에 진행)
+		CCFadeIn in = CCFadeIn.action(0.56f);
+		CCFadeOut out = CCFadeOut.action(0.32f);
 		switch(kind) {
 		case 4:
 			CCSprite divine = CCSprite.sprite("61hud/divine-01.png");
 			divine.setPosition(rune.getContentSize().width * 0.5f, rune.getContentSize().height * 0.5f);
 			divine.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
 			rune.addChild(divine, 2);
-			CCAnimate divineAction = CCAnimate.action(1.2f, divineAni, false);
-			divine.runAction(CCSequence.actions(divineAction, CCCallFuncND.action(this, "cbRemoveSprite", kind)));
+			divine.setOpacity(255);
+			CCAnimate divineAction = CCAnimate.action(0.48f, divineAni, false);
+			divine.runAction(CCSequence.actions(in, divineAction, out, CCCallFuncND.action(this, "cbRemoveSprite", kind)));
 			break;
 		case 5:
 			CCSprite earth = CCSprite.sprite("61hud/earth-01.png");
 			earth.setPosition(rune.getContentSize().width * 0.5f, rune.getContentSize().height * 0.5f);
 			earth.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
 			rune.addChild(earth, 2);
-			CCAnimate earthAction = CCAnimate.action(1.2f, earthAni, false);
-			earth.runAction(CCSequence.actions(earthAction, CCCallFuncND.action(this, "cbRemoveSprite", kind)));
+			earth.setOpacity(255);
+			CCAnimate earthAction = CCAnimate.action(0.48f, earthAni, false);
+			earth.runAction(CCSequence.actions(in, earthAction, out, CCCallFuncND.action(this, "cbRemoveSprite", kind)));
 			break;
 		case 6:
 			CCSprite mirror = CCSprite.sprite("61hud/mirror-01.png");
 			mirror.setPosition(rune.getContentSize().width * 0.5f, rune.getContentSize().height * 0.5f);
 			mirror.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
 			rune.addChild(mirror, 2);
-			CCAnimate mirrorAction = CCAnimate.action(1.2f, mirrorAni, false);
-			mirror.runAction(CCSequence.actions(mirrorAction, CCCallFuncND.action(this, "cbRemoveSprite", kind)));
+			mirror.setOpacity(255);
+			CCAnimate mirrorAction = CCAnimate.action(0.48f, mirrorAni, false);
+			mirror.runAction(CCSequence.actions(in, mirrorAction, out, CCCallFuncND.action(this, "cbRemoveSprite", kind)));
 			break;
 		}
 	}
