@@ -611,7 +611,19 @@ public class MainActivity extends Activity {
         	// 게임스코어 받아오기
     		FacebookData.getinstance().setGameScore(DataFilter.getGameRank());
         	
-    		DataFilter.dailyFilter(director, FacebookData.getinstance().getUserInfo().getId());
+    		if (GameData.share().getInitialConnection()) {
+    			String gold = "3500"; // 최초 아이디 생성시 3500gold 우편함으로 선물
+    			long requestID = (long) (Math.random() * 72036854775807L);  //facebook 알림글번호로 대체할 것
+    			String recipientID = FacebookData.getinstance().getUserInfo().getId(); // 상점 이동 방식에 따른 ID 변경
+    			String senderID = "1";
+    			String data = 
+    					"0,RequestModeMailBoxAdd*22," + requestID + "*1," + recipientID + "*19," + senderID + "*20,Gold*21," + gold;				
+    			DataFilter.sendMail(data);
+    			CCScene scene = GameGuide1.scene();
+    			CCDirector.sharedDirector().replaceScene(scene);
+			} else {
+				DataFilter.dailyFilter(director, FacebookData.getinstance().getUserInfo().getId());
+			}
         }
     }
     

@@ -121,6 +121,8 @@ public class FacebookData {
 		this.userInfo = userInfo;
 		//userPhoto = getBitmapFromURL("https://graph.facebook.com/" + userInfo.getUsername() +"/picture");
 		userPhoto = BitmapFactory.decodeResource(MainApplication.getInstance().getActivity().getResources(), R.drawable.ic_launcher);
+		
+		// DB 정보 받아오기(checkUserDBData()하여 없는 ID이면 새로 생성)
 		setDBData(DataFilter.checkUserDBData(userInfo.getId()));		
 		if (userPhoto != null && userPhoto.getRowBytes() < 100) {
 			try {	

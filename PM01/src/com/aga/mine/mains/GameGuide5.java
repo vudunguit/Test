@@ -9,6 +9,7 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor4B;
 
 import com.aga.mine.mains.Utility;
+import com.aga.mine.pages2.GameData;
 
 public class GameGuide5 extends CCLayer {
 
@@ -44,8 +45,13 @@ public class GameGuide5 extends CCLayer {
 	
 	public void nextCallback(Object sender) {
 		MainApplication.getInstance().getActivity().click();
-		CCScene scene = Option.scene();
-		CCDirector.sharedDirector().replaceScene(scene);
+		if (GameData.share().getInitialConnection()) {
+			GameData.share().setInitialConnection(false);
+			DataFilter.dailyFilter(CCDirector.sharedDirector(), FacebookData.getinstance().getUserInfo().getId());
+		} else {
+			CCScene scene = Option.scene();
+			CCDirector.sharedDirector().replaceScene(scene);
+		}
 		}
 	
 }

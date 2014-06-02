@@ -22,7 +22,7 @@ import com.aga.mine.pages2.UserData;
 import com.aga.mine.pages2.GameData;
 //
 public class Option extends CCLayer {
-	
+	String tag = "Option";
 	final String commonfolder = "00common/";
 	final String folder = "40option/";
 	final String fileExtension = ".png";
@@ -179,7 +179,6 @@ public class Option extends CCLayer {
 		
 		music.setAnchorPoint(0, 0);
 		
-		// 이미지 들어갈 좌표는 아트팀에서 좀 줘야 작업하는데 빠를텐데...
 		music.setPosition(
 				radioButtonMenuPositions[i][0] + (padding / 2) + (onButton.getContentSize().width) + 29, // 이미지에서 글자 위치 변경 +29 
 				544 + (onButton.getContentSize().height / 2) - radioButtonMenuPositions[i][1] - 4) ; // 이미지에서 글자 위치 변경 -4
@@ -189,7 +188,8 @@ public class Option extends CCLayer {
 	public void buttonCallback(Object sender) {
 		MainApplication.getInstance().getActivity().click();
 		CCMenuItemImage button = (CCMenuItemImage)sender;
-		button.getUserData();
+//		button.getUserData();
+//		Log.e(tag, "button : " + button.getUserData());
 		List<CCNode> a = button.getParent().getChildren();
 		for (CCNode ccNode : a) {
 			final CCMenuItemImage sprite = (CCMenuItemImage)ccNode;
@@ -204,7 +204,7 @@ public class Option extends CCLayer {
 	}
 	
 	private void setElemental(int type) {
-		Log.e("Option2", "selectButton : " + type);
+		Log.e("tag", "selectButton : " + type);
 	}
 	
 	

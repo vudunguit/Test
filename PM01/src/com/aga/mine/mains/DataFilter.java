@@ -13,6 +13,7 @@ import org.cocos2d.nodes.CCDirector;
 
 import android.util.Log;
 
+import com.aga.mine.pages2.GameData;
 import com.sromku.simple.fb.entities.Profile;
 
 public class DataFilter {
@@ -86,11 +87,11 @@ public class DataFilter {
 
 	public static void dailyFilter(CCDirector director, String facebookID) {
 			String requestModeDailyCheck = getDailyData(facebookID);
+//			String requestModeDailyCheck = "13"; // 테스트 코드
 			CCScene scene = CCScene.node();
 			if (requestModeDailyCheck.equals("not once a day")) {
 				scene = Home.scene();
 			} else if (0 < Integer.parseInt(requestModeDailyCheck) % 31) {
-//			requestModeDailyCheck = "13"; // 테스트용
 				scene.addChild(Daily.scene(Integer.parseInt(requestModeDailyCheck) % 31));
 			} else {
 	//			new Process();
@@ -128,8 +129,10 @@ public class DataFilter {
 	
 	public static String checkUserDBData(String facebookID) {
 		String getData = getUserDBData(facebookID);
-		if (!readFilter(getData)) { // 정상작동은 false ,해당 ID 데이터 초기화시 true (test용)
+		if (!readFilter(getData)) { // 정상작동은 false ,해당 ID 데이터 초기화시 true
+//		if (true) { // true (test용)
 			Log.e("DataFilter", "getUserDBData() 새로운 아이디 생성 또는 기존 아이디 초기화");
+			GameData.share().setInitialConnection(true);
 			setUserDBData(facebookID);
 			getData = getUserDBData(facebookID);
 		}

@@ -259,4 +259,13 @@ public class GameData {
 		}
 	}
 
+	private boolean isInitialConnection = false;
+	
+	public void setInitialConnection(boolean b) {
+		isInitialConnection = b;
+	}
+	
+	public boolean getInitialConnection() {
+		return isInitialConnection;
+	}
 }
