@@ -800,8 +800,7 @@ public class HudLayer extends CCLayer {
 				unschedule(this);
 				
 				//To do : 대전게임에서 승리시 isVictory()로 승리 애니메이션 아니면 그냥 팝업
-				//boolean isVictory = Config.getInstance().getVs();
-				boolean isVictory = true;
+				boolean isVictory = Config.getInstance().getVs();
 				if(isVictory) {
 					startVictory();
 				} else {
