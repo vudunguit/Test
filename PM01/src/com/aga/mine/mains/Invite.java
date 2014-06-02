@@ -1,5 +1,6 @@
 ﻿package com.aga.mine.mains;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,8 +37,8 @@ public class Invite extends CCLayer {
 	
 	CCSprite backboardUpper;
 	CCSprite boardFrame;
-	CCSprite sprite1;
-	CCSprite sprite2;
+	ArrayList<CCSprite> rewards;
+	CCSprite checkSprite;
 	CCLabel  inviteQuantity;
 	
 	public static float displayLeft;
@@ -88,12 +89,23 @@ public class Invite extends CCLayer {
 				
 			}
 			
+			// 친구 초대인원이 30명인데 그다음부터 초대를 취소하면 보상을 계속 획득하는지 확인해봐야 됩니다.
+			// (50, 70명도 동일합니다.)
 			if (inviteCount == 30) { // 30번째 초대시 3천gold 보상
+//			if (inviteCount == 1) { // 30번째 초대시 3천gold 보상
 				inviteRewardGold(3000);
-			} else if (inviteCount == 50) { // 50번째 초대시 7천gold 보상 
+				rewards.get(0).addChild(checkSprite);
+				checkSprite.setPosition(rewards.get(0).getContentSize().width*0.5f, rewards.get(0).getContentSize().height*0.5f);
+			} else if (inviteCount == 50) { // 50번째 초대시 7천gold 보상
+//			} else if (inviteCount == 2) { // 50번째 초대시 7천gold 보상
 				inviteRewardGold(7000);
+				rewards.get(1).addChild(checkSprite);
+				checkSprite.setPosition(rewards.get(1).getContentSize().width*0.5f, rewards.get(1).getContentSize().height*0.5f);
 			} else if (inviteCount == 70) { // 70명째 초대시 1만gold 보상
+//			} else if (inviteCount == 3) { // 70명째 초대시 1만gold 보상
 				inviteRewardGold(10000);
+				rewards.get(2).addChild(checkSprite);
+				checkSprite.setPosition(rewards.get(2).getContentSize().width*0.5f, rewards.get(2).getContentSize().height*0.5f);
 			}
 			
 			FacebookData.getinstance().modDBData("InviteNumber", String.valueOf(inviteCount));
@@ -122,10 +134,10 @@ public class Invite extends CCLayer {
 	private Invite() {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
-		
+		rewards = new ArrayList<CCSprite>();
+		checkSprite = CCSprite.sprite("24emoticon/emoticonchecked.png");
 		//when invitation is successful, this callback is called.
     	Log.e("Invite", "Callback_1 - setInviteCallback()");
-		MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
 		
 		//배경 그림 설정
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);		
@@ -137,6 +149,7 @@ public class Invite extends CCLayer {
 		// 하단 이미지
 		BottomImage.setBottomImage(this);
 		
+		MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
 		this.setIsTouchEnabled(true);
 	}
 
@@ -194,17 +207,27 @@ public class Invite extends CCLayer {
 		parentSprite.addChild(inviteText);
 		inviteText.setPosition(parentSprite.getContentSize().width/2, 160.0f);		
 
-		jewelButton(parentSprite, -1.1f, 3000, 30);
-		jewelButton(parentSprite, 0, 7000, 50);
-		jewelButton(parentSprite, 1.1f, 10000, 70);
+		rewards.add(jewelButton(parentSprite, -1.1f, 3000, 30));
+		rewards.add(jewelButton(parentSprite, 0, 7000, 50));
+		rewards.add(jewelButton(parentSprite, 1.1f, 10000, 70));
+		
+		// 일단 막코딩 합니다. ㅠㅠ (리팩토링이 필요합니다.)
+		int inviteCount = Integer.parseInt(FacebookData.getinstance().getDBData("InviteNumber"));
+		int count = 0;
+//		for (int i = 0; i < inviteCount; i++) {
+		for (int i = 30; i < inviteCount; i+=20) {
+			rewards.get(count).addChild(checkSprite);
+			count ++;
+		}
+		count = 0;
 	}
 		
-	private void jewelButton(CCSprite backBoard, float position, int gold, int friends) {
+	private CCSprite jewelButton(CCSprite parentSprite, float position, int gold, int friends) {
 
 		CCSprite statusPanel = CCSprite.sprite(folder + "invite-statusPanel" + fileExtension); //보석 버튼
 		statusPanel.setAnchorPoint(0.5f, 0.0f);
 		statusPanel.setPosition(
-				backBoard.getContentSize().width/2 + statusPanel.getContentSize().width * position, 
+				parentSprite.getContentSize().width/2 + statusPanel.getContentSize().width * position, 
 				statusPanel.getContentSize().height/2-10.0f);
 		
 		CCLabel  statusPanelText1 = CCLabel.makeLabel(
@@ -238,10 +261,11 @@ public class Invite extends CCLayer {
 				statusPanel.getContentSize().height - 66f);
 		
 
-		backBoard.addChild(statusPanel);
+		parentSprite.addChild(statusPanel);
 		statusPanel.addChild(statusPanelText1);
 		statusPanel.addChild(statusPanelText2);
 		statusPanel.addChild(statusPanelText3);
+		return statusPanel;
 	}
 
 	// config 파일에 나중에 옮길것
