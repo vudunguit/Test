@@ -11,6 +11,7 @@ import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.instant.CCCallFuncND;
 import org.cocos2d.actions.interval.CCAnimate;
+import org.cocos2d.actions.interval.CCBlink;
 import org.cocos2d.actions.interval.CCDelayTime;
 import org.cocos2d.actions.interval.CCFadeIn;
 import org.cocos2d.actions.interval.CCFadeOut;
@@ -799,7 +800,8 @@ public class HudLayer extends CCLayer {
 				unschedule(this);
 				
 				//To do : 대전게임에서 승리시 isVictory()로 승리 애니메이션 아니면 그냥 팝업
-				boolean isVictory = Config.getInstance().getVs();
+				//boolean isVictory = Config.getInstance().getVs();
+				boolean isVictory = true;
 				if(isVictory) {
 					startVictory();
 				} else {
@@ -1205,44 +1207,33 @@ public class HudLayer extends CCLayer {
 		// 회전 섬광 배치
 		mBg.addChild(backSearch);
 		backSearch.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
+		backSearch.setScale(2.0f);
 
 		// 리본 배치
 		rybon.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
 		mBg.addChild(rybon);
 
 		// 별배치
-/*		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 30; i++) {
 			CCSprite star = CCSprite.sprite("70game_ending/star.png");
+			star.setPosition(winSize.width * new Random().nextFloat(), winSize.height * new Random().nextFloat());
+			star.setScale(0.5f + 0.5f * new Random().nextFloat());
+			mBg.addChild(star);
 
-			CCDelayTime delay = CCDelayTime
-					.action(new Random().nextFloat() * 5.0f);
-			CCCallFuncN show = CCCallFuncN.action(this, "cbShowSprite");
-			star.runAction(CCSequence.actions(delay, show));
-		}*/
+			CCBlink blink = CCBlink.action(0.5f + 2f * new Random().nextFloat(), 1);
+			CCRepeatForever repeat = CCRepeatForever.action(blink);
+			star.runAction(repeat);
+		}
 
 		// 배경 회전
 		CCRotateBy rot = CCRotateBy.action(4, 360);
-		CCCallFuncN end = CCCallFuncN.action(this, "cbEndVictory");
-		backSearch.runAction(CCSequence.actions(rot, end));
+		backSearch.runAction(rot);
 
 		// 리본 확대->축소
-		rybon.setScale(1.5f);
+		rybon.setScale(2.0f);
 		CCScaleTo scale = CCScaleTo.action(0.5f, 1.0f);
 		CCCallFuncN call = CCCallFuncN.action(this, "cbCallHeartLeft");
 		rybon.runAction(CCSequence.actions(scale, call));
-	}
-
-	public void cbShowSprite(Object sender) {
-		CCSprite star = (CCSprite) sender;
-		// star.setOpacity(0);
-		star.setScale(0.5f + new Random().nextFloat() * 1.0f);
-		star.setPosition(new Random().nextFloat() * winSize.width, new Random().nextFloat() * winSize.height);
-
-		// CCFadeIn in = CCFadeIn.action(1.0f);
-		CCFadeOut out = CCFadeOut.action(1.0f);
-		CCCallFuncN remove = CCCallFuncN.action(this, "cbRemoveSprite");
-		mBg.addChild(star);
-		star.runAction(CCSequence.actions(out, remove));
 	}
 
 	public void cbEndVictory(Object sender) {
@@ -1255,54 +1246,48 @@ public class HudLayer extends CCLayer {
 		mBg.addChild(heartLeft);
 		heartLeft.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
 
-		heartLeft.setScale(1.5f);
+		heartLeft.setScale(2.0f);
 		CCScaleTo scale = CCScaleTo.action(0.5f, 1.0f);
-		CCCallFuncN call = CCCallFuncN.action(this, "cbCallHeartRight");
-		heartLeft.runAction(CCSequence.actions(scale, call));
+		
+		if(GameData.share().getHeartNumber() == 1) {
+			CCDelayTime delay = CCDelayTime.action(1.5f);
+			CCCallFuncN call = CCCallFuncN.action(this, "cbEndVictory");
+			heartLeft.runAction(CCSequence.actions(scale, delay, call));
+		} else {
+			CCCallFuncN call = CCCallFuncN.action(this, "cbCallHeartRight");
+			heartLeft.runAction(CCSequence.actions(scale, call));
+		}
 	}
 
-	public void cbCallHeartRight(Object sender) {
+	public void cbCallHeartRight(final Object sender) {
 		CCSprite heartRight = CCSprite.sprite("70game_ending/heart-right.png");
 		mBg.addChild(heartRight);
 		heartRight.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
 
-		heartRight.setScale(1.5f);
+		heartRight.setScale(2.0f);
 		CCScaleTo scale = CCScaleTo.action(0.5f, 1.0f);
-		CCCallFuncN call = CCCallFuncN.action(this, "cbCallHeartCenter");
-		heartRight.runAction(CCSequence.actions(scale, call));
+
+		if(GameData.share().getHeartNumber() == 2) {
+			CCDelayTime delay = CCDelayTime.action(1.5f);
+			CCCallFuncN call = CCCallFuncN.action(this, "cbEndVictory");
+			heartRight.runAction(CCSequence.actions(scale, delay, call));
+		} else {
+			CCCallFuncN call = CCCallFuncN.action(this, "cbCallHeartCenter");
+			heartRight.runAction(CCSequence.actions(scale, call));
+		}
+
 	}
 
-	public void cbCallHeartCenter(Object sender) {
-		CCSprite heartCenter = CCSprite
-				.sprite("70game_ending/heart-center.png");
+	public void cbCallHeartCenter(final Object sender) {
+		CCSprite heartCenter = CCSprite.sprite("70game_ending/heart-center.png");
 		mBg.addChild(heartCenter);
 		heartCenter.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
 
-		heartCenter.setScale(1.5f);
+		heartCenter.setScale(2.0f);
 		CCScaleTo scale = CCScaleTo.action(0.5f, 1.0f);
-		CCCallFuncN call = CCCallFuncN.action(this, "cbCallScore");
-		heartCenter.runAction(CCSequence.actions(scale, call));
-	}
-
-	public void cbCallScore(Object sender) {
-		//To do: 점수에 따라서 선택
-		int k = 3;
-		CCSprite score = null;
-		if (k == 1) {
-			score = CCSprite.sprite("70game_ending/x1.png");
-		} else if (k == 2) {
-			score = CCSprite.sprite("70game_ending/x2.png");
-		} else {
-			score = CCSprite.sprite("70game_ending/x3.png");
-		}
-
-		mBg.addChild(score);
-		score.setPosition(winSize.width * 0.5f, winSize.height * 0.43f);
-
-		score.setScale(1.5f);
-		CCScaleTo scale = CCScaleTo.action(0.5f, 1.0f);
-
-		score.runAction(scale);
+		CCDelayTime delay = CCDelayTime.action(1.5f);
+		CCCallFuncN call = CCCallFuncN.action(this, "cbEndVictory");
+		heartCenter.runAction(CCSequence.actions(scale, delay, call));
 	}
 	
 	//정령석 아래 영역으로 이동하는 애니 :
