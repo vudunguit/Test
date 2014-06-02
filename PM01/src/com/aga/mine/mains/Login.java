@@ -2,6 +2,7 @@
 
 import java.util.Locale;
 
+import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFunc;
 import org.cocos2d.actions.interval.CCAnimate;
@@ -78,9 +79,19 @@ public class Login extends CCLayer{
 		mCircularProgress = CCAnimate.action(1.2f, progress, false);
 		mWizard = CCAnimate.action(0.6f, wizard, false);
 		
-		terms(bg);
 		setMain(bg);
-		setForeground(bg);
+		
+	    if(MainApplication.getInstance().getActivity().mSimpleFacebook.isLogin()) {
+		    MainApplication.getInstance().mHandler.postDelayed(new Runnable() {
+	            @Override
+	            public void run() {
+	                nextSceneCallback();
+	            }
+	        }, 500);
+	    } else {
+	    	terms(bg);
+			setForeground(bg);
+	    }
 	}
 	
 	private void terms(CCSprite bg) {
@@ -120,7 +131,6 @@ public class Login extends CCLayer{
 		itemToggle.setSelectedIndex(kButtonOff);
 		itemToggle.setTag(toggleButtonTag);
 		checkMenu.addChild(itemToggle);
-		
 		
 		//
 		termsOK = CCMenuItemImage.item(
@@ -175,8 +185,15 @@ public class Login extends CCLayer{
 //		wizard.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 116);
 //		wizard.setAnchorPoint(0.5f ,0.5f);
 		
-		actionWizard();
-		actionProgress();
+		CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				actionWizard();
+				actionProgress();
+			}
+		});
+		
 	}
 	
 	private void setForeground(CCSprite bg) {
@@ -307,6 +324,14 @@ public class Login extends CCLayer{
 	
 	public void buttonTouch() {
 		loginMenu.setIsTouchEnabled(true);
+	}
+	
+	public void nextSceneCallback() {
+	    MainActivity mMainActivity = MainApplication.getInstance().getActivity();	    
+	        //get myProfile and get Friends info
+	        //go to daily scene
+	        mMainActivity.getMyProfile();
+	        mMainActivity.getFriendsInfo();
 	}
 	
 	@Override
