@@ -1,7 +1,6 @@
 ﻿package com.aga.mine.mains;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Locale;
 
 import org.cocos2d.layers.CCLayer;
@@ -14,19 +13,13 @@ import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.aga.mine.view.BroomstickItem;
 import com.aga.mine.view.GoldItem;
 import com.aga.mine.view.MailItem;
-import com.androidquery.AQuery;
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.callback.AjaxStatus;
 import com.sromku.simple.fb.entities.Profile;
 
 public class MailBox {
@@ -44,6 +37,7 @@ public class MailBox {
 	int presentBg1Tag = 304;
 	
 	public static boolean buttonActive = true;
+	boolean isLocaleKo = false;
 
 	CCSprite broomstickBackground1;
 	CCSprite broomstickBackground2;
@@ -91,6 +85,8 @@ public class MailBox {
 		return "unknown";
 	}
 	public MailBox(CCLayer parentLayer, String imageFolder, CCNode nodeThis, int selectedTab) {
+		if (Locale.getDefault().getLanguage().toString().equals("ko"))
+			isLocaleKo = true;
 		String[] mail = DataFilter.readMail();
 		for (String string : mail) {
 			Log.e("MailBox", "mailOpen [" + string + "]");
@@ -232,13 +228,19 @@ public class MailBox {
 		postCountBack.addChild(postNumber);
 
 		// 우편물 보관 기간
-		CCLabel postCountText = CCLabel.makeLabel("최대 7일간 보관", "Arial", 15.0f);
-		postCountText.setColor(ccColor3B.ccc3(64, 46, 1));
+		String explanation = "will be removed in 7 days";
+		if (isLocaleKo)
+			explanation = "최대 7일간 보관";
+//		CCLabel postCountText = CCLabel.makeLabel(explanation, "Arial", 15.0f);
+//		postCountText.setColor(ccColor3B.ccc3(64, 46, 1));
+//		postCountText.setPosition(
+//				postCountBack.getPosition().x + (1 - postCountBack.getAnchorPoint().x) * postCountBack.getContentSize().width + 20
+//				- (postCountText.getAnchorPoint().x * postCountText.getContentSize().width), 
+//				postCountBack.getPosition().y);
+		CCLabel postCountText = CCLabel.makeLabel(explanation, "Arial", 18.0f);
 		postCountText.setAnchorPoint(0.0f, 0.5f);
-		postCountText.setPosition(
-				postCountBack.getPosition().x + (1 - postCountBack.getAnchorPoint().x) * postCountBack.getContentSize().width + 20
-				- (postCountText.getAnchorPoint().x * postCountText.getContentSize().width), 
-				postCountBack.getPosition().y);
+		postCountText.setPosition(50,50);
+		postCountText.setColor(ccColor3B.ccBLACK);
 		postboxBg.addChild(postCountText, 555, 555);
 
 		// Receive All (모두받기 버튼을 누르면 현재 아이템 타입의 모든 고유번호로 아이템을 삭제함)
@@ -289,89 +291,6 @@ public class MailBox {
 		msg.what = Constant.MSG_DISPLAY_ITEMLIST;
 		MainApplication.getInstance().getActivity().mHandler.sendMessage(msg);
 		
-/*		if (BroomstickList.size() > 0) {
-
-			// 우편함 빗자루 리스트
-			CCSprite postList = CCSprite.sprite(imageFolder + "postboxList"
-					+ fileExtension);
-			postList.setPosition(
-					10.0f + postList.getContentSize().width / 2 + 3.0f,
-					broomstickBackground1.getContentSize().height - 130.0f
-							- postList.getContentSize().height / 2 - 3.0f);
-
-			CCSprite postPictrue = CCSprite.sprite(imageFolder + "pumkin"
-					+ fileExtension);
-			postPictrue.setPosition(
-					15 + postPictrue.getContentSize().width / 2,
-					(postList.getContentSize().height - 25.0f) / 2);
-
-			String nameStr = "";
-			String senderName = BroomstickList.get(0)[1];
-			if (senderName.equals("0")) {
-				nameStr = "이벤트 보상";
-			} else if (senderName.equals("1")) {
-				nameStr = "PumpkinMines";
-			} else if (senderName.equals(FacebookData.getinstance()
-					.getUserInfo().getId())) {
-				nameStr = "  구 매";
-			} else {
-				nameStr = senderName;
-			}
-
-			// 수정 필요
-			CCLabel name = CCLabel.makeLabel(nameStr, "Arial", 16);
-			name.setPosition(name.getContentSize().width / 2 + 15.0f,
-					postList.getContentSize().height - 25.0f / 2f);
-
-			CCLabel time = CCLabel.makeLabel(BroomstickList.get(0)[4], "Arial",
-					16);
-			time.setColor(ccColor3B.ccBLACK);
-			time.setAnchorPoint(1.0f, 0.5f);
-			time.setPosition(
-					postList.getContentSize().width
-							- postPictrue.getContentSize().width / 2 - 82,
-					postList.getContentSize().height - 25 / 2f);
-
-			CCLabel itemQuantity = CCLabel.makeLabel(
-					"빗자루 " + BroomstickList.get(0)[3] + "개를 선물 받았습니다.",
-					"Arial", 18);
-			// CCLabel itemQuantity = CCLabel.makeLabel(Broomstick.get(0)[3] +
-			// "개 빗자루(골드)를 선물 받았습니다.", "Arial", 15.0f);
-			itemQuantity.setAnchorPoint(0, 0.5f);
-			itemQuantity
-					.setPosition(
-							postPictrue.getPosition().x
-									+ (postPictrue.getContentSize().width * (1.15f - postPictrue
-											.getAnchorPoint().x)) + 5,
-							postPictrue.getPosition().y
-									+ (postPictrue.getContentSize().height * (0.5f - postPictrue
-											.getAnchorPoint().y)));
-
-			// CCMenuItem getButton = CCMenuItemImage.item(
-			// imageFolder + "broomstickButton1.png",
-			// imageFolder + "broomstickButton2.png",
-			// nodeThis, "clicked");
-			// // getButton.setUserData("");
-			// getButton.setUserData(Broomstick.get(0)[0]);
-			// CCMenu getItem = CCMenu.menu(getButton);
-			//
-			// getItem.setPosition(
-			// postList.getContentSize().width -
-			// getButton.getContentSize().width / 2 - 5.0f,
-			// postList.getContentSize().height / 2);
-			//
-			// getButton.setPosition(0,0);
-
-			postList.addChild(postPictrue);
-			postList.addChild(name);
-			postList.addChild(time);
-			postList.addChild(itemQuantity);
-			// postList.addChild(getItem);
-
-			presentBackground1.addChild(postList);
-			broomstickBackground1.addChild(postList);
-		}*/
-
 		postboxBg.addChild(postMenu, 777, 777);
 		
 		if (selectedTab == Constant.MAIL_TAB_BROOM) {

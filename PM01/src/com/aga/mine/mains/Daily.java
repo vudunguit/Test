@@ -112,7 +112,8 @@ public class Daily extends CCLayer {
 					Log.e("Daily", "도장찍기 애니메이션 넣을 곳 입니다.");
 					Log.e("Daily", "stamp animation");
 
-					stamp = CCSprite.sprite(folder + "stampKo" + fileExtension);
+					stamp = CCSprite.sprite(
+							Utility.getInstance().getNameWithIsoCodeSuffix(folder + "stamp" + fileExtension));
 					parent.addChild(stamp, 100);
 					stamp.setPosition(goldX[i], goldY[k]);
 					stamp.setAnchorPoint(0.5f, 0.5f);

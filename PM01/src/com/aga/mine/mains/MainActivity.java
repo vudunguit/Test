@@ -3,6 +3,7 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
@@ -318,22 +319,25 @@ public class MainActivity extends Activity {
 
     // Back-key 클릭시 프로그램 종료 코드
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+    	String exitStr = "Quit (now) ?";
+		if (Locale.getDefault().getLanguage().toString().equals("ko"))
+			exitStr = "종료하겠습니까?";
         switch (keyCode) {
         case KeyEvent.KEYCODE_BACK:
         	click();
             new AlertDialog.Builder(this).setTitle(R.string.app_name)
-                        .setMessage("종료하겠습니까?")
-                        .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                        .setMessage(exitStr)
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int which) {
-                                moveTaskToBack(true); // 본Activity finish후 다른 Activity가 뜨는 걸 방지.
-                                //      finish();
+                            	// 본Activity finish후 다른 Activity가 뜨는 걸 방지. finish();
+                                moveTaskToBack(true);
+                                // 해당 어플의 프로세스를 강제 Kill시킨다.
                                 new Process().killProcess(Process.myPid());
-                                // android.os.Process.killProcess(android.os.Process.myPid()); 
-                                // -> 해당 어플의 프로세스를 강제 Kill시킨다.
+
                             }
                         })
-                        .setNegativeButton("아니오", null)
+                        .setNegativeButton("NO", null)
                         .show();
         }
 

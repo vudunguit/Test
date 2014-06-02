@@ -1,6 +1,7 @@
 package com.aga.mine.view;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.cocos2d.nodes.CCDirector;
 
@@ -20,15 +21,17 @@ import com.aga.mine.mains.MailBox;
 import com.aga.mine.mains.MainApplication;
 import com.aga.mine.mains.R;
 import com.androidquery.AQuery;
-import com.facebook.android.Facebook;
 
 public class MailListAdapter extends BaseAdapter {
 	private ArrayList<MailItem> mMailItemList;
 	private AQuery mAq;
 	private Context mContext;
 	private int mTab;
+	boolean isLocaleKo = false;
 	
 	public MailListAdapter(Context context, ArrayList<MailItem> mailItemList, int tab) {
+		if (Locale.getDefault().getLanguage().toString().equals("ko"))
+			isLocaleKo = true;
 		mContext = context;
 		mAq = new AQuery(mContext);
 		mTab = tab;
@@ -149,10 +152,16 @@ public class MailListAdapter extends BaseAdapter {
 		
 		//set text and icon
 		if(mTab == 1) {
-			holder.text.setText("빗자루 " + mMailItemList.get(position).quantity + "개를 받았습니다.");
+			if (isLocaleKo)
+				holder.text.setText("빗자루 " + mMailItemList.get(position).quantity + "개를 받았습니다.");
+			else
+				holder.text.setText("you have received the broomstick");
 			holder.image.setImageResource(R.drawable.mail_broomstickbutton1);
 		} else {
-			holder.text.setText("" + mMailItemList.get(position).quantity + "골드를 받았습니다.");
+			if (isLocaleKo)
+				holder.text.setText("" + mMailItemList.get(position).quantity + "골드를 받았습니다.");
+			else
+				holder.text.setText("you have received a gift of "  + mMailItemList.get(position).quantity + " gold");
 			holder.image.setImageResource(R.drawable.mail_giftbutton1);
 		}
 		
