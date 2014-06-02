@@ -92,17 +92,14 @@ public class Invite extends CCLayer {
 			// 친구 초대인원이 30명인데 그다음부터 초대를 취소하면 보상을 계속 획득하는지 확인해봐야 됩니다.
 			// (50, 70명도 동일합니다.)
 			if (inviteCount == 30) { // 30번째 초대시 3천gold 보상
-//			if (inviteCount == 1) { // 30번째 초대시 3천gold 보상
 				inviteRewardGold(3000);
 				rewards.get(0).addChild(checkSprite);
 				checkSprite.setPosition(rewards.get(0).getContentSize().width*0.5f, rewards.get(0).getContentSize().height*0.5f);
 			} else if (inviteCount == 50) { // 50번째 초대시 7천gold 보상
-//			} else if (inviteCount == 2) { // 50번째 초대시 7천gold 보상
 				inviteRewardGold(7000);
 				rewards.get(1).addChild(checkSprite);
 				checkSprite.setPosition(rewards.get(1).getContentSize().width*0.5f, rewards.get(1).getContentSize().height*0.5f);
 			} else if (inviteCount == 70) { // 70명째 초대시 1만gold 보상
-//			} else if (inviteCount == 3) { // 70명째 초대시 1만gold 보상
 				inviteRewardGold(10000);
 				rewards.get(2).addChild(checkSprite);
 				checkSprite.setPosition(rewards.get(2).getContentSize().width*0.5f, rewards.get(2).getContentSize().height*0.5f);
@@ -214,9 +211,9 @@ public class Invite extends CCLayer {
 		// 일단 막코딩 합니다. ㅠㅠ (리팩토링이 필요합니다.)
 		int inviteCount = Integer.parseInt(FacebookData.getinstance().getDBData("InviteNumber"));
 		int count = 0;
-//		for (int i = 0; i < inviteCount; i++) {
 		for (int i = 30; i < inviteCount; i+=20) {
 			rewards.get(count).addChild(checkSprite);
+			checkSprite.setPosition(rewards.get(count).getContentSize().width*0.5f, rewards.get(count).getContentSize().height*0.5f);
 			count ++;
 		}
 		count = 0;
@@ -265,6 +262,8 @@ public class Invite extends CCLayer {
 		statusPanel.addChild(statusPanelText1);
 		statusPanel.addChild(statusPanelText2);
 		statusPanel.addChild(statusPanelText3);
+		
+		checkSprite.setContentSize(statusPanel.getContentSize()); 
 		return statusPanel;
 	}
 

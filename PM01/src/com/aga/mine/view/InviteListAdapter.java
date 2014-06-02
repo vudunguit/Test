@@ -25,7 +25,6 @@ public class InviteListAdapter extends BaseAdapter {
 	private Profile user;
 	private List<Profile> notAPlayers;
 	private AQuery mAq;
-	String myName = null;
 	boolean isLocaleKo = false;
 	
 	public InviteListAdapter(Context context) {
@@ -35,7 +34,6 @@ public class InviteListAdapter extends BaseAdapter {
 			isLocaleKo = true;
 		List<Profile> friends = FacebookData.getinstance().getFriendsInfo();
 		List<GameScore> gameScore = FacebookData.getinstance().getGameScore();
-		myName = FacebookData.getinstance().getUserInfo().getName();
 		notAPlayers = friends;
 		
 		for (GameScore player : gameScore) {
@@ -104,11 +102,12 @@ public class InviteListAdapter extends BaseAdapter {
 			public void onClick(View v) {
 			    MainActivity mMainActivity = MainApplication.getInstance().getActivity();
 			    mMainActivity.click();
+				String friend = notAPlayers.get(position).getId();
 				// 메시지가 정확하게 전달 되는지는 모르겠네요.
 				
 				// 로그인 안되어 있을 경우 '취소'처리(이런경우가 없는데...) 
 				Log.e("InviteListAapter", "Callback_3 - imgInviteBtn.setOnClickListener()");
-				mMainActivity.sendInvite(myName, user.getName() + "님이 귀하를 초대합니다.", null);
+				mMainActivity.sendInvite(friend, user.getName() + "님이 귀하를 초대합니다.", null);
 			}
 		});
 		
