@@ -25,6 +25,8 @@ import org.cocos2d.types.CGPoint;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.aga.mine.pages2.GameData;
@@ -82,12 +84,12 @@ public class Login extends CCLayer{
 		setMain(bg);
 		
 	    if(MainApplication.getInstance().getActivity().mSimpleFacebook.isLogin()) {
-		    MainApplication.getInstance().mHandler.postDelayed(new Runnable() {
+		    MainApplication.getInstance().mHandler.post(new Runnable() {
 	            @Override
 	            public void run() {
 	                nextSceneCallback();
 	            }
-	        }, 500);
+	        });
 	    } else {
 	    	terms(bg);
 			setForeground(bg);
@@ -193,7 +195,6 @@ public class Login extends CCLayer{
 				actionProgress();
 			}
 		});
-		
 	}
 	
 	private void setForeground(CCSprite bg) {
@@ -256,13 +257,16 @@ public class Login extends CCLayer{
 	public void removeAction(Object sender) {
 		CCSprite sprite = (CCSprite)sender;
 		sprite.removeFromParentAndCleanup(true);
-	}
-	
-	
+	}	
 	
 	public void facebookCallback(Object sender){
-		MainApplication.getInstance().getActivity().click();
-		MainApplication.getInstance().getActivity().loginFaceBook();
+		MainApplication.getInstance().mHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				MainApplication.getInstance().getActivity().click();
+				MainApplication.getInstance().getActivity().loginFaceBook();
+			}
+		});
 	}
 
 	public void guestCallback(Object sender) {
