@@ -1,6 +1,7 @@
 ﻿package com.aga.mine.mains;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import org.cocos2d.actions.base.CCFiniteTimeAction;
 import org.cocos2d.actions.interval.CCMoveTo;
@@ -32,7 +33,11 @@ public class RequestMatch extends CCLayer{
 	static CGPoint basePositionOn;
 	CGPoint basePositionOff;
 
+	boolean isLocaleKo = false;
+	
 	public RequestMatch() {
+		if (Locale.getDefault().getLanguage().toString().equals("ko"))
+			isLocaleKo = true;
 		layout();
 	}
 
@@ -63,7 +68,11 @@ public class RequestMatch extends CCLayer{
 				folder + "receiveAllButtonPress" + fileExtension, 
 				this, "clicked");
 		accept.setTag(1);
-		CCLabel textAccept = CCLabel.makeLabel("Accept", "Arial", 24);
+		
+		String acceptStr = "Accept";
+		if (isLocaleKo)
+			acceptStr = "승락";
+		CCLabel textAccept = CCLabel.makeLabel(acceptStr, "Arial", 24);
 		textAccept.setColor(ccColor3B.ccBLACK);
 		textAccept.setPosition(accept.getContentSize().width / 2, accept.getContentSize().height / 2);
 		accept.addChild(textAccept);
@@ -78,7 +87,11 @@ public class RequestMatch extends CCLayer{
 				folder + "receiveAllButtonPress" + fileExtension, 
 				this, "clicked");
 		reject.setTag(2);
-		CCLabel textReject = CCLabel.makeLabel("Reject", "Arial", 24);
+		
+		String rejectStr = "Reject";
+		if (isLocaleKo)
+			rejectStr = "거절";
+		CCLabel textReject = CCLabel.makeLabel(rejectStr, "Arial", 24);
 		textReject.setColor(ccColor3B.ccBLACK);
 		textReject.setPosition(accept.getContentSize().width / 2, accept.getContentSize().height / 2);
 		reject.addChild(textReject);
@@ -139,29 +152,30 @@ public class RequestMatch extends CCLayer{
 	}
 
 	public void clicked(Object sender) {
-		MainApplication.getInstance().getActivity().click();
 		Log.e("RequestMatch", "clicked");
-		// 초대창 애니메이션 오프
-		CCFiniteTimeAction moveOff = CCMoveTo.action(GameConfig.share().kEmoticonPanelMoveTime, basePositionOff);
-		base.runAction(CCSequence.actions(moveOff));
-		
-		switch (((CCMenuItem)sender).getTag()) {
-		case 1:
-			try {
-				GameData.share().setGameDifficulty(difficulty);
-				NetworkController.getInstance().sendRoomOwner(NetworkController.getInstance().guest);
-				NetworkController.getInstance().sendWillYouAcceptInviteOk(oppenentPlayerID);
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			break;
+		MainApplication.getInstance().getActivity().click();
+		if (Integer.valueOf(FacebookData.getinstance().getDBData("ReceivedBroomstick")) > 0) {
+			// 초대창 애니메이션 오프
+			CCFiniteTimeAction moveOff = CCMoveTo.action(GameConfig.share().kEmoticonPanelMoveTime, basePositionOff);
+			base.runAction(CCSequence.actions(moveOff));
 			
-		case 2:
-			Log.e("RequestMatch", "거절");
-			break;
+			switch (((CCMenuItem)sender).getTag()) {
+			case 1:
+				try {
+					GameData.share().setGameDifficulty(difficulty);
+					NetworkController.getInstance().sendRoomOwner(NetworkController.getInstance().guest);
+					NetworkController.getInstance().sendWillYouAcceptInviteOk(oppenentPlayerID);
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				break;
+				
+			case 2:
+				Log.e("RequestMatch", "거절");
+				break;
+			}
 		}
-
 	}
 	
 }

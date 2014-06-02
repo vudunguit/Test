@@ -14,6 +14,7 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.pages2.GameData;
@@ -281,7 +282,16 @@ public class Home extends CCLayer{
 			break;
 		case enterButton:
 			Log.e("Home", "CallBack3 : enter " + value);
-			scene = GameMode.scene();
+			if (Integer.valueOf(FacebookData.getinstance().getDBData("ReceivedBroomstick")) > 0) {
+				scene = GameMode.scene();	
+			} else {
+				CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+					public void run() {
+						Toast.makeText(MainApplication.getInstance().getApplicationContext(), "빗자루가 부족합니다.", Toast.LENGTH_SHORT).show();
+						}
+					});
+				scene = Home.scene();	
+			}
 			break;
 		case optionButton:
 			Log.e("Home", "CallBack3 : option " + value);

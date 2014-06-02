@@ -107,21 +107,12 @@ public class MatchListAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				MainApplication.getInstance().getActivity().click();
-				if (Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick")) < 1) {
-					CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
-								public void run() {
-									Toast.makeText(mContext, "빗자루가 부족합니다.", Toast.LENGTH_SHORT).show();
-								}
-							});
-				} else {
-					try {
-						NetworkController.getInstance().sendRequestMatchInvite(
-								GameData.share().getGameDifficulty(), mGameScore.get(position).getId());
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				
+				try {
+					NetworkController.getInstance().sendRequestMatchInvite(
+							GameData.share().getGameDifficulty(), mGameScore.get(position).getId());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}				
 			}
 		});
 		

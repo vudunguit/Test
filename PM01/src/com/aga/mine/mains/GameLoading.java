@@ -10,6 +10,8 @@ import org.cocos2d.types.CGSize;
 import android.util.Log;
 
 import com.aga.mine.pages2.Game;
+import com.aga.mine.pages2.GameData;
+import com.aga.mine.util.Util;
 
 public class GameLoading extends CCLayer {
 	
@@ -28,6 +30,7 @@ public class GameLoading extends CCLayer {
 		/************ 잘 사용했는지 모르겠습니다. 확인 부탁드립니다.  ************/
 //		// hide scroll view
 //		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
+		broomstickSubtract();
 		setBackground();
 		setMainMenu();
 		//schedule("nextSceneCallback", 1.0f);
@@ -111,6 +114,20 @@ public class GameLoading extends CCLayer {
 		if(mGameScene != null) {
 			unschedule("update");
 			CCDirector.sharedDirector().replaceScene(mGameScene);
+		}
+	}
+	
+	
+	private void broomstickSubtract() {
+	// 게스트모드면 패스
+		if (!GameData.share().isGuestMode) {
+		
+			int mBroomstickCount = Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick"));
+			FacebookData.getinstance().modDBData("ReceivedBroomstick", String.valueOf(mBroomstickCount - 1)); // DB에 빗자루 수량 insert
+		
+			if (mBroomstickCount >= 6)
+				Util.setBroomstickTime();
+
 		}
 	}
 	
