@@ -32,7 +32,7 @@ import com.aga.mine.util.Util;
 
 public class NetworkController extends Activity {
 	
-	boolean _owner = false;
+	public boolean _owner = false;
 	public final boolean owner = true;
 	public final boolean guest = false;
 	

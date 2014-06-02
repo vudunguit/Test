@@ -14,6 +14,7 @@ import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
@@ -142,21 +143,33 @@ public class GameEnding extends CCLayer {
 //		int randomPoint = myScore;
 		
 		bg = CCSprite.sprite("00common/" + "opacitybg.png");
-		this.addChild(bg);
 		bg.setPosition(winSize.width / 2, winSize.height / 2);
+		this.addChild(bg);
 		
 		CCSprite base = CCSprite.sprite(folder + "ending-base.png");
-		bg.addChild(base);
 		base.setAnchorPoint(0.5f, 0.5f);
 		base.setPosition(winSize.width / 2, (winSize.height / 3) * 2);
+		bg.addChild(base);
 		
 		addChild_Center(base, Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-title.png"));
-		
-		CCSprite backboard = addChild_Center(base, folder + "ending-bbWin.png");
-		addChild_Center(backboard, Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-win.png"));
-		addChild_Center(backboard, folder + "ending-winImageR.png");
-		
 		/*********************************************************/
+		String magicianColor = "R";
+		if (!NetworkController.getInstance()._owner) {
+			magicianColor = "B";
+		}
+		
+		CCSprite backboard = null;
+		if (showAni) { // true == 승리시
+			backboard = addChild_Center(base, folder + "ending-bbWin.png");
+			addChild_Center(backboard, Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-win.png"));
+			addChild_Center(backboard, folder + "ending-winImage" + magicianColor +".png");
+		} else {
+			backboard = addChild_Center(base, folder + "ending-bbLose.png");
+			addChild_Center(backboard, Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-lose.png"));
+			addChild_Center(backboard, folder + "ending-loseImage" + magicianColor +".png");
+		}
+		
+		
 		// 
 		CCSprite picture = CCSprite.sprite("noPicture.png");
 		backboard.addChild(picture);
@@ -183,11 +196,13 @@ public class GameEnding extends CCLayer {
 		
 		// 획득한 경험치만 숫자로 표현(기존+획득 아님)
 		exp = CCLabel.makeLabel(String.valueOf(mLeftExp), "Arial", 30);
-		backboard.addChild(exp);
 		exp.setAnchorPoint(1, 0.5f);
 		exp.setPosition(460, backboard.getContentSize().height - 396); //400
+		if (showAni || !GameData.share().isMultiGame) {
+			backboard.addChild(exp);
+		}
 		
-		/*********************************************************/
+		/************************ background image *********************************/
 		//현재 레벨 위치 : (현재레벨/현재레벨Max)% * 322px, 
 		mExpX = (myExp/(float)UserData.expPerLevel[mUserLevel-1]); //단위는 0 ~ 1.0
 		//test : 획득 경험치는 8000이라 가정함. 
@@ -232,31 +247,35 @@ public class GameEnding extends CCLayer {
 			lv.setPosition(25, 45);
 			
 			expHead = CCSprite.sprite(folder + "ending-exp05.png");
-			expbg.addChild(expHead, 2);
 			expHead.setAnchorPoint(0.5f, 0.5f);
 			expHead.setPosition(expBar.getPosition());
+			expbg.addChild(expHead, 2);	
+			
 //		}
 		
-		/*********************************************************/
-		// 좌측 버튼
-		CCMenuItem buttonL = CCMenuItemImage.item(
-				folder + "ending-button1.png",
-				folder + "ending-button2.png",
-				this, "clicked");
-		buttonL.setUserData(myScore / 10); // GameScore 손실 대신 gold로 대체 
-		CCSprite textL = CCSprite.sprite(Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-defense.png"));
-		buttonL.addChild(textL);
-		textL.setPosition(buttonL.getContentSize().width / 2, buttonL.getContentSize().height / 2);
-		
-		CCMenu leftbutton = CCMenu.menu(buttonL);
-		bg.addChild(leftbutton, 2);
-		leftbutton.setPosition(
-				expbg.getPosition().x - (expbg.getAnchorPoint().x * expbg.getContentSize().width)
-				+ leftbutton.getAnchorPoint().x * buttonL.getContentSize().width + 10, 
-				expbg.getPosition().y - (expbg.getAnchorPoint().y * expbg.getContentSize().height) 
-				- leftbutton.getAnchorPoint().y * buttonL.getContentSize().height - 10
-				);
-		
+		/************************** buttons *******************************/
+
+			if (!showAni || !GameData.share().isMultiGame) {
+				// 좌측 버튼
+				CCMenuItem buttonL = CCMenuItemImage.item(
+						folder + "ending-button1.png",
+						folder + "ending-button2.png",
+						this, "clicked");
+				buttonL.setUserData(myScore / 10); // GameScore 손실 대신 gold로 대체 
+				CCSprite textL = CCSprite.sprite(Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-defense.png"));
+				buttonL.addChild(textL);
+				textL.setPosition(buttonL.getContentSize().width / 2, buttonL.getContentSize().height / 2);
+				
+				CCMenu leftbutton = CCMenu.menu(buttonL);
+				bg.addChild(leftbutton, 2);
+				leftbutton.setPosition(
+						expbg.getPosition().x - (expbg.getAnchorPoint().x * expbg.getContentSize().width)
+						+ leftbutton.getAnchorPoint().x * buttonL.getContentSize().width + 10, 
+						expbg.getPosition().y - (expbg.getAnchorPoint().y * expbg.getContentSize().height) 
+						- leftbutton.getAnchorPoint().y * buttonL.getContentSize().height - 10
+						);
+			}
+			
 		// 우측 버튼
 		CCMenuItem buttonR = CCMenuItemImage.item(
 				folder + "ending-button1.png",
@@ -269,12 +288,18 @@ public class GameEnding extends CCLayer {
 		
 		CCMenu rightbutton = CCMenu.menu(buttonR);
 		bg.addChild(rightbutton, 3);
-		rightbutton.setPosition(
+		CGPoint rightButtonPosition = CGPoint.ccp(				
 				expbg.getPosition().x + ((1 - expbg.getAnchorPoint().x) * expbg.getContentSize().width)
 				- rightbutton.getAnchorPoint().x * buttonR.getContentSize().width - 10,
 				expbg.getPosition().y - (expbg.getAnchorPoint().y * expbg.getContentSize().height) 
-				- rightbutton.getAnchorPoint().y * buttonR.getContentSize().height - 10
-				);
+				- rightbutton.getAnchorPoint().y * buttonR.getContentSize().height - 10);
+		if (showAni) {
+			rightButtonPosition = CGPoint.ccp(
+					expbg.getPosition().x + ((0.5f - expbg.getAnchorPoint().x) * expbg.getContentSize().width)
+					+ ((rightbutton.getAnchorPoint().x - 0.5f) * buttonR.getContentSize().width), // <-- + 인지 -인지 다시 계산할것
+					rightButtonPosition.y);
+		}		
+		rightbutton.setPosition(rightButtonPosition);
 		
 		//경험치 및 레벨업 애니메이션
 		//경험치 1000당 1초
@@ -353,6 +378,8 @@ public class GameEnding extends CCLayer {
 	
 	Map<String, String> basket;
 	
+	
+	// DB 저장값들 clicked 되기전으로 전부 옮겨야 됩니다.
 	boolean buttonActive = true;
 	public void clicked(Object sender) {
 		MainApplication.getInstance().getActivity().click();
