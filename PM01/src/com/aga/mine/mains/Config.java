@@ -382,9 +382,9 @@ public class Config {
 		return vsResult; 
 	}
 
+	
 	public boolean isOwner() {
-		// TODO Auto-generated method stub
-		return true;
+		return NetworkController.getInstance()._owner;
 	}
 	
 	

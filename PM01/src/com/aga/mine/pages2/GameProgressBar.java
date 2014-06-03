@@ -55,8 +55,14 @@ public class GameProgressBar extends CCLayer {
 				winSize.height - base.getContentSize().height);
 		this.addChild(base);
 
-		indicatorMe = CCSprite.sprite(hudLayerFolder + "game-progressIndicatorMe-hd.png");
-		indicatorOther = CCSprite.sprite(hudLayerFolder + "game-progressIndicatorOther-hd.png");
+		if (Config.getInstance().isOwner()) {
+			indicatorMe = CCSprite.sprite(hudLayerFolder + "game-progressIndicatorMe-hd.png");
+			indicatorOther = CCSprite.sprite(hudLayerFolder + "game-progressIndicatorOther-hd.png");
+		} else {
+			indicatorMe = CCSprite.sprite(hudLayerFolder + "game-progressIndicatorOther-hd.png");
+			indicatorOther = CCSprite.sprite(hudLayerFolder + "game-progressIndicatorMe-hd.png");
+		}
+
 		indicatorMe.setTag(kTagIndicatorMe);
 		indicatorOther.setTag(kTagIndicatorOther);
 

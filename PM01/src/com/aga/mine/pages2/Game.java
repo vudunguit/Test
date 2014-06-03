@@ -470,9 +470,13 @@ public class Game extends CCLayer {
 		mPumpkinBomb = CCAnimate.action(0.5f, pumpkin, false);
 		
 		//버섯 심기 애니메이션
+		String color = "red";
+		if (!Config.getInstance().isOwner()) {
+			color  = "blue";
+		}
 		CCAnimation mushroom = CCAnimation.animation("mushroom");
 		for(int i=1; i<=8; i++) {
-			mushroom.addFrame(CCTextureCache.sharedTextureCache().addImage(String.format("60game/mush_red%02d.png", i)));
+			mushroom.addFrame(CCTextureCache.sharedTextureCache().addImage(String.format("60game/mush_" + color + "%02d.png", i)));
 		}
 		mMushroom = CCAnimate.action(0.7f, mushroom, false);
 		
@@ -1464,8 +1468,12 @@ public class Game extends CCLayer {
 
 	//
 	// tile methods
-	public void markFlag(MineCell mineCell) {	
-		CCSprite mushroom = CCSprite.sprite("60game/mush_red01.png");
+	public void markFlag(MineCell mineCell) {
+		String color = "red";
+		if (!Config.getInstance().isOwner()) {
+			color  = "blue";
+		}
+		CCSprite mushroom = CCSprite.sprite("60game/mush_"+color+"01.png");
 		addChild(mushroom, 5);
 		mushroom.setPosition(mineCell.getTilePosition());
 		
