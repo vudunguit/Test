@@ -478,7 +478,7 @@ public class Game extends CCLayer {
 		for(int i=1; i<=8; i++) {
 			mushroom.addFrame(CCTextureCache.sharedTextureCache().addImage(String.format("60game/mush_" + color + "%02d.png", i)));
 		}
-		mMushroom = CCAnimate.action(0.7f, mushroom, false);
+		mMushroom = CCAnimate.action(0.4f, mushroom, false);
 		
 		//대지마법 애니메이션 초기화
 		mEarthBomb = CCAnimation.animation("EarthBomb");
