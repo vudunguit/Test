@@ -1491,6 +1491,9 @@ public class Game extends CCLayer {
 		MineCell mineCell = (MineCell) cell;
 		
 		int flagGid = this.tmxItemLayer.tileGIDAt(CGPoint.ccp(1, 0)); // 빨간깃발(방장)
+		if(!Config.getInstance().isOwner()) {
+			flagGid = this.tmxItemLayer.tileGIDAt(CGPoint.ccp(2, 0)); // 파란깃발(손님)
+		}
 		flagGid = CCFormatter.swapIntToLittleEndian(flagGid);
 		this.tmxFlagLayer.setTileGID(flagGid, mineCell.getTileCoord());
 	}
