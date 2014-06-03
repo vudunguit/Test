@@ -155,7 +155,7 @@ public class Game extends CCLayer {
 	
 	private Game() {
 		unopenedTile = 0;
-		
+		Config.getInstance().setOwner();
 		mContext = CCDirector.sharedDirector().getActivity().getApplicationContext();
 		winSize = CCDirector.sharedDirector().winSize();
 		
@@ -471,7 +471,7 @@ public class Game extends CCLayer {
 		
 		//버섯 심기 애니메이션
 		String color = "red";
-		if (!Config.getInstance().isOwner()) {
+		if (!Config.getInstance().getOwner()) {
 			color  = "blue";
 		}
 		CCAnimation mushroom = CCAnimation.animation("mushroom");
@@ -1470,7 +1470,7 @@ public class Game extends CCLayer {
 	// tile methods
 	public void markFlag(MineCell mineCell) {
 		String color = "red";
-		if (!Config.getInstance().isOwner()) {
+		if (!Config.getInstance().getOwner()) {
 			color  = "blue";
 		}
 		CCSprite mushroom = CCSprite.sprite("60game/mush_"+color+"01.png");
@@ -1491,7 +1491,7 @@ public class Game extends CCLayer {
 		MineCell mineCell = (MineCell) cell;
 		
 		int flagGid = this.tmxItemLayer.tileGIDAt(CGPoint.ccp(1, 0)); // 빨간깃발(방장)
-		if(!Config.getInstance().isOwner()) {
+		if(!Config.getInstance().getOwner()) {
 			flagGid = this.tmxItemLayer.tileGIDAt(CGPoint.ccp(2, 0)); // 파란깃발(손님)
 		}
 		flagGid = CCFormatter.swapIntToLittleEndian(flagGid);

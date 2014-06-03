@@ -93,14 +93,14 @@ public class GameInvite extends CCLayer {
 			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_MATCHLIST);
 		}
 		
-		isOwner = NetworkController.getInstance()._owner;
+		isOwner = NetworkController.getInstance().getOwner();
 //		NetworkController.getInstance().matchMode;
 		
 	}
 	
 	
 	private GameInvite() {
-		isOwner = NetworkController.getInstance()._owner;
+		isOwner = NetworkController.getInstance().getOwner();
 		
 		//when invitation is successful, this callback is called.
     	Log.e("Invite", "Callback_1 - setInviteCallback()");

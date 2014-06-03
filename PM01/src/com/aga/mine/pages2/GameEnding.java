@@ -152,12 +152,14 @@ public class GameEnding extends CCLayer {
 		bg.addChild(base);
 		
 		addChild_Center(base, Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-title.png"));
-		/*********************************************************/
-		String magicianColor = "R";
-		if (!NetworkController.getInstance()._owner) {
+		/***************************** background image ****************************/
+		String magicianColor = null;
+		if (Config.getInstance().getOwner()) {
+			magicianColor = "R";
+		} else {
 			magicianColor = "B";
 		}
-		
+		Log.e("GameEnding", "isOwner : " + magicianColor);	
 		CCSprite backboard = null;
 		if (showAni) { // true == 승리시
 			backboard = addChild_Center(base, folder + "ending-bbWin.png");
@@ -202,7 +204,7 @@ public class GameEnding extends CCLayer {
 			backboard.addChild(exp);
 		}
 		
-		/************************ background image *********************************/
+		/*************************** expframe ******************************/
 		//현재 레벨 위치 : (현재레벨/현재레벨Max)% * 322px, 
 		mExpX = (myExp/(float)UserData.expPerLevel[mUserLevel-1]); //단위는 0 ~ 1.0
 		//test : 획득 경험치는 8000이라 가정함. 
@@ -241,10 +243,10 @@ public class GameEnding extends CCLayer {
 			CCSprite expframe = addChild_Center(expbg, folder + "ending-exp04.png");
 			
 			lv = CCLabel.makeLabel("Level " + myLevel, "Arial", 36);
-			expframe.addChild(lv);
 			lv.setColor(ccColor3B.ccYELLOW);
 			lv.setAnchorPoint(0, 0.5f);
 			lv.setPosition(25, 45);
+			expframe.addChild(lv);
 			
 			expHead = CCSprite.sprite(folder + "ending-exp05.png");
 			expHead.setAnchorPoint(0.5f, 0.5f);
@@ -253,7 +255,7 @@ public class GameEnding extends CCLayer {
 			
 //		}
 		
-		/************************** buttons *******************************/
+		/**************************** buttons *****************************/
 
 			if (!showAni || !GameData.share().isMultiGame) {
 				// 좌측 버튼

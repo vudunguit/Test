@@ -257,7 +257,7 @@ public class HudLayer extends CCLayer {
 		//
 		// 마법사
 		String magicianColor = "ra0.png";
-		if (!Config.getInstance().isOwner())
+		if (!Config.getInstance().getOwner())
 			magicianColor = "br0.png";
 		
 //		magician.setDisplayFrame(frame);
@@ -419,7 +419,7 @@ public class HudLayer extends CCLayer {
 	
 	public void setMagicianTo(int direction) {
 		String magicianColor = "ra";
-		if (!Config.getInstance().isOwner())
+		if (!Config.getInstance().getOwner())
 			magicianColor = "br";
 		CCSpriteFrame frame = cache.getSpriteFrame(magicianColor + direction + ".png");
 		magician.setDisplayFrame(frame);

@@ -31,8 +31,8 @@ import com.aga.mine.util.Util;
 //import com.aga.mine.pages.GameMinimap;
 
 public class NetworkController extends Activity {
-	
-	public boolean _owner = false;
+	String tag = "NetworkController";
+	private boolean _owner = false;
 	public final boolean owner = true;
 	public final boolean guest = false;
 	
@@ -501,7 +501,7 @@ public class NetworkController extends Activity {
     			Log.e("NetworkController", "random or invite Owner");
 	    		if(mMatchCallback != null) {
 	    			Log.e("NetworkController", "Callback_6 - mInviteCallback != null");
-	    			mMatchCallback.setEntry(matchedOppenentFacebookId, matchedOppenentName, _owner);
+	    			mMatchCallback.setEntry(matchedOppenentFacebookId, matchedOppenentName, getOwner());
 	    		} else {
 	    			Log.e("NetworkController", "실패");
 	    		}
@@ -748,11 +748,11 @@ public class NetworkController extends Activity {
 	
 	public boolean sendRoomOwner(boolean isOwner) throws IOException {
 		// 오너가 되는 부분은 랜덤매치 실패 & 초대매치 입장시 & 초대매치를 통해 랜덤매치 입장시
-		_owner = isOwner;
+		setOwner(isOwner);
 		Log.e("NetworkController", "sending sendRoomOwner ......");
 		MessageWriter message = new MessageWriter();
 		message.writeByte((byte) kMessageInRoomOwner);
-		if (_owner) {
+		if (getOwner()) {
 			message.writeByte((byte) 1);
 		} else {
 			message.writeByte((byte) 0);
@@ -760,7 +760,7 @@ public class NetworkController extends Activity {
 		sendData(message.data_);
 		setMessage(kMessageInRoomOwner, kModeSent);
 		Log.e("NetworkController", "sendRoomOwner");
-		return _owner;
+		return getOwner();
 	}
 	
 //	public static void sendRequestMatchInvite(int difficulty, String facebookID) {
@@ -779,7 +779,7 @@ public class NetworkController extends Activity {
 		message.writeByte((byte) kMessageRequestMatch);
 		message.writeByte((byte) difficulty);
 		sendData(message.data_);
-		if (_owner == true)
+		if (getOwner())
 			matchMode = randomOwner;
 		else
 			matchMode = randomGuest;	
@@ -809,7 +809,7 @@ public class NetworkController extends Activity {
 		this.sendData(message.data_);
 		this.setMessage(kMessageRequestMatchInvite, kModeSent);
 		Log.e("NetworkController", "send Request Match Invite");
-		_owner = true;
+		setOwner(true);
 		matchMode = inviteOwner;
 	}
 	
@@ -836,7 +836,7 @@ public class NetworkController extends Activity {
 		this.sendData(message.data_);
 		this.setMessage(kMessageWillYouAcceptInviteOK, kModeSent);
 		Log.e("NetworkController", "kMessageWillYouAcceptInviteOK");
-		_owner = false;
+		setOwner(false);
 		matchMode = inviteGuest;
 	}
 	 
@@ -932,6 +932,15 @@ public class NetworkController extends Activity {
 		matchMode = standby;
 	}
 	
+	public void setOwner(boolean b) {
+		Log.e(tag, "setOwner : " + b);
+		_owner = b;
+	}
+	
+	public boolean getOwner() {
+		Log.e(tag, "getOwner : " + _owner);
+		return _owner;
+	}
     //match callback--------------------------------------------------------------------------
     public MatchCallback mMatchCallback;
     

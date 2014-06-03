@@ -5,6 +5,8 @@ import java.util.Timer;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.ccColor3B;
 
+import android.util.Log;
+
 public class Config {
 
 	//
@@ -382,9 +384,15 @@ public class Config {
 		return vsResult; 
 	}
 
+	boolean owner = false;
 	
-	public boolean isOwner() {
-		return NetworkController.getInstance()._owner;
+	public void setOwner() {
+		owner =  NetworkController.getInstance().getOwner();
+		Log.e("Config", "owner : " + owner);
+	}
+	
+	public boolean getOwner() {
+		return owner;
 	}
 	
 	
