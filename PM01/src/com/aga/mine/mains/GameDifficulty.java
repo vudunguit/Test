@@ -172,6 +172,7 @@ public class GameDifficulty extends CCLayer {
 		case singleMode:
 //			single(scene);
 			scene = GameLoading.scene();
+			Config.getInstance().setSingleOwner();
 			break;
 			
 		case randomMode:

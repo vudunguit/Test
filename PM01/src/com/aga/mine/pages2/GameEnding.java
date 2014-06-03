@@ -3,6 +3,7 @@
 import java.io.IOException;
 import java.security.spec.MGF1ParameterSpec;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.cocos2d.actions.UpdateCallback;
@@ -13,6 +14,7 @@ import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
+import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
@@ -73,9 +75,18 @@ public class GameEnding extends CCLayer {
 //	int myScore2;
 	int otherScore;
 	int closedCell;
+	boolean isLocaleKo = false;
+	
+	private final int done = 0;
+	private final int restart = 1;
+	private final int defense = 2;
+	final private int popupTag = 2000;
+	float expPerSecond;
 	
 	public GameEnding(int myScore2, int otherScore, int closedCell) {
 		basket = new HashMap<String, String>();
+		if (Locale.getDefault().getLanguage().toString().equals("ko"))
+			isLocaleKo = true;
 		Log.e("GameEnding", "myScore : " + myScore2+ ", otherScore : " + otherScore + ", closedCell : " + closedCell);
 		
 		// 플레이 중이던 모든 소리 정지
@@ -187,14 +198,29 @@ public class GameEnding extends CCLayer {
 				+ (picture.getScale() * 20), picture.getPosition().y);
 		
 		CCLabel point = CCLabel.makeLabel(String.valueOf(myScore), "Arial", 30);
-		backboard.addChild(point);
 		point.setAnchorPoint(1, 0.5f);
 		point.setPosition(460, backboard.getContentSize().height - 280);
+		backboard.addChild(point);
 		
-		CCLabel gold = CCLabel.makeLabel(String.valueOf(myGold), "Arial", 30);
-		backboard.addChild(gold);
+		String goldText = String.valueOf(myGold);
+		if (!showAni) {
+			goldText = String.valueOf(-myGold);
+		}
+		
+		CGPoint goldTextPosition = CGPoint.ccp(460, backboard.getContentSize().height - 338);
+		if (GameData.share().isMultiGame && !showAni) {
+			goldTextPosition = CGPoint.ccp(goldTextPosition.x, backboard.getContentSize().height - 347);
+		}
+		CCLabel gold = CCLabel.makeLabel(goldText, "Arial", 30);
 		gold.setAnchorPoint(1, 0.5f);
-		gold.setPosition(460, backboard.getContentSize().height - 338); // 340
+		gold.setPosition(goldTextPosition); // 340
+		backboard.addChild(gold);
+		
+		CCSprite goldImage = CCSprite.sprite(folder + "gold.png");
+		goldImage.setPosition(0- goldImage.getContentSize().width*0.5f, gold.getContentSize().height*0.45f);
+		goldImage.setAnchorPoint(1, 0.5f);
+		goldImage.setScale(0.8f);
+		gold.addChild(goldImage);
 		
 		// 획득한 경험치만 숫자로 표현(기존+획득 아님)
 		exp = CCLabel.makeLabel(String.valueOf(mLeftExp), "Arial", 30);
@@ -207,8 +233,9 @@ public class GameEnding extends CCLayer {
 		/*************************** expframe ******************************/
 		//현재 레벨 위치 : (현재레벨/현재레벨Max)% * 322px, 
 		mExpX = (myExp/(float)UserData.expPerLevel[mUserLevel-1]); //단위는 0 ~ 1.0
-		//test : 획득 경험치는 8000이라 가정함. 
-//		mLeftExp = 8000;
+		//test : 획득 경험치는 10000이라 가정함. 
+		mLeftExp = 10000;
+		expPerSecond = mLeftExp / 2f;
 		
 		// 경험치 바
 		CCSprite expbg = null;
@@ -257,13 +284,23 @@ public class GameEnding extends CCLayer {
 		/**************************** buttons *****************************/
 
 			if (!showAni || !GameData.share().isMultiGame) {
+				
+				String buttonText = "ending-defense";
+				int leftButtonTag = defense;
+				if (!GameData.share().isMultiGame) {
+					buttonText = "ending-restart";
+					leftButtonTag = restart;
+				}
+				
 				// 좌측 버튼
 				CCMenuItem buttonL = CCMenuItemImage.item(
 						folder + "ending-button1.png",
 						folder + "ending-button2.png",
 						this, "clicked");
-				buttonL.setUserData(myScore / 10); // GameScore 손실 대신 gold로 대체 
-				CCSprite textL = CCSprite.sprite(Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-defense.png"));
+				buttonL.setTag(leftButtonTag);
+				buttonL.setUserData(myScore / 10); // GameScore 손실 대신 gold로 대체
+				
+				CCSprite textL = CCSprite.sprite(Utility.getInstance().getNameWithIsoCodeSuffix(folder + buttonText +".png"));
 				buttonL.addChild(textL);
 				textL.setPosition(buttonL.getContentSize().width / 2, buttonL.getContentSize().height / 2);
 				
@@ -271,7 +308,7 @@ public class GameEnding extends CCLayer {
 				bg.addChild(leftbutton, 2);
 				leftbutton.setPosition(
 						expbg.getPosition().x - (expbg.getAnchorPoint().x * expbg.getContentSize().width)
-						+ leftbutton.getAnchorPoint().x * buttonL.getContentSize().width + 10, 
+						+ leftbutton.getAnchorPoint().x * buttonL.getContentSize().width + 20, 
 						expbg.getPosition().y - (expbg.getAnchorPoint().y * expbg.getContentSize().height) 
 						- leftbutton.getAnchorPoint().y * buttonL.getContentSize().height - 10
 						);
@@ -291,7 +328,7 @@ public class GameEnding extends CCLayer {
 		bg.addChild(rightbutton, 3);
 		CGPoint rightButtonPosition = CGPoint.ccp(				
 				expbg.getPosition().x + ((1 - expbg.getAnchorPoint().x) * expbg.getContentSize().width)
-				- rightbutton.getAnchorPoint().x * buttonR.getContentSize().width - 10,
+				- rightbutton.getAnchorPoint().x * buttonR.getContentSize().width - 20,
 				expbg.getPosition().y - (expbg.getAnchorPoint().y * expbg.getContentSize().height) 
 				- rightbutton.getAnchorPoint().y * buttonR.getContentSize().height - 10);
 		if (showAni) {
@@ -314,7 +351,8 @@ public class GameEnding extends CCLayer {
 			unschedule("expAni");
 			return;
 		}
-		int gainedExp = (int)(dt * 50);
+//		int gainedExp = (int)(dt * 50);
+		int gainedExp = (int)(dt * expPerSecond);
 		myExp += gainedExp;
 		mLeftExp -= gainedExp;
 		//만일 mLeftExp가 음수가 되면 보정
@@ -335,15 +373,131 @@ public class GameEnding extends CCLayer {
 			//레벨 팝업
 			unschedule("expAni");
 			myExp = myExp - UserData.expPerLevel[mUserLevel-1];
-			final CCSprite levelUp = CCSprite.sprite("lv_up_popup/lvup.png");
-			bg.addChild(levelUp, 2000);
+			
+			// 이게 무슨 막코드인가.. 으으.. OTL
+			String[] levelUpCommentsEn = {"Level up ","Level up  rewards","G  o  l  d","Attack upgrade","Defenses upgrade","1 sec"};
+			String[] levelUpCommentsKo = {"레벨 달성","레벨업 보상","골        드","공격마법","방어마법","1초 증가"};
+			int fontLarge = (int)(26 * 2.8f);
+			int fontSmall = (int)(19 * 2f);
+			float leftMargin = 152;
+			float centerTextPosition = 396;
+			float rightMargin = 512;
+			float enScaleX = 0.6f;
+
+//			final CCSprite levelUp = CCSprite.sprite("lv_up_popup/lvup.png"); // old
+			final CCSprite levelUp = CCSprite.sprite("lv_up_popup/ending-lvupbb.png");
 			levelUp.setAnchorPoint(0.5f, 0.5f);
 			levelUp.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height / 2);
+			bg.addChild(levelUp, popupTag, popupTag);
 			
-			CCSprite levelUpKo = CCSprite.sprite("lv_up_popup/lvupKo.png");
-			levelUp.addChild(levelUpKo, 1);
-			levelUpKo.setAnchorPoint(0.5f, 0.5f);
-			levelUpKo.setPosition(levelUp.getContentSize().width/2, levelUp.getContentSize().height/2);
+			String[] popupText = null;  
+				if (isLocaleKo) {
+					popupText = levelUpCommentsKo;
+					centerTextPosition = 313;
+				} else {
+					popupText = levelUpCommentsEn;
+				}
+				
+			CCLabel LevelupTitle = CCLabel.makeLabel(popupText[0] + (myLevel+1) , "Arial", fontLarge);
+			LevelupTitle.setPosition(levelUp.getContentSize().width*0.5f, levelUp.getContentSize().height - 365);
+			LevelupTitle.setColor(ccColor3B.ccBLACK);
+			LevelupTitle.setOpacity(204);
+			
+			CCLabel reward = CCLabel.makeLabel(popupText[1], "Arial", fontSmall);
+			reward.setPosition(LevelupTitle.getPosition().x, levelUp.getContentSize().height - 483);
+			reward.setColor(ccColor3B.ccBLACK);
+			reward.setOpacity(204);
+			
+			
+			CCLabel gold1 = CCLabel.makeLabel(popupText[2], "Arial", fontSmall);
+			gold1.setPosition(leftMargin, levelUp.getContentSize().height - 535);
+			gold1.setAnchorPoint(0, 0.5f);
+			gold1.setColor(ccColor3B.ccBLACK);
+			gold1.setOpacity(204);
+			
+			CCLabel gold2 = CCLabel.makeLabel(":", "Arial", fontSmall);
+			gold2.setPosition(centerTextPosition, gold1.getPosition().y);
+			gold2.setColor(ccColor3B.ccBLACK);
+			gold2.setOpacity(204);
+			
+			CCLabel gold3 = CCLabel.makeLabel("00,000", "Arial", fontSmall);
+			gold3.setPosition(rightMargin, gold1.getPosition().y);
+			gold3.setAnchorPoint(1, 0.5f);
+			gold3.setColor(ccColor3B.ccBLACK);
+			gold3.setOpacity(204);
+			
+			CCLabel attack1 = CCLabel.makeLabel(popupText[3], "Arial", fontSmall);
+			attack1.setPosition(gold1.getPosition().x, levelUp.getContentSize().height - 585);
+			attack1.setAnchorPoint(gold1.getAnchorPoint());
+			attack1.setColor(ccColor3B.ccBLACK);
+			attack1.setOpacity(204);
+			
+			CCLabel attack2 = CCLabel.makeLabel(":", "Arial", fontSmall);
+			attack2.setPosition(gold2.getPosition().x, attack1.getPosition().y);
+			attack2.setColor(ccColor3B.ccBLACK);
+			attack2.setOpacity(204);
+			
+			CCLabel attack3 = CCLabel.makeLabel(popupText[5], "Arial", fontSmall);
+			attack3.setPosition(gold3.getPosition().x, attack1.getPosition().y);
+			attack3.setAnchorPoint(gold3.getAnchorPoint());
+			attack3.setColor(ccColor3B.ccBLACK);
+			attack3.setOpacity(204);
+			
+			
+			CCLabel defense1 = CCLabel.makeLabel(popupText[4], "Arial", fontSmall);
+			defense1.setPosition(gold1.getPosition().x,levelUp.getContentSize().height - 635);
+			defense1.setAnchorPoint(gold1.getAnchorPoint());
+			defense1.setColor(ccColor3B.ccBLACK);
+			defense1.setOpacity(204);
+			
+			CCLabel defense2 = CCLabel.makeLabel(":", "Arial", fontSmall);
+			defense2.setPosition(gold2.getPosition().x,defense1.getPosition().y);
+			defense2.setColor(ccColor3B.ccBLACK);
+			defense2.setOpacity(204);
+			
+			CCLabel defense3 = CCLabel.makeLabel(popupText[5], "Arial", fontSmall);
+			defense3.setPosition(gold3.getPosition().x,defense1.getPosition().y);
+			defense3.setAnchorPoint(gold3.getAnchorPoint());
+			defense3.setColor(ccColor3B.ccBLACK);
+			defense3.setOpacity(204);
+			
+			CCMenuItem okButton = CCMenuItemImage.item(
+					Utility.getInstance().getNameWithIsoCodeSuffix("lv_up_popup/ending-ok1.png"),
+					Utility.getInstance().getNameWithIsoCodeSuffix("lv_up_popup/ending-ok2.png"),
+					this, "popupButton");
+			
+			CCMenu ok = CCMenu.menu(okButton);
+			ok.setPosition(levelUp.getContentSize().width*0.5f, levelUp.getContentSize().height - 754);
+			
+			
+			if (isLocaleKo) {
+				LevelupTitle.setString((myLevel+1) + popupText[0]);
+			} else {
+				gold1.setScaleX(enScaleX);
+				gold3.setScaleX(enScaleX);
+				attack1.setScaleX(enScaleX);
+				attack3.setScaleX(enScaleX);
+				defense1.setScaleX(enScaleX);
+				defense3.setScaleX(enScaleX);
+			}
+			
+			levelUp.addChild(LevelupTitle);
+			levelUp.addChild(reward);
+			levelUp.addChild(gold1);
+			levelUp.addChild(gold2);
+			levelUp.addChild(gold3);
+			levelUp.addChild(attack1);
+			levelUp.addChild(attack2);
+			levelUp.addChild(attack3);
+			levelUp.addChild(defense1);
+			levelUp.addChild(defense2);
+			levelUp.addChild(defense3);
+			levelUp.addChild(ok);
+			
+//			CCSprite levelUpKo = CCSprite.sprite("lv_up_popup/lvupKo.png");
+//			levelUp.addChild(levelUpKo, 1);
+//			levelUpKo.setAnchorPoint(0.5f, 0.5f);
+//			levelUpKo.setPosition(levelUp.getContentSize().width/2, levelUp.getContentSize().height/2);
 			
 			Log.e("GameEnding", "myLevel : " + myLevel);
 			myLevel++; 
@@ -351,15 +505,15 @@ public class GameEnding extends CCLayer {
 			basket.put("Exp", String.valueOf(0)); // 레벨업에 따른 경험치 0으로 초기화 
 			lv.setString("Level " + myLevel);
 			
-			//3초 후에 레벨팝업을 제거하고 다시 경험치 애니메이션 구동
-			schedule(new UpdateCallback() {
-				@Override
-				public void update(float d) {
-					unschedule(this);
-					bg.removeChild(levelUp, true);
-					schedule("expAni");
-				}
-			}, 3.0f);
+//			//3초 후에 레벨팝업을 제거하고 다시 경험치 애니메이션 구동
+//			schedule(new UpdateCallback() {
+//				@Override
+//				public void update(float d) {
+//					unschedule(this);
+//					bg.removeChild(levelUp, true);
+//					schedule("expAni");
+//				}
+//			}, 3.0f);
 		}
 		
 	}
@@ -384,7 +538,8 @@ public class GameEnding extends CCLayer {
 	boolean buttonActive = true;
 	public void clicked(Object sender) {
 		MainApplication.getInstance().getActivity().click();
-		int tag = (Integer) ((CCMenuItemImage)sender).getUserData(); 
+		int userdata = (Integer) ((CCMenuItemImage)sender).getUserData(); 
+		int tag = ((CCNode)sender).getTag();
 		
 		CCScene scene = null;
 		if (GameData.share().isGuestMode) {
@@ -392,11 +547,11 @@ public class GameEnding extends CCLayer {
 		} else {
 			scene = Home.scene();
 		}
-		if (tag == 0) {
+		if (userdata == 0) {
 			Log.e("GameEnding", "홈으로 가기");
 		} else {
 			if (buttonActive) {
-				myGold -= tag;
+				myGold -= userdata;
 				usedGold = true;
 				buttonActive = false;
 			}
@@ -444,5 +599,16 @@ public class GameEnding extends CCLayer {
 	}
 	
 	private boolean usedGold = false;
+	
+	public void popupButton(Object sender) {
+		schedule(new UpdateCallback() {
+			@Override
+			public void update(float d) {
+				unschedule(this);
+				bg.removeChildByTag(popupTag,  true);
+				schedule("expAni");
+			}
+		}, 0);
+	}
 	
 }

@@ -395,5 +395,8 @@ public class Config {
 		return owner;
 	}
 	
-	
+	public void setSingleOwner() {
+		owner = true;
+		Log.e("Config", "owner : " + owner);
+	}
 }
