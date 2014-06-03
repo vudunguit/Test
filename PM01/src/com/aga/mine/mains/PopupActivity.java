@@ -20,6 +20,14 @@ public class PopupActivity extends Activity {
 		getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 		setContentView(R.layout.activity_popup);
 		
+		//만일 영문모드라면
+//		ImageView ivBuyQ = (ImageView) findViewById(R.id.ivBuyQ);
+//		ImageView ivBuyOk = (ImageView) findViewById(R.id.ivBuyOK);
+//		ImageView ivBuyCancle = (ImageView) findViewById(R.id.ivBuyCancle);
+//		ivBuyQ.setImageResource(R.drawable.popup_msgen);
+//		ivBuyOk.setImageResource(R.drawable.popup_ok1en);
+//		ivBuyCancle.setImageResource(R.drawable.popup_cancel1en);
+		
 		final int emoticonID = getIntent().getIntExtra("emoticonID", 0);
 
 		findViewById(R.id.ivBuy).setOnClickListener(new View.OnClickListener() {
