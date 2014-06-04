@@ -1448,7 +1448,7 @@ public class Game extends CCLayer {
 					@Override
 					public void run() {
 						for(MineCell c : cells) {
-							if(!c.isCollidable() && !c.isOpened()) {
+							if(!c.isCollidable() && !c.isOpened() && !c.isMarked()) {
 								if(c.isMine()) {
 									markMushroom(c, c.getTileCoord(), -1);
 								} else {
