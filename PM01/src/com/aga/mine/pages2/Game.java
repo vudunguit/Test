@@ -299,6 +299,11 @@ public class Game extends CCLayer {
 					if (cellRound != null && cellRound.isCollidable())
 						continue;
 					
+					//자기 자신은 주변셀에 포함시키지 않는다
+					if(k==0 && m==0) {
+						continue;
+					}
+					
 					// 유효한 주변셀 등록(현재 셀 포함)
 					cellsTemp.get(i).addRoundCell(cellRound);
 				}
@@ -1453,6 +1458,8 @@ public class Game extends CCLayer {
 						}
 					}
 				}).start();
+				
+				break;
 			}
 		}
 	}
