@@ -243,8 +243,8 @@ public class ShopGold2 extends CCLayer {
 			}
 		}
 		
-		String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
-		String user = FacebookData.getinstance().getUserInfo().getId();
+		final String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
+		final String user = FacebookData.getinstance().getUserInfo().getId();
 		long myGold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
 		
 		// 받는사람이 본인이면 DB로 바로 저장
@@ -257,7 +257,13 @@ public class ShopGold2 extends CCLayer {
 		} else {
 			double requestID = Math.random() * 9223372036854775807L;  //facebook 알림글번호로 대체할 것
 			String senderID = FacebookData.getinstance().getUserInfo().getId();
-			MainApplication.getInstance().getActivity().sendInvite(recipientID, user + "님이 선물을 보냈습니다.", null);
+			MainApplication.getInstance().mHandler.post(new Runnable() {
+				@Override
+				public void run() {
+					MainApplication.getInstance().getActivity().sendInvite(recipientID, user + "님이 선물을 보냈습니다.", null);
+				}
+			});
+			
 		}
 		
 		//경험치 및 레벨업 애니메이션
