@@ -25,6 +25,7 @@ import android.util.Log;
 import com.aga.mine.mains.Config;
 import com.aga.mine.mains.DataFilter;
 import com.aga.mine.mains.FacebookData;
+import com.aga.mine.mains.GameLoading;
 import com.aga.mine.mains.Home;
 import com.aga.mine.mains.Home2;
 import com.aga.mine.mains.MainApplication;
@@ -174,11 +175,15 @@ public class GameEnding extends CCLayer {
 		CCSprite backboard = null;
 		if (showAni) { // true == 승리시
 			backboard = addChild_Center(base, folder + "ending-bbWin.png");
-			addChild_Center(backboard, Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-win.png"));
+			addChild_Center(backboard, Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-win.png")); // 싱글 더블 승리 이미지
 			addChild_Center(backboard, folder + "ending-winImage" + magicianColor +".png");
 		} else {
 			backboard = addChild_Center(base, folder + "ending-bbLose.png");
-			addChild_Center(backboard, Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-lose.png"));
+			if (GameData.share().isMultiGame) {
+				addChild_Center(backboard, Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-lose.png"));     // 더블모드 패배 이미지	
+			} else {
+				addChild_Center(backboard, Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-loseS.png"));	// 싱글모드 패배 이미지
+			}
 			addChild_Center(backboard, folder + "ending-loseImage" + magicianColor +".png");
 		}
 		
@@ -319,6 +324,7 @@ public class GameEnding extends CCLayer {
 				folder + "ending-button1.png",
 				folder + "ending-button2.png",
 				this, "clicked");
+		buttonR.setTag(done);
 		buttonR.setUserData(0);
 		CCSprite textR = CCSprite.sprite(Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-done.png"));
 		buttonR.addChild(textR);
@@ -535,6 +541,9 @@ public class GameEnding extends CCLayer {
 	
 	
 	// DB 저장값들 clicked 되기전으로 전부 옮겨야 됩니다.
+	// 1-1. 획득 또는 손실되는 값부터 DB에 저장 (기본 point 차감)
+	// 1-2. gamePoint defense시 point회복 및 골드 차감 실행
+	// 2. restart 또는 done 체크하여 해당위치로 scene 이동. 
 	boolean buttonActive = true;
 	public void clicked(Object sender) {
 		MainApplication.getInstance().getActivity().click();
@@ -542,14 +551,19 @@ public class GameEnding extends CCLayer {
 		int tag = ((CCNode)sender).getTag();
 		
 		CCScene scene = null;
-		if (GameData.share().isGuestMode) {
-			scene = Home2.scene();
+		
+		if (tag == restart) {
+			scene = GameLoading.scene();
 		} else {
-			scene = Home.scene();
+			if (GameData.share().isGuestMode)
+				scene = Home2.scene();
+			else
+				scene = Home.scene();
 		}
-		if (userdata == 0) {
-			Log.e("GameEnding", "홈으로 가기");
-		} else {
+		
+		if (tag ==  done) {
+			Log.e("GameEnding", "그냥 종료");
+		} else if (tag ==  defense) {
 			if (buttonActive) {
 				myGold -= userdata;
 				usedGold = true;
@@ -557,7 +571,6 @@ public class GameEnding extends CCLayer {
 			}
 		}
 		
-
 		// reward
 		// DB에 적용시키는 데이터들
 		if (!GameData.share().isGuestMode) {
