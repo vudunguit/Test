@@ -145,7 +145,7 @@ public class Option extends CCLayer {
 		optionMenu.setPosition(parentSprite.getContentSize().width / 2, guide.getContentSize().height * 2.6f);
 	}
 	
-	int[][] radioButtonUserdatas = {{1,2},{11,12},{21,22},{31,32}};
+	int[][] radioButtonUserdatas = {{1,2},{11,12},{21,22}};
 	int[][] radioButtonMenuPositions = {{229,54},{229,106},{229,155},{229,205}};
 	//
 	private void radioButton(CCSprite parentSprite){

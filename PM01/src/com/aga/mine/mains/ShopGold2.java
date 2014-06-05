@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
@@ -19,14 +18,12 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
-import com.aga.mine.mains.MainActivity.InviteCallback;
-import com.aga.mine.pages2.GameData;
-import com.aga.mine.pages2.UserData;
-import com.aga.mine.util.Util;
-
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
-import android.view.MotionEvent;
+
+import com.aga.mine.mains.MainActivity.InviteCallback;
+import com.aga.mine.pages2.UserData;
 
 public class ShopGold2 extends CCLayer {
 	
@@ -285,15 +282,15 @@ public class ShopGold2 extends CCLayer {
 //		DataFilter.sendMail(data);
 		
 		
-//		Passport.SKU = Product;
-//		Log.e("ShopGold2", "buttonCallback(usd) : " + usd);
+		Passport.SKU = Product;
+		Log.e("ShopGold2", "buttonCallback(usd) : " + usd);
 		
-//		inAppBilling();
+		inAppBilling();
 	}
 		
 	private void inAppBilling() {
-//		Intent task1 = new Intent(CCDirector.sharedDirector().getActivity(), StartUpActivity.class);
-//    	CCDirector.sharedDirector().getActivity().startActivity(task1);
+		Intent task1 = new Intent(CCDirector.sharedDirector().getActivity(), StartUpActivity.class);
+    	CCDirector.sharedDirector().getActivity().startActivity(task1);
 	}
 	
 	int _mygold;
