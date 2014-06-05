@@ -24,6 +24,8 @@ import android.util.Log;
 
 import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.pages2.UserData;
+import com.blundell.tutorial.simpleinappbillingv3.domain.items.Passport;
+import com.blundell.tutorial.simpleinappbillingv3.ui.StartUpActivity;
 
 public class ShopGold2 extends CCLayer {
 	

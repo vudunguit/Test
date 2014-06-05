@@ -387,8 +387,8 @@ public class Config {
 	boolean owner = false;
 	
 	public void setOwner() {
+		Log.e("Config", "setOwner : " + owner);
 		owner =  NetworkController.getInstance().getOwner();
-		Log.e("Config", "owner : " + owner);
 	}
 	
 	public boolean getOwner() {
@@ -396,7 +396,7 @@ public class Config {
 	}
 	
 	public void setSingleOwner() {
+		Log.e("Config", "setSingleOwner : " + owner);
 		owner = true;
-		Log.e("Config", "owner : " + owner);
 	}
 }
