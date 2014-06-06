@@ -252,7 +252,7 @@ public class MainActivity extends Activity {
         mGLSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         mGLSurfaceView.getHolder().setFormat(PixelFormat.RGBA_8888);
         //setContentView(mGLSurfaceView);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.mainactivity);
         main = (RelativeLayout) findViewById(R.id.main);
         main.addView(mGLSurfaceView);
         mListView = new ListView(this);
