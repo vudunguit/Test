@@ -25,13 +25,14 @@ public class MainActivity extends BlundellActivity implements MainMenu {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        passportImage = (ImageView) findViewById(R.id.main_passport_image);
+        //setContentView(R.layout.activity_main);
+        //passportImage = (ImageView) findViewById(R.id.main_passport_image);
+        navigate().toPurchasePassportActivityForResult();
     }
 
     @Override
     public void onPurchaseItemClick(View v) {
-        navigate().toPurchasePassportActivityForResult();
+        //navigate().toPurchasePassportActivityForResult();
     }
 
     @Override
@@ -48,12 +49,27 @@ public class MainActivity extends BlundellActivity implements MainMenu {
 
     private void dealWithSuccessfulPurchase() {
         Log.d("Passport purchased");
-        popToast("Passport purchased");
-        passportImage.setVisibility(View.VISIBLE);
+        popToast("Gold purchased");
+        //passportImage.setVisibility(View.VISIBLE);
+        mPurchaseCallback.onPurchased();
+        finish();
     }
 
     private void dealWithFailedPurchase() {
         Log.d("Passport purchase failed");
-        popToast("Failed to purchase passport");
+        popToast("Failed to purchase Gold");
+        finish();
+    }
+    
+    //purchase callback--------------------------------------------------------------------------
+    public static PurchaseCallback mPurchaseCallback;
+    
+    public interface PurchaseCallback {
+    	public void onPurchased();
+    }
+    
+    public static void setPurchaseCallback(PurchaseCallback callback) {
+    	Log.d("Callback setPurchaseCallback");
+    	mPurchaseCallback = callback;
     }
 }

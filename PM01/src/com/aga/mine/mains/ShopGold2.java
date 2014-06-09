@@ -25,6 +25,8 @@ import android.util.Log;
 import com.aga.mine.mains.MainActivity.InviteCallback;
 import com.aga.mine.pages2.UserData;
 import com.blundell.tutorial.simpleinappbillingv3.domain.items.Passport;
+import com.blundell.tutorial.simpleinappbillingv3.ui.MainActivity;
+import com.blundell.tutorial.simpleinappbillingv3.ui.MainActivity.PurchaseCallback;
 import com.blundell.tutorial.simpleinappbillingv3.ui.StartUpActivity;
 
 public class ShopGold2 extends CCLayer {
@@ -55,29 +57,13 @@ public class ShopGold2 extends CCLayer {
 	}
 
 	int gold;
-	public InviteCallback mInviteCallback = new InviteCallback() {
-
-		@Override
-		public void onInvited(List<String> invitedFriends, String requestId) {
-			//To Do:
-			String senderID = FacebookData.getinstance().getUserInfo().getId();
-			
-			for (String recipientID : invitedFriends) {
-				Log.e("ShopGold2", "recipientID : " + recipientID);
-				String data = 
-						"0,RequestModeMailBoxAdd*22," + requestId + "*1," + recipientID + "*19," + senderID + "*20,Gold*21," + gold;				
-				DataFilter.sendMail(data);
-			}
-			
-		}
-    };
 	
 	public ShopGold2() {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
 		basket = new HashMap<String, String>();
 		
-		MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
+		//MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
 		
 		// BackGround 파일
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
@@ -241,6 +227,41 @@ public class ShopGold2 extends CCLayer {
 				}
 			}
 		}
+	
+//		goldLabel.setString(new NumberComma().numberComma(myGold));
+//		FacebookData.getinstance().getRequestID(recipientID);  //test용 
+
+//		String data = "0,RequestModeMailBoxAdd*22," + requestID + "*1," + recipientID + "*19," + senderID + "*20,Gold*21," + gold;
+//		DataFilter.sendMail(data);	
+		
+		Passport.SKU = Product;
+		Log.e("ShopGold2", "buttonCallback(usd) : " + usd);
+		
+		inAppBilling();
+	}
+		
+	private void inAppBilling() {
+		MainApplication.getInstance().mHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				MainActivity.setPurchaseCallback(mPurchaseCallback);
+				Intent task1 = new Intent(CCDirector.sharedDirector().getActivity(), StartUpActivity.class);
+		    	CCDirector.sharedDirector().getActivity().startActivity(task1);
+			}
+		});
+	}
+	
+	public PurchaseCallback mPurchaseCallback = new PurchaseCallback(){
+		@Override
+		public void onPurchased() {
+			purchaseSuccess();
+		}
+	};
+	
+	public void purchaseSuccess() {
+		//경험치 및 레벨업 애니메이션
+		//경험치 1000당 1초
+		schedule("goldAni");
 		
 		final String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
 		final String user = FacebookData.getinstance().getUserInfo().getId();
@@ -254,6 +275,10 @@ public class ShopGold2 extends CCLayer {
 			basket.put("Gold", String.valueOf(myGold + gold));	
 			FacebookData.getinstance().modDBData(basket);
 		} else {
+			//받는 사람이 타인이면(선물하기) 먼저 서버로 DB 정보를 전송후
+			sendPurchase();
+			
+			//facebook 알림글 전송
 			double requestID = Math.random() * 9223372036854775807L;  //facebook 알림글번호로 대체할 것
 			String senderID = FacebookData.getinstance().getUserInfo().getId();
 			MainApplication.getInstance().mHandler.post(new Runnable() {
@@ -262,38 +287,19 @@ public class ShopGold2 extends CCLayer {
 					MainApplication.getInstance().getActivity().sendInvite(recipientID, user + "님이 선물을 보냈습니다.", null);
 				}
 			});
-			
 		}
-		
-		//경험치 및 레벨업 애니메이션
-		//경험치 1000당 1초
-		schedule("goldAni");
-		
-//		goldLabel.setString(new NumberComma().numberComma(myGold));
-
-				
-				
-
-//				FacebookData.getinstance().getRequestID(recipientID);  //test용 
-
-//		
-//		String data = 
-//				"0,RequestModeMailBoxAdd*22," + requestID + 
-//				"*1," + recipientID + "*19," + senderID + "*20,Gold*21," + gold;
-//		
-//		DataFilter.sendMail(data);
-		
-		
-		Passport.SKU = Product;
-		Log.e("ShopGold2", "buttonCallback(usd) : " + usd);
-		
-		inAppBilling();
 	}
+	
+	public void sendPurchase() {
+		String senderID = FacebookData.getinstance().getUserInfo().getId();
 		
-	private void inAppBilling() {
-		Intent task1 = new Intent(CCDirector.sharedDirector().getActivity(), StartUpActivity.class);
-    	CCDirector.sharedDirector().getActivity().startActivity(task1);
-	}
+//		for (String recipientID : invitedFriends) {
+//			Log.e("ShopGold2", "recipientID : " + recipientID);
+//			String data = 
+//					"0,RequestModeMailBoxAdd*22," + requestId + "*1," + recipientID + "*19," + senderID + "*20,Gold*21," + gold;				
+//			DataFilter.sendMail(data);
+//		}
+    };
 	
 	int _mygold;
 	int _price;

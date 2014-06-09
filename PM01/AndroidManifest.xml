@@ -43,6 +43,19 @@
             android:theme="@android:style/Theme.Holo.Light.Dialog" 
             android:label="" >
         </activity>
+        
+        <activity
+            android:name="com.blundell.tutorial.simpleinappbillingv3.ui.StartUpActivity"
+            android:label="" >
+        </activity>
+        <activity
+            android:name="com.blundell.tutorial.simpleinappbillingv3.ui.MainActivity"
+            android:label="" >
+        </activity>
+        <activity
+            android:name="com.blundell.tutorial.simpleinappbillingv3.ui.PurchasePassportActivity"
+            android:label="" >
+        </activity>
     </application>
 
 </manifest>

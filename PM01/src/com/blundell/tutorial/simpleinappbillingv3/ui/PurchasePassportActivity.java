@@ -1,5 +1,8 @@
 package com.blundell.tutorial.simpleinappbillingv3.ui;
 
+import org.cocos2d.nodes.CCDirector;
+
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.android.vending.billing.util.IabResult;
@@ -30,7 +33,7 @@ public class PurchasePassportActivity extends PurchaseActivity {
 
     @Override
     protected void dealWithIabSetupFailure() {
-        popBurntToast("Sorry buying a passport is not available at this current time");
+        popBurntToast("Sorry, buying a gold is not available at this current time");
         finish();
     }
 

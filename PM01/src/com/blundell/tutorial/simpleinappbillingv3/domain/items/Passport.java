@@ -11,6 +11,6 @@ public class Passport {
 
 //    public static final String SKU = "android.test.purchased"; // Replace this with your item ID;
     
-    public static String SKU = "android.test.purchased"; // Replace this with your item ID;
+    public static String SKU = "gold0"; // Replace this with your item ID;
 
 }

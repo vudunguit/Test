@@ -1,11 +1,10 @@
 package com.blundell.tutorial.simpleinappbillingv3.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.android.vending.billing.util.IabHelper.OnIabSetupFinishedListener;
 import com.android.vending.billing.util.IabResult;
-import com.android.vending.billing.util.Purchase;
-import com.blundell.tutorial.simpleinappbillingv3.domain.items.Passport;
 import com.blundell.tutorial.simpleinappbillingv3.ui.base.PurchaseActivity;
 import com.blundell.tutorial.simpleinappbillingv3.util.Log;
 
@@ -16,7 +15,8 @@ import com.blundell.tutorial.simpleinappbillingv3.util.Log;
  * 
  */
 public class StartUpActivity extends PurchaseActivity implements OnIabSetupFinishedListener {
-
+	public static final int REQUEST_GOLD_PURCHASE = 100;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,12 +34,6 @@ public class StartUpActivity extends PurchaseActivity implements OnIabSetupFinis
         }
     }
 
-//    @Override
-//    protected void dealWithIabSetupSuccess() {
-//        navigate().toMainActivity();
-//        finish();
-//    }
-
     @Override
     protected void dealWithIabSetupFailure() {
         popBurntToast("Sorry In App Billing isn't available on your device");
@@ -47,10 +41,12 @@ public class StartUpActivity extends PurchaseActivity implements OnIabSetupFinis
     
     @Override
     protected void dealWithIabSetupSuccess() {
-        purchaseItem(Passport.SKU);
+    	navigate().toMainActivity();
+    	finish();
     }
+    
 
-    @Override
+/*    @Override
     protected void dealWithPurchaseSuccess(IabResult result, Purchase info) {
         super.dealWithPurchaseSuccess(result, info);
         setResult(RESULT_OK);
@@ -62,6 +58,6 @@ public class StartUpActivity extends PurchaseActivity implements OnIabSetupFinis
         super.dealWithPurchaseFailed(result);
         setResult(RESULT_CANCELED);
 //        finish();
-    }
+    }*/
     
 }
