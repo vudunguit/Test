@@ -276,11 +276,12 @@ public class ShopGold2 extends CCLayer {
 			FacebookData.getinstance().modDBData(basket);
 		} else {
 			//받는 사람이 타인이면(선물하기) 먼저 서버로 DB 정보를 전송후
-			sendPurchase();
+			String requestId = String.valueOf(System.currentTimeMillis());
+			String data = 
+					"0,RequestModeMailBoxAdd*22," + requestId + "*1," + recipientID + "*19," + user + "*20,Gold*21," + gold;				
+			DataFilter.sendMail(data);
 			
 			//facebook 알림글 전송
-			double requestID = Math.random() * 9223372036854775807L;  //facebook 알림글번호로 대체할 것
-			String senderID = FacebookData.getinstance().getUserInfo().getId();
 			MainApplication.getInstance().mHandler.post(new Runnable() {
 				@Override
 				public void run() {
@@ -289,17 +290,6 @@ public class ShopGold2 extends CCLayer {
 			});
 		}
 	}
-	
-	public void sendPurchase() {
-		String senderID = FacebookData.getinstance().getUserInfo().getId();
-		
-//		for (String recipientID : invitedFriends) {
-//			Log.e("ShopGold2", "recipientID : " + recipientID);
-//			String data = 
-//					"0,RequestModeMailBoxAdd*22," + requestId + "*1," + recipientID + "*19," + senderID + "*20,Gold*21," + gold;				
-//			DataFilter.sendMail(data);
-//		}
-    };
 	
 	int _mygold;
 	int _price;
