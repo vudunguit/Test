@@ -468,6 +468,7 @@ public class HudLayer extends CCLayer {
 	 * 
 	 * @return
 	 */
+	//하단 수정구 아이템 콜백(6개) + 팝업 ok, cancle 콜백(2개) + 우상단 일시정지 or 미니맵 콜백(1개)
 	public void clicked(final Object button) {
 		int tag = ((CCMenuItem) button).getTag();
 		if (!Config.getInstance().isDisableButton()) {
@@ -482,6 +483,7 @@ public class HudLayer extends CCLayer {
 	
 	private void clickedNormal(final int tag) {
 		 Log.e("HudLayer", "clicked1 : " + Config.getInstance().isDisableButton());
+		
 		String effectName = "";
 		switch (tag) {
 		case Game.kButtonMinimap:
@@ -664,6 +666,7 @@ public class HudLayer extends CCLayer {
 			this.removeChildByTag(pausePopupTag, true);
 			Config.getInstance().setDisableButton(false);
 			minimap.setIsTouchEnabled(true);
+			itemMenu.setIsTouchEnabled(true);
 			mGameProgressBar.pauseTime(false);
 			SoundEngine.sharedEngine().resumeSound();
 			break;
@@ -685,13 +688,13 @@ public class HudLayer extends CCLayer {
 			break;
 			
 		default:
-			Log.e("HudLayer", "default");
+/*			Log.e("HudLayer", "default");
 			MainApplication.getInstance().getActivity().click();
 			this.removeChildByTag(pausePopupTag, true);
 			Config.getInstance().setDisableButton(false);
 			minimap.setIsTouchEnabled(true);
 			mGameProgressBar.pauseTime(false);
-			SoundEngine.sharedEngine().resumeSound();
+			SoundEngine.sharedEngine().resumeSound();*/
 			break;
 		}
 	}
@@ -706,6 +709,7 @@ public class HudLayer extends CCLayer {
 		Log.e("HudLayer", "pausePopup : " + Config.getInstance().isDisableButton());
 		if (Config.getInstance().isDisableButton()) {
 			minimap.setIsTouchEnabled(false);
+			itemMenu.setIsTouchEnabled(false);
 			MainApplication.getInstance().getActivity().click();
 			
 			
@@ -759,6 +763,7 @@ public class HudLayer extends CCLayer {
 			this.removeChildByTag(pausePopupTag, true);
 			Config.getInstance().setDisableButton(false);
 			minimap.setIsTouchEnabled(true);
+			itemMenu.setIsTouchEnabled(true);
 			mGameProgressBar.pauseTime(false);
 			SoundEngine.sharedEngine().resumeSound();
 		}

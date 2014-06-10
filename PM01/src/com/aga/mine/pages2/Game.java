@@ -210,9 +210,6 @@ public class Game extends CCLayer {
 		
 		// 맵 올리고 기본 크기 지정
 		this.addChild(this.tileMap, -1);
-
-		// texture.setAntiAliasTexParameters();
-		// texture.setAliasTexParameters();
 		
 		// 64 pixel
 		tileSize = CGSize.make(tileMap.getTileSize().width, tileMap.getTileSize().height);
