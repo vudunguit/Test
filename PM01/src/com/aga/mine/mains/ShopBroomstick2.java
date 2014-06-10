@@ -168,14 +168,14 @@ public class ShopBroomstick2 extends CCLayer {
 	}
 
 	// config 파일에 나중에 옮길것
-	public static boolean buttonActive = true;
+	public boolean mIsButtonDisable = false;
 	final int previous = 501;
 	final int home= 502;
 	
-	// sceneCallback들 전부 여기로 옮기기
+	// 이전, 홈, 팝업의 구매, 취소 4가지 버튼 콜백
 	public void clicked(Object sender) {
 		int value = ((CCNode) sender).getTag();
-		if (buttonActive) {
+		if (!mIsButtonDisable) {
 			MainApplication.getInstance().getActivity().click();
 			switch (value) {
 			case previous:
@@ -185,17 +185,20 @@ public class ShopBroomstick2 extends CCLayer {
 			case home:
 				CCDirector.sharedDirector().replaceScene(Home.scene());
 				break;
-				
-			case Constant.PURCHASING_OK:
-				makeAPurchase();
-				this.removeChildByTag(Constant.POPUP_LAYER, true);
-				break;
-				
-			case Constant.PURCHASING_CANCEL:
-				this.removeChildByTag(Constant.POPUP_LAYER, true);
-				break;
 			}
-
+		}
+		
+		switch(value) {		
+		case Constant.PURCHASING_OK:
+			makeAPurchase();
+			this.removeChildByTag(Constant.POPUP_LAYER, true);
+			mIsButtonDisable = false;
+			break;
+			
+		case Constant.PURCHASING_CANCEL:
+			this.removeChildByTag(Constant.POPUP_LAYER, true);
+			mIsButtonDisable = false;
+			break;
 		}
 	}
 
@@ -231,8 +234,11 @@ public class ShopBroomstick2 extends CCLayer {
 		}
 	}	
 	
-	
-	public void buttonCallback(Object sender) {
+	//빗자루 구매 아이콘 클릭시 콜백(6개) 
+ 	public void buttonCallback(Object sender) {
+ 		if(mIsButtonDisable)
+ 			return;
+ 		
 		MainApplication.getInstance().getActivity().click();
 		long[] value = (long[]) ((CCNode)sender).getUserData();
 		price = value[0];
@@ -250,7 +256,7 @@ public class ShopBroomstick2 extends CCLayer {
 			});
 			return;
 		}
-		Popup.popupOfPurchase(this);
+		mIsButtonDisable = Popup.popupOfPurchase(this);
 	}
 	
 }
