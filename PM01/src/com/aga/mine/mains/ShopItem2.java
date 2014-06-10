@@ -409,7 +409,7 @@ public class ShopItem2 extends CCLayer {
 }	
 
 	// config 파일에 나중에 옮길것
-	public static boolean buttonActive = true;
+	public boolean mIsButtonDisable = false;
 	final int previous = 501;
 	final int home= 502;
 	
@@ -417,7 +417,7 @@ public class ShopItem2 extends CCLayer {
 	public void clicked(Object sender) {
 		CCScene scene = null;
 		int value = ((CCNode) sender).getTag();
-		if (buttonActive) {
+		if (!mIsButtonDisable) {
 			switch (value) {
 			case previous:
 				MainApplication.getInstance().getActivity().click();
@@ -430,30 +430,33 @@ public class ShopItem2 extends CCLayer {
 				scene = Home.scene();
 				CCDirector.sharedDirector().replaceScene(scene);
 				break;
-				
-			case Constant.PURCHASING_OK:
-				isPurchase = true;
-				makeAPurchase();
-				this.removeChildByTag(Constant.POPUP_LAYER, true);
-				break;
-				
-			case Constant.PURCHASING_CANCEL:
-				MainApplication.getInstance().getActivity().click();
-				isPurchase = false;
-				CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						Toast.makeText(mContext, "구매 취소", Toast.LENGTH_SHORT).show();
-					}
-				});
-				this.removeChildByTag(Constant.POPUP_LAYER, true);
-				break;
 			}
-
+		}
+		
+		switch(value) {
+		case Constant.PURCHASING_OK:
+			isPurchase = true;
+			makeAPurchase();
+			this.removeChildByTag(Constant.POPUP_LAYER, true);
+			mIsButtonDisable = false;
+			break;
+			
+		case Constant.PURCHASING_CANCEL:
+			MainApplication.getInstance().getActivity().click();
+			isPurchase = false;
+			CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					Toast.makeText(mContext, "구매 취소", Toast.LENGTH_SHORT).show();
+				}
+			});
+			this.removeChildByTag(Constant.POPUP_LAYER, true);
+			mIsButtonDisable = false;
+			break;
 		}
 	}
 
-	private boolean  isPurchase = false;
+	private boolean isPurchase = false;
 	private long quantity;
 //	private long price;
 
@@ -532,8 +535,11 @@ public class ShopItem2 extends CCLayer {
 	final int defense = 1; 
 	Map<String, String> basket = new HashMap<String, String>();
 	
-	
+	//정령병 구매 콜백
 	public void buySphereCallback(Object sender) {
+		if(mIsButtonDisable)
+			return;
+		
 		MainApplication.getInstance().getActivity().click();
 		int sphereQuantity = Integer.parseInt(FacebookData.getinstance().getDBData("SphereNumber"));
 		
@@ -562,14 +568,18 @@ public class ShopItem2 extends CCLayer {
 			return;
 		}
 		
-		Popup.popupOfPurchase(this);
+		mIsButtonDisable = Popup.popupOfPurchase(this);
 		basket.put("SphereNumber", String.valueOf(sphereQuantity + 1));
 		basket.put("Gold", String.valueOf(gold - spherePrice));				
 	}
 	
 	int buttonTag; 
-	// 구매 버튼(공격or방어 마법)
+	
+	// 구매 버튼(공격or방어 마법) (2개)
 	public void buyMagicCallback(Object sender) {
+		if(mIsButtonDisable) 
+			return;
+		
 		MainApplication.getInstance().getActivity().click();
 		buttonTag = ((CCNode)sender).getTag();
 		int _tag;
@@ -609,13 +619,16 @@ public class ShopItem2 extends CCLayer {
 			return;
 		}
 		
-		Popup.popupOfPurchase(this);
+		mIsButtonDisable = Popup.popupOfPurchase(this);
 		basket.put(magicType, String.valueOf(level + 1));
 		basket.put("Gold", String.valueOf(gold - price));			
 	}
 
-
+	//공격,방어 마법  콜백(6개)
 	public void selectMagicCallback(Object sender) {
+		if(mIsButtonDisable)
+			return;
+		
 		MainApplication.getInstance().getActivity().click();
 		int buttonTag = ((CCNode) sender).getTag();
 		if (buttonTag < 3) {

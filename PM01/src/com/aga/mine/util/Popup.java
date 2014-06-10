@@ -16,7 +16,7 @@ import com.aga.mine.mains.Utility;
 
 public class Popup extends CCLayer {
 	
-	public static void popupOfPurchase(CCNode parent) {
+	public static boolean popupOfPurchase(CCNode parent) {
 		CGSize winsize = CCDirector.sharedDirector().winSize();
 		String commonFolder = "00common/";
 		String folder = "20shop/";
@@ -53,6 +53,8 @@ public class Popup extends CCLayer {
 		buttons.alignItemsHorizontally(50);
 		buttons.setPosition(background.getContentSize().width/2, background.getContentSize().height * 0.37f);
 		background.addChild(buttons);
+		
+		return true;
 	}
 	
 }
