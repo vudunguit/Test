@@ -125,11 +125,16 @@ public class GameEnding extends CCLayer {
 		} else {
 			Log.e("GameEnding", "Lose");
 			// 패배 효과음
-//					myScore = otherScore;
-			this.myScore = (int) (otherScore / 3.0f); //차감 포인트
-			myGold = (int) (otherScore / 10.0f); //차감 골드
-//					decreaseScore = (int) (otherScore / 3.0f);
-			decreaseGold = (int) (otherScore / 10.0f);
+			if(otherScore > 0) {  //멀티게임 패배
+				this.myScore = (int) (otherScore / 3.0f); //차감 포인트
+				myGold = (int) (otherScore / 10.0f); //차감 골드
+	//					decreaseScore = (int) (otherScore / 3.0f);
+				decreaseGold = (int) (otherScore / 10.0f);
+			} else { //싱글게임 패배
+				myScore = 0;
+				myGold = 0;
+				myExp = 0;
+			}
 		}
 		
 		if (isExtraTime) {
@@ -240,7 +245,7 @@ public class GameEnding extends CCLayer {
 		//test : 획득 경험치는 10000이라 가정함. 
 		mLeftExp = myExp;
 		myCalcExp = myPastExp;
-		expPerSecond = mLeftExp / 2.5f;
+		expPerSecond = mLeftExp / 2.0f;
 		
 		// 경험치 바
 		CCSprite expbg = null;
@@ -313,10 +318,14 @@ public class GameEnding extends CCLayer {
 			bg.addChild(leftbutton, 2);
 			leftbutton.setPosition(
 					expbg.getPosition().x - (expbg.getAnchorPoint().x * expbg.getContentSize().width)
-					+ leftbutton.getAnchorPoint().x * buttonL.getContentSize().width + 20, 
+					+ buttonL.getAnchorPoint().x * buttonL.getContentSize().width + 20, 
 					expbg.getPosition().y - (expbg.getAnchorPoint().y * expbg.getContentSize().height) 
-					- leftbutton.getAnchorPoint().y * buttonL.getContentSize().height - 10
+					- buttonL.getAnchorPoint().y * buttonL.getContentSize().height - 10
 					);
+			Log.d("LDK", "expbg.getPositionx:" + expbg.getPosition().x);
+			Log.d("LDK", "expbg.getAnchorPoint().x:" + expbg.getAnchorPoint().x);
+			Log.d("LDK", "buttonL.getAnchorPoint().x:" + buttonL.getAnchorPoint().x);
+			Log.d("LDK", "buttonL.getContentSize().width:" + buttonL.getContentSize().width);
 		}
 			
 		// 우측 버튼
@@ -334,15 +343,17 @@ public class GameEnding extends CCLayer {
 		bg.addChild(rightbutton, 3);
 		CGPoint rightButtonPosition = CGPoint.ccp(				
 				expbg.getPosition().x + ((1 - expbg.getAnchorPoint().x) * expbg.getContentSize().width)
-				- rightbutton.getAnchorPoint().x * buttonR.getContentSize().width - 20,
+				- buttonR.getAnchorPoint().x * buttonR.getContentSize().width - 20,
 				expbg.getPosition().y - (expbg.getAnchorPoint().y * expbg.getContentSize().height) 
-				- rightbutton.getAnchorPoint().y * buttonR.getContentSize().height - 10);
-		if (showAni) {
-			rightButtonPosition = CGPoint.ccp(
-					expbg.getPosition().x + ((0.5f - expbg.getAnchorPoint().x) * expbg.getContentSize().width)
-					+ ((rightbutton.getAnchorPoint().x - 0.5f) * buttonR.getContentSize().width), // <-- + 인지 -인지 다시 계산할것
-					rightButtonPosition.y);
-		}		
+				- buttonR.getAnchorPoint().y * buttonR.getContentSize().height - 10);
+		Log.d("LDK", "buttonR.getAnchorPoint().x:" + buttonR.getAnchorPoint().x);
+		Log.d("LDK", "buttonR.getContentSize().width:" + buttonR.getContentSize().width);
+//		if (showAni) {
+//			rightButtonPosition = CGPoint.ccp(
+//					expbg.getPosition().x + ((0.5f - expbg.getAnchorPoint().x) * expbg.getContentSize().width)
+//					+ ((rightbutton.getAnchorPoint().x - 0.5f) * buttonR.getContentSize().width), // <-- + 인지 -인지 다시 계산할것
+//					rightButtonPosition.y);
+//		}		
 		rightbutton.setPosition(rightButtonPosition);
 		
 		//경험치 및 레벨업 애니메이션
@@ -594,23 +605,27 @@ public class GameEnding extends CCLayer {
 				basket.put("Exp", String.valueOf(myCurrentExp)); // 남은 경험치 
 				basket.put("LevelCharacter", String.valueOf(myCurrentLevel));
 				basket.put("HistoryWin", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryWin")) + 1));	
+				
+				FacebookData.getinstance().modDBData(basket);
 			} else { // 패배(스코어 및 경험치, 골드, 승률 ok)
-				Log.e("GameEnding", "패배 패널티");
-//				if (usedGold) {
-//					basket.put("Gold", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Gold")) - myGold));					
-//				} else {
+				Log.e("GameEnding", "패배 ");
+
+				if(otherScore > 0) {  //멀티게임 패배
 					int mPastScore = Integer.valueOf(FacebookData.getinstance().getDBData("Point"));
 					if (mPastScore < myScore) {
 						myScore = mPastScore;
 					} 
 					DataFilter.addGameScore(String.valueOf(-myScore));
 					
-//				}
-				//basket.put("Gold", String.valueOf(myCurrentGold));
-				basket.put("HistoryLose", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryLose")) + 1));	
+					basket.put("HistoryLose", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryLose")) + 1));	
+					
+					FacebookData.getinstance().modDBData(basket);
+				} else { //싱글게임 패배
+					
+				}
 			}
 			
-			FacebookData.getinstance().modDBData(basket);
+			
 			
 			//홈화면에 포인트 갱신 (서버에 저장하지는 않고 로컬만 업데이트)
 			List<GameScore> gameScores = FacebookData.getinstance().getGameScore();
