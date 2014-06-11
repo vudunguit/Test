@@ -3,6 +3,7 @@
 import java.io.IOException;
 import java.security.spec.MGF1ParameterSpec;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import com.aga.mine.mains.Config;
 import com.aga.mine.mains.DataFilter;
 import com.aga.mine.mains.FacebookData;
 import com.aga.mine.mains.GameLoading;
+import com.aga.mine.mains.GameScore;
 import com.aga.mine.mains.Home;
 import com.aga.mine.mains.Home2;
 import com.aga.mine.mains.MainApplication;
@@ -587,7 +589,7 @@ public class GameEnding extends CCLayer {
 			if (Config.getInstance().getVs()) { // 승리 (스코어 및 경험치, 골드, 승률 ok)
 				Log.e("GameEnding", "승리 보상");
 				DataFilter.addGameScore(String.valueOf(myScore));
-//						basket.put("Point", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Point")) + myScore));
+				
 				basket.put("Gold", String.valueOf(myCurrentGold));	
 				basket.put("Exp", String.valueOf(myCurrentExp)); // 남은 경험치 
 				basket.put("LevelCharacter", String.valueOf(myCurrentLevel));
@@ -599,17 +601,25 @@ public class GameEnding extends CCLayer {
 //				} else {
 					int mPastScore = Integer.valueOf(FacebookData.getinstance().getDBData("Point"));
 					if (mPastScore < myScore) {
-						DataFilter.addGameScore(String.valueOf(-mPastScore));
-					} else {
-						DataFilter.addGameScore(String.valueOf(-myScore));
-					}
+						myScore = mPastScore;
+					} 
+					DataFilter.addGameScore(String.valueOf(-myScore));
+					
 //				}
 				//basket.put("Gold", String.valueOf(myCurrentGold));
 				basket.put("HistoryLose", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryLose")) + 1));	
 			}
 			
 			FacebookData.getinstance().modDBData(basket);
-			Log.e("GameEnding", "DB : " + DataFilter.getUserDBData(FacebookData.getinstance().getUserInfo().getId()));
+			
+			//홈화면에 포인트 갱신 (서버에 저장하지는 않고 로컬만 업데이트)
+			List<GameScore> gameScores = FacebookData.getinstance().getGameScore();
+			for (GameScore gameScore : gameScores) {
+				if (gameScore.getId().equals(myID)) {
+					Log.d("LDK", "score:" + gameScore);
+					gameScore.score = myScore + gameScore.score;
+				}
+			}
 		}
 	}
 	
