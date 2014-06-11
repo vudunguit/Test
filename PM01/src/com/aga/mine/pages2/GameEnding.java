@@ -80,6 +80,8 @@ public class GameEnding extends CCLayer {
 	final private int popupTag = 2000;
 	float expPerSecond;
 	
+	CCMenu leftbutton;
+	
 	public GameEnding(int myScore, int otherScore, int closedCell) {
 		basket = new HashMap<String, String>();
 		if (Locale.getDefault().getLanguage().toString().equals("ko"))
@@ -127,8 +129,8 @@ public class GameEnding extends CCLayer {
 			// 패배 효과음
 			if(otherScore > 0) {  //멀티게임 패배
 				this.myScore = (int) (otherScore / 3.0f); //차감 포인트
+				decreaseScore = (int) (otherScore / 3.0f);
 				myGold = (int) (otherScore / 10.0f); //차감 골드
-	//					decreaseScore = (int) (otherScore / 3.0f);
 				decreaseGold = (int) (otherScore / 10.0f);
 			} else { //싱글게임 패배
 				myScore = 0;
@@ -211,16 +213,11 @@ public class GameEnding extends CCLayer {
 		mPointLabel.setPosition(460, backboard.getContentSize().height - 280);
 		backboard.addChild(mPointLabel);
 		
-		String goldText = String.valueOf(0);
-		if (!showAni) {
-			goldText = String.valueOf(-myGold);
-		}
-		
 		CGPoint goldTextPosition = CGPoint.ccp(460, backboard.getContentSize().height - 338);
 		if (GameData.share().isMultiGame && !showAni) {
 			goldTextPosition = CGPoint.ccp(goldTextPosition.x, backboard.getContentSize().height - 347);
 		}
-		mGoldLabel = CCLabel.makeLabel(goldText, "Arial", 30);
+		mGoldLabel = CCLabel.makeLabel(String.valueOf(0), "Arial", 30);
 		mGoldLabel.setAnchorPoint(1, 0.5f);
 		mGoldLabel.setPosition(goldTextPosition); // 340
 		backboard.addChild(mGoldLabel);
@@ -237,6 +234,13 @@ public class GameEnding extends CCLayer {
 		mExpLabel.setPosition(460, backboard.getContentSize().height - 396); //400
 		if (showAni || !GameData.share().isMultiGame) {
 			backboard.addChild(mExpLabel);
+		}
+		
+		//패배 팝업이면
+		if(!showAni && otherScore>0) {
+			mExpLabel.setString(String.valueOf(0));
+			mPointLabel.setString(String.valueOf(-myScore));
+			mGoldLabel.setString(String.valueOf(0));
 		}
 		
 		/*************************** expframe ******************************/
@@ -293,40 +297,39 @@ public class GameEnding extends CCLayer {
 		}
 		/**************************** buttons *****************************/
 
-		if (!showAni || !GameData.share().isMultiGame) {
-			
-			String buttonText = "ending-defense";
-			int leftButtonTag = defense;
-			if (!GameData.share().isMultiGame) {
-				buttonText = "ending-restart";
-				leftButtonTag = restart;
-			}
-			
-			// 좌측 버튼
-			CCMenuItem buttonL = CCMenuItemImage.item(
+		//좌측 버튼
+		String buttonText = "ending-restart";
+		int leftButtonTag = restart;
+		CCMenuItem buttonL = CCMenuItemImage.item(
+				folder + "ending-button1.png",
+				folder + "ending-button2.png",
+				this, "clicked");
+		if (otherScore > 0 && !showAni) { //대전 게임 패배일 경우
+			Log.d("LDK", "multigame fail");
+			buttonText = "ending-defense";
+			leftButtonTag = defense;
+			buttonL = CCMenuItemImage.item(
 					folder + "ending-button1.png",
 					folder + "ending-button2.png",
-					this, "clicked");
-			buttonL.setTag(leftButtonTag);
-			buttonL.setUserData(myScore / 10); // GameScore 손실 대신 gold로 대체
-			
-			CCSprite textL = CCSprite.sprite(Utility.getInstance().getNameWithIsoCodeSuffix(folder + buttonText +".png"));
-			buttonL.addChild(textL);
-			textL.setPosition(buttonL.getContentSize().width / 2, buttonL.getContentSize().height / 2);
-			
-			CCMenu leftbutton = CCMenu.menu(buttonL);
-			bg.addChild(leftbutton, 2);
-			leftbutton.setPosition(
-					expbg.getPosition().x - (expbg.getAnchorPoint().x * expbg.getContentSize().width)
-					+ buttonL.getAnchorPoint().x * buttonL.getContentSize().width + 20, 
-					expbg.getPosition().y - (expbg.getAnchorPoint().y * expbg.getContentSize().height) 
-					- buttonL.getAnchorPoint().y * buttonL.getContentSize().height - 10
-					);
-			Log.d("LDK", "expbg.getPositionx:" + expbg.getPosition().x);
-			Log.d("LDK", "expbg.getAnchorPoint().x:" + expbg.getAnchorPoint().x);
-			Log.d("LDK", "buttonL.getAnchorPoint().x:" + buttonL.getAnchorPoint().x);
-			Log.d("LDK", "buttonL.getContentSize().width:" + buttonL.getContentSize().width);
+					this, "defenceClicked");
 		}
+
+		buttonL.setTag(leftButtonTag);
+		buttonL.setUserData(myScore / 10); // GameScore 손실 대신 gold로 대체
+		
+		CCSprite textL = CCSprite.sprite(Utility.getInstance().getNameWithIsoCodeSuffix(folder + buttonText +".png"));
+		buttonL.addChild(textL);
+		textL.setPosition(buttonL.getContentSize().width / 2, buttonL.getContentSize().height / 2);
+		
+		leftbutton = CCMenu.menu(buttonL);
+		bg.addChild(leftbutton, 2);
+		leftbutton.setPosition(
+				expbg.getPosition().x - (expbg.getAnchorPoint().x * expbg.getContentSize().width)
+				+ buttonL.getAnchorPoint().x * buttonL.getContentSize().width + 20, 
+				expbg.getPosition().y - (expbg.getAnchorPoint().y * expbg.getContentSize().height) 
+				- buttonL.getAnchorPoint().y * buttonL.getContentSize().height - 10
+				);
+
 			
 		// 우측 버튼
 		CCMenuItem buttonR = CCMenuItemImage.item(
@@ -346,8 +349,7 @@ public class GameEnding extends CCLayer {
 				- buttonR.getAnchorPoint().x * buttonR.getContentSize().width - 20,
 				expbg.getPosition().y - (expbg.getAnchorPoint().y * expbg.getContentSize().height) 
 				- buttonR.getAnchorPoint().y * buttonR.getContentSize().height - 10);
-		Log.d("LDK", "buttonR.getAnchorPoint().x:" + buttonR.getAnchorPoint().x);
-		Log.d("LDK", "buttonR.getContentSize().width:" + buttonR.getContentSize().width);
+
 //		if (showAni) {
 //			rightButtonPosition = CGPoint.ccp(
 //					expbg.getPosition().x + ((0.5f - expbg.getAnchorPoint().x) * expbg.getContentSize().width)
@@ -582,7 +584,7 @@ public class GameEnding extends CCLayer {
 		} else if (tag ==  defense) {
 			if (buttonActive) {
 				myGold -= userdata;
-				usedGold = true;
+				//usedGold = true;
 				buttonActive = false;
 			}
 		}
@@ -638,7 +640,32 @@ public class GameEnding extends CCLayer {
 		}
 	}
 	
-	private boolean usedGold = false;
+	public void defenceClicked(Object sender) {
+		MainApplication.getInstance().getActivity().click();
+		
+		mPointLabel.setString(String.valueOf(0));
+		mGoldLabel.setString(String.valueOf(-decreaseGold));
+		
+		//버튼 비활성화
+		leftbutton.setIsTouchEnabled(false);
+		
+		//서버 정보 전송
+		DataFilter.addGameScore(String.valueOf(decreaseScore));
+		
+		basket.put("Gold", String.valueOf(myPastGold-decreaseGold));
+		FacebookData.getinstance().modDBData(basket);
+		
+		//홈화면에 포인트 갱신 (서버에 저장하지는 않고 로컬만 업데이트)
+		List<GameScore> gameScores = FacebookData.getinstance().getGameScore();
+		for (GameScore gameScore : gameScores) {
+			if (gameScore.getId().equals(myID)) {
+				Log.d("LDK", "score:" + gameScore);
+				gameScore.score = myScore + gameScore.score;
+			}
+		}
+	}
+	
+	//private boolean usedGold = false;
 	
 	public void popupButton(Object sender) {
 		schedule(new UpdateCallback() {

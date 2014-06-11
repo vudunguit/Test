@@ -101,8 +101,6 @@ public class GameLoading extends CCLayer {
 		float limit = bg.getContentSize().width - bar.getPosition().x/2;	
 		float barRight = bar.getPosition().x + bar.getContentSize().width * bar.getScaleX();
 		
-		Log.d("LDK", "limit:" + limit);
-		
 		if(barRight <= limit) {
 			mScaleX += dt*15;
 			bar.setScaleX(mScaleX);
