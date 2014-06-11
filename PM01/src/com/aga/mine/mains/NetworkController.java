@@ -32,9 +32,9 @@ import com.aga.mine.util.Util;
 
 public class NetworkController extends Activity {
 	String tag = "NetworkController";
-	private boolean _owner = false;
-	public final boolean owner = true;
-	public final boolean guest = false;
+	private boolean _owner = true;
+	public final boolean OWNER = true;
+	public final boolean GUEST = false;
 	
 	int matchMode = 0;
 	final int standby = 0;
@@ -329,7 +329,7 @@ public class NetworkController extends Activity {
 			
 		case kMessageMatchFailed:
 			Log.e("NetworkController", "kMessageMatchFailed");
-			mMatchCallback.setEntry(null, null, sendRoomOwner(owner));
+			mMatchCallback.setEntry(null, null, sendRoomOwner(OWNER));
 			matchMode = randomOwner;
 			break;
 			
@@ -509,7 +509,7 @@ public class NetworkController extends Activity {
 			case randomGuest:
 			case inviteGuest:
     			Log.e("NetworkController", "random or invite Guest / matchMode : " + matchMode);
-    			scene = GameInvite.scene(matchedOppenentFacebookId, matchedOppenentName, sendRoomOwner(guest), matchMode);
+    			scene = GameInvite.scene(matchedOppenentFacebookId, matchedOppenentName, sendRoomOwner(GUEST), matchMode);
     			CCDirector.sharedDirector().replaceScene(scene);
 				break;
 			}

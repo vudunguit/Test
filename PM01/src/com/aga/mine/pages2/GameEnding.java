@@ -40,10 +40,16 @@ public class GameEnding extends CCLayer {
 	CGSize winSize = CCDirector.sharedDirector().winSize();
 	String myName = "Guest";
 	String myID = "0";
-	int myLevel = 0;
-	int myScore = 0;
-	int myGold = 0;
-	int myExp = 0;
+	int myPastLevel = 0; //변경전 레벨
+	int myCurrentLevel; //변경후 레벨
+	int myScore = 0; //획득 포인트
+	int myGold = 0; //획득 골드
+	int myPastGold; //변경전 골드
+	int myCurrentGold; //현재 골드
+	int myExp = 0; //획득 경험치 
+	int myCalcExp; //현재 경험치 + a : 경험치바 애니메이션용 변수
+	int myPastExp; //과거 경험치
+	int myCurrentExp; //현재 경험치
 	float extraTimeReward = 1.25f; // 대전게임 승리자가 연장 게임을 하여서 완료시 기본 보상의 1.25배로 보상을 받음.  
 	boolean isExtraTime = false;  // 현재 사용하지 않는 것으로 보임.
 	
@@ -51,29 +57,17 @@ public class GameEnding extends CCLayer {
 	int decreaseGold = 0; // 스코어 보호를 위해 스코어 대신 골드로 대신 감소(선택적)
 	
 	private CCLabel lv;
-	private CCLabel exp;
+	private CCLabel mExpLabel;
 	private CCSprite bg;
 	private CCSprite expHead;
 	private CCSprite expTail;
 	private CCSprite expBar;
 	private float mExpX; //경험치 충전 상태
 	private int mLeftExp; //초기: 획득 경험치, 애니메이션이 진행됨에 따라 점점 줄어듬.
+	private CCLabel mPointLabel;
+	private CCLabel mGoldLabel;
 	
 	public int mUserLevel = Integer.valueOf(FacebookData.getinstance().getDBData("LevelCharacter"));
-	
-//	public static CCScene scene() {
-//		CCScene scene = CCScene.node();
-////		GameEnding2 layer = new GameEnding();
-//		CCLayer layer = new GameEnding();
-//		scene.addChild(layer);
-//		return scene;
-//	}
-//	public static CCLayer layer() {
-//		CCLayer layer = new GameEnding();
-//		return layer;
-//	}
-
-//	int myScore2;
 	int otherScore;
 	int closedCell;
 	boolean isLocaleKo = false;
@@ -84,30 +78,30 @@ public class GameEnding extends CCLayer {
 	final private int popupTag = 2000;
 	float expPerSecond;
 	
-	public GameEnding(int myScore2, int otherScore, int closedCell) {
+	public GameEnding(int myScore, int otherScore, int closedCell) {
 		basket = new HashMap<String, String>();
 		if (Locale.getDefault().getLanguage().toString().equals("ko"))
 			isLocaleKo = true;
-		Log.e("GameEnding", "myScore : " + myScore2+ ", otherScore : " + otherScore + ", closedCell : " + closedCell);
+		Log.e("GameEnding", "myScore : " + myScore+ ", otherScore : " + otherScore + ", closedCell : " + closedCell);
 		
 		// 플레이 중이던 모든 소리 정지
 		
-		this.myScore = myScore2;
+		this.myScore = myScore;
 		this.otherScore = otherScore;
 		this.closedCell = closedCell;
 		
 		if (!GameData.share().isGuestMode) {
 			myName = FacebookData.getinstance().getUserInfo().getName();
 			myID = FacebookData.getinstance().getUserInfo().getId();
-			myLevel = Integer.parseInt(FacebookData.getinstance().getDBData("LevelCharacter"));
-			myGold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
-			myExp = Integer.parseInt(FacebookData.getinstance().getDBData("Exp"));
+			myPastLevel = Integer.parseInt(FacebookData.getinstance().getDBData("LevelCharacter"));
+			myPastGold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
+			myPastExp = Integer.parseInt(FacebookData.getinstance().getDBData("Exp"));
 			try {
-				NetworkController.getInstance().sendRoomOwner(NetworkController.getInstance().guest);
+				NetworkController.getInstance().sendRoomOwner(NetworkController.getInstance().GUEST);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}			
+		}	
 		
 		// 결과에 맞는 소리 재생
 		// Config.getInstance().vsWin
@@ -115,32 +109,35 @@ public class GameEnding extends CCLayer {
 			Log.e("GameEnding", "Win");
 			// 승리 효과음
 			// 남은 생명수로 하트 애니 출력
-//			myScore = myScore2;
-			mLeftExp = (int) (myScore * 1.5f);
-			myGold = myScore * 5;
+//					myScore = myScore2;
+			myExp = (int) (myScore * 1.5f);
+			myGold = (int)(myScore / 5.0f); //기존 곱하기 5로된 오류가 있음.
+			if( (myPastExp + myExp) >= UserData.expPerLevel[myPastLevel-1]) {
+				myCurrentLevel = myPastLevel + 1;
+				myCurrentExp = (myPastExp + myExp) - UserData.expPerLevel[myPastLevel-1];
+			} else {
+				myCurrentLevel = myPastLevel;
+				myCurrentExp = myPastExp + myExp;
+			}
+			myCurrentGold = myPastGold + myGold;
 		} else {
 			Log.e("GameEnding", "Lose");
 			// 패배 효과음
-//			myScore = otherScore;
-			myScore = (int) (otherScore / 3.0f);
-			myGold = (int) (otherScore / 10.0f);
-//			decreaseScore = (int) (otherScore / 3.0f);
+//					myScore = otherScore;
+			this.myScore = (int) (otherScore / 3.0f); //차감 포인트
+			myGold = (int) (otherScore / 10.0f); //차감 골드
+//					decreaseScore = (int) (otherScore / 3.0f);
 			decreaseGold = (int) (otherScore / 10.0f);
 		}
 		
 		if (isExtraTime) {
-			myScore = (int) (myScore2 * extraTimeReward);
-			mLeftExp = (int) (myScore * 1.5f);
-			myGold = myScore * 5;
+			this.myScore = (int) (myScore * extraTimeReward);
+			myExp = (int) (this.myScore * 1.5f);
+			myGold = (int)(this.myScore / 5.0f);
 		}
-		
-//		myScore = (int) (Math.random() * 1000) + 1;
-		//test
-		//myGold = 12345;
-		//myExp = 3000;
-		//myScore = 2123;
-//		mainMenu(true);
-		
+	}
+	
+	public void startGameOver() {
 		// 팝업에 표현되는 모든 숫자는 이번에 획득 또는 상실 되는 숫자들만 표현 
 		mainMenu(Config.getInstance().getVs());
 	}
@@ -202,12 +199,12 @@ public class GameEnding extends CCLayer {
 				picture.getPosition().x + (picture.getContentSize().width * (1 - picture.getAnchorPoint().x))
 				+ (picture.getScale() * 20), picture.getPosition().y);
 		
-		CCLabel point = CCLabel.makeLabel(String.valueOf(myScore), "Arial", 30);
-		point.setAnchorPoint(1, 0.5f);
-		point.setPosition(460, backboard.getContentSize().height - 280);
-		backboard.addChild(point);
+		mPointLabel = CCLabel.makeLabel(String.valueOf(0), "Arial", 30);
+		mPointLabel.setAnchorPoint(1, 0.5f);
+		mPointLabel.setPosition(460, backboard.getContentSize().height - 280);
+		backboard.addChild(mPointLabel);
 		
-		String goldText = String.valueOf(myGold);
+		String goldText = String.valueOf(0);
 		if (!showAni) {
 			goldText = String.valueOf(-myGold);
 		}
@@ -216,37 +213,38 @@ public class GameEnding extends CCLayer {
 		if (GameData.share().isMultiGame && !showAni) {
 			goldTextPosition = CGPoint.ccp(goldTextPosition.x, backboard.getContentSize().height - 347);
 		}
-		CCLabel gold = CCLabel.makeLabel(goldText, "Arial", 30);
-		gold.setAnchorPoint(1, 0.5f);
-		gold.setPosition(goldTextPosition); // 340
-		backboard.addChild(gold);
+		mGoldLabel = CCLabel.makeLabel(goldText, "Arial", 30);
+		mGoldLabel.setAnchorPoint(1, 0.5f);
+		mGoldLabel.setPosition(goldTextPosition); // 340
+		backboard.addChild(mGoldLabel);
 		
 		CCSprite goldImage = CCSprite.sprite(folder + "gold.png");
-		goldImage.setPosition(0- goldImage.getContentSize().width*0.5f, gold.getContentSize().height*0.45f);
+		goldImage.setPosition(0- goldImage.getContentSize().width*0.5f, mGoldLabel.getContentSize().height*0.45f);
 		goldImage.setAnchorPoint(1, 0.5f);
 		goldImage.setScale(0.8f);
-		gold.addChild(goldImage);
+		mGoldLabel.addChild(goldImage);
 		
 		// 획득한 경험치만 숫자로 표현(기존+획득 아님)
-		exp = CCLabel.makeLabel(String.valueOf(mLeftExp), "Arial", 30);
-		exp.setAnchorPoint(1, 0.5f);
-		exp.setPosition(460, backboard.getContentSize().height - 396); //400
+		mExpLabel = CCLabel.makeLabel(String.valueOf(0), "Arial", 30);
+		mExpLabel.setAnchorPoint(1, 0.5f);
+		mExpLabel.setPosition(460, backboard.getContentSize().height - 396); //400
 		if (showAni || !GameData.share().isMultiGame) {
-			backboard.addChild(exp);
+			backboard.addChild(mExpLabel);
 		}
 		
 		/*************************** expframe ******************************/
 		//현재 레벨 위치 : (현재레벨/현재레벨Max)% * 322px, 
-		mExpX = (myExp/(float)UserData.expPerLevel[mUserLevel-1]); //단위는 0 ~ 1.0
+		mExpX = (myPastExp/(float)UserData.expPerLevel[myPastLevel-1]); //단위는 0 ~ 1.0
 		//test : 획득 경험치는 10000이라 가정함. 
-		mLeftExp = 10000;
-		expPerSecond = mLeftExp / 2f;
+		mLeftExp = myExp;
+		myCalcExp = myPastExp;
+		expPerSecond = mLeftExp / 2.5f;
 		
 		// 경험치 바
 		CCSprite expbg = null;
 		
 		// 이번게임에서 획득한 경험치가 없을때 true
-		if (mLeftExp <= 0) {
+		if (myExp <= 0) {
 			expbg = base;	
 		} else {
 			expbg = CCSprite.sprite(folder + "ending-exp01.png");
@@ -275,7 +273,7 @@ public class GameEnding extends CCLayer {
 			
 			CCSprite expframe = addChild_Center(expbg, folder + "ending-exp04.png");
 			
-			lv = CCLabel.makeLabel("Level " + myLevel, "Arial", 36);
+			lv = CCLabel.makeLabel("Level " + myPastLevel, "Arial", 36);
 			lv.setColor(ccColor3B.ccYELLOW);
 			lv.setAnchorPoint(0, 0.5f);
 			lv.setPosition(25, 45);
@@ -288,36 +286,36 @@ public class GameEnding extends CCLayer {
 		}
 		/**************************** buttons *****************************/
 
-			if (!showAni || !GameData.share().isMultiGame) {
-				
-				String buttonText = "ending-defense";
-				int leftButtonTag = defense;
-				if (!GameData.share().isMultiGame) {
-					buttonText = "ending-restart";
-					leftButtonTag = restart;
-				}
-				
-				// 좌측 버튼
-				CCMenuItem buttonL = CCMenuItemImage.item(
-						folder + "ending-button1.png",
-						folder + "ending-button2.png",
-						this, "clicked");
-				buttonL.setTag(leftButtonTag);
-				buttonL.setUserData(myScore / 10); // GameScore 손실 대신 gold로 대체
-				
-				CCSprite textL = CCSprite.sprite(Utility.getInstance().getNameWithIsoCodeSuffix(folder + buttonText +".png"));
-				buttonL.addChild(textL);
-				textL.setPosition(buttonL.getContentSize().width / 2, buttonL.getContentSize().height / 2);
-				
-				CCMenu leftbutton = CCMenu.menu(buttonL);
-				bg.addChild(leftbutton, 2);
-				leftbutton.setPosition(
-						expbg.getPosition().x - (expbg.getAnchorPoint().x * expbg.getContentSize().width)
-						+ leftbutton.getAnchorPoint().x * buttonL.getContentSize().width + 20, 
-						expbg.getPosition().y - (expbg.getAnchorPoint().y * expbg.getContentSize().height) 
-						- leftbutton.getAnchorPoint().y * buttonL.getContentSize().height - 10
-						);
+		if (!showAni || !GameData.share().isMultiGame) {
+			
+			String buttonText = "ending-defense";
+			int leftButtonTag = defense;
+			if (!GameData.share().isMultiGame) {
+				buttonText = "ending-restart";
+				leftButtonTag = restart;
 			}
+			
+			// 좌측 버튼
+			CCMenuItem buttonL = CCMenuItemImage.item(
+					folder + "ending-button1.png",
+					folder + "ending-button2.png",
+					this, "clicked");
+			buttonL.setTag(leftButtonTag);
+			buttonL.setUserData(myScore / 10); // GameScore 손실 대신 gold로 대체
+			
+			CCSprite textL = CCSprite.sprite(Utility.getInstance().getNameWithIsoCodeSuffix(folder + buttonText +".png"));
+			buttonL.addChild(textL);
+			textL.setPosition(buttonL.getContentSize().width / 2, buttonL.getContentSize().height / 2);
+			
+			CCMenu leftbutton = CCMenu.menu(buttonL);
+			bg.addChild(leftbutton, 2);
+			leftbutton.setPosition(
+					expbg.getPosition().x - (expbg.getAnchorPoint().x * expbg.getContentSize().width)
+					+ leftbutton.getAnchorPoint().x * buttonL.getContentSize().width + 20, 
+					expbg.getPosition().y - (expbg.getAnchorPoint().y * expbg.getContentSize().height) 
+					- leftbutton.getAnchorPoint().y * buttonL.getContentSize().height - 10
+					);
+		}
 			
 		// 우측 버튼
 		CCMenuItem buttonR = CCMenuItemImage.item(
@@ -359,26 +357,31 @@ public class GameEnding extends CCLayer {
 		}
 //		int gainedExp = (int)(dt * 50);
 		int gainedExp = (int)(dt * expPerSecond);
-		myExp += gainedExp;
+		myCalcExp += gainedExp;
 		mLeftExp -= gainedExp;
 		//만일 mLeftExp가 음수가 되면 보정
 		if(mLeftExp < 0) {
-			myExp += mLeftExp;
+			myCalcExp += mLeftExp;
 			mLeftExp = 0;
+			mExpLabel.setString(String.valueOf(myExp));
+			mPointLabel.setString(String.valueOf(myScore));
+			mGoldLabel.setString(String.valueOf(myGold));
 		}
 		
 		//늘어난 경험치가 현재 레벨의 최대 경험치를 넘지 않으면 애니메이션 넘으면 레벨 팝업
-		if(myExp <= UserData.expPerLevel[mUserLevel-1]) {
+		if(myCalcExp <= UserData.expPerLevel[mUserLevel-1]) {
 			//경험치 애니메이션
-			mExpX = (myExp/(float)UserData.expPerLevel[mUserLevel-1]);
+			mExpX = (myCalcExp/(float)UserData.expPerLevel[myPastLevel-1]);
 			expBar.setPosition((int)(mExpX * 322) + 172, 45);
 			expTail.setScaleX((expBar.getPosition().x - 172) / 322);
 			expHead.setPosition(expBar.getPosition());
-			exp.setString(String.valueOf(myExp));
+			mExpLabel.setString(String.valueOf(myExp - mLeftExp));
+			mPointLabel.setString(String.valueOf((int)((myExp - mLeftExp)/1.5f)));
+			mGoldLabel.setString(String.valueOf((int)((myExp - mLeftExp)/1.5f/5f)));
 		} else {
 			//레벨 팝업
 			unschedule("expAni");
-			myExp = myExp - UserData.expPerLevel[mUserLevel-1];
+			myCalcExp = myCalcExp - UserData.expPerLevel[myPastLevel-1];
 			
 			// 이게 무슨 막코드인가.. 으으.. OTL
 			String[] levelUpCommentsEn = {"Level up ","Level up  rewards","G  o  l  d","Attack upgrade","Defenses upgrade","1 sec"};
@@ -397,14 +400,14 @@ public class GameEnding extends CCLayer {
 			bg.addChild(levelUp, popupTag, popupTag);
 			
 			String[] popupText = null;  
-				if (isLocaleKo) {
-					popupText = levelUpCommentsKo;
-					centerTextPosition = 313;
-				} else {
-					popupText = levelUpCommentsEn;
-				}
+			if (isLocaleKo) {
+				popupText = levelUpCommentsKo;
+				centerTextPosition = 313;
+			} else {
+				popupText = levelUpCommentsEn;
+			}
 				
-			CCLabel LevelupTitle = CCLabel.makeLabel(popupText[0] + (myLevel+1) , "Arial", fontLarge);
+			CCLabel LevelupTitle = CCLabel.makeLabel(popupText[0] + (myPastLevel+1) , "Arial", fontLarge);
 			LevelupTitle.setPosition(levelUp.getContentSize().width*0.5f, levelUp.getContentSize().height - 365);
 			LevelupTitle.setColor(ccColor3B.ccBLACK);
 			LevelupTitle.setOpacity(204);
@@ -426,7 +429,7 @@ public class GameEnding extends CCLayer {
 			gold2.setColor(ccColor3B.ccBLACK);
 			gold2.setOpacity(204);
 			
-			CCLabel gold3 = CCLabel.makeLabel("00,000", "Arial", fontSmall);
+			CCLabel gold3 = CCLabel.makeLabel(String.valueOf(myCurrentGold), "Arial", fontSmall);
 			gold3.setPosition(rightMargin, gold1.getPosition().y);
 			gold3.setAnchorPoint(1, 0.5f);
 			gold3.setColor(ccColor3B.ccBLACK);
@@ -477,7 +480,7 @@ public class GameEnding extends CCLayer {
 			
 			
 			if (isLocaleKo) {
-				LevelupTitle.setString((myLevel+1) + popupText[0]);
+				LevelupTitle.setString((myPastLevel+1) + popupText[0]);
 			} else {
 				gold1.setScaleX(enScaleX);
 				gold3.setScaleX(enScaleX);
@@ -505,11 +508,11 @@ public class GameEnding extends CCLayer {
 //			levelUpKo.setAnchorPoint(0.5f, 0.5f);
 //			levelUpKo.setPosition(levelUp.getContentSize().width/2, levelUp.getContentSize().height/2);
 			
-			Log.e("GameEnding", "myLevel : " + myLevel);
-			myLevel++; 
-			basket.put("LevelCharacter", String.valueOf(myLevel)); // 레벨업(기존레벨에 +1)
-			basket.put("Exp", String.valueOf(0)); // 레벨업에 따른 경험치 0으로 초기화 
-			lv.setString("Level " + myLevel);
+//			Log.e("GameEnding", "myLevel : " + myLevel);
+//			myLevel++; 
+			//basket.put("LevelCharacter", String.valueOf(myLevel)); // 레벨업(기존레벨에 +1)
+			//basket.put("Exp", String.valueOf(0)); // 레벨업에 따른 경험치 0으로 초기화 
+			lv.setString("Level " + myCurrentLevel);
 			
 //			//3초 후에 레벨팝업을 제거하고 다시 경험치 애니메이션 구동
 //			schedule(new UpdateCallback() {
@@ -571,6 +574,12 @@ public class GameEnding extends CCLayer {
 			}
 		}
 		
+		
+		// 홈으로 갈때 DB데이터 갱신 필요
+		CCDirector.sharedDirector().replaceScene(scene);
+	}
+	
+	public void saveGameOver() {
 		// reward
 		// DB에 적용시키는 데이터들
 		if (!GameData.share().isGuestMode) {
@@ -578,37 +587,30 @@ public class GameEnding extends CCLayer {
 			if (Config.getInstance().getVs()) { // 승리 (스코어 및 경험치, 골드, 승률 ok)
 				Log.e("GameEnding", "승리 보상");
 				DataFilter.addGameScore(String.valueOf(myScore));
-//				basket.put("Point", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Point")) + myScore));
-				basket.put("Gold", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Gold")) + myGold));	
-//				basket.put("Exp", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Exp")) + mLeftExp));	
-				
-				// 레벨업이 안됐을시 획득한 전체 경험치를
-				// 레벨업이 됐을시 레벨업후 남은 경험치를 넣어주세요.
-				// 경험치 계산식은 score * 1.5입니다. 전체 경험치를 어디서 받는지 몰라서 수식으로 넣었습니다.
-				basket.put("Exp", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Exp")) + (int) (myScore * 1.5f))); // 남은 경험치 
+//						basket.put("Point", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Point")) + myScore));
+				basket.put("Gold", String.valueOf(myCurrentGold));	
+				basket.put("Exp", String.valueOf(myCurrentExp)); // 남은 경험치 
+				basket.put("LevelCharacter", String.valueOf(myCurrentLevel));
 				basket.put("HistoryWin", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryWin")) + 1));	
-//				basket.put("Exp",String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Exp")) + mLeftExp));	
 			} else { // 패배(스코어 및 경험치, 골드, 승률 ok)
 				Log.e("GameEnding", "패배 패널티");
-				if (usedGold) {
-					basket.put("Gold", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Gold")) - myGold));					
-				} else {
+//				if (usedGold) {
+//					basket.put("Gold", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Gold")) - myGold));					
+//				} else {
 					int mPastScore = Integer.valueOf(FacebookData.getinstance().getDBData("Point"));
 					if (mPastScore < myScore) {
 						DataFilter.addGameScore(String.valueOf(-mPastScore));
 					} else {
 						DataFilter.addGameScore(String.valueOf(-myScore));
 					}
-				}
-//					basket.put("Score", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("Score")) - decreaseScore));
+//				}
+				//basket.put("Gold", String.valueOf(myCurrentGold));
 				basket.put("HistoryLose", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryLose")) + 1));	
 			}
 			
 			FacebookData.getinstance().modDBData(basket);
 			Log.e("GameEnding", "DB : " + DataFilter.getUserDBData(FacebookData.getinstance().getUserInfo().getId()));
 		}
-		// 홈으로 갈때 DB데이터 갱신 필요
-		CCDirector.sharedDirector().replaceScene(scene);
 	}
 	
 	private boolean usedGold = false;

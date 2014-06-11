@@ -215,7 +215,7 @@ public class GameInvite extends CCLayer {
 				break;
 			}
 			try {
-				NetworkController.getInstance().sendRoomOwner(NetworkController.getInstance().guest);
+				NetworkController.getInstance().sendRoomOwner(NetworkController.getInstance().GUEST);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

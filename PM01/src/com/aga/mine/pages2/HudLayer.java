@@ -785,8 +785,8 @@ public class HudLayer extends CCLayer {
 	 */
 	public boolean isGameOver = false; // 게임 종료 메시지를 서버로 무한 보내는것을 방지함.
 	
-	int myScore;
-	int otherScore; 
+	public int myScore;
+	public int otherScore; 
 //	public void gameOver() {
 	public void gameOver(int score, int other) {
         SoundEngine.sharedEngine().purgeSharedEngine();
@@ -795,6 +795,10 @@ public class HudLayer extends CCLayer {
 		myScore = score;
 		otherScore = other; 
 		Log.e("HudLayer", "myScore : " + myScore + ", otherScore : " + otherScore);
+		
+		//게임 서버에 정보 저장
+		mGameEnding = new GameEnding(myScore, otherScore, mGame.getClosedCell());
+		mGameEnding.saveGameOver();
 		
 		// 애니메이션 이펙트 endingZoomOutAndBlastFX
 		mGame.gameOverAnimation(); //2초동안 실행
@@ -816,7 +820,8 @@ public class HudLayer extends CCLayer {
 	}
 	
 	private void popupEnding() {
-		mGameEnding = new GameEnding(myScore, otherScore, mGame.getClosedCell());
+		//mGameEnding = new GameEnding(myScore, otherScore, mGame.getClosedCell());
+		mGameEnding.startGameOver();
 		addChild(mGameEnding, GameConfig.share().kDepthPopup, 1234);
 		mGameEnding.setIsTouchEnabled(true);
 	}

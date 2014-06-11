@@ -147,7 +147,7 @@ public class InvitationReceiver extends CCLayer{
 	
 	public void aCallback(Object sender) {
 		try {
-			NetworkController.getInstance().sendRoomOwner(NetworkController.getInstance().guest);
+			NetworkController.getInstance().sendRoomOwner(NetworkController.getInstance().GUEST);
 			NetworkController.getInstance().sendResponseMatchInvite(1, oppenentPlayer);
 //			CCScene scene = GameInvite.getInstance().scene();
 //			CCDirector.sharedDirector().replaceScene(scene);
