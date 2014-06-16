@@ -75,4 +75,14 @@ public class MainApplication extends Application {
     public Handler mHandler = new Handler() {
         
     };
+    
+    //이모티콘 구매 애니메이션
+    private ShopEmoticon mShopEmoticon;
+    public void setShopEmoticon(ShopEmoticon shopEmoticon) {
+    	mShopEmoticon = shopEmoticon;
+    }
+    
+    public void startAni(int gold, int price) {
+    	mShopEmoticon.makeAPurchase(gold, price);
+    }
 }

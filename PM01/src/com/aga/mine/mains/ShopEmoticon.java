@@ -29,6 +29,8 @@ public class ShopEmoticon extends CCLayer {
 	CCSprite boardFrame;
 	CCSprite 	layer4;
 	
+	CCLabel goldLabel;
+	
 	static CCScene scene() {
 		CCScene scene = CCScene.node();
 		CCLayer layer = new ShopEmoticon();
@@ -43,6 +45,9 @@ public class ShopEmoticon extends CCLayer {
 		
 		TopMenu2.setSceneMenu(this);
 		BottomImage.setBottomImage(this);
+		
+		//애니메이션을 하기위해 자기자신의 인스턴스를 주입
+		MainApplication.getInstance().setShopEmoticon(this);
 
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_EMOTICONLIST);
 	}
@@ -59,7 +64,8 @@ public class ShopEmoticon extends CCLayer {
 		bg.addChild(boardFrame);
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
-		FrameTitle6.setTitle(boardFrame, folder);
+		
+		goldLabel = FrameTitle6.setTitle(boardFrame, folder);
 	}
 	
 	final int previous = 501;
@@ -116,5 +122,33 @@ public class ShopEmoticon extends CCLayer {
 	public void popup(int emoticonID){
 		Popup.popupOfPurchase(this);
 		this.emoticonID = emoticonID;
+	}
+	
+	//골드 감소 애니메이션
+	int _mygold;
+	int _price;
+	int pps;
+	int gamso = 0;
+	
+	public void makeAPurchase(int gold, int price) {
+		_mygold = gold;
+		_price = price;
+		pps = _price / 2;
+		gamso = 0;
+		// 골드 차감 애니
+		schedule("goldAni");
+	}
+	
+
+	
+	public void goldAni(float dt) {
+		gamso += dt * pps;
+		goldLabel.setString(new NumberComma().numberComma(_mygold + gamso));
+		// 골드 차감은 gamso가 작아져야함.
+		if (gamso < _price) {
+			unschedule("goldAni");
+			goldLabel.setString(new NumberComma().numberComma(FacebookData.getinstance().getDBData("Gold")));
+			gamso = 0;
+		}
 	}
 }

@@ -38,12 +38,17 @@ public class PopupActivity extends Activity {
 				FacebookData.getinstance().modDBData("Emoticons", emoticons);
 				
 				String gold = FacebookData.getinstance().getDBData("Gold");
+				//골드 감소 애니
+				MainApplication.getInstance().startAni(Integer.parseInt(gold), -100);
+				
 				gold = String.valueOf(Long.parseLong(gold) - 100);
 				FacebookData.getinstance().modDBData("Gold", gold);
 				SoundEngine.sharedEngine().playEffect(PopupActivity.this, R.raw.buy);
-				
+
 				MainApplication.getInstance().getActivity().mEmoticonAdapter.refresh(emoticonID);
 				finish();
+				
+				
 			}
 		});
 		
