@@ -606,9 +606,22 @@ public class GameEnding extends CCLayer {
 				basket.put("Gold", String.valueOf(myCurrentGold));	
 				basket.put("Exp", String.valueOf(myCurrentExp)); // 남은 경험치 
 				basket.put("LevelCharacter", String.valueOf(myCurrentLevel));
-				basket.put("HistoryWin", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryWin")) + 1));	
+				
+				//멀티게임일 경우만 전적 반영
+				if(otherScore > 0) {
+					basket.put("HistoryWin", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryWin")) + 1));
+				}
 				
 				FacebookData.getinstance().modDBData(basket);
+				
+				//홈화면에 포인트 갱신 (서버에 저장하지는 않고 로컬만 업데이트)
+				List<GameScore> gameScores = FacebookData.getinstance().getGameScore();
+				for (GameScore gameScore : gameScores) {
+					if (gameScore.getId().equals(myID)) {
+						Log.d("LDK", "score:" + gameScore);
+						gameScore.score = myScore + gameScore.score;
+					}
+				}
 			} else { // 패배(스코어 및 경험치, 골드, 승률 ok)
 				Log.e("GameEnding", "패배 ");
 
@@ -624,17 +637,6 @@ public class GameEnding extends CCLayer {
 					FacebookData.getinstance().modDBData(basket);
 				} else { //싱글게임 패배
 					
-				}
-			}
-			
-			
-			
-			//홈화면에 포인트 갱신 (서버에 저장하지는 않고 로컬만 업데이트)
-			List<GameScore> gameScores = FacebookData.getinstance().getGameScore();
-			for (GameScore gameScore : gameScores) {
-				if (gameScore.getId().equals(myID)) {
-					Log.d("LDK", "score:" + gameScore);
-					gameScore.score = myScore + gameScore.score;
 				}
 			}
 		}
