@@ -464,7 +464,10 @@ public class ShopItem2 extends CCLayer {
 		Log.e("ShopItem2", "isPurchase : " + isPurchase);
 		if (isPurchase) {
 			FacebookData.getinstance().modDBData(basket);
-			gold.setString(new NumberComma().numberComma(FacebookData.getinstance().getDBData("Gold")));
+			
+			//gold.setString(new NumberComma().numberComma(FacebookData.getinstance().getDBData("Gold")));
+			//골드 감소 애니메이션
+			startGoldAni();
 			
 			Collection k = basket .keySet();
 			Iterator itr = k.iterator();
@@ -567,6 +570,9 @@ public class ShopItem2 extends CCLayer {
 			});
 			return;
 		}
+		//애니메이션 변수 설정
+		_mygold = (int)gold;
+		_price = price * (-1);
 		
 		mIsButtonDisable = Popup.popupOfPurchase(this);
 		basket.put("SphereNumber", String.valueOf(sphereQuantity + 1));
@@ -618,6 +624,9 @@ public class ShopItem2 extends CCLayer {
 			});
 			return;
 		}
+		//애니메이션 변수 설정
+		_mygold = (int)gold;
+		_price = price * (-1);
 		
 		mIsButtonDisable = Popup.popupOfPurchase(this);
 		basket.put(magicType, String.valueOf(level + 1));
@@ -784,4 +793,27 @@ public class ShopItem2 extends CCLayer {
 	}
 	
 
+	//골드 감소 애니메이션
+	int _mygold;
+	int _price;
+	int pps;
+	int gamso = 0;
+	
+	public void startGoldAni() {
+		pps = _price / 2;
+		gamso = 0;
+		// 골드 차감 애니
+		schedule("goldAni");
+	}
+
+	public void goldAni(float dt) {
+		gamso += dt * pps;
+		gold.setString(new NumberComma().numberComma(_mygold + gamso));
+		// 골드 차감은 gamso가 작아져야함.
+		if (gamso < _price) {
+			unschedule("goldAni");
+			gold.setString(new NumberComma().numberComma(FacebookData.getinstance().getDBData("Gold")));
+			gamso = 0;
+		}
+	}
 }
