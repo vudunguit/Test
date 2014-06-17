@@ -635,6 +635,15 @@ public class GameEnding extends CCLayer {
 					basket.put("HistoryLose", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryLose")) + 1));	
 					
 					FacebookData.getinstance().modDBData(basket);
+					
+					//홈화면에 포인트 갱신 (서버에 저장하지는 않고 로컬만 업데이트)
+					List<GameScore> gameScores = FacebookData.getinstance().getGameScore();
+					for (GameScore gameScore : gameScores) {
+						if (gameScore.getId().equals(myID)) {
+							Log.d("LDK", "score:" + gameScore);
+							gameScore.score = -myScore + gameScore.score;
+						}
+					}
 				} else { //싱글게임 패배
 					
 				}
@@ -651,7 +660,7 @@ public class GameEnding extends CCLayer {
 		//버튼 비활성화
 		leftbutton.setIsTouchEnabled(false);
 		
-		//서버 정보 전송
+		//서버 정보 전송 : 포인트는 원복, 골드는 차감
 		DataFilter.addGameScore(String.valueOf(decreaseScore));
 		
 		basket.put("Gold", String.valueOf(myPastGold-decreaseGold));
@@ -662,7 +671,7 @@ public class GameEnding extends CCLayer {
 		for (GameScore gameScore : gameScores) {
 			if (gameScore.getId().equals(myID)) {
 				Log.d("LDK", "score:" + gameScore);
-				gameScore.score = myScore + gameScore.score;
+				gameScore.score = decreaseScore + gameScore.score;
 			}
 		}
 	}
