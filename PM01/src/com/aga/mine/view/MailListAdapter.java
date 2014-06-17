@@ -167,6 +167,34 @@ public class MailListAdapter extends BaseAdapter {
 		
 		return convertView;
 	}
+
+	public void receiveAll(int tab) {
+		if(tab == Constant.MAIL_TAB_BROOM) {
+			int value = 0;
+			for(MailItem item : mMailItemList) {
+				value += Integer.parseInt(item.quantity);
+			}
+			
+			if(value > 0) {
+				value += Integer.parseInt(FacebookData.getinstance().getDBData("ReceivedBroomstick"));
+				if (value >= 6) {
+					//빗자루의 총합이 6개 이상일시 남은시간 초기화 시키는 코드 넣어주시기 바랍니다.
+					
+				}
+				FacebookData.getinstance().modDBData("ReceivedBroomstick", String.valueOf(value));
+			}
+		} else {
+			int value = 0;
+			for(MailItem item : mMailItemList) {
+				value += Integer.parseInt(item.quantity);
+			}
+			
+			if(value > 0) {
+				value += Long.parseLong(FacebookData.getinstance().getDBData("Gold")) + value;
+				FacebookData.getinstance().modDBData("Gold", String.valueOf(value));
+			}
+		}
+	}
 	
 	class Viewholder {
 		ImageView profile;
