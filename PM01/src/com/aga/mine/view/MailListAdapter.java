@@ -173,6 +173,7 @@ public class MailListAdapter extends BaseAdapter {
 			int value = 0;
 			for(MailItem item : mMailItemList) {
 				value += Integer.parseInt(item.quantity);
+				DataFilter.deleteMail(item.serial_number);
 			}
 			
 			if(value > 0) {
@@ -182,16 +183,27 @@ public class MailListAdapter extends BaseAdapter {
 					
 				}
 				FacebookData.getinstance().modDBData("ReceivedBroomstick", String.valueOf(value));
+				
+				mMailItemList.clear();
+				MailBox.postNumber.setString(String.valueOf(mMailItemList.size()));
+				MailListAdapter.this.notifyDataSetChanged();
+				HomeTop.getDB();
 			}
 		} else {
 			int value = 0;
 			for(MailItem item : mMailItemList) {
 				value += Integer.parseInt(item.quantity);
+				DataFilter.deleteMail(item.serial_number);
 			}
 			
 			if(value > 0) {
 				value += Long.parseLong(FacebookData.getinstance().getDBData("Gold")) + value;
 				FacebookData.getinstance().modDBData("Gold", String.valueOf(value));
+				
+				mMailItemList.clear();
+				MailBox.postNumber.setString(String.valueOf(mMailItemList.size()));
+				MailListAdapter.this.notifyDataSetChanged();
+				HomeTop.getDB();
 			}
 		}
 	}

@@ -13,6 +13,7 @@ import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -355,7 +356,7 @@ public class Home extends CCLayer{
 				tempLayer.setIsTouchEnabled(true);
 			}
 		} else if (value == mailReceiveAllButton) {
-			String[] items = data.split(",");
+/*			String[] items = data.split(",");
 			for (String item : items) {
 				Log.e("Home", "mailReceiveAll : " + item);
 				if (!item.equals("")) {
@@ -368,7 +369,14 @@ public class Home extends CCLayer{
 			if (isBroomTab)
 				new MailBox(mailBoxLayer, "11mailbox/", this, Constant.MAIL_TAB_BROOM);
 			else
-				new MailBox(mailBoxLayer, "11mailbox/", this, Constant.MAIL_TAB_GOLD);
+				new MailBox(mailBoxLayer, "11mailbox/", this, Constant.MAIL_TAB_GOLD);*/
+			
+			int tab = isBroomTab==true? Constant.MAIL_TAB_BROOM : Constant.MAIL_TAB_GOLD;
+			Message msg = MainApplication.getInstance().getActivity().mHandler.obtainMessage();
+			msg.arg1 = tab;
+			msg.what = Constant.MSG_RECEIVE_ALL;
+			MainApplication.getInstance().getActivity().mHandler.sendMessage(msg);
+			
 		} else if (value == presentGoldButton) {
 			Log.e("Home", "presentGold : " + value);
 			String[] items = data.split(",");

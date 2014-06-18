@@ -74,6 +74,7 @@ public class MainActivity extends Activity {
     public ListView mListView;
     public GridView mGridView;
     public EmoticonListAdapter mEmoticonAdapter;
+    public MailListAdapter mMailAdapter;
 
     private int nMargin = 0;
     private float frameCenterPosition = 0.525f;
@@ -150,8 +151,8 @@ public class MainActivity extends Activity {
 			case Constant.MSG_DISPLAY_ITEMLIST:
 				int tab = msg.arg1;
 				ArrayList<MailItem> broomstickList = (ArrayList<MailItem>) msg.obj;
-				MailListAdapter mailAdapter = new MailListAdapter(MainActivity.this, broomstickList, tab);
-				mListView.setAdapter(mailAdapter);
+				mMailAdapter = new MailListAdapter(MainActivity.this, broomstickList, tab);
+				mListView.setAdapter(mMailAdapter);
 				RelativeLayout.LayoutParams itemParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 				itemParams.setMargins(
 						(int) (itemListMarginLeft * scale) + nMargin, 
@@ -232,6 +233,12 @@ public class MainActivity extends Activity {
 				intent.putExtra("emoticonID", emoticonID);
 				startActivityForResult(intent, 111);
 
+				break;
+				
+			case Constant.MSG_RECEIVE_ALL:
+				if(mMailAdapter != null) {
+					mMailAdapter.receiveAll(msg.arg1);
+				}
 				break;
 			}
 		}
