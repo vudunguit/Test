@@ -12,8 +12,8 @@ import org.cocos2d.types.CGSize;
 import android.content.Context;
 import android.util.Log;
 
-import com.aga.mine.mains.Config;
-import com.aga.mine.mains.NetworkController;
+import com.aga.mine.main.Config;
+import com.aga.mine.main.NetworkController;
 
 //일단 완료(중간에 gameover game.release 빼고)
 public class GameProgressBar extends CCLayer {

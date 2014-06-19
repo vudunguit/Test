@@ -19,9 +19,9 @@ import org.cocos2d.utils.CCFormatter;
 
 import android.util.Log;
 
-import com.aga.mine.mains.Config;
-import com.aga.mine.mains.NetworkController;
-import com.aga.mine.mains.Utility;
+import com.aga.mine.main.Config;
+import com.aga.mine.main.NetworkController;
+import com.aga.mine.main.Utility;
 
 public class GameMinimap extends CCLayer{
 	

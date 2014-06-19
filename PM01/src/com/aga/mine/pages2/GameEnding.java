@@ -23,16 +23,16 @@ import org.cocos2d.types.ccColor3B;
 
 import android.util.Log;
 
-import com.aga.mine.mains.Config;
-import com.aga.mine.mains.DataFilter;
-import com.aga.mine.mains.FacebookData;
-import com.aga.mine.mains.GameLoading;
-import com.aga.mine.mains.GameScore;
-import com.aga.mine.mains.Home;
-import com.aga.mine.mains.Home2;
-import com.aga.mine.mains.MainApplication;
-import com.aga.mine.mains.NetworkController;
-import com.aga.mine.mains.Utility;
+import com.aga.mine.main.Config;
+import com.aga.mine.main.DataFilter;
+import com.aga.mine.main.FacebookData;
+import com.aga.mine.main.GameLoading;
+import com.aga.mine.main.GameScore;
+import com.aga.mine.main.Home;
+import com.aga.mine.main.Home2;
+import com.aga.mine.main.MainApplication;
+import com.aga.mine.main.NetworkController;
+import com.aga.mine.main.Utility;
 import com.facebook.android.Facebook;
 
 public class GameEnding extends CCLayer {

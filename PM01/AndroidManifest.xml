@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.aga.mine.mains"
+    package="com.aga.mine.main"
     android:versionCode="1"
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,13 +13,13 @@
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
-        android:name="com.aga.mine.mains.MainApplication"
+        android:name="com.aga.mine.main.MainApplication"
         android:allowBackup="true"
         android:icon="@drawable/pmines_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.aga.mine.mains.MainActivity"
+            android:name="com.aga.mine.main.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.aga.mine.mains.Daily"
+            android:name="com.aga.mine.main.Daily"
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.LoginActivity"
@@ -39,7 +39,7 @@
             android:value="@string/app_id" />
 
         <activity
-            android:name="com.aga.mine.mains.PopupActivity"
+            android:name="com.aga.mine.main.PopupActivity"
             android:theme="@android:style/Theme.Holo.Light.Dialog" 
             android:label="" >
         </activity>

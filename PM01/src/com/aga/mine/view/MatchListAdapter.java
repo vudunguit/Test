@@ -15,11 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aga.mine.mains.FacebookData;
-import com.aga.mine.mains.GameScore;
-import com.aga.mine.mains.MainApplication;
-import com.aga.mine.mains.NetworkController;
-import com.aga.mine.mains.R;
+import com.aga.mine.main.FacebookData;
+import com.aga.mine.main.GameScore;
+import com.aga.mine.main.MainApplication;
+import com.aga.mine.main.NetworkController;
+import com.aga.mine.main.R;
 import com.aga.mine.pages2.GameData;
 import com.aga.mine.util.Util;
 import com.androidquery.AQuery;

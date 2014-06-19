@@ -18,9 +18,9 @@ import org.cocos2d.types.CGSize;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import com.aga.mine.mains.Config;
-import com.aga.mine.mains.NetworkController;
-import com.aga.mine.mains.Utility;
+import com.aga.mine.main.Config;
+import com.aga.mine.main.NetworkController;
+import com.aga.mine.main.Utility;
 
 
 // 이미지 파일명의 -hd를 제거 하여서 오류 발생 함.

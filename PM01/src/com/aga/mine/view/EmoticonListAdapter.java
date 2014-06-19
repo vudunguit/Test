@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.aga.mine.mains.Constant;
-import com.aga.mine.mains.FacebookData;
-import com.aga.mine.mains.MainApplication;
-import com.aga.mine.mains.R;
-import com.aga.mine.mains.ShopEmoticon;
+import com.aga.mine.main.Constant;
+import com.aga.mine.main.FacebookData;
+import com.aga.mine.main.MainApplication;
+import com.aga.mine.main.ShopEmoticon;
+import com.aga.mine.main.R;
 
 public class EmoticonListAdapter extends BaseAdapter {
 	private Context mContext;

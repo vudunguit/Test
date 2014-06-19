@@ -43,11 +43,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.aga.mine.mains.Config;
-import com.aga.mine.mains.FacebookData;
-import com.aga.mine.mains.MainApplication;
-import com.aga.mine.mains.NetworkController;
-import com.aga.mine.mains.R;
+import com.aga.mine.main.Config;
+import com.aga.mine.main.FacebookData;
+import com.aga.mine.main.MainApplication;
+import com.aga.mine.main.NetworkController;
+import com.aga.mine.main.R;
 
 public class Game extends CCLayer {
 	
@@ -971,7 +971,7 @@ public class Game extends CCLayer {
 	//
 	// 더블터치 : 셀 오픈
 	public void handleDoubleTap(MotionEvent event) {
-		//mHud.StartAniCloudDefense(10);
+		mHud.gameOver(500, 0);
 		Log.e("Game / handleDoubleTap", "마인 갯수 : " + getMineNumber());
 		if (Config.getInstance().isDisableButton())
 			return;

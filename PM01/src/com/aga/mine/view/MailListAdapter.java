@@ -13,13 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aga.mine.mains.Constant;
-import com.aga.mine.mains.DataFilter;
-import com.aga.mine.mains.FacebookData;
-import com.aga.mine.mains.HomeTop;
-import com.aga.mine.mains.MailBox;
-import com.aga.mine.mains.MainApplication;
-import com.aga.mine.mains.R;
+import com.aga.mine.main.Constant;
+import com.aga.mine.main.DataFilter;
+import com.aga.mine.main.FacebookData;
+import com.aga.mine.main.HomeTop;
+import com.aga.mine.main.MailBox;
+import com.aga.mine.main.MainApplication;
+import com.aga.mine.main.R;
 import com.androidquery.AQuery;
 
 public class MailListAdapter extends BaseAdapter {

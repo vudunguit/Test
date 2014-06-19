@@ -19,9 +19,9 @@ import org.cocos2d.utils.CCFormatter;
 import android.content.Context;
 import android.util.Log;
 
-import com.aga.mine.mains.Config;
-import com.aga.mine.mains.NetworkController;
-import com.aga.mine.mains.R;
+import com.aga.mine.main.Config;
+import com.aga.mine.main.NetworkController;
+import com.aga.mine.main.R;
 
 public class MineCell extends CCLayer{
 	

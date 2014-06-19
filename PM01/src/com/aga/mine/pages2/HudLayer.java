@@ -49,12 +49,12 @@ import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import com.aga.mine.mains.Config;
-import com.aga.mine.mains.Home;
-import com.aga.mine.mains.Home2;
-import com.aga.mine.mains.MainApplication;
-import com.aga.mine.mains.NetworkController;
-import com.aga.mine.mains.Utility;
+import com.aga.mine.main.Config;
+import com.aga.mine.main.Home;
+import com.aga.mine.main.Home2;
+import com.aga.mine.main.MainApplication;
+import com.aga.mine.main.NetworkController;
+import com.aga.mine.main.Utility;
 
 public class HudLayer extends CCLayer {
 

@@ -11,8 +11,8 @@ import org.cocos2d.types.CGSize;
 
 import android.util.Log;
 
-import com.aga.mine.mains.Constant;
-import com.aga.mine.mains.Utility;
+import com.aga.mine.main.Constant;
+import com.aga.mine.main.Utility;
 
 public class Popup extends CCLayer {
 	

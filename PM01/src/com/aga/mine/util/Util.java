@@ -13,9 +13,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.aga.mine.mains.Constant;
-import com.aga.mine.mains.GameLoading;
-import com.aga.mine.mains.MainApplication;
+import com.aga.mine.main.Constant;
+import com.aga.mine.main.GameLoading;
+import com.aga.mine.main.MainApplication;
 
 public final class Util {
 

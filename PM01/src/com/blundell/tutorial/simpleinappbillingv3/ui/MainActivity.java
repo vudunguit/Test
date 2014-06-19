@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.aga.mine.mains.R;
+import com.aga.mine.main.R;
 import com.blundell.tutorial.simpleinappbillingv3.ui.base.BlundellActivity;
 import com.blundell.tutorial.simpleinappbillingv3.ui.utils.Navigator;
 import com.blundell.tutorial.simpleinappbillingv3.ui.xml.MainMenu;

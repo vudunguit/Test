@@ -3,7 +3,7 @@ package com.blundell.tutorial.simpleinappbillingv3.ui.base;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.aga.mine.mains.R;
+import com.aga.mine.main.R;
 import com.android.vending.billing.util.IabHelper;
 import com.android.vending.billing.util.IabHelper.OnIabPurchaseFinishedListener;
 import com.android.vending.billing.util.IabHelper.OnIabSetupFinishedListener;
