@@ -13,8 +13,8 @@ public class MainApplication extends Application {
     //private static final String APP_ID = "625994234086470";
 //    private static final String APP_ID = "1387999011424838";
 //    private static final String APP_NAMESPACE = "sromkuapp";
-    private static final String APP_ID = "184667795054098";
-    private static final String APP_NAMESPACE = "PumpkinMine";
+    private static final String APP_ID = "709362365791816";
+    private static final String APP_NAMESPACE = "Pumpkin Mine";
     
     private Context mContext;
     private MainActivity mActivity;
