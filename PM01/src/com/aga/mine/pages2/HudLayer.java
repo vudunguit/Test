@@ -44,7 +44,7 @@ import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
-import android.R;
+import com.aga.mine.main.R;
 import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
