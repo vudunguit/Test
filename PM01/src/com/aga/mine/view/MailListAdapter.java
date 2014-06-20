@@ -6,6 +6,7 @@ import java.util.Locale;
 import org.cocos2d.nodes.CCDirector;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -194,10 +195,11 @@ public class MailListAdapter extends BaseAdapter {
 			for(MailItem item : mMailItemList) {
 				value += Integer.parseInt(item.quantity);
 				DataFilter.deleteMail(item.serial_number);
+				Log.d("LDK", "gold:" + item.quantity);
 			}
 			
 			if(value > 0) {
-				value += Long.parseLong(FacebookData.getinstance().getDBData("Gold")) + value;
+				value += Long.parseLong(FacebookData.getinstance().getDBData("Gold"));
 				FacebookData.getinstance().modDBData("Gold", String.valueOf(value));
 				
 				mMailItemList.clear();

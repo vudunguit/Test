@@ -58,12 +58,19 @@ public class ShopGold2 extends CCLayer {
 
 	int gold;
 	
+	public InviteCallback mInviteCallback = new InviteCallback() {
+		@Override
+		public void onInvited(List<String> invitedFriends, String requestId) {
+
+		}
+    };
+	
 	public ShopGold2() {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
 		basket = new HashMap<String, String>();
 		
-		//MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
+		MainApplication.getInstance().getActivity().setInviteCallback(mInviteCallback);
 		
 		// BackGround 파일
 		bg = BackGround.setBackground(this, CGPoint.make(0.5f, 0.5f), commonfolder + "bg1" + fileExtension);
@@ -259,16 +266,16 @@ public class ShopGold2 extends CCLayer {
 	};
 	
 	public void purchaseSuccess() {
-		//경험치 및 레벨업 애니메이션
-		//경험치 1000당 1초
-		schedule("goldAni");
-		
 		final String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
 		final String user = FacebookData.getinstance().getUserInfo().getId();
 		long myGold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
 		
 		// 받는사람이 본인이면 DB로 바로 저장
 		if (recipientID.equals(user)) {
+			//경험치 및 레벨업 애니메이션
+			//경험치 1000당 1초
+			schedule("goldAni");
+			
 			_mygold = (int) myGold;
 			_price = gold;
 			pps = _price / 2;
