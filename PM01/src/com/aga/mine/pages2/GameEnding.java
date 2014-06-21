@@ -127,7 +127,7 @@ public class GameEnding extends CCLayer {
 		} else {
 			Log.e("GameEnding", "Lose");
 			// 패배 효과음
-			if(otherScore > 0) {  //멀티게임 패배
+			if(GameData.share().isMultiGame) {  //멀티게임 패배
 				this.myScore = (int) (otherScore / 3.0f); //차감 포인트
 				decreaseScore = (int) (otherScore / 3.0f);
 				myGold = (int) (otherScore / 10.0f); //차감 골드
@@ -237,7 +237,7 @@ public class GameEnding extends CCLayer {
 		}
 		
 		//패배 팝업이면
-		if(!showAni && otherScore>0) {
+		if(!showAni && GameData.share().isMultiGame) {
 			mExpLabel.setString(String.valueOf(0));
 			mPointLabel.setString(String.valueOf(-myScore));
 			mGoldLabel.setString(String.valueOf(0));
@@ -304,7 +304,7 @@ public class GameEnding extends CCLayer {
 				folder + "ending-button1.png",
 				folder + "ending-button2.png",
 				this, "clicked");
-		if (otherScore > 0 && !showAni) { //대전 게임 패배일 경우
+		if (GameData.share().isMultiGame && !showAni) { //대전 게임 패배일 경우
 			Log.d("LDK", "multigame fail");
 			buttonText = "ending-defense";
 			leftButtonTag = defense;
@@ -570,6 +570,8 @@ public class GameEnding extends CCLayer {
 		
 		CCScene scene = null;
 		
+		GameData.share().isMultiGame = false; // 다시하기를 누를 경우 홈으로 가지않아 초기화할 방법이 없으므로 여기서 초기화
+		
 		if (tag == restart) {
 			scene = GameLoading.scene();
 		} else {
@@ -608,7 +610,7 @@ public class GameEnding extends CCLayer {
 				basket.put("LevelCharacter", String.valueOf(myCurrentLevel));
 				
 				//멀티게임일 경우만 전적 반영
-				if(otherScore > 0) {
+				if(GameData.share().isMultiGame) {
 					basket.put("HistoryWin", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryWin")) + 1));
 				}
 				
@@ -625,7 +627,7 @@ public class GameEnding extends CCLayer {
 			} else { // 패배(스코어 및 경험치, 골드, 승률 ok)
 				Log.e("GameEnding", "패배 ");
 
-				if(otherScore > 0) {  //멀티게임 패배
+				if(GameData.share().isMultiGame) {  //멀티게임 패배
 					int mPastScore = Integer.valueOf(FacebookData.getinstance().getDBData("Point"));
 					if (mPastScore < myScore) {
 						myScore = mPastScore;

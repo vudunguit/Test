@@ -26,7 +26,7 @@ public class GameLoading extends CCLayer {
 	CCScene mGameScene;
 	
 	private GameLoading() {
-		
+		Log.d("LDK", "GameLoading");
 		/************ 잘 사용했는지 모르겠습니다. 확인 부탁드립니다.  ************/
 //		// hide scroll view
 //		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
