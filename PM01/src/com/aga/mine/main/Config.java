@@ -384,11 +384,16 @@ public class Config {
 		return vsResult; 
 	}
 
+	//마법사 색깔 결정: 싱글게임이면 true, 멀티게임 주인이면 true => 빨간색, 그외 파란색
 	boolean owner = false;
 	
 	public void setOwner() {
 		Log.e("Config", "setOwner : " + owner);
 		owner =  NetworkController.getInstance().getOwner();
+	}
+	
+	public void setOwner(boolean b) {
+		owner = b;
 	}
 	
 	public boolean getOwner() {

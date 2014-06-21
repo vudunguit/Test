@@ -155,7 +155,12 @@ public class Game extends CCLayer {
 	
 	private Game() {
 		unopenedTile = 0;
-		Config.getInstance().setOwner();
+		if(GameData.share().isMultiGame && !NetworkController.getInstance().getOwner()) {
+			Config.getInstance().setOwner(false);
+		} else {
+			Config.getInstance().setOwner(true);
+		}
+		
 		mContext = CCDirector.sharedDirector().getActivity().getApplicationContext();
 		winSize = CCDirector.sharedDirector().winSize();
 		
