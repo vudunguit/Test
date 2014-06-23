@@ -34,7 +34,7 @@ public class GameMinimap extends CCLayer{
 	final int kTagMinimap = 9;
 
 	CCTMXTiledMap tileMap = null;
-	static CCSprite base  = null;
+	//static CCSprite base  = null;
 	//배경
 	CCTMXLayer bg = null;
 	CCTMXLayer meta = null;
@@ -49,20 +49,6 @@ public class GameMinimap extends CCLayer{
 	
 	ArrayList<MineCell> cells  = null;
 	ArrayList<MineCell> sphereBaseCells = null;
-	
-//	private static GameMinimap gameMinimap;
-//	
-//	public static synchronized GameMinimap getInstance() {
-//		if (gameMinimap == null) {
-//			gameMinimap = new GameMinimap();
-//		}
-//		return gameMinimap;
-//	}
-	
-//	public void dealloc() {
-//		gameMinimap = null;
-//		
-//	}
 	
 	private HudLayer mHudLayer;
 	
@@ -161,16 +147,7 @@ public class GameMinimap extends CCLayer{
 		}
 		 
 	}
-	// layout() end
-//	
-//	public static void minimapOn() {
-//		this.
-//	}
-//	public static void minimapOff() {
-//		this.setVisible(false);
-//	}
 	
-	//
 	// MineCell Delegate
 	public void removeTile(CGPoint tileCoord) {
 		// Global ID // Globally unique IDentifier
@@ -222,51 +199,6 @@ public class GameMinimap extends CCLayer{
 		}
 
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/*****************************************************/
 	/** 문제지점
@@ -416,50 +348,6 @@ public class GameMinimap extends CCLayer{
 		
 	}
 	/*****************************************************/
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	public void removeTile(int tileGID) {
