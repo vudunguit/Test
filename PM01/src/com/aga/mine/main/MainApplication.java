@@ -11,10 +11,10 @@ import android.os.Handler;
 
 public class MainApplication extends Application {
     //private static final String APP_ID = "625994234086470";
-	private static final String APP_ID = "1387999011424838";
-	private static final String APP_NAMESPACE = "typing_game";
-    //private static final String APP_ID = "709362365791816";
-    //private static final String APP_NAMESPACE = "pumpkinmine;
+	//private static final String APP_ID = "1387999011424838";
+	//private static final String APP_NAMESPACE = "typing_game";
+    private static final String APP_ID = "709362365791816";
+    private static final String APP_NAMESPACE = "Pumpkin Mine";
     
     private Context mContext;
     private MainActivity mActivity;
@@ -32,7 +32,7 @@ public class MainApplication extends Application {
         mContext = this.getApplicationContext();
         
         // initialize facebook configuration
-        Permission[] permissions = new Permission[] { Permission.BASIC_INFO,
+        Permission[] permissions = new Permission[] { //Permission.BASIC_INFO,
                                                      Permission.USER_CHECKINS,
                                                      Permission.USER_EVENTS,
                                                      Permission.USER_GROUPS,
