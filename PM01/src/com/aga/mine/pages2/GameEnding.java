@@ -84,6 +84,7 @@ public class GameEnding extends CCLayer {
 	
 	public GameEnding(int myScore, int otherScore, int closedCell) {
 		basket = new HashMap<String, String>();
+
 		if (Locale.getDefault().getLanguage().toString().equals("ko"))
 			isLocaleKo = true;
 		Log.e("GameEnding", "myScore : " + myScore+ ", otherScore : " + otherScore + ", closedCell : " + closedCell);
@@ -139,11 +140,11 @@ public class GameEnding extends CCLayer {
 			}
 		}
 		
-		if (isExtraTime) {
+/*		if (isExtraTime) {
 			this.myScore = (int) (myScore * extraTimeReward);
 			myExp = (int) (this.myScore * 1.5f);
 			myGold = (int)(this.myScore / 5.0f);
-		}
+		}*/
 	}
 	
 	public void startGameOver() {
@@ -368,6 +369,9 @@ public class GameEnding extends CCLayer {
 	public void expAni(float dt) {
 		if(mLeftExp <= 0) {
 			unschedule("expAni");
+			mExpLabel.setString(String.valueOf(myExp));
+			mPointLabel.setString(String.valueOf(myScore));
+			mGoldLabel.setString(String.valueOf(myGold));
 			return;
 		}
 //		int gainedExp = (int)(dt * 50);
@@ -375,13 +379,13 @@ public class GameEnding extends CCLayer {
 		myCalcExp += gainedExp;
 		mLeftExp -= gainedExp;
 		//만일 mLeftExp가 음수가 되면 보정
-		if(mLeftExp < 0) {
+/*		if(mLeftExp < 0) {
 			myCalcExp += mLeftExp;
 			mLeftExp = 0;
 			mExpLabel.setString(String.valueOf(myExp));
 			mPointLabel.setString(String.valueOf(myScore));
 			mGoldLabel.setString(String.valueOf(myGold));
-		}
+		}*/
 		
 		//늘어난 경험치가 현재 레벨의 최대 경험치를 넘지 않으면 애니메이션 넘으면 레벨 팝업
 		if(myCalcExp <= UserData.expPerLevel[mUserLevel-1]) {

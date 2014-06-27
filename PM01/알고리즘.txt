@@ -1,0 +1,17 @@
+* 셀특성
+- 호박 : open, setMine
+- 버섯 : marked
+
+* 현재 찾은 지뢰
+-GameData의 currentMine 
+
+* 만일 잘못된 장소에 버섯을 꼽아놓는다면
+- currentMine은 증가하지 않지만 좌측상단(mGame.decreasemine)은 증가
+
+* 게임 종료
+- currentMine이 최대 마인에 도달하면 종료
+
+* 이슈
+신성마법시 버섯이 마지막에 marked 되는 현상
+포인트 1점 차이 오차 발생
+종료시 애니메이션이 제대로 안됨. zoom out이 될된상태에서 버섯 폭발일어남.
