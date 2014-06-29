@@ -33,16 +33,17 @@ public class MainApplication extends Application {
         
         // initialize facebook configuration
         Permission[] permissions = new Permission[] { //Permission.BASIC_INFO,
-                                                     Permission.USER_CHECKINS,
+                                                     //Permission.USER_CHECKINS,
                                                      Permission.USER_EVENTS,
                                                      Permission.USER_GROUPS,
                                                      Permission.USER_LIKES,
                                                      Permission.USER_PHOTOS,
                                                      Permission.USER_VIDEOS,
-                                                     Permission.FRIENDS_EVENTS,
-                                                     Permission.FRIENDS_PHOTOS,
-                                                     Permission.FRIENDS_ABOUT_ME,
-                                                     Permission.PUBLISH_STREAM };
+                                                     //Permission.FRIENDS_EVENTS,
+                                                     //Permission.FRIENDS_PHOTOS,
+                                                     //Permission.FRIENDS_ABOUT_ME,
+                                                     //Permission.PUBLISH_STREAM 
+                                                     };
 
         SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder().setAppId(APP_ID)
                     .setNamespace(APP_NAMESPACE)
