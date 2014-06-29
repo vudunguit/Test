@@ -172,6 +172,7 @@ public class GameProgressBar extends CCLayer {
 		// 게임시간이 종료하면 타이머를 멈추고 게임종료 메서드 호출한다.
 		if (seconds <= 0) {
 			this.stopTime();
+			mHud.mGame.stopCheck();
 			gameover();
 			
 			

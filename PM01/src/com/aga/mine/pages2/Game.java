@@ -159,6 +159,17 @@ public class Game extends CCLayer {
 		return mThreadCount;
 	}
 	
+	//타일 오픈중 공격을 받을때 사용
+/*	private int mReceivedAttackType;
+	private int mReceivedAttackData;
+	public synchronized void setReceivedAttackType(int type, int data) {
+		mReceivedAttackType = type;
+		mReceivedAttackData = data;
+	}
+	public synchronized int getReceivedAttackType() {
+		return mReceivedAttackType;
+	}*/
+	
 	private Game() {
 		unopenedTile = 0;
 		if(GameData.share().isMultiGame && !NetworkController.getInstance().getOwner()) {
@@ -552,37 +563,58 @@ public class Game extends CCLayer {
 		SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
 		
 		//게임 오버 체크
-		schedule(new UpdateCallback() {
-			@Override
-			public void update(float d) {
-				//타일 오픈 쓰레드가 실행중이면 끝날때까지 기다린다
-				if(getThreadCount()>0) {
-					Log.e("LDK", "thread count:" + getThreadCount());
-					return;  
-				}
-				//하트 소멸의 경우
-				if (GameData.share().isHeartOut()) {
-					unschedule(this);
-					Log.e("MineCell / open", "delegate - gameOver *** mission failed ***");
-					if (GameData.share().isMultiGame) {
-						sendRequestGameOver(0); // 대전이므로 서버로 내점수 0점 보내기
-					} else {
-						Config.getInstance().setVs(Config.getInstance().vsLose);
-						mHud.gameOver(0, 0);
-					}
-				}
-				//찾은 마인이 최대마인에 도달했을때
-				if (GameData.share().getCurrentMine() == GameData.share().getMineNumber()) {
-					unschedule(this);
-					if (GameData.share().isMultiGame) {
-						sendRequestGameOver(sumScore());
-					} else {
-						Config.getInstance().setVs(Config.getInstance().vsWin);
-						mHud.gameOver((int)(sumScore()*0.2f), 0); //싱글 게임은 멀티게임 포인트의 20%
-					}
-				}
+		schedule("checkGame", 1.0f);
+	}
+	
+	public void stopCheck() {
+		unschedule("checkGame");
+	}
+	
+	public void checkGame(float dt) {
+		//타일 오픈 쓰레드가 실행중이면 끝날때까지 기다린다
+		if(getThreadCount()>0) {
+			Log.e("LDK", "thread count:" + getThreadCount());
+			return;  
+		}
+		//하트 소멸의 경우
+		if (GameData.share().isHeartOut()) {
+			stopCheck();
+			Log.e("MineCell / open", "delegate - gameOver *** mission failed ***");
+			if (GameData.share().isMultiGame) {
+				sendRequestGameOver(0); // 대전이므로 서버로 내점수 0점 보내기
+			} else {
+				Config.getInstance().setVs(Config.getInstance().vsLose);
+				mHud.gameOver(0, 0);
 			}
-		}, 1.0f);
+		}
+		//찾은 마인이 최대마인에 도달했을때
+		if (GameData.share().getCurrentMine() == GameData.share().getMineNumber()) {
+			stopCheck();
+			if (GameData.share().isMultiGame) {
+				sendRequestGameOver(sumScore());
+			} else {
+				Config.getInstance().setVs(Config.getInstance().vsWin);
+				mHud.gameOver((int)(sumScore()*0.2f), 0); //싱글 게임은 멀티게임 포인트의 20%
+			}
+		}
+		
+		//타일이 오픈중 상대방의 공격이 있을 경우, 타일 오픈이 끝나고 실행한다.
+/*		if(getReceivedAttackType()>0) {
+			final int type = getReceivedAttackType();
+			final int data = mReceivedAttackData;
+			setReceivedAttackType(0, 0);
+			switch(type) {
+			case 1:
+				mHud.StartAniFireDefense(data);
+				break;
+			case 2:
+				mHud.StartAniWindDefense(data);
+				break;
+			case 3:
+				mHud.StartAniCloudDefense(data);
+				break;
+			}
+		}*/
 	}
 	
 	// 대전했을시 게임오버 점수
