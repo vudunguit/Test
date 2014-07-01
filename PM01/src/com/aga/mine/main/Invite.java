@@ -209,14 +209,14 @@ public class Invite extends CCLayer {
 		rewards.add(jewelButton(parentSprite, 1.1f, 10000, 70));
 		
 		// 일단 막코딩 합니다. ㅠㅠ (리팩토링이 필요합니다.)
-		int inviteCount = Integer.parseInt(FacebookData.getinstance().getDBData("InviteNumber"));
+/*		int inviteCount = Integer.parseInt(FacebookData.getinstance().getDBData("InviteNumber"));
 		int count = 0;
 		for (int i = 30; i < inviteCount; i+=20) {
 			rewards.get(count).addChild(checkSprite);
 			checkSprite.setPosition(rewards.get(count).getContentSize().width*0.5f, rewards.get(count).getContentSize().height*0.5f);
 			count ++;
 		}
-		count = 0;
+		count = 0;*/
 	}
 		
 	private CCSprite jewelButton(CCSprite parentSprite, float position, int gold, int friends) {
