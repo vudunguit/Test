@@ -579,7 +579,7 @@ public class Game extends CCLayer {
 		//하트 소멸의 경우
 		if (GameData.share().isHeartOut()) {
 			stopCheck();
-			Log.e("MineCell / open", "delegate - gameOver *** mission failed ***");
+			Log.e("LDK", "heart out");
 			if (GameData.share().isMultiGame) {
 				sendRequestGameOver(0); // 대전이므로 서버로 내점수 0점 보내기
 			} else {
@@ -1050,7 +1050,7 @@ public class Game extends CCLayer {
 	//
 	// 더블터치 : 셀 오픈
 	public void handleDoubleTap(MotionEvent event) {
-		//mHud.gameOver(500, 0);
+		//mHud.gameOver(1500, 0);
 		Log.e("Game / handleDoubleTap", "마인 갯수 : " + getMineNumber());
 		if (Config.getInstance().isDisableButton())
 			return;
@@ -1772,18 +1772,21 @@ public class Game extends CCLayer {
 		float foundMine = GameData.share().getCurrentMine(); // 올바르게 버섯이 심겨진 지뢰만(찾은 호박)
 		float maxMine = GameData.share().getMineNumber(); // 테스트중
 		float heart = GameData.share().getHeartNumber();
-		float spentTime = 900 - GameData.share().getSeconds(); // 소요 시간
+		//float spentTime = 900 - GameData.share().getSeconds(); // 소요 시간
+		float leftTime = GameData.share().getSeconds(); //남은 시간
 		
 		if (heart > 0) {
-			myScore = (int) ((((foundMine + heart) * maxMine) + spentTime) * maxMine * 0.006f);
+			myScore = (int) ((((foundMine + heart) * maxMine) + leftTime) * maxMine * 0.006f);
+		} else {
+			myScore = 0;
 		}
 		
-		Log.e("Game", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", heart : " + heart + ", maxMine : " + maxMine + ", spentTime : " + spentTime);
+		Log.e("Game", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", heart : " + heart + ", maxMine : " + maxMine + ", spentTime : " + leftTime);
 		
 		return myScore;
 	}
 	
-	public void messageReceived(int messageType, Object obj) {
+	public void messageReceived(int messageType, int obj) {
 		mHud.mGameProgressBar.stopTime();
 		Log.e("Game", "kmessageRequestScore = 15, kmessageGameOver = 6, kmessageOpponentConnectionLost = 9");
 		Log.e("Game", "messageReceived - messageType : " + messageType);
@@ -1791,12 +1794,8 @@ public class Game extends CCLayer {
 		final int kmessageGameOver = 6;
 		final int kmessageOpponentConnectionLost = 9;
 		
-		int myScore = 0;
-		int otherScore = -1;
-		if (obj != null)
-			otherScore = (Integer) obj;		
-		
-		myScore = sumScore();
+		int myScore = sumScore();
+		int otherScore = obj;	
 
 		if (myScore < otherScore)
 			Config.getInstance().setVs(Config.getInstance().vsLose);
@@ -1815,7 +1814,9 @@ public class Game extends CCLayer {
 			break;
 			
 		case kmessageGameOver:
+			stopCheck();
 			mHud.gameOver(myScore, otherScore);
+			
 			break;
 			
 		case kmessageOpponentConnectionLost:

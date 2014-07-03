@@ -130,15 +130,17 @@ public class GameEnding extends CCLayer {
 			// 패배 효과음
 			if(GameData.share().isMultiGame) {  //멀티게임 패배
 				this.myScore = (int) (otherScore / 3.0f); //차감 포인트
+				Log.e("LDK", "myScore:" + myScore);
 				//차감포인트가 현재 포인트보다 작으면 그것만큼 차감. 즉, 마이너스가 되지 않음.
 				int mPastScore = Integer.valueOf(FacebookData.getinstance().getDBData("Point"));
+				Log.e("LDK", "mPastScore:" + mPastScore);
 				if (mPastScore <= myScore) {
 					myScore = 0;
 					myGold = 0;
 				} else {
 					myGold = (int) (otherScore / 10.0f); //차감 골드
 				}
-
+				Log.e("LDK", "myScore:" + myScore + ", myGold:" + myGold);
 				//decreaseScore = (int) (otherScore / 3.0f);
 				//decreaseGold = (int) (otherScore / 10.0f);
 				myExp = 0;
