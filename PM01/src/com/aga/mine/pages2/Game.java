@@ -160,7 +160,7 @@ public class Game extends CCLayer {
 	}
 	
 	//타일 오픈중 공격을 받을때 사용
-/*	private int mReceivedAttackType;
+	private int mReceivedAttackType;
 	private int mReceivedAttackData;
 	public synchronized void setReceivedAttackType(int type, int data) {
 		mReceivedAttackType = type;
@@ -168,7 +168,7 @@ public class Game extends CCLayer {
 	}
 	public synchronized int getReceivedAttackType() {
 		return mReceivedAttackType;
-	}*/
+	}
 	
 	private Game() {
 		unopenedTile = 0;
@@ -599,7 +599,7 @@ public class Game extends CCLayer {
 		}
 		
 		//타일이 오픈중 상대방의 공격이 있을 경우, 타일 오픈이 끝나고 실행한다.
-/*		if(getReceivedAttackType()>0) {
+		if(getReceivedAttackType()>0) {
 			final int type = getReceivedAttackType();
 			final int data = mReceivedAttackData;
 			setReceivedAttackType(0, 0);
@@ -614,7 +614,7 @@ public class Game extends CCLayer {
 				mHud.StartAniCloudDefense(data);
 				break;
 			}
-		}*/
+		}
 	}
 	
 	// 대전했을시 게임오버 점수

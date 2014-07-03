@@ -256,18 +256,25 @@ public class GameMinimap extends CCLayer{
 //			switch ((data - 23) / 1000) {  // data를 1000으로 나누어 나머지 값이 공격 지속 시간입니다. 현재 23
 			
 			case 1:
-//				mHudLayer.testText.setString("불마법을 사용. type : " + data);
-				
-//				mHudLayer.StartAniFireDefense(data % 1000); // 나머지 값을 지속시간으로 사용
-				mHudLayer.StartAniFireDefense(data%1000);
+				if(mHudLayer.mGame.getThreadCount()>0) {
+					mHudLayer.mGame.setReceivedAttackType(1, data%1000);
+				} else {
+					mHudLayer.StartAniFireDefense(data%1000);
+				}
 				break;
 			case 2:
-//				mHudLayer.testText.setString("바람마법을 사용. type : " + data);
-				mHudLayer.StartAniWindDefense(data%1000);
+				if(mHudLayer.mGame.getThreadCount()>0) {
+					mHudLayer.mGame.setReceivedAttackType(2, data%1000);
+				} else {
+					mHudLayer.StartAniWindDefense(data%1000);
+				}
 				break;
 			case 3:
-//				mHudLayer.testText.setString("구름마법을 사용. type : " + data);
-				mHudLayer.StartAniCloudDefense(data%1000);
+				if(mHudLayer.mGame.getThreadCount()>0) {
+					mHudLayer.mGame.setReceivedAttackType(3, data%1000);
+				} else {
+					mHudLayer.StartAniCloudDefense(data%1000);
+				}
 				break;
 			case 4:
 				mHudLayer.testText.setString("신성마법을 사용. type : " + data);
