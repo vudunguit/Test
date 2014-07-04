@@ -172,6 +172,7 @@ public class GameProgressBar extends CCLayer {
 		// 게임시간이 종료하면 타이머를 멈추고 게임종료 메서드 호출한다.
 		if (seconds <= 0) {
 			this.stopTime();
+			mHud.mGame.stopCheck();
 			gameover();
 			
 			
@@ -209,7 +210,7 @@ public class GameProgressBar extends CCLayer {
 		} else {
 			Log.e("GameProgressBar", "싱글 - 시간 초과시 무조건 승리");
 			Config.getInstance().setVs(Config.getInstance().vsWin);
-			mHud.gameOver(mHud.mGame.sumScore(), 0);
+			mHud.gameOver((int)(mHud.mGame.sumScore() * 0.2f), 0);
 		}
 //		mHud.gameOver(mHud.mGame.sumScore(), -1);
 

@@ -37,14 +37,11 @@ import org.cocos2d.nodes.CCSpriteFrame;
 import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.nodes.CCSpriteSheet;
 import org.cocos2d.nodes.CCTextureCache;
-import org.cocos2d.opengl.CCTexture2D;
 import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
-import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
-import com.aga.mine.main.R;
 import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -789,7 +786,7 @@ public class HudLayer extends CCLayer {
 	public int otherScore; 
 //	public void gameOver() {
 	public void gameOver(int score, int other) {
-        SoundEngine.sharedEngine().purgeSharedEngine();
+        //SoundEngine.sharedEngine().purgeSharedEngine();
 		Log.e("HudLayer", "gameEnding - gogo");
 		Config.getInstance().setDisableButton(true);
 		myScore = score;

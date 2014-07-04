@@ -11,10 +11,12 @@ import android.os.Handler;
 
 public class MainApplication extends Application {
     //private static final String APP_ID = "625994234086470";
-	private static final String APP_ID = "1387999011424838";
-	private static final String APP_NAMESPACE = "typing_game";
-    //private static final String APP_ID = "709362365791816";
-    //private static final String APP_NAMESPACE = "pumpkinmine;
+	//private static final String APP_ID = "1387999011424838";
+	//private static final String APP_NAMESPACE = "typing_game";
+//    private static final String APP_ID = "709362365791816";
+//    private static final String APP_NAMESPACE = "Pumpkin Mine";
+    private static final String APP_ID = "184667795054098";
+    private static final String APP_NAMESPACE = "PumpkinMine";
     
     private Context mContext;
     private MainActivity mActivity;
@@ -42,7 +44,8 @@ public class MainApplication extends Application {
                                                      Permission.FRIENDS_EVENTS,
                                                      Permission.FRIENDS_PHOTOS,
                                                      Permission.FRIENDS_ABOUT_ME,
-                                                     Permission.PUBLISH_STREAM };
+                                                     Permission.PUBLISH_STREAM 
+                                                     };
 
         SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder().setAppId(APP_ID)
                     .setNamespace(APP_NAMESPACE)

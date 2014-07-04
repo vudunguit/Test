@@ -463,7 +463,7 @@ public class NetworkController extends Activity {
 					kMessageRequestScoreCount++;
 				}
 				
-				mGame.messageReceived(messageType, null);
+				mGame.messageReceived(messageType, -1);
 //				mGame.gameOver();
 //			}
 //			byte result1 = reader.readByte();

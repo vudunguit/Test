@@ -55,8 +55,8 @@ public class GameEnding extends CCLayer {
 	float extraTimeReward = 1.25f; // 대전게임 승리자가 연장 게임을 하여서 완료시 기본 보상의 1.25배로 보상을 받음.  
 	boolean isExtraTime = false;  // 현재 사용하지 않는 것으로 보임.
 	
-	int decreaseScore = 0; // 일반적으로 대전 패배시 스코어 감소
-	int decreaseGold = 0; // 스코어 보호를 위해 스코어 대신 골드로 대신 감소(선택적)
+//	int decreaseScore = 0; // 일반적으로 대전 패배시 스코어 감소
+//	int decreaseGold = 0; // 스코어 보호를 위해 스코어 대신 골드로 대신 감소(선택적)
 	
 	private CCLabel lv;
 	private CCLabel mExpLabel;
@@ -82,17 +82,18 @@ public class GameEnding extends CCLayer {
 	
 	CCMenu leftbutton;
 	
-	public GameEnding(int myScore, int otherScore, int closedCell) {
+	public GameEnding(int myscore, int otherscore, int closedcell) {
 		basket = new HashMap<String, String>();
+
 		if (Locale.getDefault().getLanguage().toString().equals("ko"))
 			isLocaleKo = true;
-		Log.e("GameEnding", "myScore : " + myScore+ ", otherScore : " + otherScore + ", closedCell : " + closedCell);
+		Log.e("GameEnding", "myScore : " + myscore+ ", otherScore : " + otherscore + ", closedCell : " + closedcell);
 		
 		// 플레이 중이던 모든 소리 정지
 		
-		this.myScore = myScore;
-		this.otherScore = otherScore;
-		this.closedCell = closedCell;
+		this.myScore = myscore;
+		this.otherScore = otherscore;
+		this.closedCell = closedcell;
 		
 		if (!GameData.share().isGuestMode) {
 			myName = FacebookData.getinstance().getUserInfo().getName();
@@ -125,13 +126,24 @@ public class GameEnding extends CCLayer {
 			}
 			myCurrentGold = myPastGold + myGold;
 		} else {
-			Log.e("GameEnding", "Lose");
+			Log.e("GameEnding", "Lose" + "isMultigame:" + GameData.share().isMultiGame);
 			// 패배 효과음
 			if(GameData.share().isMultiGame) {  //멀티게임 패배
 				this.myScore = (int) (otherScore / 3.0f); //차감 포인트
-				decreaseScore = (int) (otherScore / 3.0f);
-				myGold = (int) (otherScore / 10.0f); //차감 골드
-				decreaseGold = (int) (otherScore / 10.0f);
+				Log.e("LDK", "myScore:" + myScore);
+				//차감포인트가 현재 포인트보다 작으면 그것만큼 차감. 즉, 마이너스가 되지 않음.
+				int mPastScore = Integer.valueOf(FacebookData.getinstance().getDBData("Point"));
+				Log.e("LDK", "mPastScore:" + mPastScore);
+				if (mPastScore <= myScore) {
+					myScore = 0;
+					myGold = 0;
+				} else {
+					myGold = (int) (otherScore / 10.0f); //차감 골드
+				}
+				Log.e("LDK", "myScore:" + myScore + ", myGold:" + myGold);
+				//decreaseScore = (int) (otherScore / 3.0f);
+				//decreaseGold = (int) (otherScore / 10.0f);
+				myExp = 0;
 			} else { //싱글게임 패배
 				myScore = 0;
 				myGold = 0;
@@ -139,11 +151,11 @@ public class GameEnding extends CCLayer {
 			}
 		}
 		
-		if (isExtraTime) {
+/*		if (isExtraTime) {
 			this.myScore = (int) (myScore * extraTimeReward);
 			myExp = (int) (this.myScore * 1.5f);
 			myGold = (int)(this.myScore / 5.0f);
-		}
+		}*/
 	}
 	
 	public void startGameOver() {
@@ -237,7 +249,8 @@ public class GameEnding extends CCLayer {
 		}
 		
 		//패배 팝업이면
-		if(!showAni && GameData.share().isMultiGame) {
+		if(!showAni) {
+			Log.e("LDK", "myScore:" + myScore);
 			mExpLabel.setString(String.valueOf(0));
 			mPointLabel.setString(String.valueOf(-myScore));
 			mGoldLabel.setString(String.valueOf(0));
@@ -368,6 +381,9 @@ public class GameEnding extends CCLayer {
 	public void expAni(float dt) {
 		if(mLeftExp <= 0) {
 			unschedule("expAni");
+			mExpLabel.setString(String.valueOf(myExp));
+			mPointLabel.setString(String.valueOf(myScore));
+			mGoldLabel.setString(String.valueOf(myGold));
 			return;
 		}
 //		int gainedExp = (int)(dt * 50);
@@ -375,13 +391,13 @@ public class GameEnding extends CCLayer {
 		myCalcExp += gainedExp;
 		mLeftExp -= gainedExp;
 		//만일 mLeftExp가 음수가 되면 보정
-		if(mLeftExp < 0) {
+/*		if(mLeftExp < 0) {
 			myCalcExp += mLeftExp;
 			mLeftExp = 0;
 			mExpLabel.setString(String.valueOf(myExp));
 			mPointLabel.setString(String.valueOf(myScore));
 			mGoldLabel.setString(String.valueOf(myGold));
-		}
+		}*/
 		
 		//늘어난 경험치가 현재 레벨의 최대 경험치를 넘지 않으면 애니메이션 넘으면 레벨 팝업
 		if(myCalcExp <= UserData.expPerLevel[mUserLevel-1]) {
@@ -628,10 +644,7 @@ public class GameEnding extends CCLayer {
 				Log.e("GameEnding", "패배 ");
 
 				if(GameData.share().isMultiGame) {  //멀티게임 패배
-					int mPastScore = Integer.valueOf(FacebookData.getinstance().getDBData("Point"));
-					if (mPastScore < myScore) {
-						myScore = mPastScore;
-					} 
+
 					DataFilter.addGameScore(String.valueOf(-myScore));
 					
 					basket.put("HistoryLose", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryLose")) + 1));	
@@ -657,15 +670,16 @@ public class GameEnding extends CCLayer {
 		MainApplication.getInstance().getActivity().click();
 		
 		mPointLabel.setString(String.valueOf(0));
-		mGoldLabel.setString(String.valueOf(-decreaseGold));
+		mGoldLabel.setString(String.valueOf(-myGold));
+		Log.e("LDK", "decrease gold:" + -myGold);
 		
 		//버튼 비활성화
 		leftbutton.setIsTouchEnabled(false);
 		
 		//서버 정보 전송 : 포인트는 원복, 골드는 차감
-		DataFilter.addGameScore(String.valueOf(decreaseScore));
+		DataFilter.addGameScore(String.valueOf(myScore));
 		
-		basket.put("Gold", String.valueOf(myPastGold-decreaseGold));
+		basket.put("Gold", String.valueOf(myPastGold-myGold));
 		FacebookData.getinstance().modDBData(basket);
 		
 		//홈화면에 포인트 갱신 (서버에 저장하지는 않고 로컬만 업데이트)
@@ -673,7 +687,7 @@ public class GameEnding extends CCLayer {
 		for (GameScore gameScore : gameScores) {
 			if (gameScore.getId().equals(myID)) {
 				Log.d("LDK", "score:" + gameScore);
-				gameScore.score = decreaseScore + gameScore.score;
+				gameScore.score = myScore + gameScore.score;
 			}
 		}
 	}
