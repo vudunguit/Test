@@ -384,11 +384,16 @@ public class Config {
 		return vsResult; 
 	}
 
+	//Wizard color crystal: single game is true, if the owner of a multi-game true => red, others blue
 	boolean owner = false;
 	
 	public void setOwner() {
 		Log.e("Config", "setOwner : " + owner);
 		owner =  NetworkController.getInstance().getOwner();
+	}
+	
+	public void setOwner(boolean b) {
+		owner = b;
 	}
 	
 	public boolean getOwner() {

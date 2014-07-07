@@ -36,7 +36,7 @@ public class GameMinimap extends CCLayer{
 	final int kTagMinimap = 9;
 
 	CCTMXTiledMap tileMap = null;
-	static CCSprite base  = null;
+//	static CCSprite base  = null;
 	//배경
 	CCTMXLayer bg = null;
 	CCTMXLayer meta = null;
@@ -224,52 +224,6 @@ public class GameMinimap extends CCLayer{
 		}
 
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/*****************************************************/
 	/** 문제지점
 	 *  
@@ -283,7 +237,7 @@ public class GameMinimap extends CCLayer{
 
 		String[] type = {"CellOpen", "MushroomOn", "MushroomOff", "MagicAttack", "MagicDefense",
 				"GameOver", "Emoticon", "Mine", "Sphere", "SphereTake"};
-		
+
 		final int kPlayDataCellOpen = 0;
 //		final int kPlayDataMushroomOn = 1;
 //		final int kPlayDataMushroomOff = 2;
@@ -295,7 +249,7 @@ public class GameMinimap extends CCLayer{
 		final int kPlayDataSphere = 8;
 		final int kPlayDataSphereTake = 9;
 		int cellGID;
-		
+
 		int dataLength = 0;
 		int count = 0;
 		int itemType = data / 10000;
@@ -304,7 +258,7 @@ public class GameMinimap extends CCLayer{
 			cell = searchTilePosition(data % 10000);
 		}
 
-	
+
 		switch (playType){
 		case kPlayDataCellOpen:
 			removeTile(data);
@@ -321,23 +275,30 @@ public class GameMinimap extends CCLayer{
 //			break;
 //			
 		case kPlayDataMagicAttack:
-			
+
 			switch (data / 1000) {  // data를 1000으로 나누어 나머지 값이 공격 지속 시간입니다. 현재 23
 //			switch ((data - 23) / 1000) {  // data를 1000으로 나누어 나머지 값이 공격 지속 시간입니다. 현재 23
-			
+
 			case 1:
-//				mHudLayer.testText.setString("불마법을 사용. type : " + data);
-				
-//				mHudLayer.StartAniFireDefense(data % 1000); // 나머지 값을 지속시간으로 사용
-				mHudLayer.StartAniFireDefense(data%1000);
+				if(mHudLayer.mGame.getThreadCount()>0) {
+					mHudLayer.mGame.setReceivedAttackType(1, data%1000);
+				} else {
+					mHudLayer.StartAniFireDefense(data%1000);
+				}
 				break;
 			case 2:
-//				mHudLayer.testText.setString("바람마법을 사용. type : " + data);
-				mHudLayer.StartAniWindDefense(data%1000);
+				if(mHudLayer.mGame.getThreadCount()>0) {
+					mHudLayer.mGame.setReceivedAttackType(2, data%1000);
+				} else {
+					mHudLayer.StartAniWindDefense(data%1000);
+				}
 				break;
 			case 3:
-//				mHudLayer.testText.setString("구름마법을 사용. type : " + data);
-				mHudLayer.StartAniCloudDefense(data%1000);
+				if(mHudLayer.mGame.getThreadCount()>0) {
+					mHudLayer.mGame.setReceivedAttackType(3, data%1000);
+				} else {
+					mHudLayer.StartAniCloudDefense(data%1000);
+				}
 				break;
 			case 4:
 				mHudLayer.testText.setString("신성마법을 사용. type : " + data);
@@ -352,11 +313,11 @@ public class GameMinimap extends CCLayer{
 			}
 
 			break;
-			
+
 //		case kPlayDataMagicDefense:
 //			mHudLayer.testText.setString("적이 방어 하였습니다. kPlayDataMagicDefense");
 //			break;
-			
+
 		case kPlayDataGameOver:
 			try {
 				mHudLayer.gameOver(1,1); // 점수 넣어야될듯
@@ -366,7 +327,7 @@ public class GameMinimap extends CCLayer{
 				e.printStackTrace();
 			}
 			break;
-			
+
 		case kPlayDataEmoticon:
 			mHudLayer.testText.setString("이모티콘이 왔습니다. type : " + data);
 			mHudLayer.startEmoticonAni(data);
@@ -379,7 +340,7 @@ public class GameMinimap extends CCLayer{
 ////			this.mineLayer.setTileGID(cellGID, searchTilePosition(data));
 ////			removeTile(data);
 //			break;
-			
+
 		case kPlayDataSphere:
 			count = 0;
 			for (int m = 0; m < 2; m++) { // 세로 방향
@@ -393,7 +354,7 @@ public class GameMinimap extends CCLayer{
 				}
 			}			
 			break;
-			
+
 		case kPlayDataSphereTake:
 //			mHudLayer.testText.setString("Warning!!!! 적이 아이템 획득");
 			count = 0;
@@ -417,53 +378,8 @@ public class GameMinimap extends CCLayer{
 		}
 		
 	}
+	
 	/*****************************************************/
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public void removeTile(int tileGID) {
 		this.getFg().removeTileAt(searchTilePosition(tileGID));
 	}

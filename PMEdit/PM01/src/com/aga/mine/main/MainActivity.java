@@ -349,7 +349,8 @@ public class MainActivity extends Activity {
                         .show();
         }
 
-        return true;
+//        return true;
+        return super.onKeyDown(keyCode, event);
     }
 
     private void setDisplayMetrics() {

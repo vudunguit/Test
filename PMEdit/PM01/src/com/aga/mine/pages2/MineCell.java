@@ -241,17 +241,17 @@ public class MineCell extends CCLayer{
 		Log.e("MineCell", "getClosedCell : " + mGame.getClosedCell());
 		Log.e("MineCell", "getMineNumber() : " + GameData.share().getMineNumber());
 		
-		int closedTiles = mGame.getClosedCell();
-		if (closedTiles <= GameData.share().getMineNumber()) {
-			Log.e("MineCell", "new gameover : score 1000");
-			if (GameData.share().isMultiGame) {
-				gameOverType = continueGame;
-				sendRequestGameOver(mGame.sumScore());
-			} else {
-				gameOverType = singleCompleted;
-				gameOver(mGame.sumScore());
-			}
-		}
+//		int closedTiles = mGame.getClosedCell();
+//		if (closedTiles <= GameData.share().getMineNumber()) {
+//			Log.e("MineCell", "new gameover : score 1000");
+//			if (GameData.share().isMultiGame) {
+//				gameOverType = continueGame;
+//				sendRequestGameOver(mGame.sumScore());
+//			} else {
+//				gameOverType = singleCompleted;
+//				gameOver(mGame.sumScore());
+//			}
+//		}
 		
 		return numberOfArroundMine;
 	}
@@ -364,32 +364,32 @@ public class MineCell extends CCLayer{
 		//최대 지뢰 갯수와 currentMine의 수가 같으면 게임 종료 <<---- 밖으로 빼야 할 것 같음. 수상함. 좀 더 테스트
 		Log.e("MineCell / open", "currentMine : " + currentMine + ", MaxMineNumber : " +  GameData.share().getMineNumber());
 		
-		if (GameData.share().getCurrentMine() == GameData.share().getMineNumber()) {
-			Log.e("MineCell / open", "delegate - gameOver *** mission complete ***");
-			int myScore = 0;
-			
-			float openedCell = GameData.share().getOpenedCell();
-//			float foundMine = mGame.getFoundMine(); // 지우는건 일단 보류
-			float foundMine = GameData.share().getCurrentMine(); // 올바르게 버섯이 심겨진 지뢰만(찾은 호박)
-			float maxMine = GameData.share().getMineNumber(); // 테스트중
-			float heart = GameData.share().getHeartNumber();
-			float spentTime = 900 - GameData.share().getSeconds(); // 소요 시간
-
-			if (heart > 0) {
-				myScore = (int) ((((foundMine + heart) * maxMine) + spentTime) * maxMine * 0.006f);
-			}
-			
-			Log.e("MineCell", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", maxMine : " + maxMine + ", heart : " + heart + ", spentTime : " + spentTime);
-			
-			if (GameData.share().isMultiGame) {
-				gameOverType = continueGame;
-				sendRequestGameOver(myScore);
-			} else if (GameData.share().isGuestMode) {
-				gameOverType = singleCompleted;
-				gameOver(myScore);
-			}
-			
-		}
+//		if (GameData.share().getCurrentMine() == GameData.share().getMineNumber()) {
+//			Log.e("MineCell / open", "delegate - gameOver *** mission complete ***");
+//			int myScore = 0;
+//			
+//			float openedCell = GameData.share().getOpenedCell();
+////			float foundMine = mGame.getFoundMine(); // 지우는건 일단 보류
+//			float foundMine = GameData.share().getCurrentMine(); // 올바르게 버섯이 심겨진 지뢰만(찾은 호박)
+//			float maxMine = GameData.share().getMineNumber(); // 테스트중
+//			float heart = GameData.share().getHeartNumber();
+//			float spentTime = 900 - GameData.share().getSeconds(); // 소요 시간
+//
+//			if (heart > 0) {
+//				myScore = (int) ((((foundMine + heart) * maxMine) + spentTime) * maxMine * 0.006f);
+//			}
+//			
+//			Log.e("MineCell", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", maxMine : " + maxMine + ", heart : " + heart + ", spentTime : " + spentTime);
+//			
+//			if (GameData.share().isMultiGame) {
+//				gameOverType = continueGame;
+//				sendRequestGameOver(myScore);
+//			} else if (GameData.share().isGuestMode) {
+//				gameOverType = singleCompleted;
+//				gameOver(myScore);
+//			}
+//			
+//		}
 		
 		// 지뢰를 밟을시 생명 하나 감소 시킨다.(현재셀은 이미 오픈되었음)
 		// 지뢰를 밟을시 생명 감소 (-1)
@@ -400,16 +400,16 @@ public class MineCell extends CCLayer{
 		updateHeart();
 
 		// 생명수 다없어지면 게임오버
-		if (GameData.share().isHeartOut()) {
-			Log.e("MineCell / open", "delegate - gameOver *** mission failed ***");
-			if (GameData.share().isMultiGame) {
-				sendRequestGameOver(0); // 대전이므로 서버로 내점수 0점 보내기
-			} else {
-				gameOverType = singleFailed;
-				gameOver(-1); // 대전이 아니므로 서버로 점수 안보내기
-			}
-			
-		}
+//		if (GameData.share().isHeartOut()) {
+//			Log.e("MineCell / open", "delegate - gameOver *** mission failed ***");
+//			if (GameData.share().isMultiGame) {
+//				sendRequestGameOver(0); // 대전이므로 서버로 내점수 0점 보내기
+//			} else {
+//				gameOverType = singleFailed;
+//				gameOver(-1); // 대전이 아니므로 서버로 점수 안보내기
+//			}
+//			
+//		}
 	}
 	
 	public void startPumpkinBomb() {
@@ -434,36 +434,36 @@ public class MineCell extends CCLayer{
 	}
 	
 	// 대전했을시 게임오버 점수
-	private void sendRequestGameOver(int myScore) {
-		Log.e("MineCell", "myScore : " + myScore);
-		try {
-			NetworkController.getInstance().sendRequestGameOver(myScore);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	int gameOverType = 0; //
-	final int singleFailed = 1;
-	final int singleCompleted = 2;
-	final int continueGame = 3;
-	
-	// 싱글 및 게스트일때 게임오버 점수
-	private void gameOver(int myScore) {
-		Log.e("MineCell", "myScore : " + myScore);
-		if (gameOverType == singleFailed) {
-			Log.e("MineCell", "싱글 - 생명 전부 소모로 종료 (type) : " + gameOverType);
-			Config.getInstance().setVs(Config.getInstance().vsLose);
-			mGame.mHud.gameOver(myScore, 0);
-		} else if (gameOverType == singleCompleted){
-			Log.e("MineCell", "싱글 - 전부 찾고 종료 (type) : " + gameOverType);
-			Config.getInstance().setVs(Config.getInstance().vsWin);
-			myScore = (int) (myScore*0.2);
-			mGame.mHud.gameOver(myScore, 0);
-		} else if (gameOverType == continueGame){
-			Log.e("MineCell", "멀티 - 계속 하기 (type) : " + gameOverType);
-		}
-	}
+//	private void sendRequestGameOver(int myScore) {
+//		Log.e("MineCell", "myScore : " + myScore);
+//		try {
+//			NetworkController.getInstance().sendRequestGameOver(myScore);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
+//	
+//	int gameOverType = 0; //
+//	final int singleFailed = 1;
+//	final int singleCompleted = 2;
+//	final int continueGame = 3;
+//	
+//	// 싱글 및 게스트일때 게임오버 점수
+//	private void gameOver(int myScore) {
+//		Log.e("MineCell", "myScore : " + myScore);
+//		if (gameOverType == singleFailed) {
+//			Log.e("MineCell", "싱글 - 생명 전부 소모로 종료 (type) : " + gameOverType);
+//			Config.getInstance().setVs(Config.getInstance().vsLose);
+//			mGame.mHud.gameOver(myScore, 0);
+//		} else if (gameOverType == singleCompleted){
+//			Log.e("MineCell", "싱글 - 전부 찾고 종료 (type) : " + gameOverType);
+//			Config.getInstance().setVs(Config.getInstance().vsWin);
+//			myScore = (int) (myScore*0.2);
+//			mGame.mHud.gameOver(myScore, 0);
+//		} else if (gameOverType == continueGame){
+//			Log.e("MineCell", "멀티 - 계속 하기 (type) : " + gameOverType);
+//		}
+//	}
 
 	
 	public int getSphereItem() {

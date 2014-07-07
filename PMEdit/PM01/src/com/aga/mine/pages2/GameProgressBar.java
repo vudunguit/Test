@@ -211,7 +211,8 @@ public class GameProgressBar extends CCLayer {
 		} else {
 			Log.e("GameProgressBar", "싱글 - 시간 초과시 무조건 승리");
 			Config.getInstance().setVs(Config.getInstance().vsWin);
-			mHud.gameOver(mHud.mGame.sumScore(), 0);
+//			mHud.gameOver(mHud.mGame.sumScore(), 0);
+			mHud.gameOver((int)(mHud.mGame.sumScore() * 0.2f), 0);
 		}
 //		mHud.gameOver(mHud.mGame.sumScore(), -1);
 

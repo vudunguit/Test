@@ -175,7 +175,8 @@ public class GameData {
 		String keyString = "ItemFire,ItemWind,ItemCloud,ItemDivine,ItemEarth,ItemMirror";
 		String[] keyArray = keyString.split(",", 6);
 		for (int i = 0; i < keyArray.length; i++) {
-			this.setGameData(keyArray[i], 50);
+//			this.setGameData(keyArray[i], 50);
+			this.setGameData(keyArray[i], 0);
 		}
 		return true;
 	}

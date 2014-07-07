@@ -154,9 +154,33 @@ public class Game extends CCLayer {
 		return tileMap;
 	}
 	
+	//타일 여는 쓰레드 갯수 변수
+	private int mThreadCount;
+	public synchronized void setThreadCount(int value) {
+		mThreadCount += value;
+	}
+	public synchronized int getThreadCount() {
+		return mThreadCount;
+	}
+	
+	//타일 오픈중 공격을 받을때 사용
+	private int mReceivedAttackType;
+	private int mReceivedAttackData;
+	public synchronized void setReceivedAttackType(int type, int data) {
+		mReceivedAttackType = type;
+		mReceivedAttackData = data;
+	}
+	public synchronized int getReceivedAttackType() {
+		return mReceivedAttackType;
+	}
 	private Game() {
 		unopenedTile = 0;
-		Config.getInstance().setOwner();
+//		Config.getInstance().setOwner();
+		if(GameData.share().isMultiGame && !NetworkController.getInstance().getOwner()) {
+			Config.getInstance().setOwner(false);
+		} else {
+			Config.getInstance().setOwner(true);
+		}
 		mContext = CCDirector.sharedDirector().getActivity().getApplicationContext();
 		winSize = CCDirector.sharedDirector().winSize();
 		
@@ -540,6 +564,70 @@ public class Game extends CCLayer {
 			gameStart();
 		}
 		SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
+		
+		//게임 오버 체크
+		schedule("checkGame", 1.0f);
+	}
+
+	public void stopCheck() {
+		unschedule("checkGame");
+	}
+
+	public void checkGame(float dt) {
+		//타일 오픈 쓰레드가 실행중이면 끝날때까지 기다린다
+		if(getThreadCount()>0) {
+			Log.e("LDK", "thread count:" + getThreadCount());
+			return;  
+		}
+		//하트 소멸의 경우
+		if (GameData.share().isHeartOut()) {
+			stopCheck();
+			Log.e("LDK", "heart out");
+			if (GameData.share().isMultiGame) {
+				sendRequestGameOver(0); // 대전이므로 서버로 내점수 0점 보내기
+			} else {
+				Config.getInstance().setVs(Config.getInstance().vsLose);
+				mHud.gameOver(0, 0);
+			}
+		}
+		//찾은 마인이 최대마인에 도달했을때
+		if (GameData.share().getCurrentMine() == GameData.share().getMineNumber()) {
+			stopCheck();
+			if (GameData.share().isMultiGame) {
+				sendRequestGameOver(sumScore());
+			} else {
+				Config.getInstance().setVs(Config.getInstance().vsWin);
+				mHud.gameOver((int)(sumScore()*0.2f), 0); //싱글 게임은 멀티게임 포인트의 20%
+			}
+		}
+
+		//타일이 오픈중 상대방의 공격이 있을 경우, 타일 오픈이 끝나고 실행한다.
+		if(getReceivedAttackType()>0) {
+			final int type = getReceivedAttackType();
+			final int data = mReceivedAttackData;
+			setReceivedAttackType(0, 0);
+			switch(type) {
+			case 1:
+				mHud.StartAniFireDefense(data);
+				break;
+			case 2:
+				mHud.StartAniWindDefense(data);
+				break;
+			case 3:
+				mHud.StartAniCloudDefense(data);
+				break;
+			}
+		}
+	}
+		 	
+	// 대전했을시 게임오버 점수
+	private void sendRequestGameOver(int myScore) {
+		Log.e("Game", "myScore : " + myScore);
+		try {
+			 NetworkController.getInstance().sendRequestGameOver(myScore);
+		} catch (IOException e) {
+			 e.printStackTrace();
+		}
 	}
 
 	public void gameStart() {
@@ -880,13 +968,13 @@ public class Game extends CCLayer {
 		CGPoint coord = setCoord(event);
 		for (MineCell mineCell : cells) {
 			/***************테스트 코드**********************/
-			Log.e("Game_LongPress", "mineCell.isCollidable() : " + mineCell.isCollidable());
+			/*Log.e("Game_LongPress", "mineCell.isCollidable() : " + mineCell.isCollidable());
 			Log.e("Game_LongPress", "mineCell.isMarked() : " + mineCell.isMarked());
 			Log.e("Game_LongPress", "mineCell.isMine() : " + mineCell.isMine());
 			Log.e("Game_LongPress", "mineCell.isOpened() : " + mineCell.isOpened());
 			Log.e("Game_LongPress", "mineCell.isSphere() : " + mineCell.isSphere());
 			Log.e("Game_LongPress", "mineCell.isSphereBasePossible() : " + mineCell.isSphereBasePossible());
-			Log.e("Game_LongPress", "mineCell.isSphereCellsClear() : " + mineCell.isSphereCellsClear());
+			Log.e("Game_LongPress", "mineCell.isSphereCellsClear() : " + mineCell.isSphereCellsClear());*/
 			/*************************************/
 			
 			// 오픈안된 셀에 버섯(깃발)꽂기
@@ -930,20 +1018,20 @@ public class Game extends CCLayer {
 			Log.e("Game", "markedMine : " + GameData.share().getCurrentMine());
 			Log.e("Game", "getClosedCell : " + getClosedCell());
 			Log.e("Game", "getMineNumber() : " + GameData.share().getMineNumber());
-			// 게임 종료, 이게 가능한가???
-			if (getClosedCell() <= GameData.share().getMineNumber()) {
-				Log.e("Game", "handleLongPress Game Over");
-				// 오픈이 안된 셀 11개, 지뢰 1개 ==> 지뢰에 버섯을 꽂아도 타일은 오픈되지 않으므로x
-				// 오픈이 안된 셀 10개, 지뢰 0개 ==> 이미 더블탭에서 종료가 됐을것이기에 x
-				mHud.gameOver(sumScore(), -1);
-			}
+//			// 게임 종료, 이게 가능한가???
+//			if (getClosedCell() <= GameData.share().getMineNumber()) {
+//				Log.e("Game", "handleLongPress Game Over");
+//				// 오픈이 안된 셀 11개, 지뢰 1개 ==> 지뢰에 버섯을 꽂아도 타일은 오픈되지 않으므로x
+//				// 오픈이 안된 셀 10개, 지뢰 0개 ==> 이미 더블탭에서 종료가 됐을것이기에 x
+//				mHud.gameOver(sumScore(), -1);
+//			}
 		}
 		
 		mineCell.setMarked(true);
 		this.markFlag(mineCell);
 		if (GameData.share().isMultiGame) {
 			try {
-					NetworkController.getInstance().sendPlayDataMushroomOn(mineCell.getCell_ID());
+				NetworkController.getInstance().sendPlayDataMushroomOn(mineCell.getCell_ID());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -972,7 +1060,7 @@ public class Game extends CCLayer {
 	//
 	// 더블터치 : 셀 오픈
 	public void handleDoubleTap(MotionEvent event) {
-		mHud.gameOver(500, 0);
+//		mHud.gameOver(1500, 0);
 		Log.e("Game / handleDoubleTap", "마인 갯수 : " + getMineNumber());
 		if (Config.getInstance().isDisableButton())
 			return;
@@ -1008,7 +1096,8 @@ public class Game extends CCLayer {
 							public void run() {
 								cell.roundOpen();
 								checkSphereCell();
-								checkGameOver();
+//								checkGameOver();
+								setThreadCount(-1);
 							}
 						}).start();
 					}
@@ -1020,7 +1109,8 @@ public class Game extends CCLayer {
 						public void run() {
 							cell.open();
 							checkSphereCell();
-							checkGameOver();
+//							checkGameOver();
+							setThreadCount(-1);
 						}
 					}).start();
 				}
@@ -1069,14 +1159,14 @@ public class Game extends CCLayer {
 	}
 	
 	// 게임 오버인지 확인
-	private void checkGameOver() {
+	/*private void checkGameOver() {
 		if (getClosedCell() <= GameData.share().getMineNumber()) {
 			Log.e("Game / handleDoubleTap", "handleDoubleTap Game Over");
 			Log.e("Game", "unopenedTile : " + getClosedCell() + ", Max Mine : "
 					+ GameData.share().getMineNumber());
 			mHud.gameOver(sumScore(), -1);
 		}
-	}
+	}*/
 
 	@Override
 	public boolean ccTouchesBegan(MotionEvent event) {
@@ -1337,10 +1427,10 @@ public class Game extends CCLayer {
 					deltaLocation = CGPoint.ccpSub(currentTouchLocation,
 							previousTouchLocation);
 				}
-				Log.e("Game / Moved", "move2 : " + isMove2
-						+ ", deltaLocation : " + deltaLocation);
-				Log.e("Game / Moved", "previousTouchLocation : "
-						+ previousTouchLocation);
+//				Log.e("Game / Moved", "move2 : " + isMove2
+//						+ ", deltaLocation : " + deltaLocation);
+//				Log.e("Game / Moved", "previousTouchLocation : "
+//						+ previousTouchLocation);
 				int area = 5;
 				// adasdas
 				if (deltaLocation.x < -1 * area || deltaLocation.x > area
@@ -1445,6 +1535,7 @@ public class Game extends CCLayer {
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
+						setThreadCount(1);
 						for(MineCell c : cells) {
 							if(!c.isCollidable() && !c.isOpened() && !c.isMarked()) {
 								if(c.isMine()) {
@@ -1454,6 +1545,7 @@ public class Game extends CCLayer {
 								}
 							}
 						}
+						setThreadCount(-1);
 					}
 				}).start();
 				
@@ -1690,18 +1782,19 @@ public class Game extends CCLayer {
 		float foundMine = GameData.share().getCurrentMine(); // 올바르게 버섯이 심겨진 지뢰만(찾은 호박)
 		float maxMine = GameData.share().getMineNumber(); // 테스트중
 		float heart = GameData.share().getHeartNumber();
-		float spentTime = 900 - GameData.share().getSeconds(); // 소요 시간
-		
+//		float spentTime = 900 - GameData.share().getSeconds(); // 소요 시간
+		float leftTime = GameData.share().getSeconds(); //남은 시간
 		if (heart > 0) {
-			myScore = (int) ((((foundMine + heart) * maxMine) + spentTime) * maxMine * 0.006f);
+			myScore = (int) ((((foundMine + heart) * maxMine) + leftTime) * maxMine * 0.006f);
 		}
 		
-		Log.e("MineCell", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", heart : " + heart + ", maxMine : " + maxMine + ", spentTime : " + spentTime);
+		Log.e("Game", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", heart : " + heart + ", maxMine : " + maxMine + ", spentTime : " + leftTime);
 		
 		return myScore;
 	}
 	
-	public void messageReceived(int messageType, Object obj) {
+//	public void messageReceived(int messageType, Object obj) {
+	public void messageReceived(int messageType, int obj) {
 		mHud.mGameProgressBar.stopTime();
 		Log.e("Game", "kmessageRequestScore = 15, kmessageGameOver = 6, kmessageOpponentConnectionLost = 9");
 		Log.e("Game", "messageReceived - messageType : " + messageType);
@@ -1709,12 +1802,15 @@ public class Game extends CCLayer {
 		final int kmessageGameOver = 6;
 		final int kmessageOpponentConnectionLost = 9;
 		
-		int myScore = 0;
-		int otherScore = -1;
-		if (obj != null)
-			otherScore = (Integer) obj;		
+//		int myScore = 0;
+//		int otherScore = -1;
+//		if (obj != null)
+//			otherScore = (Integer) obj;		
+//		
+//		myScore = sumScore();
 		
-		myScore = sumScore();
+		int myScore = sumScore();
+		int otherScore = obj;	
 
 		if (myScore < otherScore)
 			Config.getInstance().setVs(Config.getInstance().vsLose);
@@ -1733,6 +1829,7 @@ public class Game extends CCLayer {
 			break;
 			
 		case kmessageGameOver:
+			stopCheck();
 			mHud.gameOver(myScore, otherScore);
 			break;
 			

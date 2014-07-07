@@ -37,6 +37,8 @@ public class GameEmoticon extends CCLayer{
 	CCSprite base;
 	boolean isEmoticonPanelOn;
 	
+	CCSprite disable;
+	
 	public GameEmoticon() {
 		layout();
 	}
@@ -66,14 +68,28 @@ public class GameEmoticon extends CCLayer{
 		CCMenu baseButton = CCMenu.menu(item);
 		base.addChild(baseButton);
 		baseButton.setPosition(
-				base.getContentSize().width - item.getContentSize().width /2,
-				base.getContentSize().height /2 + 5f);
+//				base.getContentSize().width - item.getContentSize().width /2,
+//				base.getContentSize().height /2 + 5f);
+				base.getContentSize().width - item.getContentSize().width /2-13,
+				base.getContentSize().height /2 + 15f);
 		basePositionOn = CGPoint.ccp(winSize.width / 2, winSize.height /2);
 		basePositionOff = CGPoint.ccp(
 				basePositionOn.x - base.getContentSize().width + item.getContentSize().width + 5, 
 				basePositionOn.y);
 		
 		base.setPosition(GameConfig.share().isEmoticonPanelOn ? basePositionOn : basePositionOff);
+		
+		
+		//disable button
+		 disable = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "buttons-hd/emoticon-baseButton-disable-hd.png"));
+		 disable.setPosition(baseButton.getPosition());
+		 disable.setAnchorPoint(0.5f, 0.5f);
+		 if (!GameData.share ().isMultiGame) {
+			 base.addChild(disable);
+			 baseButton.setIsTouchEnabled(false);
+		 }
+		
+		
 		
 		//
 		// 제목
