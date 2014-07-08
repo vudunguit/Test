@@ -217,14 +217,6 @@ public class Game extends CCLayer {
 		a.add(CCDirector.sharedDirector().getOpenGLView());
 		CCDirector.sharedDirector().getOpenGLView().addTouchables(a);
 		
-		// 사운드 (로드)
-		for (int i = 0; i < 17; i++) {
-			SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.landopen_01 + i); // 이펙트 (효과음) // (타일)pickup	
-		}
-		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.pumpkin); // 이펙트 (효과음) // (호박)hit
-		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.mushroom); // 이펙트 (효과음) // (버섯)move
-		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.landopen_22); 
-		
 		// 타일맵 로드
 		if (!GameData.share().isMultiGame)
 			GameData.share().setMap((byte) 0); // 인자값은 무의미
@@ -560,8 +552,11 @@ public class Game extends CCLayer {
 		if (!GameData.share().isMultiGame) {
 			gameStart();
 		}
-		SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
+		if(MainApplication.getInstance().getBGM()) {
+			SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
+		}
 		
+		MainApplication.getInstance().setIsPlaying(true);
 		//게임 오버 체크
 		schedule("checkGame", 1.0f);
 	}
@@ -976,8 +971,10 @@ public class Game extends CCLayer {
 			
 			// 오픈안된 셀에 버섯(깃발)꽂기
 			if (!mineCell.isOpened() && !mineCell.isCollidable() && CGPoint.equalToPoint(mineCell.getTileCoord(), coord)) {
-				// effect sound play
-				SoundEngine.sharedEngine().playEffect(mContext, R.raw.mushroom);
+				if(MainApplication.getInstance().getSound()) {
+					// effect sound play
+					SoundEngine.sharedEngine().playEffect(mContext, R.raw.mushroom);
+				}
 				// 버섯 설치음 대신 진동으로 변경입니다. (일단 둘다 열어둡니다.)
 				MainApplication.getInstance().getActivity().vibe();
 				
@@ -1861,34 +1858,6 @@ public class Game extends CCLayer {
 		mineNumber --;
 		return mineNumber;
 	}
-	
-//	private boolean _soundPlaying = false;
-//	private boolean _soundPaused = false;
-//	private boolean _resumeSound = false;
-//	
-//	public void bgMusicClicked(View button)
-//	{
-//	    // If we haven't started playing the sound - play it!
-//	    if (!_soundPlaying)
-//	    {
-//	        SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
-//	        _soundPlaying = true;
-//	    }
-//	    else
-//	    {
-//	        // We've loaded the sound, now it's just a case of pausing / resuming
-//	        if (!_soundPaused)
-//	        {
-//	            SoundEngine.sharedEngine().pauseSound();
-//	            _soundPaused = true;
-//	        }
-//	        else
-//	        {
-//	            SoundEngine.sharedEngine().resumeSound();
-//	            _soundPaused = false;
-//	        }
-//	    }
-//	}
 	
 	//정령석 유리병 여는 애니메이션
 	public void startOpenBottle(MineCell cell) {
