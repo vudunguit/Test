@@ -81,19 +81,6 @@ public class MainApplication extends Application {
     };
     
     //sound & bgm------------------------------------------------------------------------------
-    public boolean getIsPlaying() {
-    	SharedPreferences pref = getApplicationContext().getSharedPreferences("mine",0);
-    	boolean mBGM = pref.getBoolean("IsPlaying", false);
-		
-		return mBGM;
-    }
-	public void setIsPlaying(boolean IsPlaying) {
-		SharedPreferences pref = getApplicationContext().getSharedPreferences("mine",0);
-		SharedPreferences.Editor edit = pref.edit();
-		edit.putBoolean("IsPlaying", IsPlaying);
-		edit.commit();
-	}
-    
     public boolean getBGM() {
     	SharedPreferences pref = getApplicationContext().getSharedPreferences("mine",0);
     	boolean mBGM = pref.getBoolean("BGM", true);

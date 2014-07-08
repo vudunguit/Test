@@ -117,6 +117,9 @@ public class MainActivity extends Activity {
     private float matchListMarginRight = 100;
     private float matchListMarginBottom = 186;
     
+    //게임중인지 여부 
+    public boolean mIsPlaying;
+    
     public Handler mHandler = new Handler(Looper.getMainLooper()) {
 		@Override
 		public void handleMessage(Message msg) {
@@ -292,7 +295,7 @@ public class MainActivity extends Activity {
         super.onPause();
         Log.d(TAG, "onPause");
         CCDirector.sharedDirector().onPause();
-        if(MainApplication.getInstance().getIsPlaying() && MainApplication.getInstance().getBGM()) {
+        if(mIsPlaying && MainApplication.getInstance().getBGM()) {
         	SoundEngine.sharedEngine().pauseSound();
         }
     }
@@ -302,7 +305,7 @@ public class MainActivity extends Activity {
         super.onResume();
         
         CCDirector.sharedDirector().onResume();
-        if(MainApplication.getInstance().getIsPlaying() && MainApplication.getInstance().getBGM()) {
+        if(mIsPlaying && MainApplication.getInstance().getBGM()) {
         	SoundEngine.sharedEngine().playSound(this, R.raw.bgm, true);
         }
     }

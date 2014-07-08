@@ -556,7 +556,7 @@ public class Game extends CCLayer {
 			SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
 		}
 		
-		MainApplication.getInstance().setIsPlaying(true);
+		MainApplication.getInstance().getActivity().mIsPlaying = true;
 		//게임 오버 체크
 		schedule("checkGame", 1.0f);
 	}
