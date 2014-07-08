@@ -1,13 +1,14 @@
 ﻿package com.aga.mine.main;
 
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Handler;
+
 import com.facebook.SessionDefaultAudience;
 import com.sromku.simple.fb.Permission;
 import com.sromku.simple.fb.SimpleFacebook;
 import com.sromku.simple.fb.SimpleFacebookConfiguration;
-
-import android.app.Application;
-import android.content.Context;
-import android.os.Handler;
 
 public class MainApplication extends Application {
     //private static final String APP_ID = "625994234086470";
@@ -79,6 +80,34 @@ public class MainApplication extends Application {
         
     };
     
+    //sound & bgm------------------------------------------------------------------------------
+    public boolean getBGM() {
+    	SharedPreferences pref = getApplicationContext().getSharedPreferences("mine",0);
+    	boolean mBGM = pref.getBoolean("BGM", true);
+		
+		return mBGM;
+	}
+	public void setBGM(boolean mIsBGM) {
+		SharedPreferences pref = getApplicationContext().getSharedPreferences("mine",0);
+		SharedPreferences.Editor edit = pref.edit();
+		edit.putBoolean("BGM", mIsBGM);
+		edit.commit();
+	}
+
+	public boolean getSound() {
+		SharedPreferences pref = getApplicationContext().getSharedPreferences("mine",0);
+    	boolean mSound = pref.getBoolean("Sound", true);
+		
+		return mSound;
+	}
+	public void setSound(boolean mIsSound) {
+		SharedPreferences pref = getApplicationContext().getSharedPreferences("mine",0);
+		SharedPreferences.Editor edit = pref.edit();
+		edit.putBoolean("Sound", mIsSound);
+		edit.commit();
+	}
+	//sound & bgm------------------------------------------------------------------------------
+	
     //이모티콘 구매 애니메이션
     private ShopEmoticon mShopEmoticon;
     public void setShopEmoticon(ShopEmoticon shopEmoticon) {

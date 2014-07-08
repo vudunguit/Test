@@ -154,34 +154,34 @@ public class Option extends CCLayer {
 		Log.e("userdatas", "length : " + radioButtonUserdatas.length);
 		for (int i = 0; i < radioButtonUserdatas.length; i++) {
 			
-		CCMenuItem onButton = CCMenuItemImage.item(
-				folder + "option-check1" + fileExtension,
-				folder + "option-check1" + fileExtension,
-				this, "buttonCallback");		
-
-		Log.e("userdatas[i][0]", "userdatas[i][0] : " + radioButtonUserdatas[i][0]);
-		onButton.setUserData(radioButtonUserdatas[i][0]);
-		onButton.addChild(itemOver);
-		onButton.setIsEnabled(false);
-		
-		CCMenuItem offButton = CCMenuItemImage.item(
-				folder + "option-check1" + fileExtension,
-				folder + "option-check1" + fileExtension,
-				this, "buttonCallback");
-		Log.e("userdatas[i][1]", "userdatas[i][1] : " + radioButtonUserdatas[i][1]);
-		offButton.setUserData(radioButtonUserdatas[i][1]);
-		
-		CCMenu music = CCMenu.menu(onButton, offButton);
-		
-		parentSprite.addChild(music);
-		
-		music.alignItemsHorizontally(padding);
-		
-		music.setAnchorPoint(0, 0);
-		
-		music.setPosition(
-				radioButtonMenuPositions[i][0] + (padding / 2) + (onButton.getContentSize().width) + 29, // 이미지에서 글자 위치 변경 +29 
-				544 + (onButton.getContentSize().height / 2) - radioButtonMenuPositions[i][1] - 4) ; // 이미지에서 글자 위치 변경 -4
+			CCMenuItem onButton = CCMenuItemImage.item(
+					folder + "option-check1" + fileExtension,
+					folder + "option-check1" + fileExtension,
+					this, "buttonCallback");		
+	
+			Log.e("userdatas[i][0]", "userdatas[i][0] : " + radioButtonUserdatas[i][0]);
+			onButton.setUserData(radioButtonUserdatas[i][0]);
+			onButton.addChild(itemOver);
+			onButton.setIsEnabled(false);
+			
+			CCMenuItem offButton = CCMenuItemImage.item(
+					folder + "option-check1" + fileExtension,
+					folder + "option-check1" + fileExtension,
+					this, "buttonCallback");
+			Log.e("userdatas[i][1]", "userdatas[i][1] : " + radioButtonUserdatas[i][1]);
+			offButton.setUserData(radioButtonUserdatas[i][1]);
+			
+			CCMenu music = CCMenu.menu(onButton, offButton);
+			
+			parentSprite.addChild(music);
+			
+			music.alignItemsHorizontally(padding);
+			
+			music.setAnchorPoint(0, 0);
+			
+			music.setPosition(
+					radioButtonMenuPositions[i][0] + (padding / 2) + (onButton.getContentSize().width) + 29, // 이미지에서 글자 위치 변경 +29 
+					544 + (onButton.getContentSize().height / 2) - radioButtonMenuPositions[i][1] - 4) ; // 이미지에서 글자 위치 변경 -4
 		}
 	}
 	
@@ -205,6 +205,20 @@ public class Option extends CCLayer {
 	
 	private void setElemental(int type) {
 		Log.e("tag", "selectButton : " + type);
+		switch(type) {
+		case 1: //bgm on
+			MainApplication.getInstance().setBGM(true);
+			break;
+		case 2: //bgm off
+			MainApplication.getInstance().setBGM(false);
+			break;
+		case 11: //sound on
+			MainApplication.getInstance().setSound(true);
+			break;
+		case 12: //sound off
+			MainApplication.getInstance().setSound(false);
+			break;
+		}
 	}
 	
 	
