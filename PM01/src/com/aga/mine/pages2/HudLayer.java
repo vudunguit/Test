@@ -27,6 +27,7 @@ import org.cocos2d.layers.CCTMXTiledMap;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
+import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.menus.CCMenuItemToggle;
 import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
@@ -37,11 +38,14 @@ import org.cocos2d.nodes.CCSpriteFrame;
 import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.nodes.CCSpriteSheet;
 import org.cocos2d.nodes.CCTextureCache;
+import org.cocos2d.opengl.CCTexture2D;
 import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
+import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
+import com.aga.mine.main.R;
 import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -52,6 +56,7 @@ import com.aga.mine.main.Home2;
 import com.aga.mine.main.MainApplication;
 import com.aga.mine.main.NetworkController;
 import com.aga.mine.main.Utility;
+import com.aga.mine.util.Util;
 
 public class HudLayer extends CCLayer {
 
@@ -158,8 +163,9 @@ public class HudLayer extends CCLayer {
 
 		//
 		// 좌상단 찾은 지뢰 갯수 및 생명 표시
-		CCSprite statusBase = CCSprite.sprite(folder
-				+ "game-statusBase-hd.png");
+		CCSprite statusBase = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				folder
+				+ "game-statusBase-hd.png"));
 		statusBase.setPosition(statusBase.getContentSize().width / 2
 				+ margin, winSize.height
 				- statusBase.getContentSize().height / 2 - margin);
@@ -184,8 +190,9 @@ public class HudLayer extends CCLayer {
 		//
 		// 우상단 미니맵 버튼
 		CCMenuItem item = CCMenuItemImage.item(
-				folder + MinimapImageNormal, 
-				folder + MinimapImageSelect, this, "clicked");
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + MinimapImageNormal)), 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + MinimapImageSelect)), 
+				this, "clicked");
 		item.setTag(Game.kButtonMinimap);
 		
 		minimap = CCMenu.menu(item);
@@ -200,13 +207,13 @@ public class HudLayer extends CCLayer {
 
 		//
 		// 하단 수정구 아이템
-		itemBase = CCSprite.sprite(folder + "game-itemBase-hd.png");
+		itemBase = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "game-itemBase-hd.png"));
 		this.addChild(itemBase);
 		itemBase.setPosition(
 				winSize.width / 2,
 				itemBase.getContentSize().height / 2 + itemBase.getContentSize().height / 12);
-		CCMenuItemImage itemOn = null;
-		CCMenuItemImage itemOff = null;
+		CCMenuItemSprite itemOn = null;
+		CCMenuItemSprite itemOff = null;
 		CCMenuItemToggle itemToggle;
 		itemMenu = CCMenu.menu();
 		String[] fileNames = { "Fire", "Wind", "Cloud", "Divine", "Earth", "Mirror" };
@@ -215,8 +222,12 @@ public class HudLayer extends CCLayer {
 			String fOn = folder + "game-item" + fileNames[i] + "On-hd.png";
 			String fOff = folder + "game-item" + fileNames[i] + "Off-hd.png";
 			
-			itemOn = CCMenuItemImage.item(fOn, fOn);
-			itemOff = CCMenuItemImage.item(fOff, fOff);
+			itemOn = CCMenuItemImage.item(
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + fOn)), 
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + fOn)));
+			itemOff = CCMenuItemImage.item(
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + fOff)), 
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + fOff)));
 			
 			itemToggle = CCMenuItemToggle.item(this, "clicked", itemOff, itemOn);
 			itemToggle.setSelectedIndex(kButtonOff);
@@ -279,56 +290,56 @@ public class HudLayer extends CCLayer {
 		}
 		
 		//불, 바람, 구름 애니메이션
-		fire = CCSprite.sprite("61hud/fire-01.png");
+		fire = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "61hud/fire-01.png"));
 		fireAttack = CCAnimation.animation("fireAttack");
 		for(int i=1; i<=6; i++) {
-    		CCSprite fireframe = CCSprite.sprite(String.format("61hud/fire-%02d.png", i));
+    		CCSprite fireframe = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("61hud/fire-%02d.png", i)));
     		fireAttack.addFrame(fireframe.getTexture());
 		}
 		
-		wind = CCSprite.sprite("61hud/wind01_0.1.png");
+		wind = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "61hud/wind01_0.1.png"));
 		windAttack = CCAnimation.animation("windAttack");
 		for(int i=1; i<=8; i++) {
-    		CCSprite windframe = CCSprite.sprite(String.format("61hud/wind%02d_0.1.png", i));
+    		CCSprite windframe = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("61hud/wind%02d_0.1.png", i)));
     		//fire.flipY_ = true;
     		windAttack.addFrame(windframe.getTexture());
 		}
 		
-		cloud = CCSprite.sprite("61hud/fx-passingcloud1.png");
+		cloud = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "61hud/fx-passingcloud1.png"));
 		
 //		rune = CCSprite.sprite("61hud/rune-01.png");
 		runeAni = CCAnimation.animation("rune");
 		for(int i=1; i<=10; i++) {
-    		runeAni.addFrame(CCTextureCache.sharedTextureCache().addImage(String.format("61hud/rune-%02d.png", i)));
+    		runeAni.addFrame(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + (String.format("61hud/rune-%02d.png", i))));
 		}
 		for(int i=1; i<=3; i++) {
-			runeAni.addFrame(CCTextureCache.sharedTextureCache().addImage("61hud/rune-10.png"));
+			runeAni.addFrame(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + ("61hud/rune-10.png")));
 		}
 		
 		//divine = CCSprite.sprite("61hud/divine-01.png");
 		divineAni = CCAnimation.animation("divine");
 		for(int i=1; i<=6; i++) {
-    		divineAni.addFrame(CCTextureCache.sharedTextureCache().addImage(String.format("61hud/divine-%02d.png", i)));
+    		divineAni.addFrame(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + (String.format("61hud/divine-%02d.png", i))));
 		}
 		
 		//earth = CCSprite.sprite("61hud/earth-01.png");
 		earthAni = CCAnimation.animation("earth");
 		for(int i=1; i<=6; i++) {
-    		CCSprite earthframe = CCSprite.sprite(String.format("61hud/earth-%02d.png", i));
+    		CCSprite earthframe = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("61hud/earth-%02d.png", i)));
     		earthAni.addFrame(earthframe.getTexture());
 		}
 		
 		//mirror = CCSprite.sprite("61hud/mirror-01.png");
 		mirrorAni = CCAnimation.animation("mirror");
 		for(int i=1; i<=6; i++) {
-    		CCSprite mirrorframe = CCSprite.sprite(String.format("61hud/mirror-%02d.png", i));
+    		CCSprite mirrorframe = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("61hud/mirror-%02d.png", i)));
     		mirrorAni.addFrame(mirrorframe.getTexture());
 		}
 		
 		//마법사 감전 애니
 		mShockAni = CCAnimation.animation("shock");
 		for(int i=1; i<=4; i++) {
-    		CCSprite shockframe = CCSprite.sprite(String.format("61hud/Shock-%d.png", i));
+    		CCSprite shockframe = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("61hud/Shock-%d.png", i)));
     		mShockAni.addFrame(shockframe.getTexture());
 		}
 		
@@ -343,7 +354,7 @@ public class HudLayer extends CCLayer {
 	//이모티콘 애니메이션 : NetworkController에서 데이터를 수신후 이 펑션을 호출
 	public void startEmoticonAni(int emoticonId) {
 		String emoticonPath = String.format("62game_emoticon/emoticons-hd/emoticon%02d-hd.png", emoticonId);
-		CCSprite emoticon = CCSprite.sprite(emoticonPath);
+		CCSprite emoticon = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + emoticonPath));
 		
 		emoticon.setScale(0.5f);
 		emoticon.setPosition(winSize.getWidth()/2, winSize.getHeight() * 3 / 4);
@@ -386,10 +397,10 @@ public class HudLayer extends CCLayer {
 		for (int i = 0; i < GameData.share().kMaxHeartNumber; i++) {
 			z = (i < value) ? 10 : 0;
 
-			CCSprite heartOn = CCSprite.sprite(folder
-					+ "game-heartOn-hd.png");
-			CCSprite heartOff = CCSprite.sprite(folder
-					+ "game-heartOff-hd.png");
+			CCSprite heartOn = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder
+					+ "game-heartOn-hd.png"));
+			CCSprite heartOff = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder
+					+ "game-heartOff-hd.png"));
 
 			this.addChild(heartOff, z);
 			heartOff.setPosition(position);
@@ -436,7 +447,7 @@ public class HudLayer extends CCLayer {
 	public void clickEffect(int sphereType, float startDelay) {
 		//
 		// 활성화된 아이템버튼의 클릭 효과 오버레이를 일정시간 켰다 끈다.
-		CCSprite overlay = CCSprite.sprite(folder + "game-itemOver-hd.png");
+		CCSprite overlay = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "game-itemOver-hd.png"));
 
 		for (CCNode itemNode : itemMenu.getChildren()) {
 			CCMenuItemToggle item = (CCMenuItemToggle) itemNode;
@@ -710,11 +721,11 @@ public class HudLayer extends CCLayer {
 			MainApplication.getInstance().getActivity().click();
 			
 			
-			CCSprite opacitybg = CCSprite.sprite("00common/opacitybg.png");
+			CCSprite opacitybg = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "00common/opacitybg.png"));
 			opacitybg.setPosition(this.getContentSize().width/2, this.getContentSize().height/2);
 			this.addChild(opacitybg, pausePopupTag, pausePopupTag);
 			
-			CCSprite panel = CCSprite.sprite(folder + Utility.getInstance().getNameWithIsoCodeSuffix("pausebg.png"));
+			CCSprite panel = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + Utility.getInstance().getNameWithIsoCodeSuffix("pausebg.png")));
 			panel.setPosition(opacitybg.getContentSize().width/2, opacitybg.getContentSize().height/2);
 			opacitybg.addChild(panel);
 			
@@ -723,8 +734,9 @@ public class HudLayer extends CCLayer {
 			String continue2Str = Utility.getInstance().getNameWithIsoCodeSuffix("continue2.png"); 
 			
 			CCMenuItem continueButton = CCMenuItemImage.item(
-					folder + continue1Str, 
-					folder + continue2Str, this, "clicked");
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + continue1Str)), 
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + continue2Str)), 
+					this, "clicked");
 			continueButton.setTag(continueTag);
 			continueButton.setAnchorPoint(0.5f, 0.5f);
 			
@@ -741,8 +753,9 @@ public class HudLayer extends CCLayer {
 			String quit2Str = Utility.getInstance().getNameWithIsoCodeSuffix("quit2.png"); 
 			
 			CCMenuItem quitButton = CCMenuItemImage.item(
-					folder + quit1Str, 
-					folder + quit2Str, this, "clicked");
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + quit1Str)), 
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + quit2Str)), 
+					this, "clicked");
 			quitButton.setTag(quitTag);
 			quitButton.setAnchorPoint(0.5f, 0.5f);
 			
@@ -787,8 +800,9 @@ public class HudLayer extends CCLayer {
 //	public void gameOver() {
 	public void gameOver(int score, int other) {
 		SoundEngine.sharedEngine().pauseSound();
+//		MainApplication.getInstance().setIsPlaying(false);
 		MainApplication.getInstance().getActivity().mIsPlaying = false;
-        //SoundEngine.sharedEngine().purgeSharedEngine();
+//        SoundEngine.sharedEngine().purgeSharedEngine();
 		Log.e("HudLayer", "gameEnding - gogo");
 		Config.getInstance().setDisableButton(true);
 		myScore = score;
@@ -1006,7 +1020,7 @@ public class HudLayer extends CCLayer {
 		startShockAni(); //마법사 감전 애니
 		
 		for(int k=0; k<10; k++) {
-			CCSprite fire = CCSprite.sprite("61hud/fire-01.png");
+			CCSprite fire = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "61hud/fire-01.png"));
 			//x 위치 랜덤
 			Random rand = new Random();
 			float fireWidth = fire.getContentSize().width;
@@ -1070,7 +1084,7 @@ public class HudLayer extends CCLayer {
 		startShockAni(); //마법사 감전 애니
 		
 		for(int k=0; k<10; k++) {
-			CCSprite wind = CCSprite.sprite("61hud/wind01_0.1.png");
+			CCSprite wind = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "61hud/wind01_0.1.png"));
 			//x 위치 랜덤
 			Random rand = new Random();
 			float windWidth = fire.getContentSize().width;
@@ -1130,7 +1144,7 @@ public class HudLayer extends CCLayer {
 	//parameter : 4:신성, 5:대지, 6:반사
 	public void StartAniRune(int kind) {
 		//룬애니
-		CCSprite rune = CCSprite.sprite("61hud/rune-01.png");
+		CCSprite rune = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "61hud/rune-01.png"));
 		rune.setScale(0.55f);
 		rune.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
 		rune.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
@@ -1146,7 +1160,7 @@ public class HudLayer extends CCLayer {
 		CCFadeOut out = CCFadeOut.action(0.32f);
 		switch(kind) {
 		case 4:
-			CCSprite divine = CCSprite.sprite("61hud/divine-01.png");
+			CCSprite divine = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "61hud/divine-01.png"));
 			divine.setPosition(rune.getContentSize().width * 0.5f, rune.getContentSize().height * 0.5f);
 			divine.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
 			rune.addChild(divine, 2);
@@ -1155,7 +1169,7 @@ public class HudLayer extends CCLayer {
 			divine.runAction(CCSequence.actions(in, divineAction, out, CCCallFuncND.action(this, "cbRemoveSprite", kind)));
 			break;
 		case 5:
-			CCSprite earth = CCSprite.sprite("61hud/earth-01.png");
+			CCSprite earth = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "61hud/earth-01.png"));
 			earth.setPosition(rune.getContentSize().width * 0.5f, rune.getContentSize().height * 0.5f);
 			earth.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
 			rune.addChild(earth, 2);
@@ -1164,7 +1178,7 @@ public class HudLayer extends CCLayer {
 			earth.runAction(CCSequence.actions(in, earthAction, out, CCCallFuncND.action(this, "cbRemoveSprite", kind)));
 			break;
 		case 6:
-			CCSprite mirror = CCSprite.sprite("61hud/mirror-01.png");
+			CCSprite mirror = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "61hud/mirror-01.png"));
 			mirror.setPosition(rune.getContentSize().width * 0.5f, rune.getContentSize().height * 0.5f);
 			mirror.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));
 			rune.addChild(mirror, 2);
@@ -1199,11 +1213,11 @@ public class HudLayer extends CCLayer {
 	
 	// Victory 애니메이션
 	private void startVictory() {
-		CCSprite backLight = CCSprite.sprite("70game_ending/back-light.png");
-		CCSprite backSearch = CCSprite.sprite("70game_ending/back-search.png");
-		CCSprite rybon = CCSprite.sprite("70game_ending/rybon.png");
+		CCSprite backLight = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "70game_ending/back-light.png"));
+		CCSprite backSearch = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "70game_ending/back-search.png"));
+		CCSprite rybon = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "70game_ending/rybon.png"));
 		
-		mBg = CCSprite.sprite("00common/" + "opacitybg.png");
+		mBg = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "00common/" + "opacitybg.png"));
 		mBg.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
 		//mBg.setScale(0.8f);
 		addChild(mBg);
@@ -1223,7 +1237,7 @@ public class HudLayer extends CCLayer {
 
 		// 별배치
 		for (int i = 0; i < 30; i++) {
-			CCSprite star = CCSprite.sprite("70game_ending/star.png");
+			CCSprite star = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "70game_ending/star.png"));
 			star.setPosition(winSize.width * new Random().nextFloat(), winSize.height * new Random().nextFloat());
 			star.setScale(0.5f + 0.5f * new Random().nextFloat());
 			mBg.addChild(star);
@@ -1250,7 +1264,7 @@ public class HudLayer extends CCLayer {
 	}
 
 	public void cbCallHeartLeft(Object sender) {
-		CCSprite heartLeft = CCSprite.sprite("70game_ending/heart-left.png");
+		CCSprite heartLeft = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "70game_ending/heart-left.png"));
 		mBg.addChild(heartLeft);
 		heartLeft.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
 
@@ -1268,7 +1282,7 @@ public class HudLayer extends CCLayer {
 	}
 
 	public void cbCallHeartRight(final Object sender) {
-		CCSprite heartRight = CCSprite.sprite("70game_ending/heart-right.png");
+		CCSprite heartRight = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "70game_ending/heart-right.png"));
 		mBg.addChild(heartRight);
 		heartRight.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
 
@@ -1287,7 +1301,7 @@ public class HudLayer extends CCLayer {
 	}
 
 	public void cbCallHeartCenter(final Object sender) {
-		CCSprite heartCenter = CCSprite.sprite("70game_ending/heart-center.png");
+		CCSprite heartCenter = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "70game_ending/heart-center.png"));
 		mBg.addChild(heartCenter);
 		heartCenter.setPosition(winSize.width * 0.5f, winSize.height * 0.5f);
 
@@ -1314,50 +1328,50 @@ public class HudLayer extends CCLayer {
 		
 		switch(kind) {
 		case Game.kButtonFire:
-			spirit = CCSprite.sprite("60game/sprit1_01.png");
+			spirit = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "60game/sprit1_01.png"));
 			item = itemMenu.getChildByTag(Game.kButtonFire);
 			for(int i=1; i<=5; i++) {
-	    		CCSprite frame = CCSprite.sprite(String.format("60game/sprit1_%02d.png", i));
+	    		CCSprite frame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("60game/sprit1_%02d.png", i)));
 	    		ani.addFrame(frame.getTexture());
 			}
 			break;
 		case Game.kButtonWind:
-			spirit = CCSprite.sprite("60game/sprit2_01.png");
+			spirit = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "60game/sprit2_01.png"));
 			item = itemMenu.getChildByTag(Game.kButtonWind);
 			for(int i=1; i<=5; i++) {
-	    		CCSprite frame = CCSprite.sprite(String.format("60game/sprit2_%02d.png", i));
+	    		CCSprite frame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("60game/sprit2_%02d.png", i)));
 	    		ani.addFrame(frame.getTexture());
 			}
 			break;
 		case Game.kButtonCloud:
-			spirit = CCSprite.sprite("60game/sprit3_01.png");
+			spirit = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "60game/sprit3_01.png"));
 			item = itemMenu.getChildByTag(Game.kButtonCloud);
 			for(int i=1; i<=5; i++) {
-	    		CCSprite frame = CCSprite.sprite(String.format("60game/sprit3_%02d.png", i));
+	    		CCSprite frame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("60game/sprit3_%02d.png", i)));
 	    		ani.addFrame(frame.getTexture());
 			}
 			break;
 		case Game.kButtonDivine:
-			spirit = CCSprite.sprite("60game/sprit4_01.png");
+			spirit = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "60game/sprit4_01.png"));
 			item = itemMenu.getChildByTag(Game.kButtonDivine);
 			for(int i=1; i<=5; i++) {
-	    		CCSprite frame = CCSprite.sprite(String.format("60game/sprit4_%02d.png", i));
+	    		CCSprite frame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("60game/sprit4_%02d.png", i)));
 	    		ani.addFrame(frame.getTexture());
 			}
 			break;
 		case Game.kButtonEarth:
-			spirit = CCSprite.sprite("60game/sprit5_01.png");
+			spirit = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "60game/sprit5_01.png"));
 			item = itemMenu.getChildByTag(Game.kButtonEarth);
 			for(int i=1; i<=5; i++) {
-	    		CCSprite frame = CCSprite.sprite(String.format("60game/sprit5_%02d.png", i));
+	    		CCSprite frame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("60game/sprit5_%02d.png", i)));
 	    		ani.addFrame(frame.getTexture());
 			}
 			break;
 		case Game.kButtonMirror:
-			spirit = CCSprite.sprite("60game/sprit6_01.png");
+			spirit = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "60game/sprit6_01.png"));
 			item = itemMenu.getChildByTag(Game.kButtonMirror);
 			for(int i=1; i<=5; i++) {
-	    		CCSprite frame = CCSprite.sprite(String.format("60game/sprit6_%02d.png", i));
+	    		CCSprite frame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("60game/sprit6_%02d.png", i)));
 	    		ani.addFrame(frame.getTexture());
 			}
 			break;
@@ -1399,7 +1413,7 @@ public class HudLayer extends CCLayer {
 		CCAnimate shock = CCAnimate.action(0.4f, mShockAni, false);
 		CCRepeatForever shockAni = CCRepeatForever.action(shock);
 		
-		CCSprite sprite = CCSprite.sprite("61hud/Shock-1.png");
+		CCSprite sprite = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "61hud/Shock-1.png"));
 		this.addChild(sprite, 11, 2001);
 		sprite.setPosition(winSize.width * 0.5f, winSize.height * 0.25f);
 		sprite.runAction(shockAni);

@@ -10,6 +10,7 @@ import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
@@ -18,6 +19,7 @@ import android.util.Log;
 
 import com.aga.mine.main.NetworkController;
 import com.aga.mine.pages2.UserData;
+import com.aga.mine.util.Util;
 import com.facebook.model.GraphUser;
 import com.sromku.simple.fb.entities.Profile;
 
@@ -42,11 +44,11 @@ public class InvitationReceiver extends CCLayer{
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
 		
-		CCSprite bg = CCSprite.sprite("00common/opacitybg.png");
+		CCSprite bg = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "00common/opacitybg.png"));
 		Popup.addChild(bg);
 		bg.setPosition(winsize().width / 2, winsize().height / 2);
 		
-		CCSprite backBoard = CCSprite.sprite("mirroritem/ref-popup.png");
+		CCSprite backBoard = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "mirroritem/ref-popup.png"));
 		bg.addChild(backBoard);
 		backBoard.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height / 2);
 		
@@ -72,11 +74,15 @@ public class InvitationReceiver extends CCLayer{
 		
 		
 		
-		a1 = CCMenuItemImage.item("mirroritem/mirrorbutton1.png",
-				"mirroritem/ref-popup-ok-select.png", this, "aCallback");
+		a1 = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "mirroritem/mirrorbutton1.png")),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "mirroritem/ref-popup-ok-select.png")), 
+				this, "aCallback");
 
-		b1 = CCMenuItemImage.item("mirroritem/mirrorbutton2.png",
-				"mirroritem/ref-popup-Cancel-select.png", this, "bCallback");
+		b1 = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "mirroritem/mirrorbutton2.png")),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "mirroritem/ref-popup-Cancel-select.png")), 
+				this, "bCallback");
 		
 		inviteMenu = CCMenu.menu(a1, b1);
 		backBoard.addChild(inviteMenu);

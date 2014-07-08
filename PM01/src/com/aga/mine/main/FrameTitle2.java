@@ -1,8 +1,10 @@
 ﻿package com.aga.mine.main;
 
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 
 import com.aga.mine.main.Utility;
+import com.aga.mine.util.Util;
 
 public class FrameTitle2 {
 
@@ -19,7 +21,7 @@ public class FrameTitle2 {
 	public static void setTitle(CCSprite parentSprite, String imageFolder, int tag) {
 		//
 		// 타이틀 판넬
-		CCSprite titlePanel = CCSprite.sprite(commonfolder + "frame-titlePanel" + fileExtension);
+		CCSprite titlePanel = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "frame-titlePanel" + fileExtension));
 		parentSprite.addChild(titlePanel, tag, tag);
 		titlePanel.setAnchorPoint(0.5f, 0.5f);
 		titlePanel.setPosition(
@@ -27,9 +29,9 @@ public class FrameTitle2 {
 			parentSprite.getContentSize().height - 110.0f);
 		
 		// 타이틀
-		CCSprite frameTitle = CCSprite.sprite(
+		CCSprite frameTitle = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
 		Utility.getInstance().getNameWithIsoCodeSuffix(
-				imageFolder + imageFolder.substring(2, imageFolder.length()-1) + "-title" + fileExtension));
+				imageFolder + imageFolder.substring(2, imageFolder.length()-1) + "-title" + fileExtension)));
 		titlePanel.addChild(frameTitle);
 		frameTitle.setAnchorPoint(0.5f, 0.5f);
 		frameTitle.setPosition(titlePanel.getContentSize().width / 2, titlePanel.getContentSize().height / 2);

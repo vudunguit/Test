@@ -4,12 +4,15 @@ import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
+
+import com.aga.mine.util.Util;
 
 public class SpriteSummery {
 	
 	public static CCSprite imageSummary(String image1, String image2) {
-		CCSprite sprite1 = CCSprite.sprite(image1);
-		CCSprite sprite2 = CCSprite.sprite(image2);
+		CCSprite sprite1 = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + image1));
+		CCSprite sprite2 = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + image2));
 //		sprite2.setAnchorPoint(0.5f, 0.5f); // 원래 이게 맞는건데 안된다. 나중에 확인
 		sprite2.setAnchorPoint(0,0);
 		sprite2.setPosition(sprite1.getPosition().x/2, sprite1.getPosition().y/2);
@@ -18,7 +21,7 @@ public class SpriteSummery {
 	}
 	
 	public static CCSprite imageSummary(CCSprite baseSprite, String image) {
-		CCSprite sprite2 = CCSprite.sprite(image);
+		CCSprite sprite2 = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + image));
 //		sprite2.setAnchorPoint(0.5f, 0.5f); // 원래 이게 맞는건데 안된다. 나중에 확인
 		sprite2.setAnchorPoint(0,0);
 		sprite2.setPosition(baseSprite.getPosition().x/2, baseSprite.getPosition().y/2);

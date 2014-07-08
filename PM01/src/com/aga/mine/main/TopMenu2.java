@@ -3,12 +3,16 @@
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItemImage;
+import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
+import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGSize;
 
 import com.aga.mine.pages2.UserData;
+import com.aga.mine.util.Util;
 
 import android.content.Context;
 
@@ -36,15 +40,15 @@ public class TopMenu2 extends CCLayer{
 	// 상단 메뉴 (scene 이동)
 	public static void setSceneMenu(CCNode nodeThis){
 		
-		CCMenuItemImage frameButtonBack = CCMenuItemImage.item(
-				commonfolder + "frame-buttonBack-normal-hd" + fileExtension,
-				commonfolder + "frame-buttonBack-select-hd" + fileExtension,
+		CCMenuItemSprite frameButtonBack = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "frame-buttonBack-normal-hd" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "frame-buttonBack-select-hd" + fileExtension)),
 				nodeThis, "clicked");
 		frameButtonBack.setTag(previous);
 		
-		CCMenuItemImage frameButtonHome = CCMenuItemImage.item(
-				commonfolder + "frame-buttonHome-normal-hd" + fileExtension,
-				commonfolder + "frame-buttonHome-select-hd" + fileExtension,
+		CCMenuItemSprite frameButtonHome = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "frame-buttonHome-normal-hd" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "frame-buttonHome-select-hd" + fileExtension)),
 				nodeThis,"clicked");
 		frameButtonHome.setTag(home);
 		

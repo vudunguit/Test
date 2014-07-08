@@ -13,6 +13,7 @@ import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.utils.CCFormatter;
@@ -22,6 +23,7 @@ import android.util.Log;
 import com.aga.mine.main.Config;
 import com.aga.mine.main.NetworkController;
 import com.aga.mine.main.Utility;
+import com.aga.mine.util.Util;
 
 public class GameMinimap extends CCLayer{
 	
@@ -34,7 +36,7 @@ public class GameMinimap extends CCLayer{
 	final int kTagMinimap = 9;
 
 	CCTMXTiledMap tileMap = null;
-	//static CCSprite base  = null;
+//	static CCSprite base  = null;
 	//배경
 	CCTMXLayer bg = null;
 	CCTMXLayer meta = null;
@@ -49,6 +51,20 @@ public class GameMinimap extends CCLayer{
 	
 	ArrayList<MineCell> cells  = null;
 	ArrayList<MineCell> sphereBaseCells = null;
+	
+//	private static GameMinimap gameMinimap;
+//	
+//	public static synchronized GameMinimap getInstance() {
+//		if (gameMinimap == null) {
+//			gameMinimap = new GameMinimap();
+//		}
+//		return gameMinimap;
+//	}
+	
+//	public void dealloc() {
+//		gameMinimap = null;
+//		
+//	}
 	
 	private HudLayer mHudLayer;
 	
@@ -81,7 +97,7 @@ public class GameMinimap extends CCLayer{
 
 		//
 		// 베이스
-		CCSprite base = CCSprite.sprite(hudLayerFolder + "minimap-base-hd.png");
+		CCSprite base = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + hudLayerFolder + "minimap-base-hd.png"));
 		this.addChild(base);
 		base.setPosition(winSize.width/2, winSize.height/2);
 		base.setTag(kTagMinimap);
@@ -89,8 +105,8 @@ public class GameMinimap extends CCLayer{
 		//
 		// 닫기버튼
 		CCMenuItem itemExit = CCMenuItemImage.item(
-				hudLayerFolder + "minimap-buttonExit-normal-hd.png", 
-				hudLayerFolder + "minimap-buttonExit-select-hd.png", 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + hudLayerFolder + "minimap-buttonExit-normal-hd.png")), 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + hudLayerFolder + "minimap-buttonExit-select-hd.png")), 
 				this, "clicked");
 		itemExit.setTag(kButtonExit);
 		CCMenu buttonExit = CCMenu.menu(itemExit);
@@ -147,7 +163,16 @@ public class GameMinimap extends CCLayer{
 		}
 		 
 	}
+	// layout() end
+//	
+//	public static void minimapOn() {
+//		this.
+//	}
+//	public static void minimapOff() {
+//		this.setVisible(false);
+//	}
 	
+	//
 	// MineCell Delegate
 	public void removeTile(CGPoint tileCoord) {
 		// Global ID // Globally unique IDentifier
@@ -199,7 +224,6 @@ public class GameMinimap extends CCLayer{
 		}
 
 	}
-	
 	/*****************************************************/
 	/** 문제지점
 	 *  
@@ -213,7 +237,7 @@ public class GameMinimap extends CCLayer{
 
 		String[] type = {"CellOpen", "MushroomOn", "MushroomOff", "MagicAttack", "MagicDefense",
 				"GameOver", "Emoticon", "Mine", "Sphere", "SphereTake"};
-		
+
 		final int kPlayDataCellOpen = 0;
 //		final int kPlayDataMushroomOn = 1;
 //		final int kPlayDataMushroomOff = 2;
@@ -225,7 +249,7 @@ public class GameMinimap extends CCLayer{
 		final int kPlayDataSphere = 8;
 		final int kPlayDataSphereTake = 9;
 		int cellGID;
-		
+
 		int dataLength = 0;
 		int count = 0;
 		int itemType = data / 10000;
@@ -234,7 +258,7 @@ public class GameMinimap extends CCLayer{
 			cell = searchTilePosition(data % 10000);
 		}
 
-	
+
 		switch (playType){
 		case kPlayDataCellOpen:
 			removeTile(data);
@@ -251,10 +275,10 @@ public class GameMinimap extends CCLayer{
 //			break;
 //			
 		case kPlayDataMagicAttack:
-			
+
 			switch (data / 1000) {  // data를 1000으로 나누어 나머지 값이 공격 지속 시간입니다. 현재 23
 //			switch ((data - 23) / 1000) {  // data를 1000으로 나누어 나머지 값이 공격 지속 시간입니다. 현재 23
-			
+
 			case 1:
 				if(mHudLayer.mGame.getThreadCount()>0) {
 					mHudLayer.mGame.setReceivedAttackType(1, data%1000);
@@ -289,11 +313,11 @@ public class GameMinimap extends CCLayer{
 			}
 
 			break;
-			
+
 //		case kPlayDataMagicDefense:
 //			mHudLayer.testText.setString("적이 방어 하였습니다. kPlayDataMagicDefense");
 //			break;
-			
+
 		case kPlayDataGameOver:
 			try {
 				mHudLayer.gameOver(1,1); // 점수 넣어야될듯
@@ -303,7 +327,7 @@ public class GameMinimap extends CCLayer{
 				e.printStackTrace();
 			}
 			break;
-			
+
 		case kPlayDataEmoticon:
 			mHudLayer.testText.setString("이모티콘이 왔습니다. type : " + data);
 			mHudLayer.startEmoticonAni(data);
@@ -316,7 +340,7 @@ public class GameMinimap extends CCLayer{
 ////			this.mineLayer.setTileGID(cellGID, searchTilePosition(data));
 ////			removeTile(data);
 //			break;
-			
+
 		case kPlayDataSphere:
 			count = 0;
 			for (int m = 0; m < 2; m++) { // 세로 방향
@@ -330,7 +354,7 @@ public class GameMinimap extends CCLayer{
 				}
 			}			
 			break;
-			
+
 		case kPlayDataSphereTake:
 //			mHudLayer.testText.setString("Warning!!!! 적이 아이템 획득");
 			count = 0;
@@ -354,9 +378,8 @@ public class GameMinimap extends CCLayer{
 		}
 		
 	}
+	
 	/*****************************************************/
-	
-	
 	public void removeTile(int tileGID) {
 		this.getFg().removeTileAt(searchTilePosition(tileGID));
 	}

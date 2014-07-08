@@ -15,6 +15,7 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
+import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
@@ -22,6 +23,7 @@ import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.nodes.CCSpriteSheet;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
@@ -33,6 +35,7 @@ import android.widget.Toast;
 import com.aga.mine.main.R;
 import com.aga.mine.pages2.UserData;
 import com.aga.mine.util.Popup;
+import com.aga.mine.util.Util;
 
 // 전체적인 변수명 정리와 리팩토링이 필요함. (급하니 코드가 더 더러워짐.)
 public class ShopItem2 extends CCLayer {
@@ -45,7 +48,7 @@ public class ShopItem2 extends CCLayer {
 	private CCSprite bg;
 	private CCSprite bb;
 	
-	private CCSprite itemOver = CCSprite.sprite(folder + "item-buttoncover" + fileExtension);
+	private CCSprite itemOver = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttoncover" + fileExtension));
 	private Context mContext;
 	private UserData userData;
 	
@@ -106,7 +109,7 @@ public class ShopItem2 extends CCLayer {
 	}
 
 	private void setBackBoardMenu(String imageFullPath) {
-		bb = CCSprite.sprite(imageFullPath);
+		bb = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(bb);
 		bb.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		bb.setAnchorPoint(0.5f, 0.5f);
@@ -114,7 +117,7 @@ public class ShopItem2 extends CCLayer {
 	}
 	
 	private void setBoardFrameMenu(String imageFullPath) {
-		CCSprite boardFrame = CCSprite.sprite(imageFullPath);
+		CCSprite boardFrame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(boardFrame);
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
@@ -127,60 +130,60 @@ public class ShopItem2 extends CCLayer {
 			setText(parentSprite);
 			
 		CCMenuItem itemSphere = CCMenuItemImage.item(
-				folder + "item-buttonBuy-hd" + fileExtension,
-				folder + "item-buttonBuy-select-hd" + fileExtension,
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonBuy-hd" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonBuy-select-hd" + fileExtension)),
 				this, "buySphereCallback");
 		itemSphere.setUserData("Sphere");
 		
 		CCMenuItem itemOffenseBuy = CCMenuItemImage.item(
-				folder + "item-buttonBuy-hd" + fileExtension,
-				folder + "item-buttonBuy-select-hd" + fileExtension,
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonBuy-hd" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonBuy-select-hd" + fileExtension)),
 				this, "buyMagicCallback");
 		itemOffenseBuy.setTag(offense);
 		
 		CCMenuItem itemDefenseBuy = CCMenuItemImage.item(
-				folder + "item-buttonBuy-hd" + fileExtension,
-				folder + "item-buttonBuy-select-hd" + fileExtension,
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonBuy-hd" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonBuy-select-hd" + fileExtension)),
 				this, "buyMagicCallback");
 		itemDefenseBuy.setTag(defense);
 		
-		CCMenuItemImage o_fire = CCMenuItemImage.item(
-				folder + "item-buttonFire-hd" + fileExtension,
-				folder + "item-buttonFire-select-hd" + fileExtension,
+		CCMenuItemSprite o_fire = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonFire-hd" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonFire-select-hd" + fileExtension)),
 				this, "selectMagicCallback");		
 		o_fire.setTag(0);
 		o_fire.addChild(itemOver);
 		o_fire.setIsEnabled(false);
 		
-		CCMenuItemImage o_wind = CCMenuItemImage.item(
-				folder + "item-buttonWind-hd" + fileExtension,
-				folder + "item-buttonWind-select-hd" + fileExtension,
+		CCMenuItemSprite o_wind = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonWind-hd" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonWind-select-hd" + fileExtension)),
 				this, "selectMagicCallback");
 		o_wind.setTag(1);
 		
-		CCMenuItemImage o_cloud = CCMenuItemImage.item(
-				folder + "item-buttonCloud-hd" + fileExtension,
-				folder + "item-buttonCloud-select-hd" + fileExtension,
+		CCMenuItemSprite o_cloud = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonCloud-hd" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonCloud-select-hd" + fileExtension)),
 				this, "selectMagicCallback");
 		o_cloud.setTag(2);
 		
-		CCMenuItemImage d_fire = CCMenuItemImage.item(
-				folder + "item-buttonFire-hd" + fileExtension,
-				folder + "item-buttonFire-select-hd" + fileExtension,
+		CCMenuItemSprite d_fire = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonFire-hd" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonFire-select-hd" + fileExtension)),
 				this, "selectMagicCallback");		
 		d_fire.setTag(3);
 		d_fire.addChild(itemOver);
 		d_fire.setIsEnabled(false);
 		
-		CCMenuItemImage d_wind = CCMenuItemImage.item(
-				folder + "item-buttonWind-hd" + fileExtension,
-				folder + "item-buttonWind-select-hd" + fileExtension,
+		CCMenuItemSprite d_wind = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonWind-hd" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonWind-select-hd" + fileExtension)),
 				this, "selectMagicCallback");
 		d_wind.setTag(4);
 		
-		CCMenuItemImage d_cloud = CCMenuItemImage.item(
-				folder + "item-buttonCloud-hd" + fileExtension,
-				folder + "item-buttonCloud-select-hd" + fileExtension,
+		CCMenuItemSprite d_cloud = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonCloud-hd" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "item-buttonCloud-select-hd" + fileExtension)),
 				this, "selectMagicCallback");
 		d_cloud.setTag(5);
 		
@@ -217,8 +220,8 @@ public class ShopItem2 extends CCLayer {
 				65 + o_fire.getContentSize().width * 1.5f,
 				587 - 538 + o_fire.getContentSize().height / 2); // 방어 속성 메뉴
 		
-		CCSprite buyText = CCSprite.sprite(
-				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "item-textBuy" + fileExtension));
+		CCSprite buyText = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "item-textBuy" + fileExtension)));
 		buyText.setPosition(itemSphere.getContentSize().width/2, itemSphere.getContentSize().height / 2);
 //		buyText.setAnchorPoint(0.5f, 0.5f);
 		itemSphere.addChild(buyText);
@@ -313,8 +316,8 @@ public class ShopItem2 extends CCLayer {
 
 		
 		/********************* 공격 *************************/
-		CCSprite attackItem = CCSprite.sprite(
-				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "item-labelAttack" + fileExtension));
+		CCSprite attackItem = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "item-labelAttack" + fileExtension)));
 		attackItem.setPosition(110, parentSprite.getContentSize().height - 190);
 		parentSprite.addChild(attackItem);		
 		
@@ -361,10 +364,11 @@ public class ShopItem2 extends CCLayer {
 	
 		/********************* 방어 *************************/
 		
-		CCSprite defenseItem = CCSprite.sprite(
-				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "item-labelDefense" + fileExtension));
+		CCSprite defenseItem = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "item-labelDefense" + fileExtension)));
 		defenseItem.setPosition(110, parentSprite.getContentSize().height - 385);
 		parentSprite.addChild(defenseItem);
+		
 		
 		
 		CCLabel gold3 = CCLabel.makeLabel("Gold", "Arial", 25);
@@ -649,11 +653,11 @@ public class ShopItem2 extends CCLayer {
 //		Log.e("ShopItem2", "selectMagicCallback _ tag : " + temp);
 		
 		List<CCNode> a = ((CCNode) sender).getParent().getChildren();
-		CCMenuItemImage button = (CCMenuItemImage)sender;
+		CCMenuItemSprite button = (CCMenuItemSprite)sender;
 		
 		// 부모에 속한 자식들 모두 선택되지 않은상태로 변경
 		for (CCNode ccNode : a) {
-			final CCMenuItemImage ccButton = (CCMenuItemImage)ccNode;
+			final CCMenuItemSprite ccButton = (CCMenuItemSprite)ccNode;
 			ccButton.setIsEnabled(true);
 			ccButton.removeChild(itemOver, true);
 		}
@@ -753,22 +757,22 @@ public class ShopItem2 extends CCLayer {
 		CCMenuItem button = null;
 		switch (labelTag) {
 		case 0:
-			button = (CCMenuItemImage) levelFire.getParent();
+			button = (CCMenuItemSprite) levelFire.getParent();
 			break;
 		case 1:
-			button = (CCMenuItemImage) levelWind.getParent();
+			button = (CCMenuItemSprite) levelWind.getParent();
 			break;
 		case 2:
-			button = (CCMenuItemImage) levelCloud.getParent();
+			button = (CCMenuItemSprite) levelCloud.getParent();
 			break;
 		case 3:
-			button = (CCMenuItemImage) levelDivine.getParent();
+			button = (CCMenuItemSprite) levelDivine.getParent();
 			break;
 		case 4:
-			button = (CCMenuItemImage) levelEarth.getParent();
+			button = (CCMenuItemSprite) levelEarth.getParent();
 			break;
 		case 5:
-			button = (CCMenuItemImage) levelMirror.getParent();
+			button = (CCMenuItemSprite) levelMirror.getParent();
 			break;
 		}
 		Log.e(tag, "button : " + button);

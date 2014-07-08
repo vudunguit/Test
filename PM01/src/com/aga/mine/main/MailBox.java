@@ -11,12 +11,14 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
 import android.os.Message;
 import android.util.Log;
 
+import com.aga.mine.util.Util;
 import com.aga.mine.view.BroomstickItem;
 import com.aga.mine.view.GoldItem;
 import com.aga.mine.view.MailItem;
@@ -120,68 +122,71 @@ public class MailBox {
 		buttonActive = false;
 
 		// 불투명 배경
-		CCSprite opacityBg = CCSprite.sprite(commonfolder + "opacitybg.png");
+		CCSprite opacityBg = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "opacitybg.png"));
 		opacityBg.setPosition(winsize().width / 2, winsize().height / 2);
 
 		// 기본 배경
-		CCSprite postboxBg = CCSprite.sprite(imageFolder + "postboxbg.png");
+		CCSprite postboxBg = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "postboxbg.png"));
 		postboxBg.setPosition(opacityBg.getContentSize().width / 2,
 				opacityBg.getContentSize().height / 2);
 
 		// 빗자루 배경 (활성)
-		broomstickBackground1 = CCSprite.sprite(imageFolder + "broomstickBackgroundActive.png");
+		broomstickBackground1 = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "broomstickBackgroundActive.png"));
 		broomstickBackground1.setPosition(postboxBg.getContentSize().width / 2,
 				postboxBg.getContentSize().height / 2 + 18);
 
 		// 빗자루 배경 (비활성)
-		broomstickBackground2 = CCSprite.sprite(imageFolder + "broomstickBackgroundInactive.png");
+		broomstickBackground2 = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "broomstickBackgroundInactive.png"));
 		broomstickBackground2.setPosition(postboxBg.getContentSize().width / 2,
 				postboxBg.getContentSize().height / 2 + 18);
 
 		// 선물 배경 (활성)
-		presentBackground1 = CCSprite.sprite(imageFolder + "giftBackgroundActive.png");
+		presentBackground1 = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "giftBackgroundActive.png"));
 		presentBackground1.setPosition(postboxBg.getContentSize().width / 2,
 				postboxBg.getContentSize().height / 2 + 18);
 
 		// 선물 배경 (비활성)
-		presentBackground2 = CCSprite.sprite(imageFolder + "giftBackgroundInactive.png");
+		presentBackground2 = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "giftBackgroundInactive.png"));
 		presentBackground2.setPosition(postboxBg.getContentSize().width / 2,
 				postboxBg.getContentSize().height / 2 + 18);
 
 		//
 		// 빗자루 메뉴
-		CCMenuItem broomstickMenu = CCMenuItemImage.item(imageFolder
-				+ "postboxBlankButton.png", imageFolder
-				+ "postboxBlankButton.png", nodeThis,
+		CCMenuItem broomstickMenu = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "postboxBlankButton.png")), 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder	+ "postboxBlankButton.png")), 
+				nodeThis,
 				"clicked2");
 		broomstickMenu.setTag(broomTab);
 
 		// 빗자루 메뉴 이름
-		CCSprite broomstickMenuTitle = CCSprite.sprite(
-				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "postboxBroomstickTitle.png"));
+		CCSprite broomstickMenuTitle = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "postboxBroomstickTitle.png")));
 		broomstickMenuTitle.setPosition(broomstickMenu.getContentSize().width / 2, broomstickMenu.getContentSize().height / 2);
 		broomstickMenu.addChild(broomstickMenuTitle);
 
 		//
 		// 선물 메뉴
 		CCMenuItem giftMenu = CCMenuItemImage.item(
-				imageFolder + "postboxBlankButton.png", 
-				imageFolder + "postboxBlankButton.png", 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "postboxBlankButton.png")), 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "postboxBlankButton.png")), 
 				nodeThis, "clicked2");
 		giftMenu.setTag(goldTab);
 
 		// 선물 메뉴 이름
-		CCSprite giftMenuTitle = CCSprite.sprite(Utility.getInstance()
+		CCSprite giftMenuTitle = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				Utility.getInstance()
 				.getNameWithIsoCodeSuffix(
-						imageFolder + "postboxGiftTitle.png"));
+						imageFolder + "postboxGiftTitle.png")));
 		giftMenuTitle.setPosition(giftMenu.getContentSize().width / 2,
 				giftMenu.getContentSize().height / 2);
 		giftMenu.addChild(giftMenuTitle);
 
 		//close menu
-		CCMenuItem close = CCMenuItemImage.item(imageFolder
-				+ "postboxCloseNormal.png", imageFolder
-				+ "postboxClosePress.png", nodeThis, "clicked2");
+		CCMenuItem close = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder	+ "postboxCloseNormal.png")), 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder	+ "postboxClosePress.png")), 
+				nodeThis, "clicked2");
 		close.setTag(mailcloseButton);
 
 		CCMenuItem[] menu = { broomstickMenu, giftMenu, close };
@@ -212,7 +217,7 @@ public class MailBox {
 		} else {
 			postCountBackStr += "giftCount.png";
 		}
-		CCSprite postCountBack = CCSprite.sprite(postCountBackStr);
+		CCSprite postCountBack = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + postCountBackStr));
 		postboxBg.addChild(postCountBack, 665,  665);
 		postCountBack.setPosition(
 				postboxBg.getContentSize().width / 2 - broomstickBackground1.getContentSize().width / 2 + postCountBack.getContentSize().width / 2  + 10, 
@@ -252,15 +257,15 @@ public class MailBox {
 
 		// 모두 받기 버튼
 		CCMenuItem receiveAllButton = CCMenuItemImage.item(
-				imageFolder + "receiveAllButtonNormal.png",
-				imageFolder + "receiveAllButtonPress.png",
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "receiveAllButtonNormal.png")),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "receiveAllButtonPress.png")),
 				nodeThis, "clicked2");
 		receiveAllButton.setTag(mailReceiveAllButton);
 		receiveAllButton.setUserData(BroomstickAll);
 
 		// 모두 받기 버튼 Text
-		CCSprite receiveAllText = CCSprite.sprite(
-				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "receiveAllButton.png"));
+		CCSprite receiveAllText = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "receiveAllButton.png")));
 		receiveAllButton.addChild(receiveAllText);
 		receiveAllText.setPosition(
 				receiveAllButton.getContentSize().width / 2,

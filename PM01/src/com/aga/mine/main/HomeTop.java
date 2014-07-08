@@ -13,6 +13,7 @@ import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCLabelAtlas;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
@@ -87,16 +88,16 @@ public class HomeTop extends CCLayer{
 	private void setTopMenu(CCSprite parentSprite, String imageFolder, CCNode nodeThis) {
 		
 		// 지팡이 상점 바로가기 배경(버튼)
-		CCMenuItem broomstickBg = CCMenuItemImage.item(imageFolder
-				+ "home-broomstickBg-hd" + fileExtension, imageFolder
-				+ "home-broomstickBg-hd" + fileExtension, 
+		CCMenuItem broomstickBg = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder	+ "home-broomstickBg-hd" + fileExtension)), 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder	+ "home-broomstickBg-hd" + fileExtension)), 
 				nodeThis, "clicked2");
 		broomstickBg.setTag(broomstickButton);
 		
 		// 골드 상점 바로가기 배경(버튼)
 		CCMenuItem goldBg = CCMenuItemImage.item(
-				imageFolder + "home-goldBg-hd" + fileExtension,
-				imageFolder + "home-goldBg-hd" + fileExtension, 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "home-goldBg-hd" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "home-goldBg-hd" + fileExtension)), 
 				nodeThis, "clicked2");
 		goldBg.setTag(goldButton);
 		
@@ -114,7 +115,7 @@ public class HomeTop extends CCLayer{
 		goldBg.setPosition(topMenu.getContentSize().width - goldBg.getContentSize().width/ 2, 0f);
 
 		 // 지팡이 그림
-		CCSprite broomstickImg = CCSprite.sprite(imageFolder + "home-broomstickOn-hd" + fileExtension);
+		CCSprite broomstickImg = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "home-broomstickOn-hd" + fileExtension));
 		broomstickBg.addChild(broomstickImg);
 		broomstickImg.setPosition(
 				broomstickImg.getContentSize().width / 2 + 10.0f,
@@ -148,7 +149,7 @@ public class HomeTop extends CCLayer{
 	private void setTitle(CCSprite parentSprite, String imageFolder) {
 		
 		// 타이틀 판넬
-		CCSprite titlePanel = CCSprite.sprite(commonfolder + "frame-titlePanel" + fileExtension);
+		CCSprite titlePanel = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "frame-titlePanel" + fileExtension));
 		parentSprite.addChild(titlePanel);
 		titlePanel.setAnchorPoint(0.5f, 0.5f);
 		titlePanel.setPosition(
@@ -156,14 +157,14 @@ public class HomeTop extends CCLayer{
 			parentSprite.getContentSize().height - 98);
 		
 		// 타이틀
-		CCSprite frameTitle = CCSprite.sprite(
+		CCSprite frameTitle = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
 				Utility.getInstance().getNameWithIsoCodeSuffix(
-						imageFolder + imageFolder.substring(2, imageFolder.length()-1) + "-title" + fileExtension));
+						imageFolder + imageFolder.substring(2, imageFolder.length()-1) + "-title" + fileExtension)));
 		titlePanel.addChild(frameTitle);
 		frameTitle.setPosition(titlePanel.getContentSize().width / 2, titlePanel.getContentSize().height / 2);
 			
 		// 경기 기간 배경
-		CCSprite banner = CCSprite.sprite(commonfolder + "titlebanner" + fileExtension);
+		CCSprite banner = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "titlebanner" + fileExtension));
 		titlePanel.addChild(banner);
 		banner.setAnchorPoint(0.5f, 1);
 		banner.setPosition(titlePanel.getContentSize().width / 2, 10);

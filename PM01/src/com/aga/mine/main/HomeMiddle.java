@@ -10,6 +10,7 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.ccColor3B;
 
 import android.content.Context;
@@ -17,6 +18,7 @@ import android.util.Log;
 
 import com.aga.mine.main.ImageDownloader.ImageLoaderListener;
 import com.aga.mine.pages2.UserData;
+import com.aga.mine.util.Util;
 
 public class HomeMiddle {
 
@@ -45,25 +47,25 @@ public class HomeMiddle {
 		String userNameStr = FacebookData.getinstance().getUserInfo().getName();
 		List<GameScore> gameScores = FacebookData.getinstance().getGameScore();
 		
-		CCSprite profileBg = CCSprite.sprite(imageFolder + "home-profileBg-hd" + fileExtension); // 프로필 백그
+		CCSprite profileBg = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "home-profileBg-hd" + fileExtension)); // 프로필 백그
 		parentSprite.addChild(profileBg, 10, 10);
 		profileBg.setPosition(
 				parentSprite.getContentSize().width / 2, 
 				parentSprite.getContentSize().height - profileBg.getContentSize().height / 2 - 40.0f);
 		
-		CCSprite profilePicture= CCSprite.sprite(commonfolder + "frame-pictureFrame-hd" + fileExtension); // 프로필 사진 틀
+		CCSprite profilePicture= CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "frame-pictureFrame-hd" + fileExtension)); // 프로필 사진 틀
 		profilePicture.setPosition(
 				profilePicture.getContentSize().width / 2 + 85, 
 				profileBg.getContentSize().height - 60);
 		
 		CCMenuItem post = CCMenuItemImage.item(  // 우편
-				imageFolder + "home-mail-hd" + fileExtension, 
-				imageFolder + "home-mail-hd" + fileExtension, 				 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "home-mail-hd" + fileExtension)), 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "home-mail-hd" + fileExtension)), 				 
 				nodeThis,"clicked2");
 		post.setTag(mailButton);
 		post.setAnchorPoint(1.0f, 0.5f);
 		
-		final CCSprite userImage = CCSprite.sprite("noPicture" + fileExtension); // 프로필 사진
+		final CCSprite userImage = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "noPicture" + fileExtension)); // 프로필 사진
 		userImage.setAnchorPoint(0.5f, 0.5f);
 		userImage.setPosition(profilePicture.getContentSize().width / 2, profilePicture.getContentSize().height / 2);
 		profilePicture.addChild(userImage);
@@ -79,7 +81,7 @@ public class HomeMiddle {
 		mDownloader.execute();
 		
 		
-		CCSprite newIcon = CCSprite.sprite(imageFolder + "home-mailNew-hd01" + fileExtension); // 새로운 우편
+		CCSprite newIcon = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "home-mailNew-hd01" + fileExtension)); // 새로운 우편
 		newIcon.setPosition(
 				post.getContentSize().width/2, 
 				post.getContentSize().height);
@@ -94,7 +96,7 @@ public class HomeMiddle {
 			profileBg.getContentSize().height/2);
 		profileBg.addChild(postMenu);
 		
-		CCSprite levelProgressBar = CCSprite.sprite(imageFolder + "home-progressBar-hd" + fileExtension); // 레벨 프로그레스 바
+		CCSprite levelProgressBar = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "home-progressBar-hd" + fileExtension)); // 레벨 프로그레스 바
 		levelProgressBar.setPosition(
 				profileBg.getContentSize().width/2+10f,
 				levelProgressBar.getContentSize().height/2+25.0f);
@@ -114,7 +116,7 @@ public class HomeMiddle {
 			scale = levelProgressBar.getContentSize().width - 4;
 		}
 		
-		CCSprite gaugeBar = CCSprite.sprite(imageFolder + "Home-gaugeBar-hd" + fileExtension); // 레벨 게이지 바
+		CCSprite gaugeBar = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "Home-gaugeBar-hd" + fileExtension)); // 레벨 게이지 바
 		levelProgressBar.addChild(gaugeBar);
 		gaugeBar.setAnchorPoint(0, 0.5f);
 		gaugeBar.setPosition(2, levelProgressBar.getContentSize().height / 2);

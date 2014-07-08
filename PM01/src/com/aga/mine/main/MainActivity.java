@@ -20,7 +20,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
-import android.media.AudioManager;
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
@@ -281,7 +280,12 @@ public class MainActivity extends Activity {
         CCDirector.sharedDirector().setDisplayFPS(false); // FPS 표시
         CCDirector.sharedDirector().setAnimationInterval(1.0f / 60);
 
+//		SoundEngine.sharedEngine().preloadSound(this, R.raw.bgm); // 배경음악
+//		SoundEngine.sharedEngine().preloadEffect(this, R.raw.click); // 클릭음
+//		SoundEngine.sharedEngine().preloadEffect(this, R.raw.buy); // 구입음
+//		SoundEngine.sharedEngine().preloadEffect(this, R.raw.mushroom); // 게임 효과음 (버섯)
 		mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+		
 		mSimpleFacebook = SimpleFacebook.getInstance(this);
 		
 		loadSound();
@@ -295,18 +299,20 @@ public class MainActivity extends Activity {
         super.onPause();
         Log.d(TAG, "onPause");
         CCDirector.sharedDirector().onPause();
-        if(mIsPlaying && MainApplication.getInstance().getBGM()) {
-        	SoundEngine.sharedEngine().pauseSound();
+//        if(MainApplication.getInstance().getIsPlaying() && MainApplication.getInstance().getBGM()) {
+        if(mIsPlaying && MainApplication.getInstance().getBGM()){
+        	 SoundEngine.sharedEngine().pauseSound();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        
+//        mSimpleFacebook = SimpleFacebook.getInstance(this);
         CCDirector.sharedDirector().onResume();
-        if(mIsPlaying && MainApplication.getInstance().getBGM()) {
-        	SoundEngine.sharedEngine().playSound(this, R.raw.bgm, true);
+//        if(MainApplication.getInstance().getIsPlaying() && MainApplication.getInstance().getBGM()) {
+        if(mIsPlaying && MainApplication.getInstance().getBGM()){
+        	 SoundEngine.sharedEngine().playSound(this, R.raw.bgm, true);
         }
     }
 
@@ -358,10 +364,11 @@ public class MainActivity extends Activity {
                         .show();
         }
 
+//        return true;
         return super.onKeyDown(keyCode, event);
     }
 
-	private void setDisplayMetrics() {
+    private void setDisplayMetrics() {
         DisplayMetrics metrics = this.getResources().getDisplayMetrics();
         int dh = metrics.heightPixels;
         int dw = metrics.widthPixels;
@@ -651,26 +658,28 @@ public class MainActivity extends Activity {
         		mVibrator.vibrate(200);
     		} else {
     			Log.e(TAG, "진동기능이 제공되지 않습니다.");
+//    			SoundEngine.sharedEngine().playEffect(this, R.raw.mushroom);
     		}
     	}
 	}
     
     public void loadSound() {
-        SoundEngine.sharedEngine().preloadSound(this, R.raw.bgm); // 배경음악
-		SoundEngine.sharedEngine().preloadEffect(this, R.raw.click); // 클릭음
-		SoundEngine.sharedEngine().preloadEffect(this, R.raw.buy); // 구입음
-
-		for (int i = 0; i < 17; i++) {
-			SoundEngine.sharedEngine().preloadEffect(this, R.raw.landopen_01 + i); // 이펙트 (효과음) // (타일)pickup	
-		}
-		SoundEngine.sharedEngine().preloadEffect(this, R.raw.pumpkin); // 이펙트 (효과음) // (호박)hit
-		SoundEngine.sharedEngine().preloadEffect(this, R.raw.mushroom); // 이펙트 (효과음) // (버섯)move
-		SoundEngine.sharedEngine().preloadEffect(this, R.raw.landopen_22); 
+    	 SoundEngine.sharedEngine().preloadSound(this, R.raw.bgm); // 배경음악
+    	 SoundEngine.sharedEngine().preloadEffect(this, R.raw.click); // 클릭음
+    	 SoundEngine.sharedEngine().preloadEffect(this, R.raw.buy); // 구입음
+    	 
+    	 for (int i = 0; i < 17; i++) {
+    		 SoundEngine.sharedEngine().preloadEffect(this, R.raw.landopen_01 + i); // 이펙트 (효과음) // (타일)pickup	
+    	 }
+    	 SoundEngine.sharedEngine().preloadEffect(this, R.raw.pumpkin); // 이펙트 (효과음) // (호박)hit
+    	 SoundEngine.sharedEngine().preloadEffect(this, R.raw.mushroom); // 이펙트 (효과음) // (버섯)move
+    	 SoundEngine.sharedEngine().preloadEffect(this, R.raw.landopen_22); 
     }
 
     public void click() {
+//		SoundEngine.sharedEngine().playEffect(this, R.raw.click); // buttonClick
     	if(MainApplication.getInstance().getSound()) {
-    		SoundEngine.sharedEngine().playEffect(this, R.raw.click); // buttonClick
+    		 SoundEngine.sharedEngine().playEffect(this, R.raw.click); // buttonClick
     	}
 	}
 }

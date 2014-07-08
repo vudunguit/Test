@@ -384,7 +384,7 @@ public class Config {
 		return vsResult; 
 	}
 
-	//마법사 색깔 결정: 싱글게임이면 true, 멀티게임 주인이면 true => 빨간색, 그외 파란색
+	//Wizard color crystal: single game is true, if the owner of a multi-game true => red, others blue
 	boolean owner = false;
 	
 	public void setOwner() {

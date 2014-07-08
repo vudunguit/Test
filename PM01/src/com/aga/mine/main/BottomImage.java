@@ -3,7 +3,10 @@
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGSize;
+
+import com.aga.mine.util.Util;
 
 public class BottomImage {
 
@@ -23,12 +26,12 @@ public class BottomImage {
 	
 	// 하단 이미지
 	public static void setBottomImage(CCNode nodeThis, int tag) {
-		CCSprite pumpkinL = CCSprite.sprite(commonfolder + "pumpkinL" + fileExtension);
+		CCSprite pumpkinL = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "pumpkinL" + fileExtension));
 		nodeThis.addChild(pumpkinL, tag, tag);
 		pumpkinL.setAnchorPoint(0, 0);
 		pumpkinL.setPosition(0, 0);
 		
-		CCSprite pumpkinR = CCSprite.sprite(commonfolder + "pumpkinR" + fileExtension);
+		CCSprite pumpkinR = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "pumpkinR" + fileExtension));
 		nodeThis.addChild(pumpkinR);
 		pumpkinR.setAnchorPoint(1f, 0);
 		pumpkinR.setPosition(winsize().width, 0);

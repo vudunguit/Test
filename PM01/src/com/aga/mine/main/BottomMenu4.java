@@ -6,7 +6,10 @@ import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGSize;
+
+import com.aga.mine.util.Util;
 
 public class BottomMenu4 {
 	
@@ -44,7 +47,7 @@ public class BottomMenu4 {
 						null, null);
 		
 		//상점 x표시
-		CCSprite lock1 = CCSprite.sprite(imageFolder + "shopLock" + fileExtension);
+		CCSprite lock1 = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "shopLock" + fileExtension));
 		button1.addChild(lock1);
 		lock1.setPosition(button1.getContentSize().width / 2, button1.getContentSize().height / 2);
 		button1.setIsEnabled(false);
@@ -108,7 +111,7 @@ public class BottomMenu4 {
 		
 		//
 		//x표시
-		CCSprite lock2 = CCSprite.sprite(imageFolder + "inviteLock" + fileExtension);
+		CCSprite lock2 = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "inviteLock" + fileExtension));
 		friendsInvite.addChild(lock2);
 		lock2.setPosition(friendsInvite.getContentSize().width / 2, friendsInvite.getContentSize().height / 2);
 		friendsInvite.setIsEnabled(false);

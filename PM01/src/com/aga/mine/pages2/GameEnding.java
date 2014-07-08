@@ -13,10 +13,12 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
+import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
@@ -33,6 +35,7 @@ import com.aga.mine.main.Home2;
 import com.aga.mine.main.MainApplication;
 import com.aga.mine.main.NetworkController;
 import com.aga.mine.main.Utility;
+import com.aga.mine.util.Util;
 import com.facebook.android.Facebook;
 
 public class GameEnding extends CCLayer {
@@ -82,18 +85,17 @@ public class GameEnding extends CCLayer {
 	
 	CCMenu leftbutton;
 	
-	public GameEnding(int myscore, int otherscore, int closedcell) {
+	public GameEnding(int myScore, int otherScore, int closedCell) {
 		basket = new HashMap<String, String>();
-
 		if (Locale.getDefault().getLanguage().toString().equals("ko"))
 			isLocaleKo = true;
-		Log.e("GameEnding", "myScore : " + myscore+ ", otherScore : " + otherscore + ", closedCell : " + closedcell);
+		Log.e("GameEnding", "myScore : " + myScore+ ", otherScore : " + otherScore + ", closedCell : " + closedCell);
 		
 		// 플레이 중이던 모든 소리 정지
 		
-		this.myScore = myscore;
-		this.otherScore = otherscore;
-		this.closedCell = closedcell;
+		this.myScore = myScore;
+		this.otherScore = otherScore;
+		this.closedCell = closedCell;
 		
 		if (!GameData.share().isGuestMode) {
 			myName = FacebookData.getinstance().getUserInfo().getName();
@@ -126,11 +128,16 @@ public class GameEnding extends CCLayer {
 			}
 			myCurrentGold = myPastGold + myGold;
 		} else {
+//			Log.e("GameEnding", "Lose");
 			Log.e("GameEnding", "Lose" + "isMultigame:" + GameData.share().isMultiGame);
 			// 패배 효과음
+//			if(otherScore > 0) {  //멀티게임 패배
 			if(GameData.share().isMultiGame) {  //멀티게임 패배
 				this.myScore = (int) (otherScore / 3.0f); //차감 포인트
 				Log.e("LDK", "myScore:" + myScore);
+//				decreaseScore = (int) (otherScore / 3.0f);
+//				myGold = (int) (otherScore / 10.0f); //차감 골드
+//				decreaseGold = (int) (otherScore / 10.0f);
 				//차감포인트가 현재 포인트보다 작으면 그것만큼 차감. 즉, 마이너스가 되지 않음.
 				int mPastScore = Integer.valueOf(FacebookData.getinstance().getDBData("Point"));
 				Log.e("LDK", "mPastScore:" + mPastScore);
@@ -151,7 +158,7 @@ public class GameEnding extends CCLayer {
 			}
 		}
 		
-/*		if (isExtraTime) {
+		/*if (isExtraTime) {
 			this.myScore = (int) (myScore * extraTimeReward);
 			myExp = (int) (this.myScore * 1.5f);
 			myGold = (int)(this.myScore / 5.0f);
@@ -172,11 +179,11 @@ public class GameEnding extends CCLayer {
 		String userColor = "";
 //		int randomPoint = myScore;
 		
-		bg = CCSprite.sprite("00common/" + "opacitybg.png");
+		bg = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "00common/" + "opacitybg.png"));
 		bg.setPosition(winSize.width / 2, winSize.height / 2);
 		this.addChild(bg);
 		
-		CCSprite base = CCSprite.sprite(folder + "ending-base.png");
+		CCSprite base = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "ending-base.png"));
 		base.setAnchorPoint(0.5f, 0.5f);
 		base.setPosition(winSize.width / 2, (winSize.height / 3) * 2);
 		bg.addChild(base);
@@ -207,7 +214,7 @@ public class GameEnding extends CCLayer {
 		
 		
 		// 
-		CCSprite picture = CCSprite.sprite("noPicture.png");
+		CCSprite picture = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "noPicture.png"));
 		backboard.addChild(picture);
 		picture.setAnchorPoint(0.5f, 0.5f);
 		picture.setScale(1.4f);
@@ -234,7 +241,7 @@ public class GameEnding extends CCLayer {
 		mGoldLabel.setPosition(goldTextPosition); // 340
 		backboard.addChild(mGoldLabel);
 		
-		CCSprite goldImage = CCSprite.sprite(folder + "gold.png");
+		CCSprite goldImage = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "gold.png"));
 		goldImage.setPosition(0- goldImage.getContentSize().width*0.5f, mGoldLabel.getContentSize().height*0.45f);
 		goldImage.setAnchorPoint(1, 0.5f);
 		goldImage.setScale(0.8f);
@@ -249,8 +256,9 @@ public class GameEnding extends CCLayer {
 		}
 		
 		//패배 팝업이면
-		if(!showAni) {
-			Log.e("LDK", "myScore:" + myScore);
+//		if(!showAni && otherScore>0) {
+//		if(!showAni && GameData.share().isMultiGame) {
+		if(!showAni){
 			mExpLabel.setString(String.valueOf(0));
 			mPointLabel.setString(String.valueOf(-myScore));
 			mGoldLabel.setString(String.valueOf(0));
@@ -271,7 +279,7 @@ public class GameEnding extends CCLayer {
 		if (myExp <= 0) {
 			expbg = base;	
 		} else {
-			expbg = CCSprite.sprite(folder + "ending-exp01.png");
+			expbg = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "ending-exp01.png"));
 			bg.addChild(expbg);
 	//		bg.setAnchorPoint(0.5f, 0.5f);
 			expbg.setPosition(
@@ -280,14 +288,14 @@ public class GameEnding extends CCLayer {
 					base.getPosition().y - (base.getAnchorPoint().y * base.getContentSize().height) 
 					- expbg.getAnchorPoint().y * expbg.getContentSize().height
 					);
-			expBar = CCSprite.sprite(folder + "ending-exp02.png");
+			expBar = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "ending-exp02.png"));
 			expbg.addChild(expBar, 1);
 			expBar.setAnchorPoint(1, 0.5f);
 			expBar.setPosition((int)(mExpX * 322) + 172, 45); // x값 172 = 0
 //			expBar.setPosition(172, 45); // x값 172 = 0
 //			expBar.setPosition(494, 45);
 			
-			expTail = CCSprite.sprite(folder + "ending-exp03.png");
+			expTail = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "ending-exp03.png"));
 			expBar.addChild(expTail);
 			expTail.setAnchorPoint(1, 0.5f);
 			expTail.setPosition(
@@ -303,7 +311,7 @@ public class GameEnding extends CCLayer {
 			lv.setPosition(25, 45);
 			expframe.addChild(lv);
 			
-			expHead = CCSprite.sprite(folder + "ending-exp05.png");
+			expHead = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "ending-exp05.png"));
 			expHead.setAnchorPoint(0.5f, 0.5f);
 			expHead.setPosition(expBar.getPosition());
 			expbg.addChild(expHead, 2);	
@@ -314,23 +322,24 @@ public class GameEnding extends CCLayer {
 		String buttonText = "ending-restart";
 		int leftButtonTag = restart;
 		CCMenuItem buttonL = CCMenuItemImage.item(
-				folder + "ending-button1.png",
-				folder + "ending-button2.png",
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "ending-button1.png")),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "ending-button2.png")),
 				this, "clicked");
+//		if (otherScore > 0 && !showAni) { //대전 게임 패배일 경우
 		if (GameData.share().isMultiGame && !showAni) { //대전 게임 패배일 경우
 			Log.d("LDK", "multigame fail");
 			buttonText = "ending-defense";
 			leftButtonTag = defense;
 			buttonL = CCMenuItemImage.item(
-					folder + "ending-button1.png",
-					folder + "ending-button2.png",
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "ending-button1.png")),
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "ending-button2.png")),
 					this, "defenceClicked");
 		}
 
 		buttonL.setTag(leftButtonTag);
 		buttonL.setUserData(myScore / 10); // GameScore 손실 대신 gold로 대체
 		
-		CCSprite textL = CCSprite.sprite(Utility.getInstance().getNameWithIsoCodeSuffix(folder + buttonText +".png"));
+		CCSprite textL = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + Utility.getInstance().getNameWithIsoCodeSuffix(folder + buttonText +".png")));
 		buttonL.addChild(textL);
 		textL.setPosition(buttonL.getContentSize().width / 2, buttonL.getContentSize().height / 2);
 		
@@ -346,12 +355,12 @@ public class GameEnding extends CCLayer {
 			
 		// 우측 버튼
 		CCMenuItem buttonR = CCMenuItemImage.item(
-				folder + "ending-button1.png",
-				folder + "ending-button2.png",
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "ending-button1.png")),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "ending-button2.png")),
 				this, "clicked");
 		buttonR.setTag(done);
 		buttonR.setUserData(0);
-		CCSprite textR = CCSprite.sprite(Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-done.png"));
+		CCSprite textR = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + Utility.getInstance().getNameWithIsoCodeSuffix(folder + "ending-done.png")));
 		buttonR.addChild(textR);
 		textR.setPosition(buttonR.getContentSize().width / 2, buttonR.getContentSize().height / 2);
 		
@@ -391,7 +400,7 @@ public class GameEnding extends CCLayer {
 		myCalcExp += gainedExp;
 		mLeftExp -= gainedExp;
 		//만일 mLeftExp가 음수가 되면 보정
-/*		if(mLeftExp < 0) {
+		/*if(mLeftExp < 0) {
 			myCalcExp += mLeftExp;
 			mLeftExp = 0;
 			mExpLabel.setString(String.valueOf(myExp));
@@ -425,7 +434,7 @@ public class GameEnding extends CCLayer {
 			float enScaleX = 0.6f;
 
 //			final CCSprite levelUp = CCSprite.sprite("lv_up_popup/lvup.png"); // old
-			final CCSprite levelUp = CCSprite.sprite("lv_up_popup/ending-lvupbb.png");
+			final CCSprite levelUp = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "lv_up_popup/ending-lvupbb.png"));
 			levelUp.setAnchorPoint(0.5f, 0.5f);
 			levelUp.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height / 2);
 			bg.addChild(levelUp, popupTag, popupTag);
@@ -502,8 +511,8 @@ public class GameEnding extends CCLayer {
 			defense3.setOpacity(204);
 			
 			CCMenuItem okButton = CCMenuItemImage.item(
-					Utility.getInstance().getNameWithIsoCodeSuffix("lv_up_popup/ending-ok1.png"),
-					Utility.getInstance().getNameWithIsoCodeSuffix("lv_up_popup/ending-ok2.png"),
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + Utility.getInstance().getNameWithIsoCodeSuffix("lv_up_popup/ending-ok1.png"))),
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + Utility.getInstance().getNameWithIsoCodeSuffix("lv_up_popup/ending-ok2.png"))),
 					this, "popupButton");
 			
 			CCMenu ok = CCMenu.menu(okButton);
@@ -560,7 +569,7 @@ public class GameEnding extends CCLayer {
 	
 	private CCSprite addChild_Center(CCSprite parentSprite, String childSpriteImage) {
 		
-		CCSprite childSprite = CCSprite.sprite(childSpriteImage);
+		CCSprite childSprite = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + childSpriteImage));
 		parentSprite.addChild(childSprite, 1);
 		
 		childSprite.setAnchorPoint(0.5f, 0.5f);
@@ -581,7 +590,7 @@ public class GameEnding extends CCLayer {
 	boolean buttonActive = true;
 	public void clicked(Object sender) {
 		MainApplication.getInstance().getActivity().click();
-		int userdata = (Integer) ((CCMenuItemImage)sender).getUserData(); 
+		int userdata = (Integer) ((CCMenuItemSprite)sender).getUserData(); 
 		int tag = ((CCNode)sender).getTag();
 		
 		CCScene scene = null;
@@ -626,6 +635,7 @@ public class GameEnding extends CCLayer {
 				basket.put("LevelCharacter", String.valueOf(myCurrentLevel));
 				
 				//멀티게임일 경우만 전적 반영
+//				if(otherScore > 0) {
 				if(GameData.share().isMultiGame) {
 					basket.put("HistoryWin", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryWin")) + 1));
 				}
@@ -643,8 +653,12 @@ public class GameEnding extends CCLayer {
 			} else { // 패배(스코어 및 경험치, 골드, 승률 ok)
 				Log.e("GameEnding", "패배 ");
 
+//				if(otherScore > 0) {  //멀티게임 패배
 				if(GameData.share().isMultiGame) {  //멀티게임 패배
-
+//					int mPastScore = Integer.valueOf(FacebookData.getinstance().getDBData("Point"));
+//					if (mPastScore < myScore) {
+//						myScore = mPastScore;
+//					} 
 					DataFilter.addGameScore(String.valueOf(-myScore));
 					
 					basket.put("HistoryLose", String.valueOf(Integer.parseInt(FacebookData.getinstance().getDBData("HistoryLose")) + 1));	
@@ -670,6 +684,7 @@ public class GameEnding extends CCLayer {
 		MainApplication.getInstance().getActivity().click();
 		
 		mPointLabel.setString(String.valueOf(0));
+//		mGoldLabel.setString(String.valueOf(-decreaseGold));
 		mGoldLabel.setString(String.valueOf(-myGold));
 		Log.e("LDK", "decrease gold:" + -myGold);
 		
@@ -677,8 +692,10 @@ public class GameEnding extends CCLayer {
 		leftbutton.setIsTouchEnabled(false);
 		
 		//서버 정보 전송 : 포인트는 원복, 골드는 차감
+//		DataFilter.addGameScore(String.valueOf(decreaseScore));
 		DataFilter.addGameScore(String.valueOf(myScore));
 		
+//		basket.put("Gold", String.valueOf(myPastGold-decreaseGold));
 		basket.put("Gold", String.valueOf(myPastGold-myGold));
 		FacebookData.getinstance().modDBData(basket);
 		
@@ -687,6 +704,7 @@ public class GameEnding extends CCLayer {
 		for (GameScore gameScore : gameScores) {
 			if (gameScore.getId().equals(myID)) {
 				Log.d("LDK", "score:" + gameScore);
+//				gameScore.score = decreaseScore + gameScore.score;
 				gameScore.score = myScore + gameScore.score;
 			}
 		}

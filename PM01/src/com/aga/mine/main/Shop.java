@@ -4,14 +4,17 @@ import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItemImage;
+import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 
 import android.view.MotionEvent;
 
 import com.aga.mine.pages2.GameData;
+import com.aga.mine.util.Util;
 
 public class Shop extends CCLayer {
 	
@@ -40,7 +43,7 @@ public class Shop extends CCLayer {
 	}
 	
 	private void setBackBoardMenu(String imageFullPath) {
-		CCSprite bb = CCSprite.sprite(imageFullPath);
+		CCSprite bb = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(bb);
 		bb.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		bb.setAnchorPoint(0.5f, 0.5f);
@@ -48,7 +51,7 @@ public class Shop extends CCLayer {
 	}
 	
 	private void setBoardFrameMenu(String imageFullPath) {
-		CCSprite boardFrame = CCSprite.sprite(imageFullPath);
+		CCSprite boardFrame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(boardFrame);
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
@@ -57,32 +60,40 @@ public class Shop extends CCLayer {
 	}
 	
 	private void setMainMenu(CCSprite parentSprite){
-		CCMenuItemImage button1 = CCMenuItemImage.item(
+		CCMenuItemSprite button1 = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
 				Utility.getInstance().getNameWithIsoCodeSuffix(
-						folder + "shop-gold1" + fileExtension),
+						folder + "shop-gold1" + fileExtension))),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
 				Utility.getInstance().getNameWithIsoCodeSuffix(
-						folder + "shop-gold2" + fileExtension),
+						folder + "shop-gold2" + fileExtension))),
 				this, "button1Callback");
 		
-		CCMenuItemImage button2 = CCMenuItemImage.item(
+		CCMenuItemSprite button2 = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
 				Utility.getInstance().getNameWithIsoCodeSuffix(
-						folder + "shop-item1" + fileExtension),
+						folder + "shop-item1" + fileExtension))),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
 				Utility.getInstance().getNameWithIsoCodeSuffix(
-						folder + "shop-item2" + fileExtension),
+						folder + "shop-item2" + fileExtension))),
 				this, "button2Callback");
 		
-		CCMenuItemImage button3 = CCMenuItemImage.item(
+		CCMenuItemSprite button3 = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
 				Utility.getInstance().getNameWithIsoCodeSuffix(
-						folder + "shop-broomstick1" + fileExtension),
+						folder + "shop-broomstick1" + fileExtension))),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
 				Utility.getInstance().getNameWithIsoCodeSuffix(
-						folder + "shop-broomstick2" + fileExtension),
+						folder + "shop-broomstick2" + fileExtension))),
 				this, "button3Callback");
 		
-		CCMenuItemImage button4 = CCMenuItemImage.item(
+		CCMenuItemSprite button4 = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
 				Utility.getInstance().getNameWithIsoCodeSuffix(
-						folder + "shop-emoticon1" + fileExtension),
+						folder + "shop-emoticon1" + fileExtension))),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
 				Utility.getInstance().getNameWithIsoCodeSuffix(
-						folder + "shop-emoticon2" + fileExtension),
+						folder + "shop-emoticon2" + fileExtension))),
 				this, "button4Callback");
 		
 		CCMenu gameMenu = CCMenu.menu(button1, button2, button3, button4);

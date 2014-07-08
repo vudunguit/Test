@@ -14,6 +14,7 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 
 import android.graphics.Bitmap;
@@ -21,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.aga.mine.pages2.GameData;
+import com.aga.mine.util.Util;
 import com.sromku.simple.fb.entities.Profile;
 
 public class GameRandom extends CCLayer {
@@ -79,7 +81,7 @@ public class GameRandom extends CCLayer {
 
 	// 백 보드 설정
 	private void setBackBoardMenu(String imageFullPath) {
-		CCSprite bb = CCSprite.sprite(imageFullPath);
+		CCSprite bb = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(bb, 0, 0);
 		bb.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		bb.setAnchorPoint(0.5f, 0.5f);
@@ -89,7 +91,7 @@ public class GameRandom extends CCLayer {
 	
 	// 게시판 설정
 	private void setBoardFrameMenu(String imageFullPath) {
-		CCSprite boardFrame = CCSprite.sprite(imageFullPath);
+		CCSprite boardFrame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(boardFrame);
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
@@ -101,10 +103,10 @@ public class GameRandom extends CCLayer {
 		int matchingPanelPosition = -20;
 		
 		List<CCSprite> matchingPanel = new ArrayList<CCSprite>();
-		matchingPanel.add(CCSprite.sprite(commonfolder + "matchPanelMe.png")); 
-		matchingPanel.add(CCSprite.sprite(commonfolder + "matchPanelOther.png")); 
+		matchingPanel.add(CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "matchPanelMe.png"))); 
+		matchingPanel.add(CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "matchPanelOther.png"))); 
 		
-		CCSprite pictureFrame = CCSprite.sprite(commonfolder + "frame-pictureFrame-hd.png");
+		CCSprite pictureFrame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "frame-pictureFrame-hd.png"));
 		
 		for (int i = 0; i < matchingPanel.size(); i++) {
 			parentSprite.addChild(matchingPanel.get(i), 0, i + 10);
@@ -113,14 +115,14 @@ public class GameRandom extends CCLayer {
 					parentSprite.getContentSize().height - matchingPanel.get(0).getContentSize().height * (i + 0.5f) - (i * 5) - 35  + matchingPanelPosition);
 
 			 // facebook 이미지
-			pictureFrame = CCSprite.sprite(commonfolder + "frame-pictureFrame-hd.png");
+			pictureFrame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "frame-pictureFrame-hd.png"));
 			matchingPanel.get(i).addChild(pictureFrame, 0, i + 100);
 			pictureFrame.setScale(0.8f);		
 			pictureFrame.setPosition(pictureFrame.getContentSize().width * 2, matchingPanel.get(0).getContentSize().height / 2);
 		}
 		
 //		CCSprite player1Photo = CCSprite.sprite(FacebookData.getinstance().getUserPhoto()); // 프로필 사진
-		CCSprite player1Photo = CCSprite.sprite(commonfolder + "noPicture.png"); // 프로필 사진
+		CCSprite player1Photo = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "noPicture.png")); // 프로필 사진
 		matchingPanel.get(0).getChildByTag(100).addChild(player1Photo, 0, 1000);
 		player1Photo.setScale(1 / 0.8f);
 		player1Photo.setAnchorPoint(0.5f, 0.5f);
@@ -146,7 +148,7 @@ public class GameRandom extends CCLayer {
 	
 	private void countdown(CCSprite parentSprite){
 
-		illust = CCSprite.sprite(folder + "randomMatchingBottomIllust.png"); // 카운트 다운 배경
+		illust = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "randomMatchingBottomIllust.png")); // 카운트 다운 배경
 		parentSprite.addChild(illust);
 		illust.setPosition(parentSprite.getContentSize().width / 2, illust.getContentSize().height / 2);
 
@@ -383,7 +385,7 @@ public class GameRandom extends CCLayer {
 					oppenentName = friend.getName();
 					Bitmap userPhoto = getBitmapFromURL("https://graph.facebook.com/" + friend.getId() +"/picture");
 					if (userPhoto.getRowBytes() < 100) {
-						player2Photo= CCSprite.sprite(commonfolder + "noPicture.png"); // 프로필 사진
+						player2Photo= CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "noPicture.png")); // 프로필 사진
 					} else {
 						player2Photo= CCSprite.sprite(userPhoto); // 프로필 사진
 					}
@@ -399,7 +401,7 @@ public class GameRandom extends CCLayer {
 					player2Photo = player1Photo;
 					Bitmap userPhoto = getBitmapFromURL("https://graph.facebook.com/" + friend.getId() +"/picture");
 					if (userPhoto.getRowBytes() < 100) {
-						player1Photo= CCSprite.sprite(commonfolder + "noPicture.png"); // 프로필 사진
+						player1Photo= CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "noPicture.png")); // 프로필 사진
 					} else {
 						player1Photo= CCSprite.sprite(userPhoto); // 프로필 사진
 					}

@@ -8,9 +8,11 @@ import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.interval.CCRotateBy;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.util.Log;
 
 import com.aga.mine.main.Constant;
@@ -18,6 +20,8 @@ import com.aga.mine.main.GameLoading;
 import com.aga.mine.main.MainApplication;
 
 public final class Util {
+	
+	public static final String RESOURCE = Environment.getExternalStorageDirectory() + "/Android/data/com.aga.mine.main.resources/";
 
 	public static void setBroom(String id) {
 		Context context = MainApplication.getInstance().getApplicationContext();
@@ -75,7 +79,7 @@ public final class Util {
 	}
 	
 	/**
-	 * 현재 시간을 세팅, 빗자루 수량이 6에서 5로 줄어들 경우에 사용
+	 * í˜„ìž¬ ì‹œê°„ì�„ ì„¸íŒ…, ë¹—ìž�ë£¨ ìˆ˜ëŸ‰ì�´ 6ì—�ì„œ 5ë¡œ ì¤„ì–´ë“¤ ê²½ìš°ì—� ì‚¬ìš©
 	 */
 	public static void setBroomstickTime() {
 		Context context = MainApplication.getInstance().getApplicationContext();
@@ -87,8 +91,8 @@ public final class Util {
 	}
 	
 	/**
-	 * 현재 시간에 남은 경과시간을 빼서 세팅
-	 * 빗자루 수량이 6보다 작은 경우 수량을 계산하고 남은 시간을 세팅시에 사용
+	 * í˜„ìž¬ ì‹œê°„ì—� ë‚¨ì�€ ê²½ê³¼ì‹œê°„ì�„ ë¹¼ì„œ ì„¸íŒ…
+	 * ë¹—ìž�ë£¨ ìˆ˜ëŸ‰ì�´ 6ë³´ë‹¤ ìž‘ì�€ ê²½ìš° ìˆ˜ëŸ‰ì�„ ê³„ì‚°í•˜ê³  ë‚¨ì�€ ì‹œê°„ì�„ ì„¸íŒ…ì‹œì—� ì‚¬ìš©
 	 */
 	public static void setBroomstickTime(long leftTime) {
 		Context context = MainApplication.getInstance().getApplicationContext();
@@ -100,8 +104,8 @@ public final class Util {
 	}
 	
 	/**
-	 * 경과시간을 리턴
-	 * 최초로 앱을 실행시에는 0을 리턴 (경과시간이 없다라는 의미)
+	 * ê²½ê³¼ì‹œê°„ì�„ ë¦¬í„´
+	 * ìµœì´ˆë¡œ ì•±ì�„ ì‹¤í–‰ì‹œì—�ëŠ” 0ì�„ ë¦¬í„´ (ê²½ê³¼ì‹œê°„ì�´ ì—†ë‹¤ë�¼ëŠ” ì�˜ë¯¸)
 	 */
 	public static long getBroomstickTime() {
 		Context context = MainApplication.getInstance().getApplicationContext();
@@ -119,7 +123,7 @@ public final class Util {
 
 	
 	static Map<String, Boolean> join = new HashMap<String, Boolean>();
-	// 게임 접속자들 체크
+	// ê²Œìž„ ì ‘ì†�ìž�ë“¤ ì²´í�¬
 	public static void setJoin(String id, byte joinValue) {
 		Log.e("Util", "set id : " + id + ", " + joinValue);
 		if (joinValue > 0)
@@ -139,17 +143,17 @@ public final class Util {
 /*******************************************************************/
 //	private static ImageDownloader mDownloader;
 //	
-//	// 대전하는 사람 이미지 및 이름 설정 (random, invite match용)
-//	// 이렇게 써먹기는 범용성이 떨어짐..
+//	// ëŒ€ì „í•˜ëŠ” ì‚¬ëžŒ ì�´ë¯¸ì§€ ë°� ì�´ë¦„ ì„¤ì • (random, invite matchìš©)
+//	// ì�´ë ‡ê²Œ ì�¨ë¨¹ê¸°ëŠ” ë²”ìš©ì„±ì�´ ë–¨ì–´ì§�..
 //	public static void setEntry(String id, String name, boolean owner, CCSprite backboard) {
 //		Log.e("Util", "setEntry");
 //		if (backboard.getChildren() == null || backboard.getChildren().size() < 1) {
-//			Log.e("Util", "if문 : " + backboard.getChildren().size());
+//			Log.e("Util", "ifë¬¸ : " + backboard.getChildren().size());
 //			CCScene scene = GameInvite.scene(null, null, false);
 //			MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
 //			CCDirector.sharedDirector().replaceScene(scene);
 //		} else {
-//			Log.e("Util", "if문 pass");
+//			Log.e("Util", "ifë¬¸ pass");
 //		}
 //		
 //		for (CCNode panel2 : backboard.getChildren()) {
@@ -200,8 +204,8 @@ public final class Util {
 	
 	public static void count(CCSprite parentSprite){
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_HIDE_SCROLLVIEW);
-		CCSprite tornado = tornado(parentSprite, 347); // tag는 무의미함.
-		counter = CCSprite.sprite(randomfolder + "n05.png");
+		CCSprite tornado = tornado(parentSprite, 347); // tagëŠ” ë¬´ì�˜ë¯¸í•¨.
+		counter = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + randomfolder + "n05.png"));
 		counter.setPosition(tornado.getPosition());
 		parentSprite.addChild(counter);
 
@@ -214,7 +218,7 @@ public final class Util {
 	}
 	
 	public static CCSprite tornado(CCSprite parentSprite, int tag) {
-		CCSprite tornado = CCSprite.sprite(randomfolder + "Tornado.png");
+		CCSprite tornado = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + randomfolder + "Tornado.png"));
 		tornado.setPosition(parentSprite.getContentSize().width/2, parentSprite.getContentSize().height * 0.28f);
 		parentSprite.addChild(tornado, tag, tag);
 		CCRepeatForever repeat = CCRepeatForever.action(CCRotateBy.action(16, -360));
@@ -229,14 +233,14 @@ public final class Util {
 				Thread.sleep(time);
 				count--;
 				if (count > 0) {
-					CCSprite counterNumber = CCSprite.sprite(randomfolder + "n0" + count + ".png");
+					CCSprite counterNumber = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + randomfolder + "n0" + count + ".png"));
 					counter.setTexture(counterNumber.getTexture());
 				} else {
 					isLoop = false;
 					count = 5;
 				}
 			}
-			// 작업하지않는 다른 패키지 이지만 잘 붙는지만 확인하는 것입니다.
+			// ìž‘ì—…í•˜ì§€ì•ŠëŠ” ë‹¤ë¥¸ íŒ¨í‚¤ì§€ ì�´ì§€ë§Œ ìž˜ ë¶™ëŠ”ì§€ë§Œ í™•ì�¸í•˜ëŠ” ê²ƒìž…ë‹ˆë‹¤.
 			CCDirector.sharedDirector().replaceScene(GameLoading.scene());
 		} catch (InterruptedException e) {
 			e.printStackTrace();

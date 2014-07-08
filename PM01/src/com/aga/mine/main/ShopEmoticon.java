@@ -6,6 +6,7 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.aga.mine.main.R;
 import com.aga.mine.util.Popup;
+import com.aga.mine.util.Util;
 
 public class ShopEmoticon extends CCLayer {
 	
@@ -54,14 +56,14 @@ public class ShopEmoticon extends CCLayer {
 	}
 	
 	private void setBackBoardMenu(String imageFullPath) {
-		CCSprite bb = CCSprite.sprite(imageFullPath);
+		CCSprite bb = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(bb);
 		bb.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		bb.setAnchorPoint(0.5f, 0.5f);
 	}
 	
 	private void setBoardFrameMenu(String imageFullPath) {
-		CCSprite boardFrame = CCSprite.sprite(imageFullPath);
+		CCSprite boardFrame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(boardFrame);
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);

@@ -11,10 +11,12 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
+import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
@@ -24,6 +26,7 @@ import android.util.Log;
 
 import com.aga.mine.main.MainActivity.InviteCallback;
 import com.aga.mine.pages2.UserData;
+import com.aga.mine.util.Util;
 import com.blundell.tutorial.simpleinappbillingv3.domain.items.Passport;
 import com.blundell.tutorial.simpleinappbillingv3.ui.MainActivity;
 import com.blundell.tutorial.simpleinappbillingv3.ui.MainActivity.PurchaseCallback;
@@ -59,11 +62,11 @@ public class ShopGold2 extends CCLayer {
 	int gold;
 	
 	public InviteCallback mInviteCallback = new InviteCallback() {
-		@Override
-		public void onInvited(List<String> invitedFriends, String requestId) {
-
-		}
-    };
+		 @Override
+		 public void onInvited(List<String> invitedFriends, String requestId) {
+		 
+		 }
+	};
 	
 	public ShopGold2() {
 		mContext = CCDirector.sharedDirector().getActivity();
@@ -84,7 +87,7 @@ public class ShopGold2 extends CCLayer {
 	}
 	
 	private void setBackBoardMenu(String imageFullPath) {
-		CCSprite bb = CCSprite.sprite(imageFullPath);
+		CCSprite bb = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(bb);
 		bb.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		bb.setAnchorPoint(0.5f, 0.5f);
@@ -92,7 +95,7 @@ public class ShopGold2 extends CCLayer {
 	}
 	
 	private void setBoardFrameMenu(String imageFullPath) {
-		CCSprite boardFrame = CCSprite.sprite(imageFullPath);
+		CCSprite boardFrame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(boardFrame);
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
@@ -113,14 +116,14 @@ public class ShopGold2 extends CCLayer {
 		List<CCMenuItem> listMenus = new ArrayList<CCMenuItem>();
 		
 		for (double[] ds : valuesArray) {
-			CCMenuItemImage button = CCMenuItemImage.item(
-					folder + "buttonnormal" + fileExtension,
-					folder + "buttonpressed" + fileExtension,
+			CCMenuItemSprite button = CCMenuItemImage.item(
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "buttonnormal" + fileExtension)),
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "buttonpressed" + fileExtension)),
 					this, "buttonCallback");
 			button.setUserData(ds[0]);
 			
 			// 골드 이미지
-			CCSprite goldimage = CCSprite.sprite(folder + (int)ds[1] + fileExtension);
+			CCSprite goldimage = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + (int)ds[1] + fileExtension));
 			goldimage.setPosition(goldimage.getContentSize().width / 2, button.getContentSize().height / 2);
 			button.addChild(goldimage);
 			
@@ -266,14 +269,18 @@ public class ShopGold2 extends CCLayer {
 	};
 	
 	public void purchaseSuccess() {
+		//경험치 및 레벨업 애니메이션
+		//경험치 1000당 1초
+//		schedule("goldAni");
+		
 		final String recipientID = FacebookData.getinstance().getRecipientID(); // 상점 이동 방식에 따른 ID 변경
 		final String user = FacebookData.getinstance().getUserInfo().getId();
 		long myGold = Integer.parseInt(FacebookData.getinstance().getDBData("Gold"));
 		
 		// 받는사람이 본인이면 DB로 바로 저장
 		if (recipientID.equals(user)) {
-			//경험치 및 레벨업 애니메이션
-			//경험치 1000당 1초
+			// EXP and level up animation
+			// Experience 1 second per 1000
 			schedule("goldAni");
 			
 			_mygold = (int) myGold;

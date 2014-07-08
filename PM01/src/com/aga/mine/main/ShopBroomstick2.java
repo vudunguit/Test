@@ -11,10 +11,12 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
+import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import com.aga.mine.main.MainActivity.InviteCallback;
 import com.aga.mine.pages2.UserData;
 import com.aga.mine.util.Popup;
+import com.aga.mine.util.Util;
 
 public class ShopBroomstick2 extends CCLayer {
 	
@@ -87,7 +90,7 @@ public class ShopBroomstick2 extends CCLayer {
 	}
 	
 	private void setBackBoardMenu(String imageFullPath) {
-		CCSprite bb = CCSprite.sprite(imageFullPath);
+		CCSprite bb = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(bb);
 		bb.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		bb.setAnchorPoint(0.5f, 0.5f);
@@ -95,7 +98,7 @@ public class ShopBroomstick2 extends CCLayer {
 	}
 	
 	private void setBoardFrameMenu(String imageFullPath) {
-		CCSprite boardFrame = CCSprite.sprite(imageFullPath);
+		CCSprite boardFrame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(boardFrame);
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
@@ -114,15 +117,15 @@ public class ShopBroomstick2 extends CCLayer {
 		List<CCMenuItem> listMenus = new ArrayList<CCMenuItem>();
 		
 		for (long[] ds : valuesArray) {
-			CCMenuItemImage button = CCMenuItemImage.item(
-					folder + "buttonnormal" + fileExtension,
-					folder + "buttonpressed" + fileExtension,
+			CCMenuItemSprite button = CCMenuItemImage.item(
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "buttonnormal" + fileExtension)),
+					CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "buttonpressed" + fileExtension)),
 					this, "buttonCallback");
 			button.setUserData(ds);
 			listMenus.add(button);
 			
 			// 빗자루 이미지
-			CCSprite goldimage = CCSprite.sprite(folder + (int)ds[1] + fileExtension);
+			CCSprite goldimage = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + (int)ds[1] + fileExtension));
 			goldimage.setPosition(goldimage.getContentSize().width / 2, button.getContentSize().height / 2);
 			button.addChild(goldimage);
 			

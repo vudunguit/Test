@@ -8,11 +8,13 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
 import com.aga.mine.main.R;
+import com.aga.mine.util.Util;
 
 import android.content.Context;
 import android.util.Log;
@@ -57,9 +59,10 @@ public class Daily extends CCLayer {
 
 	// 출석부 타이틀
 	private void setTitle() {
-		CCSprite title = CCSprite.sprite(Utility.getInstance()
+		CCSprite title = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				Utility.getInstance()
 				.getNameWithIsoCodeSuffix(
-						folder + "daily-title" + fileExtension));
+						folder + "daily-title" + fileExtension)));
 		bg.addChild(title);
 		title.setPosition(bg.getContentSize().width / 2,
 				bg.getContentSize().height - title.getContentSize().height
@@ -68,8 +71,9 @@ public class Daily extends CCLayer {
 	}
 
 	private void closeImage() {
-		CCSprite close = CCSprite.sprite(folder + "daily-close3"
-				+ fileExtension);
+		CCSprite close = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				folder + "daily-close3"
+				+ fileExtension));
 		bg.addChild(close, 1, 777);
 		close.setPosition(525, bg.getContentSize().height - 178);
 		close.setAnchorPoint(0, 0);
@@ -87,15 +91,15 @@ public class Daily extends CCLayer {
 				CCSprite gold = null;
 				if ((i + 1) % 5 != 0) {
 					if (dailyCount < count) {
-						gold = CCSprite.sprite(folder + "daily-coin1.png");
+						gold = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "daily-coin1.png"));
 					} else {
-						gold = CCSprite.sprite(folder + "daily-coin2.png");
+						gold = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "daily-coin2.png"));
 					}
 				} else {
 					if (dailyCount < count) {
-						gold = CCSprite.sprite(folder + "daily-pack1.png");
+						gold = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "daily-pack1.png"));
 					} else {
-						gold = CCSprite.sprite(folder + "daily-pack2.png");
+						gold = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "daily-pack2.png"));
 					}
 				}
 				parent.addChild(gold, 1);
@@ -103,9 +107,10 @@ public class Daily extends CCLayer {
 
 				// 도장 찍기
 				if (dailyCount > count) {
-					CCSprite stamp = CCSprite.sprite(Utility.getInstance()
+					CCSprite stamp = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+							Utility.getInstance()
 							.getNameWithIsoCodeSuffix(
-									folder + "stamp" + fileExtension));
+									folder + "stamp" + fileExtension)));
 					parent.addChild(stamp, 100);
 					stamp.setPosition(goldX[i], goldY[k]);
 					stamp.setAnchorPoint(0.5f, 0.5f);
@@ -114,8 +119,8 @@ public class Daily extends CCLayer {
 					Log.e("Daily", "도장찍기 애니메이션 넣을 곳 입니다.");
 					Log.e("Daily", "stamp animation");
 
-					stamp = CCSprite.sprite(
-							Utility.getInstance().getNameWithIsoCodeSuffix(folder + "stamp" + fileExtension));
+					stamp = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+							Utility.getInstance().getNameWithIsoCodeSuffix(folder + "stamp" + fileExtension)));
 					parent.addChild(stamp, 100);
 					stamp.setPosition(goldX[i], goldY[k]);
 					stamp.setAnchorPoint(0.5f, 0.5f);
@@ -180,8 +185,9 @@ public class Daily extends CCLayer {
 	@Override
 	public boolean ccTouchesBegan(MotionEvent event) {
 		bg.removeChildByTag(777, true);
-		CCSprite close = CCSprite.sprite(folder + "daily-close4"
-				+ fileExtension);
+		CCSprite close = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				folder + "daily-close4"
+				+ fileExtension));
 		bg.addChild(close, 2);
 		close.setPosition(525, bg.getContentSize().height - 178);
 		close.setAnchorPoint(0, 0);

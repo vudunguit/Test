@@ -4,6 +4,7 @@ import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
@@ -53,7 +54,7 @@ public class GameLoading extends CCLayer {
 	
 	// 배경 스케일 설정
 	private void setBackground() {
-		bg = CCSprite.sprite(folder + "gameloadbg" + fileExtension);
+		bg = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "gameloadbg" + fileExtension));
 		bg.setPosition(center());
 		this.addChild(bg);
 		
@@ -62,20 +63,20 @@ public class GameLoading extends CCLayer {
 	}
 	
 	private void setMainMenu() {
-		CCSprite cloud = CCSprite.sprite(
-				folder + "loadsmoke" + fileExtension);
+		CCSprite cloud = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				folder + "loadsmoke" + fileExtension));
 		cloud.setPosition(50,120);
 		cloud.setAnchorPoint(0, 0);
 		bg.addChild(cloud);
 		
-		bar = CCSprite.sprite(
-				folder + "loadpiece" + fileExtension);
+		bar = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				folder + "loadpiece" + fileExtension));
 		bar.setPosition(160,127);
 		bar.setAnchorPoint(0, 0);
 		bg.addChild(bar);
 		//bar.setScaleX(75);
 		
-		wizard = CCSprite.sprite(folder + "loadwizard" + fileExtension);
+		wizard = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "loadwizard" + fileExtension));
 		wizard.setPosition(bar.getPosition().x + bar.getContentSize().width * bar.getScaleX() - wizard.getContentSize().width/2, bar.getPosition().y);
 		wizard.setAnchorPoint(0, 0);
 		bg.addChild(wizard);

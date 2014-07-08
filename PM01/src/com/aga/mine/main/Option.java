@@ -8,9 +8,11 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
+import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 
 import android.content.Context;
@@ -20,6 +22,7 @@ import android.util.Log;
 
 import com.aga.mine.pages2.UserData;
 import com.aga.mine.pages2.GameData;
+import com.aga.mine.util.Util;
 //
 public class Option extends CCLayer {
 	String tag = "Option";
@@ -33,7 +36,7 @@ public class Option extends CCLayer {
 	CCSprite bb;
 	CCSprite boardFrame;
 	
-	CCSprite itemOver = CCSprite.sprite(folder + "option-check" + fileExtension);
+	CCSprite itemOver = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "option-check" + fileExtension));
 
 	private Context mContext;
 	UserData userData ;
@@ -68,7 +71,7 @@ public class Option extends CCLayer {
 	
 	// 백 보드 설정
 	private void setBackBoardMenu(String imageFullPath) {
-		CCSprite bb = CCSprite.sprite(imageFullPath);
+		CCSprite bb = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(bb);
 		bb.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.5f);
 		bb.setAnchorPoint(0.5f, 0.5f);
@@ -78,7 +81,7 @@ public class Option extends CCLayer {
 
 	// 게시판 설정
 	private void setBoardFrameMenu(String imageFullPath) {
-		CCSprite boardFrame = CCSprite.sprite(imageFullPath);
+		CCSprite boardFrame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(boardFrame);
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
@@ -154,45 +157,45 @@ public class Option extends CCLayer {
 		Log.e("userdatas", "length : " + radioButtonUserdatas.length);
 		for (int i = 0; i < radioButtonUserdatas.length; i++) {
 			
-			CCMenuItem onButton = CCMenuItemImage.item(
-					folder + "option-check1" + fileExtension,
-					folder + "option-check1" + fileExtension,
-					this, "buttonCallback");		
-	
-			Log.e("userdatas[i][0]", "userdatas[i][0] : " + radioButtonUserdatas[i][0]);
-			onButton.setUserData(radioButtonUserdatas[i][0]);
-			onButton.addChild(itemOver);
-			onButton.setIsEnabled(false);
-			
-			CCMenuItem offButton = CCMenuItemImage.item(
-					folder + "option-check1" + fileExtension,
-					folder + "option-check1" + fileExtension,
-					this, "buttonCallback");
-			Log.e("userdatas[i][1]", "userdatas[i][1] : " + radioButtonUserdatas[i][1]);
-			offButton.setUserData(radioButtonUserdatas[i][1]);
-			
-			CCMenu music = CCMenu.menu(onButton, offButton);
-			
-			parentSprite.addChild(music);
-			
-			music.alignItemsHorizontally(padding);
-			
-			music.setAnchorPoint(0, 0);
-			
-			music.setPosition(
-					radioButtonMenuPositions[i][0] + (padding / 2) + (onButton.getContentSize().width) + 29, // 이미지에서 글자 위치 변경 +29 
-					544 + (onButton.getContentSize().height / 2) - radioButtonMenuPositions[i][1] - 4) ; // 이미지에서 글자 위치 변경 -4
+		CCMenuItem onButton = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "option-check1" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "option-check1" + fileExtension)),
+				this, "buttonCallback");		
+
+		Log.e("userdatas[i][0]", "userdatas[i][0] : " + radioButtonUserdatas[i][0]);
+		onButton.setUserData(radioButtonUserdatas[i][0]);
+		onButton.addChild(itemOver);
+		onButton.setIsEnabled(false);
+		
+		CCMenuItem offButton = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "option-check1" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "option-check1" + fileExtension)),
+				this, "buttonCallback");
+		Log.e("userdatas[i][1]", "userdatas[i][1] : " + radioButtonUserdatas[i][1]);
+		offButton.setUserData(radioButtonUserdatas[i][1]);
+		
+		CCMenu music = CCMenu.menu(onButton, offButton);
+		
+		parentSprite.addChild(music);
+		
+		music.alignItemsHorizontally(padding);
+		
+		music.setAnchorPoint(0, 0);
+		
+		music.setPosition(
+				radioButtonMenuPositions[i][0] + (padding / 2) + (onButton.getContentSize().width) + 29, // 이미지에서 글자 위치 변경 +29 
+				544 + (onButton.getContentSize().height / 2) - radioButtonMenuPositions[i][1] - 4) ; // 이미지에서 글자 위치 변경 -4
 		}
 	}
 	
 	public void buttonCallback(Object sender) {
 		MainApplication.getInstance().getActivity().click();
-		CCMenuItemImage button = (CCMenuItemImage)sender;
+		CCMenuItemSprite button = (CCMenuItemSprite)sender;
 //		button.getUserData();
 //		Log.e(tag, "button : " + button.getUserData());
 		List<CCNode> a = button.getParent().getChildren();
 		for (CCNode ccNode : a) {
-			final CCMenuItemImage sprite = (CCMenuItemImage)ccNode;
+			final CCMenuItemSprite sprite = (CCMenuItemSprite)ccNode;
 			sprite.setIsEnabled(true);
 			sprite.removeChild(itemOver, true);
 		}
@@ -206,18 +209,18 @@ public class Option extends CCLayer {
 	private void setElemental(int type) {
 		Log.e("tag", "selectButton : " + type);
 		switch(type) {
-		case 1: //bgm on
-			MainApplication.getInstance().setBGM(true);
-			break;
-		case 2: //bgm off
-			MainApplication.getInstance().setBGM(false);
-			break;
-		case 11: //sound on
-			MainApplication.getInstance().setSound(true);
-			break;
-		case 12: //sound off
-			MainApplication.getInstance().setSound(false);
-			break;
+			 case 1: //bgm on
+			 MainApplication.getInstance().setBGM(true);
+			 break;
+			 case 2: //bgm off
+			 MainApplication.getInstance().setBGM(false);
+			 break;
+			 case 11: //sound on
+			 MainApplication.getInstance().setSound(true);
+			 break;
+			 case 12: //sound off
+			 MainApplication.getInstance().setSound(false);
+			 break;
 		}
 	}
 	

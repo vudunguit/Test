@@ -3,7 +3,10 @@
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.ccColor3B;
+
+import com.aga.mine.util.Util;
 
 public class FrameTitle6 {
 
@@ -16,7 +19,7 @@ public class FrameTitle6 {
 	public static CCLabel setTitle(CCSprite parentSprite, String imageFolder) {
 		
 		// 타이틀 판넬
-		CCSprite titlePanel = CCSprite.sprite(commonfolder + "frame-titlePanel" + fileExtension);
+		CCSprite titlePanel = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "frame-titlePanel" + fileExtension));
 		parentSprite.addChild(titlePanel);
 		titlePanel.setAnchorPoint(0.5f, 0.5f);
 		titlePanel.setPosition(
@@ -24,15 +27,15 @@ public class FrameTitle6 {
 			parentSprite.getContentSize().height - 98);
 		
 		// 타이틀
-		CCSprite frameTitle = CCSprite.sprite(
+		CCSprite frameTitle = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
 				Utility.getInstance().getNameWithIsoCodeSuffix(
-						imageFolder + imageFolder.substring(2, imageFolder.length()-1) + "-title" + fileExtension));
+						imageFolder + imageFolder.substring(2, imageFolder.length()-1) + "-title" + fileExtension)));
 		titlePanel.addChild(frameTitle);
 //		frameTitle.setAnchorPoint(0.5f, 0.5f);
 		frameTitle.setPosition(titlePanel.getContentSize().width / 2, titlePanel.getContentSize().height / 2);
 			
 		// 경기 기간 배경
-		CCSprite banner = CCSprite.sprite(commonfolder + "titlebanner" + fileExtension);
+		CCSprite banner = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "titlebanner" + fileExtension));
 		titlePanel.addChild(banner);
 		banner.setAnchorPoint(0.5f, 1);
 		banner.setPosition(titlePanel.getContentSize().width / 2, 10);

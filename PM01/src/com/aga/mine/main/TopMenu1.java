@@ -8,12 +8,14 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
 
 import android.content.Context;
 
 import com.aga.mine.pages2.UserData;
+import com.aga.mine.util.Util;
 
 public class TopMenu1 extends CCLayer{
 
@@ -36,15 +38,15 @@ public class TopMenu1 extends CCLayer{
 	CCLabel[] setTopMenu(CCSprite parentSprite, String imageFolder, CCNode nodeThis) {
 		
 		// 지팡이 상점 바로가기 배경(버튼)
-		CCMenuItem broomstickBg = CCMenuItemImage.item(imageFolder
-				+ "home-broomstickBg-hd" + fileExtension, imageFolder
-				+ "home-broomstickBg-hd" + fileExtension, 
+		CCMenuItem broomstickBg = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder	+ "home-broomstickBg-hd" + fileExtension)), 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder	+ "home-broomstickBg-hd" + fileExtension)), 
 				nodeThis, "broomstickCallback");
 
 		// 골드 상점 바로가기 배경(버튼)
 		CCMenuItem goldBg = CCMenuItemImage.item(
-				imageFolder + "home-goldBg-hd" + fileExtension,
-				imageFolder + "home-goldBg-hd" + fileExtension, 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "home-goldBg-hd" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "home-goldBg-hd" + fileExtension)), 
 				nodeThis, "goldCallback");
 
 		CCMenu topMenu = CCMenu.menu(broomstickBg, goldBg);
@@ -61,7 +63,7 @@ public class TopMenu1 extends CCLayer{
 		goldBg.setPosition(topMenu.getContentSize().width - goldBg.getContentSize().width/ 2, 0f);
 
 		 // 지팡이 그림
-		CCSprite broomstickImg = CCSprite.sprite(imageFolder + "home-broomstickOn-hd" + fileExtension);
+		CCSprite broomstickImg = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFolder + "home-broomstickOn-hd" + fileExtension));
 		broomstickBg.addChild(broomstickImg);
 		broomstickImg.setPosition(
 				broomstickImg.getContentSize().width / 2 + 10.0f,

@@ -8,8 +8,11 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
+
+import com.aga.mine.util.Util;
 
 import android.content.Context;
 import android.util.Log;
@@ -65,7 +68,7 @@ public class Home2 extends CCLayer {
 	
 	// 백 보드 설정
 	private void setBackBoardMenu(CCSprite parentSprite, String imageFullPath) {
-		CCSprite bb = CCSprite.sprite(imageFullPath);
+		CCSprite bb = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		parentSprite.addChild(bb);
 		bb.setPosition(parentSprite.getContentSize().width / 2, parentSprite.getContentSize().height * 0.525f);
 		bb.setAnchorPoint(0.5f, 0.5f);
@@ -130,7 +133,7 @@ public class Home2 extends CCLayer {
 	
 	// 게시판 설정
 	private void setBoardFrameMenu(CCSprite parentSprite, String imageFullPath) {
-		CCSprite boardFrame = CCSprite.sprite(imageFullPath);
+		CCSprite boardFrame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		parentSprite.addChild(boardFrame);
 		boardFrame.setPosition(parentSprite.getContentSize().width / 2, parentSprite.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);

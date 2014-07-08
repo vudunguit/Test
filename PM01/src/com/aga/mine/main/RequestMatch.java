@@ -13,6 +13,7 @@ import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 import org.cocos2d.types.ccColor3B;
@@ -20,6 +21,7 @@ import org.cocos2d.types.ccColor3B;
 import android.util.Log;
 
 import com.aga.mine.pages2.GameData;
+import com.aga.mine.util.Util;
 import com.sromku.simple.fb.entities.Profile;
 
 public class RequestMatch extends CCLayer{
@@ -49,7 +51,7 @@ public class RequestMatch extends CCLayer{
 		String fileExtension = ".png";
 		
 		// 초대 창
-		base = CCSprite.sprite(commonfolder + "popup-bg" + fileExtension);
+		base = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "popup-bg" + fileExtension));
 		this.addChild(base);
 		
 		// 초대 메시지
@@ -64,8 +66,8 @@ public class RequestMatch extends CCLayer{
 		
 		// 초대 응답 버튼
 		CCMenuItem accept = CCMenuItemImage.item(
-				folder + "receiveAllButtonNormal" + fileExtension,
-				folder + "receiveAllButtonPress" + fileExtension, 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "receiveAllButtonNormal" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "receiveAllButtonPress" + fileExtension)), 
 				this, "clicked");
 		accept.setTag(1);
 		
@@ -83,8 +85,8 @@ public class RequestMatch extends CCLayer{
 		
 		// 초대 거부 버튼
 		CCMenuItem reject = CCMenuItemImage.item(
-				folder + "receiveAllButtonNormal" + fileExtension,
-				folder + "receiveAllButtonPress" + fileExtension, 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "receiveAllButtonNormal" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "receiveAllButtonPress" + fileExtension)), 
 				this, "clicked");
 		reject.setTag(2);
 		

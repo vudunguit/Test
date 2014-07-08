@@ -5,6 +5,9 @@ import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
+
+import com.aga.mine.util.Util;
 
 public class BottomMenu3 {
 	
@@ -22,8 +25,10 @@ public class BottomMenu3 {
 		
 		// 좌측 버튼(랜덤매칭)
 		CCMenuItem button1 = CCMenuItemImage.item(
-				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "random-button1" + fileExtension), 
-				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "random-button1" + fileExtension), 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "random-button1" + fileExtension))),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				Utility.getInstance().getNameWithIsoCodeSuffix(imageFolder + "random-button1" + fileExtension))), 
 				nodeThis, "randomMatch");
 		CCMenu bottomMenu = CCMenu.menu(button1);
 		nodeThis.addChild(bottomMenu, tag, tag);

@@ -4,14 +4,17 @@ import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItemImage;
+import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 
 import android.util.Log;
 
 import com.aga.mine.pages2.GameData;
+import com.aga.mine.util.Util;
 
 public class GameMode extends CCLayer {
 	
@@ -49,7 +52,7 @@ public class GameMode extends CCLayer {
 	
 	// 백 보드 설정
 	private void setBackBoardMenu(String imageFullPath) {
-		CCSprite bb = CCSprite.sprite(imageFullPath);
+		CCSprite bb = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(bb);
 		bb.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		bb.setAnchorPoint(0.5f, 0.5f);
@@ -58,7 +61,7 @@ public class GameMode extends CCLayer {
 	
 	// 게시판 설정
 	private void setBoardFrameMenu(String imageFullPath) {
-		CCSprite boardFrame = CCSprite.sprite(imageFullPath);
+		CCSprite boardFrame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(boardFrame);
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
@@ -70,21 +73,21 @@ public class GameMode extends CCLayer {
 	// 게임 메뉴
 	private void setMainMenu(CCSprite parentSprite){
 		// 싱글
-		CCMenuItemImage button1 = CCMenuItemImage.item(
-				folder + "mode-singlebutton1" + fileExtension,
-				folder + "mode-singlebutton2" + fileExtension,
+		CCMenuItemSprite button1 = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "mode-singlebutton1" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "mode-singlebutton2" + fileExtension)),
 				this, "nextCallback");
 		button1.setTag(singleMode);
 		// 대전
-		CCMenuItemImage button2 = CCMenuItemImage.item(
-				folder + 	"mode-randombutton1" + fileExtension,
-				folder + 	"mode-randombutton2" + fileExtension,
+		CCMenuItemSprite button2 = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + 	"mode-randombutton1" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + 	"mode-randombutton2" + fileExtension)),
 				this, "nextCallback");
 		button2.setTag(randomMode);
 		// 초대
-		CCMenuItemImage button3 = CCMenuItemImage.item(
-				folder + 	"mode-invitebutton1" + fileExtension,
-				folder + 	"mode-invitebutton2" + fileExtension,
+		CCMenuItemSprite button3 = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + 	"mode-invitebutton1" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + 	"mode-invitebutton2" + fileExtension)),
 				this, "nextCallback");
 		button3.setTag(inviteMode);
 		
@@ -93,29 +96,29 @@ public class GameMode extends CCLayer {
 		gameMenu.setPosition(parentSprite.getContentSize().width / 2 - 5, parentSprite.getContentSize().height / 2 - 12);
 		parentSprite.addChild(gameMenu, 1);
 		
-		CCSprite	buttonText1 = CCSprite.sprite(
-				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "mode-singletext" + fileExtension));
+		CCSprite	buttonText1 = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "mode-singletext" + fileExtension)));
 		button1.addChild(buttonText1);
 		buttonText1.setPosition(button1.getContentSize().width - buttonText1.getContentSize().width/2 - 30f, button1.getContentSize().height/2);
 
-		CCSprite	buttonText2 = CCSprite.sprite(
-				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "mode-randomtext" + fileExtension));
+		CCSprite	buttonText2 = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "mode-randomtext" + fileExtension)));
 		button2.addChild(buttonText2);
 		buttonText2.setPosition(button2.getContentSize().width - buttonText2.getContentSize().width/2 - 30f, button2.getContentSize().height/2);
 
-		CCSprite	buttonText3 = CCSprite.sprite(
-				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "mode-invitetext" + fileExtension));
+		CCSprite	buttonText3 = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "mode-invitetext" + fileExtension)));
 		button3.addChild(buttonText3);
 		buttonText3.setPosition(button3.getContentSize().width - buttonText3.getContentSize().width/2 - 30f, button3.getContentSize().height/2);
 		
 		if (GameData.share().isGuestMode) {
 			//x표시 2
-			CCSprite lock2 = CCSprite.sprite("10home/" + "modeLock" + fileExtension);
+			CCSprite lock2 = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "10home/" + "modeLock" + fileExtension));
 			button2.addChild(lock2);
 			lock2.setPosition(button2.getContentSize().width / 2, button2.getContentSize().height / 2);
 			
 			//x표시 3
-			CCSprite lock3 = CCSprite.sprite("10home/" + "modeLock" + fileExtension);
+			CCSprite lock3 = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "10home/" + "modeLock" + fileExtension));
 			button3.addChild(lock3);
 			lock3.setPosition(button3.getContentSize().width / 2, button3.getContentSize().height / 2);
 			

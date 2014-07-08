@@ -26,6 +26,8 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
 
+import com.aga.mine.util.Util;
+
 import android.util.Log;
 
 
@@ -191,7 +193,7 @@ public class Utility extends CCLayer {
 	public void dimScreen(CCNode parentNode, float opacity) {
 		// winSizeInPixels;
 		CGSize wins = CCDirector.sharedDirector().winSize();
-		CCSprite dim = CCSprite.sprite("singleblackpixel.png");
+		CCSprite dim = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "singleblackpixel.png"));
 		dim.setScaleX(wins.width);
 		dim.setScaleY(wins.height);
 		dim.setAnchorPoint(0, 0);

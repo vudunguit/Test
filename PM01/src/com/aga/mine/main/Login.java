@@ -14,6 +14,7 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
+import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.menus.CCMenuItemToggle;
 import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
@@ -21,6 +22,7 @@ import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.nodes.CCSpriteSheet;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 
 import android.content.Intent;
@@ -30,6 +32,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.aga.mine.pages2.GameData;
+import com.aga.mine.util.Util;
 
 public class Login extends CCLayer{
 	
@@ -98,15 +101,18 @@ public class Login extends CCLayer{
 	
 	private void terms(CCSprite bg) {
 		//
-		CCSprite termsBody = CCSprite.sprite(
-				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "gameTermsBg" + fileExtension));
+		CCSprite termsBody = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE +
+				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "gameTermsBg" + fileExtension)));
 		termsBody.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2);
 		termsBody.setAnchorPoint(0.5f ,0.5f);
 		bg.addChild(termsBody, termsTag , termsTag);
 		
 		//
-		String termsStr = Utility.getInstance().getNameWithIsoCodeSuffix(folder + "gameTermsTitle" + fileExtension);
-		CCMenuItem termsUrl = CCMenuItemImage.item(termsStr, termsStr,this, "cilcked");
+		String termsStr = Util.RESOURCE + Utility.getInstance().getNameWithIsoCodeSuffix(folder + "gameTermsTitle" + fileExtension);
+		CCMenuItem termsUrl = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(termsStr)), 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(termsStr)),
+				this, "cilcked");
 		termsUrl.setTag(0);
 		CCMenu policyMenu = CCMenu.menu(termsUrl);
 		policyMenu.setPosition(termsBody.getContentSize().width * 0.5f, termsBody.getContentSize().height * 0.55f);
@@ -126,18 +132,28 @@ public class Login extends CCLayer{
 		// toggle
 		String fOn = folder + "gameTermsCheck1" + fileExtension;
 		String fOff = folder + "gameTermsCheck2" + fileExtension;
-		CCMenuItemImage itemOn = CCMenuItemImage.item(fOn, fOn);
-		CCMenuItemImage itemOff = CCMenuItemImage.item(fOff, fOff);
+		CCMenuItemSprite itemOn = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + fOn)), 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + fOn)));
+		CCMenuItemSprite itemOff = CCMenuItemImage.item(
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + fOff)), 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + fOff)));
 		
-		CCMenuItemToggle itemToggle = CCMenuItemToggle.item(this, "cilcked", itemOn, itemOff);
+		CCMenuItemToggle itemToggle = CCMenuItemToggle.item(
+				this, 
+				"cilcked", 
+				itemOn, 
+				itemOff);
 		itemToggle.setSelectedIndex(kButtonOff);
 		itemToggle.setTag(toggleButtonTag);
 		checkMenu.addChild(itemToggle);
 		
 		//
 		termsOK = CCMenuItemImage.item(
-				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "gameTermsOkImage1" + fileExtension),
-						Utility.getInstance().getNameWithIsoCodeSuffix(folder + "gameTermsOkImage2" + fileExtension),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+						Utility.getInstance().getNameWithIsoCodeSuffix(folder + "gameTermsOkImage1" + fileExtension))),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+						Utility.getInstance().getNameWithIsoCodeSuffix(folder + "gameTermsOkImage2" + fileExtension))),
 				this, "cilcked");
 		termsOK.setTag(2);
 		
@@ -147,8 +163,8 @@ public class Login extends CCLayer{
 		termsBody.addChild(okMenu);
 		
 		// termsOK disable image
-		CCSprite disableButton = CCSprite.sprite(
-				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "gameTermsOkImage3" + fileExtension));
+		CCSprite disableButton = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE +
+				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "gameTermsOkImage3" + fileExtension)));
 		disableButton.setPosition(termsOK.getContentSize().width/2, termsOK.getContentSize().height/2);
 		termsOK.addChild(disableButton, disableButtonTag, disableButtonTag);
 	}
@@ -157,14 +173,16 @@ public class Login extends CCLayer{
 
 	private void setMain(CCSprite bg) {
 		//게임이름
-		CCSprite title = CCSprite.sprite(
-				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "game-Woodtitle" + fileExtension));
+		CCSprite title = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE +
+				Utility.getInstance().getNameWithIsoCodeSuffix(folder + "game-Woodtitle" + fileExtension)));
 		title.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2);
 		title.setAnchorPoint(0.5f ,0.5f);
 		bg.addChild(title, aniTag, aniTag);
 		
 		//로딩바 배경
-		CCSprite loadingMap = CCSprite.sprite(folder + "countbg" + fileExtension);
+		CCSprite loadingMap = CCSprite.sprite(
+				CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE +
+				folder + "countbg" + fileExtension));
 		loadingMap.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2);
 		loadingMap.setAnchorPoint(0.5f ,0.5f);
 		bg.addChild(loadingMap, aniTag + 1,  aniTag + 1);
@@ -176,7 +194,8 @@ public class Login extends CCLayer{
 //		bg.addChild(loadingBar, aniTag + 2,  aniTag + 2);
 		
 		// 냄비
-		CCSprite pot = CCSprite.sprite(folder + "pot" + fileExtension);
+		CCSprite pot = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE +
+				folder + "pot" + fileExtension));
 		pot.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 116);
 		pot.setAnchorPoint(0.5f ,0.5f);
 		bg.addChild(pot, aniTag + 3,  aniTag + 3);
@@ -200,15 +219,15 @@ public class Login extends CCLayer{
 	private void setForeground(CCSprite bg) {
 		//페이스북
 		CCMenuItem facebook = CCMenuItemImage.item(
-				folder + "Facebook-normal" + fileExtension,
-				folder + "Facebook-select" + fileExtension,
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "Facebook-normal" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "Facebook-select" + fileExtension)),
 				this, "facebookCallback");
 //		facebook.setAnchorPoint(0.5f, 0.5f);
 		
 		//게스트
 		CCMenuItem guest = CCMenuItemImage.item(
-				folder + "Guest-normal" + fileExtension,
-				folder + "Guest-select" + fileExtension,
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "Guest-normal" + fileExtension)),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "Guest-select" + fileExtension)),
 				this, "guestCallback");
 //		guest.setAnchorPoint(0.5f, 0.5f);
 		
@@ -231,7 +250,8 @@ public class Login extends CCLayer{
 	public CCAnimate mCircularProgress;
 	
 	public void actionProgress() {
-		CCSprite loadingBar = CCSprite.sprite(folder + "c01" + fileExtension);
+		CCSprite loadingBar = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + 
+				folder + "c01" + fileExtension));
 //		loadingBar.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 0);
 		// plist이미지(f01~12)와 낱개(c01) 이미지의 위치가 다름
 		// plist를 만지는 툴이 없으므로 위치를 변경함.
@@ -243,7 +263,8 @@ public class Login extends CCLayer{
 	}
 	
 	public void actionWizard() {
-		CCSprite wizard = CCSprite.sprite(folder + "wizard01" + fileExtension);
+		CCSprite wizard = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE +
+				folder + "wizard01" + fileExtension));
 		// 마법사 위치는 맞기때문에 그냥 놔둠.(신기신기)
 		wizard.setPosition(bg.getContentSize().width/2, bg.getContentSize().height/2 + 116);
 		wizard.setAnchorPoint(0.5f ,0.5f);

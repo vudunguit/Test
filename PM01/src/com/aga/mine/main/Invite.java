@@ -12,6 +12,7 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
@@ -132,7 +133,7 @@ public class Invite extends CCLayer {
 		mContext = CCDirector.sharedDirector().getActivity();
 		userData = UserData.share(mContext);
 		rewards = new ArrayList<CCSprite>();
-		checkSprite = CCSprite.sprite("24emoticon/emoticonchecked.png");
+		checkSprite = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "24emoticon/emoticonchecked.png"));
 		//when invitation is successful, this callback is called.
     	Log.e("Invite", "Callback_1 - setInviteCallback()");
 		
@@ -152,7 +153,7 @@ public class Invite extends CCLayer {
 
 	// 백 보드 설정
 	private void setBackBoardMenu(String imageFullPath) {
-		CCSprite backBoard = CCSprite.sprite(imageFullPath);
+		CCSprite backBoard = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(backBoard);
 		backBoard.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		backBoard.setAnchorPoint(0.5f, 0.5f);
@@ -161,7 +162,7 @@ public class Invite extends CCLayer {
 	
 	// 게시판 설정
 	private void setBoardFrameMenu(String imageFullPath) {
-		CCSprite boardFrame = CCSprite.sprite(imageFullPath);
+		CCSprite boardFrame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(boardFrame);
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
@@ -209,7 +210,7 @@ public class Invite extends CCLayer {
 		rewards.add(jewelButton(parentSprite, 1.1f, 10000, 70));
 		
 		// 일단 막코딩 합니다. ㅠㅠ (리팩토링이 필요합니다.)
-/*		int inviteCount = Integer.parseInt(FacebookData.getinstance().getDBData("InviteNumber"));
+		/*int inviteCount = Integer.parseInt(FacebookData.getinstance().getDBData("InviteNumber"));
 		int count = 0;
 		for (int i = 30; i < inviteCount; i+=20) {
 			rewards.get(count).addChild(checkSprite);
@@ -221,7 +222,7 @@ public class Invite extends CCLayer {
 		
 	private CCSprite jewelButton(CCSprite parentSprite, float position, int gold, int friends) {
 
-		CCSprite statusPanel = CCSprite.sprite(folder + "invite-statusPanel" + fileExtension); //보석 버튼
+		CCSprite statusPanel = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "invite-statusPanel" + fileExtension)); //보석 버튼
 		statusPanel.setAnchorPoint(0.5f, 0.0f);
 		statusPanel.setPosition(
 				parentSprite.getContentSize().width/2 + statusPanel.getContentSize().width * position, 

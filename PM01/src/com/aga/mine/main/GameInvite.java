@@ -10,6 +10,7 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 
 import android.util.Log;
@@ -146,7 +147,7 @@ public class GameInvite extends CCLayer {
 	
 	// 백 보드 설정
 	private void setBackBoardMenu(String imageFullPath) {
-		backboard = CCSprite.sprite(imageFullPath);
+		backboard = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(backboard, 0, 0);
 		backboard.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		backboard.setAnchorPoint(0.5f, 0.5f);
@@ -156,7 +157,7 @@ public class GameInvite extends CCLayer {
 	static CCSprite boardFrame;
 	// 게시판 설정
 	private void setBoardFrameMenu(String imageFullPath) {
-		boardFrame = CCSprite.sprite(imageFullPath);
+		boardFrame = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		bg.addChild(boardFrame);
 		boardFrame.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height * 0.525f);
 		boardFrame.setAnchorPoint(0.5f, 0.5f);
@@ -167,8 +168,8 @@ public class GameInvite extends CCLayer {
 	private void setMainMenu(CCSprite parentSprite){
 		
 		List<CCNode> matchingPanel = new ArrayList<CCNode>();
-		matchingPanel.add(CCSprite.sprite(commonfolder + "matchPanelMe.png")); 
-		matchingPanel.add(CCSprite.sprite(commonfolder + "matchPanelOther.png")); 
+		matchingPanel.add(CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "matchPanelMe.png"))); 
+		matchingPanel.add(CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + commonfolder + "matchPanelOther.png"))); 
 				
 		for (int k = 0; k < matchingPanel.size(); k++) {
 			int value = k + 1;
@@ -179,7 +180,7 @@ public class GameInvite extends CCLayer {
 					parentSprite.getContentSize().height - _node.getContentSize().height * (value * 1.05f + 0.1f));
 			
 			// 이미지
-			final CCSprite _picture = CCSprite.sprite("noPicture.png");		
+			final CCSprite _picture = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "noPicture.png"));		
 			_picture.setAnchorPoint(0.5f, 0.5f);
 			_picture.setPosition(_picture.getContentSize().width * 2.7f, _node.getContentSize().height / 2);
 			_node.addChild(_picture, 0, 102);

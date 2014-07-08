@@ -6,6 +6,7 @@ import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
@@ -14,6 +15,7 @@ import android.util.Log;
 
 import com.aga.mine.main.Config;
 import com.aga.mine.main.NetworkController;
+import com.aga.mine.util.Util;
 
 //일단 완료(중간에 gameover game.release 빼고)
 public class GameProgressBar extends CCLayer {
@@ -50,17 +52,17 @@ public class GameProgressBar extends CCLayer {
 		mContext = CCDirector.theApp.getApplicationContext();
 		CGSize winSize = CCDirector.sharedDirector().winSize();
 
-		base = CCSprite.sprite(hudLayerFolder + "game-progressBase-hd.png");
+		base = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + hudLayerFolder + "game-progressBase-hd.png"));
 		base.setPosition(winSize.width / 2,
 				winSize.height - base.getContentSize().height);
 		this.addChild(base);
 
 		if (Config.getInstance().getOwner()) {
-			indicatorMe = CCSprite.sprite(hudLayerFolder + "game-progressIndicatorMe-hd.png");
-			indicatorOther = CCSprite.sprite(hudLayerFolder + "game-progressIndicatorOther-hd.png");
+			indicatorMe = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + hudLayerFolder + "game-progressIndicatorMe-hd.png"));
+			indicatorOther = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + hudLayerFolder + "game-progressIndicatorOther-hd.png"));
 		} else {
-			indicatorMe = CCSprite.sprite(hudLayerFolder + "game-progressIndicatorOther-hd.png");
-			indicatorOther = CCSprite.sprite(hudLayerFolder + "game-progressIndicatorMe-hd.png");
+			indicatorMe = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + hudLayerFolder + "game-progressIndicatorOther-hd.png"));
+			indicatorOther = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + hudLayerFolder + "game-progressIndicatorMe-hd.png"));
 		}
 
 		indicatorMe.setTag(kTagIndicatorMe);
@@ -172,7 +174,6 @@ public class GameProgressBar extends CCLayer {
 		// 게임시간이 종료하면 타이머를 멈추고 게임종료 메서드 호출한다.
 		if (seconds <= 0) {
 			this.stopTime();
-			mHud.mGame.stopCheck();
 			gameover();
 			
 			
@@ -210,6 +211,7 @@ public class GameProgressBar extends CCLayer {
 		} else {
 			Log.e("GameProgressBar", "싱글 - 시간 초과시 무조건 승리");
 			Config.getInstance().setVs(Config.getInstance().vsWin);
+//			mHud.gameOver(mHud.mGame.sumScore(), 0);
 			mHud.gameOver((int)(mHud.mGame.sumScore() * 0.2f), 0);
 		}
 //		mHud.gameOver(mHud.mGame.sumScore(), -1);

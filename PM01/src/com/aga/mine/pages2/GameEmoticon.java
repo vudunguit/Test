@@ -12,6 +12,7 @@ import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
@@ -21,6 +22,7 @@ import android.view.MotionEvent;
 import com.aga.mine.main.Config;
 import com.aga.mine.main.NetworkController;
 import com.aga.mine.main.Utility;
+import com.aga.mine.util.Util;
 
 
 // 이미지 파일명의 -hd를 제거 하여서 오류 발생 함.
@@ -50,7 +52,7 @@ public class GameEmoticon extends CCLayer{
 		
 		//
 		// 베이스
-		base = CCSprite.sprite(folder + "emoticon-base.png");
+		base = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "emoticon-base.png"));
 		this.addChild(base);
 		CGSize baseActive = CGSize.make(
 				base.getContentSize().width - base.getContentSize().width / 7.7f, 
@@ -59,13 +61,15 @@ public class GameEmoticon extends CCLayer{
 		//
 		// 탭 버튼
 		CCMenuItem item = CCMenuItemImage.item(
-				folder + "emoticon-baseButton-hd.png",
-				folder + "emoticon-baseButton-hd.png",
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "emoticon-baseButton-hd.png")),
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "emoticon-baseButton-hd.png")),
 				this, "clicked");
 		item.setTag(kButtonBase);
 		CCMenu baseButton = CCMenu.menu(item);
 		base.addChild(baseButton);
 		baseButton.setPosition(
+//				base.getContentSize().width - item.getContentSize().width /2,
+//				base.getContentSize().height /2 + 5f);
 				base.getContentSize().width - item.getContentSize().width /2-13,
 				base.getContentSize().height /2 + 15f);
 		basePositionOn = CGPoint.ccp(winSize.width / 2, winSize.height /2);
@@ -75,25 +79,28 @@ public class GameEmoticon extends CCLayer{
 		
 		base.setPosition(GameConfig.share().isEmoticonPanelOn ? basePositionOn : basePositionOff);
 		
+		
 		//disable button
-		disable = CCSprite.sprite(folder + "buttons-hd/emoticon-baseButton-disable-hd.png");
-		disable.setPosition(baseButton.getPosition());
-		disable.setAnchorPoint(0.5f, 0.5f);
-		if(!GameData.share().isMultiGame) {
-			base.addChild(disable);
-			baseButton.setIsTouchEnabled(false);
-		}
+		 disable = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "buttons-hd/emoticon-baseButton-disable-hd.png"));
+		 disable.setPosition(baseButton.getPosition());
+		 disable.setAnchorPoint(0.5f, 0.5f);
+		 if (!GameData.share ().isMultiGame) {
+			 base.addChild(disable);
+			 baseButton.setIsTouchEnabled(false);
+		 }
+		
+		
 		
 		//
 		// 제목
 		String titleFile = Utility.getInstance().getNameWithIsoCodeSuffix(folder + "emoticon-title.png");
-		CCSprite title = CCSprite.sprite(titleFile);
+		CCSprite title = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + titleFile));
 		base.addChild(title);
 		title.setPosition(baseActive.width / 2, baseActive.height - title.getContentSize().height * 1.2f);
 		
 		//
 		// 이모티콘들
-		CCSprite emoticonBase = CCSprite.sprite(folder + "emoticon-tiles.png");
+		CCSprite emoticonBase = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "emoticon-tiles.png"));
 		base.addChild(emoticonBase);
 		emoticonBase.setPosition(baseActive.width / 2, baseActive.height / 2 + baseActive.height / 50);
 		
@@ -111,15 +118,15 @@ public class GameEmoticon extends CCLayer{
 		
 		//
 		// 입력창
-		CCSprite inputBase = CCSprite.sprite(folder + "emoticon-inputBase-hd.png");
+		CCSprite inputBase = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "emoticon-inputBase-hd.png"));
 		base.addChild(inputBase);
 		inputBase.setPosition(baseActive.width/2 , inputBase.getContentSize().height * 0.9f);
 		
 		//
 		// 보내기 버튼
 		CCMenuItem itemSend = CCMenuItemImage.item(
-				folder + "emoticon-buttonSend-hd.png", 
-				folder + "emoticon-buttonSendOver-hd.png",
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "emoticon-buttonSend-hd.png")), 
+				CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + folder + "emoticon-buttonSendOver-hd.png")),
 				this, "clicked");
 		itemSend.setTag(kButtonSend);
 		CCMenu buttonSend = CCMenu.menu(itemSend);
@@ -133,7 +140,7 @@ public class GameEmoticon extends CCLayer{
 		// 언어 파악후 파일명에 붙여서 저장하기
 		//String textFile = Utility.getInstance().getNameWithIsoCodeSuffix("emoticon-textSendKo-hd.png");
 		String textFile = folder + Utility.getInstance().getNameWithIsoCodeSuffix("emoticon-textSend.png");
-		CCSprite textSend = CCSprite.sprite(textFile);
+		CCSprite textSend = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + textFile));
 		itemSend.addChild(textSend);
 		textSend.setPosition(
 				itemSend.getContentSize().width / 2, 

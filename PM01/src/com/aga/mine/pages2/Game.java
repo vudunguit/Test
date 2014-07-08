@@ -7,10 +7,12 @@ import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.cocos2d.actions.UpdateCallback;
+import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.instant.CCCallFuncND;
 import org.cocos2d.actions.interval.CCAnimate;
+import org.cocos2d.actions.interval.CCDelayTime;
 import org.cocos2d.actions.interval.CCFadeIn;
 import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.actions.interval.CCRotateBy;
@@ -36,6 +38,7 @@ import org.cocos2d.types.ccColor3B;
 import org.cocos2d.utils.CCFormatter;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,6 +48,7 @@ import com.aga.mine.main.FacebookData;
 import com.aga.mine.main.MainApplication;
 import com.aga.mine.main.NetworkController;
 import com.aga.mine.main.R;
+import com.aga.mine.util.Util;
 
 public class Game extends CCLayer {
 	
@@ -169,15 +173,14 @@ public class Game extends CCLayer {
 	public synchronized int getReceivedAttackType() {
 		return mReceivedAttackType;
 	}
-	
 	private Game() {
 		unopenedTile = 0;
+//		Config.getInstance().setOwner();
 		if(GameData.share().isMultiGame && !NetworkController.getInstance().getOwner()) {
 			Config.getInstance().setOwner(false);
 		} else {
 			Config.getInstance().setOwner(true);
 		}
-		
 		mContext = CCDirector.sharedDirector().getActivity().getApplicationContext();
 		winSize = CCDirector.sharedDirector().winSize();
 		
@@ -216,6 +219,14 @@ public class Game extends CCLayer {
 		ArrayList<View> a = new ArrayList<View>();
 		a.add(CCDirector.sharedDirector().getOpenGLView());
 		CCDirector.sharedDirector().getOpenGLView().addTouchables(a);
+		
+		// 사운드 (로드)
+//		for (int i = 0; i < 17; i++) {
+//			SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.landopen_01 + i); // 이펙트 (효과음) // (타일)pickup	
+//		}
+//		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.pumpkin); // 이펙트 (효과음) // (호박)hit
+//		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.mushroom); // 이펙트 (효과음) // (버섯)move
+//		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.landopen_22); 
 		
 		// 타일맵 로드
 		if (!GameData.share().isMultiGame)
@@ -469,19 +480,19 @@ public class Game extends CCLayer {
 		UserData.share(mContext).myBroomstick();
 		
 		//타일 오픈 애니메이션 초기화
-		mTex = CCTextureCache.sharedTextureCache().addImage("60game/grass00.png");
+		mTex = CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "60game/grass00.png");
 		
 		CCAnimation animation = CCAnimation.animation("tile");
 		for( int i=0;i<=8;i++) {
 			//animation.addFrame(String.format("60game/%02d.png", i));
-			animation.addFrame(CCTextureCache.sharedTextureCache().addImage(String.format("60game/grass%02d.png", i)));
+			animation.addFrame(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + (String.format("60game/grass%02d.png", i))));
 		}
 		mOpenAction = CCAnimate.action(0.3f, animation, false);
 		
 		//호박폭발 애니메이션
 		CCAnimation pumpkin = CCAnimation.animation("pumpkin");
 		for( int i=1;i<=7;i++) {
-			pumpkin.addFrame(String.format("60game/pumpkinbomb_%02d.png", i));
+			pumpkin.addFrame(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("60game/pumpkinbomb_%02d.png", i)));
 		}
 		mPumpkinBomb = CCAnimate.action(0.5f, pumpkin, false);
 		
@@ -492,41 +503,41 @@ public class Game extends CCLayer {
 		}
 		CCAnimation mushroom = CCAnimation.animation("mushroom");
 		for(int i=1; i<=8; i++) {
-			mushroom.addFrame(CCTextureCache.sharedTextureCache().addImage(String.format("60game/mush_" + color + "%02d.png", i)));
+			mushroom.addFrame(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + (String.format("60game/mush_" + color + "%02d.png", i))));
 		}
 		mMushroom = CCAnimate.action(0.4f, mushroom, false);
 		
 		//대지마법 애니메이션 초기화
 		mEarthBomb = CCAnimation.animation("EarthBomb");
 		for(int i=1; i<=12; i++) {
-    		CCSprite ebframe = CCSprite.sprite(String.format("61hud/earth-bomb%02d.png", i));
+    		CCSprite ebframe = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("61hud/earth-bomb%02d.png", i)));
     		mEarthBomb.addFrame(ebframe.getTexture());
 		}
 		
 		//정령석 병 여는 애니메이션
 		mBottle = CCAnimation.animation("bottle");
 		for(int i=1; i<=10; i++) {
-    		CCSprite bottle = CCSprite.sprite(String.format("61hud/bottle_%02d.png", i));
+    		CCSprite bottle = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("61hud/bottle_%02d.png", i)));
     		mBottle.addFrame(bottle.getTexture());
 		}
 		
 		//불피해시 용암 애니
 		mMagma = CCAnimation.animation("magma");
 		for(int i=1; i<=9; i++) {
-    		CCSprite magma = CCSprite.sprite(String.format("60game/magma_%02d.png", i));
+    		CCSprite magma = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("60game/magma_%02d.png", i)));
     		mMagma.addFrame(magma.getTexture());
 		}
 		
 		//불피해시 불기동 애니
 		mMagmaFire = CCAnimation.animation("magmafire");
 		for(int i=1; i<=4; i++) {
-    		CCSprite magmafire = CCSprite.sprite(String.format("60game/magmafire_%02d.png", i));
+    		CCSprite magmafire = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("60game/magmafire_%02d.png", i)));
     		mMagmaFire.addFrame(magmafire.getTexture());
 		}
 		
 		cloudDefense = CCAnimation.animation("cloudDefense");
 		for(int i=1; i<=4; i++) {
-    		CCSprite cloudframe = CCSprite.sprite(String.format("61hud/fx-cloud%d.png", i));
+    		CCSprite cloudframe = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("61hud/fx-cloud%d.png", i)));
     		cloudDefense.addFrame(cloudframe.getTexture());
 		}
 		
@@ -534,7 +545,7 @@ public class Game extends CCLayer {
 		mNumberTags = new ArrayList<Integer>();
 		
 		//대지마법 9칸 가이드
-		mEarthGuide = CCSprite.sprite("61hud/earth_guide.png");
+		mEarthGuide = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "61hud/earth_guide.png"));
 		
 		//애니메이션 타일을 미리 생성한다. 태그는 2000 + 셀아이디
 		mAnimationTiles = new HashMap<Integer, CCSprite>();
@@ -552,19 +563,23 @@ public class Game extends CCLayer {
 		if (!GameData.share().isMultiGame) {
 			gameStart();
 		}
-		if(MainApplication.getInstance().getBGM()) {
-			SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
-		}
+//		SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
 		
+		if(MainApplication.getInstance().getBGM()) {
+			 SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
+		}
+			  		
+//		MainApplication.getInstance().setIsPlaying(true);
 		MainApplication.getInstance().getActivity().mIsPlaying = true;
+		
 		//게임 오버 체크
 		schedule("checkGame", 1.0f);
 	}
-	
+
 	public void stopCheck() {
 		unschedule("checkGame");
 	}
-	
+
 	public void checkGame(float dt) {
 		//타일 오픈 쓰레드가 실행중이면 끝날때까지 기다린다
 		if(getThreadCount()>0) {
@@ -592,7 +607,7 @@ public class Game extends CCLayer {
 				mHud.gameOver((int)(sumScore()*0.2f), 0); //싱글 게임은 멀티게임 포인트의 20%
 			}
 		}
-		
+
 		//타일이 오픈중 상대방의 공격이 있을 경우, 타일 오픈이 끝나고 실행한다.
 		if(getReceivedAttackType()>0) {
 			final int type = getReceivedAttackType();
@@ -611,14 +626,14 @@ public class Game extends CCLayer {
 			}
 		}
 	}
-	
+		 	
 	// 대전했을시 게임오버 점수
 	private void sendRequestGameOver(int myScore) {
 		Log.e("Game", "myScore : " + myScore);
 		try {
-			NetworkController.getInstance().sendRequestGameOver(myScore);
+			 NetworkController.getInstance().sendRequestGameOver(myScore);
 		} catch (IOException e) {
-			e.printStackTrace();
+			 e.printStackTrace();
 		}
 	}
 
@@ -960,7 +975,7 @@ public class Game extends CCLayer {
 		CGPoint coord = setCoord(event);
 		for (MineCell mineCell : cells) {
 			/***************테스트 코드**********************/
-/*			Log.e("Game_LongPress", "mineCell.isCollidable() : " + mineCell.isCollidable());
+			/*Log.e("Game_LongPress", "mineCell.isCollidable() : " + mineCell.isCollidable());
 			Log.e("Game_LongPress", "mineCell.isMarked() : " + mineCell.isMarked());
 			Log.e("Game_LongPress", "mineCell.isMine() : " + mineCell.isMine());
 			Log.e("Game_LongPress", "mineCell.isOpened() : " + mineCell.isOpened());
@@ -971,10 +986,13 @@ public class Game extends CCLayer {
 			
 			// 오픈안된 셀에 버섯(깃발)꽂기
 			if (!mineCell.isOpened() && !mineCell.isCollidable() && CGPoint.equalToPoint(mineCell.getTileCoord(), coord)) {
+				// effect sound play
+//				SoundEngine.sharedEngine().playEffect(mContext, R.raw.mushroom);
 				if(MainApplication.getInstance().getSound()) {
-					// effect sound play
-					SoundEngine.sharedEngine().playEffect(mContext, R.raw.mushroom);
+					 // effect sound play
+					 SoundEngine.sharedEngine().playEffect(mContext, R.raw.mushroom);
 				}
+				
 				// 버섯 설치음 대신 진동으로 변경입니다. (일단 둘다 열어둡니다.)
 				MainApplication.getInstance().getActivity().vibe();
 				
@@ -1012,6 +1030,13 @@ public class Game extends CCLayer {
 			Log.e("Game", "markedMine : " + GameData.share().getCurrentMine());
 			Log.e("Game", "getClosedCell : " + getClosedCell());
 			Log.e("Game", "getMineNumber() : " + GameData.share().getMineNumber());
+//			// 게임 종료, 이게 가능한가???
+//			if (getClosedCell() <= GameData.share().getMineNumber()) {
+//				Log.e("Game", "handleLongPress Game Over");
+//				// 오픈이 안된 셀 11개, 지뢰 1개 ==> 지뢰에 버섯을 꽂아도 타일은 오픈되지 않으므로x
+//				// 오픈이 안된 셀 10개, 지뢰 0개 ==> 이미 더블탭에서 종료가 됐을것이기에 x
+//				mHud.gameOver(sumScore(), -1);
+//			}
 		}
 		
 		mineCell.setMarked(true);
@@ -1047,7 +1072,7 @@ public class Game extends CCLayer {
 	//
 	// 더블터치 : 셀 오픈
 	public void handleDoubleTap(MotionEvent event) {
-		//mHud.gameOver(1500, 0);
+//		mHud.gameOver(1500, 0);
 		Log.e("Game / handleDoubleTap", "마인 갯수 : " + getMineNumber());
 		if (Config.getInstance().isDisableButton())
 			return;
@@ -1081,22 +1106,22 @@ public class Game extends CCLayer {
 						new Thread(new Runnable() {
 							@Override
 							public void run() {
-								setThreadCount(1);
 								cell.roundOpen();
 								checkSphereCell();
+//								checkGameOver();
 								setThreadCount(-1);
 							}
 						}).start();
 					}
-				// 닫혀있는 셀 누르면
+					// 닫혀있는 셀 누르면
 				} else {
 					// 지정된 셀을 열어준다.(tile의 fg를 제거)
 					new Thread(new Runnable() {
 						@Override
 						public void run() {
-							setThreadCount(1);
 							cell.open();
 							checkSphereCell();
+//							checkGameOver();
 							setThreadCount(-1);
 						}
 					}).start();
@@ -1146,7 +1171,7 @@ public class Game extends CCLayer {
 	}
 	
 	// 게임 오버인지 확인
-/*	private void checkGameOver() {
+	/*private void checkGameOver() {
 		if (getClosedCell() <= GameData.share().getMineNumber()) {
 			Log.e("Game / handleDoubleTap", "handleDoubleTap Game Over");
 			Log.e("Game", "unopenedTile : " + getClosedCell() + ", Max Mine : "
@@ -1557,7 +1582,7 @@ public class Game extends CCLayer {
 		if (!Config.getInstance().getOwner()) {
 			color  = "blue";
 		}
-		CCSprite mushroom = CCSprite.sprite("60game/mush_"+color+"01.png");
+		CCSprite mushroom = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "60game/mush_"+color+"01.png"));
 		addChild(mushroom, 5);
 		mushroom.setPosition(mineCell.getTilePosition());
 		
@@ -1769,13 +1794,10 @@ public class Game extends CCLayer {
 		float foundMine = GameData.share().getCurrentMine(); // 올바르게 버섯이 심겨진 지뢰만(찾은 호박)
 		float maxMine = GameData.share().getMineNumber(); // 테스트중
 		float heart = GameData.share().getHeartNumber();
-		//float spentTime = 900 - GameData.share().getSeconds(); // 소요 시간
+//		float spentTime = 900 - GameData.share().getSeconds(); // 소요 시간
 		float leftTime = GameData.share().getSeconds(); //남은 시간
-		
 		if (heart > 0) {
 			myScore = (int) ((((foundMine + heart) * maxMine) + leftTime) * maxMine * 0.006f);
-		} else {
-			myScore = 0;
 		}
 		
 		Log.e("Game", "myScore : " + myScore + ", openedCell : " + openedCell + ", foundMine : " + foundMine + ", heart : " + heart + ", maxMine : " + maxMine + ", spentTime : " + leftTime);
@@ -1783,6 +1805,7 @@ public class Game extends CCLayer {
 		return myScore;
 	}
 	
+//	public void messageReceived(int messageType, Object obj) {
 	public void messageReceived(int messageType, int obj) {
 		mHud.mGameProgressBar.stopTime();
 		Log.e("Game", "kmessageRequestScore = 15, kmessageGameOver = 6, kmessageOpponentConnectionLost = 9");
@@ -1790,6 +1813,13 @@ public class Game extends CCLayer {
 		final int kmessageRequestScore = 15;
 		final int kmessageGameOver = 6;
 		final int kmessageOpponentConnectionLost = 9;
+		
+//		int myScore = 0;
+//		int otherScore = -1;
+//		if (obj != null)
+//			otherScore = (Integer) obj;		
+//		
+//		myScore = sumScore();
 		
 		int myScore = sumScore();
 		int otherScore = obj;	
@@ -1813,7 +1843,6 @@ public class Game extends CCLayer {
 		case kmessageGameOver:
 			stopCheck();
 			mHud.gameOver(myScore, otherScore);
-			
 			break;
 			
 		case kmessageOpponentConnectionLost:
@@ -1859,10 +1888,38 @@ public class Game extends CCLayer {
 		return mineNumber;
 	}
 	
+//	private boolean _soundPlaying = false;
+//	private boolean _soundPaused = false;
+//	private boolean _resumeSound = false;
+//	
+//	public void bgMusicClicked(View button)
+//	{
+//	    // If we haven't started playing the sound - play it!
+//	    if (!_soundPlaying)
+//	    {
+//	        SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
+//	        _soundPlaying = true;
+//	    }
+//	    else
+//	    {
+//	        // We've loaded the sound, now it's just a case of pausing / resuming
+//	        if (!_soundPaused)
+//	        {
+//	            SoundEngine.sharedEngine().pauseSound();
+//	            _soundPaused = true;
+//	        }
+//	        else
+//	        {
+//	            SoundEngine.sharedEngine().resumeSound();
+//	            _soundPaused = false;
+//	        }
+//	    }
+//	}
+	
 	//정령석 유리병 여는 애니메이션
 	public void startOpenBottle(MineCell cell) {
 		CGPoint pos = cell.getTilePosition();
-		CCSprite bottle = CCSprite.sprite("61hud/bottle_01.png");
+		CCSprite bottle = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "61hud/bottle_01.png"));
 		
 		pos = CGPoint.ccp(pos.x + tileSize.width/2, pos.y - tileSize.height/2);
 		
@@ -1896,7 +1953,7 @@ public class Game extends CCLayer {
 	
 	
 	public void startEarthBomb() {
-		CCSprite bomb = CCSprite.sprite("61hud/earth-bomb01.png");
+		CCSprite bomb = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "61hud/earth-bomb01.png"));
 		//붙이는 위치, 크기 조정해야 함.
 		bomb.setPosition(winSize.width*0.5f, winSize.height*0.5f);
 		addChild(bomb, 100);
@@ -1925,7 +1982,7 @@ public class Game extends CCLayer {
 		
 		CCAnimation pumpkin = CCAnimation.animation("pumpkin");
 		for( int i=1;i<=7;i++) {
-			pumpkin.addFrame(String.format("60game/pumpkinbomb_%02d.png", i));
+			pumpkin.addFrame(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + String.format("60game/pumpkinbomb_%02d.png", i)));
 		}
 		final CCAnimate pumpkinBomb = CCAnimate.action(1.2f, pumpkin, true);
 		
@@ -1938,7 +1995,7 @@ public class Game extends CCLayer {
 					if(cell.isMine()) {
 						getFg().removeTileAt(cell.getTileCoord());
 						
-						CCSprite bomb = CCSprite.sprite("60game/pumpkinbomb_01.png");
+						CCSprite bomb = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "60game/pumpkinbomb_01.png"));
 						bomb.setPosition(cell.getTilePosition());
 						theLayer.addChild(bomb, 100);
 						
@@ -1977,21 +2034,21 @@ public class Game extends CCLayer {
 				if(r < 40) { //30%
 					//깨진 대지 타일 세팅
 					//this.tmxFlagLayer.setTileGID(crackGID, cell.getTileCoord());
-					CCSprite crack = CCSprite.sprite("60game/crackearth.png");
+					CCSprite crack = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "60game/crackearth.png"));
 					this.addChild(crack, 20, tag);
 					crack.setPosition(cell.getTilePosition());
 					crack.setAnchorPoint(0.5f, 0.5f);
 					Log.d("LDK", "crack earth position:" + cell.getPosition().x + "," + cell.getPosition().y);
 					
 					//용암 애니
-					CCSprite sprite = CCSprite.sprite("60game/magma_01.png");
+					CCSprite sprite = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "60game/magma_01.png"));
 					sprite.setScale(0.5f);
 					crack.addChild(sprite, -1);
 					sprite.setPosition(crack.getContentSize().width/2, crack.getContentSize().height/2);
 					sprite.runAction(magmaAni.copy());
 					
 					//불기둥 애니
-					CCSprite sprite2 = CCSprite.sprite("60game/magmafire_01.png");
+					CCSprite sprite2 = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "60game/magmafire_01.png"));
 					crack.addChild(sprite2, 1);
 					sprite2.setPosition(crack.getContentSize().width/2, crack.getContentSize().height/2);
 					sprite2.setAnchorPoint(0.5f, 0.2f);
@@ -2101,7 +2158,7 @@ public class Game extends CCLayer {
 		for(int k=0; k<4; k++) {
 			int tag = 10000 + k;
 
-			CCSprite cloud = CCSprite.sprite("61hud/fx-cloud1.png");
+			CCSprite cloud = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + "61hud/fx-cloud1.png"));
 			cloud.setOpacity(255);
 			cloud.setPosition(clouds.get(k)); //구름 생성 위치
 			cloud.setAnchorPoint(CGPoint.ccp(0.5f, 0.5f));

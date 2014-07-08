@@ -8,9 +8,11 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
 import org.cocos2d.menus.CCMenuItemImage;
+import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 
 import android.os.Message;
@@ -105,6 +107,7 @@ public class Home extends CCLayer{
 		//display scroll view
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_RANKLIST);
 		GameData.share().isMultiGame = false;
+//		MainApplication.getInstance().setIsPlaying(false);
 		MainApplication.getInstance().getActivity().mIsPlaying = false;
 	}
 	
@@ -138,7 +141,8 @@ public class Home extends CCLayer{
 	 }
 	
 	private CCSprite setHomeMenu(CCSprite parent, String imageFullPath) {
-		CCSprite sprite = CCSprite.sprite(imageFullPath);
+		
+		CCSprite sprite = CCSprite.sprite(CCTextureCache.sharedTextureCache().addImageExternal(Util.RESOURCE + imageFullPath));
 		parent.addChild(sprite);
 		sprite.setPosition(parent.getContentSize().width / 2, parent.getContentSize().height * 0.525f);
 		sprite.setAnchorPoint(0.5f, 0.5f);
@@ -319,7 +323,7 @@ public class Home extends CCLayer{
 
 		CCScene homeScene = (CCScene) this.getParent();
 		CCLayer mailBoxLayer = (CCLayer) homeScene.getChildByTag(mailBoxLayerTag);
-		String data = (String) ((CCMenuItemImage) sender).getUserData();
+		String data = (String) ((CCMenuItemSprite) sender).getUserData();
 
 		if (value == mailButton) {
 			// 안드로이드 스크롤뷰로 교체해야됩니다.
