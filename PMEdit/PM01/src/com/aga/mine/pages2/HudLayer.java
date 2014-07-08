@@ -799,6 +799,9 @@ public class HudLayer extends CCLayer {
 	public int otherScore; 
 //	public void gameOver() {
 	public void gameOver(int score, int other) {
+		SoundEngine.sharedEngine().pauseSound();
+//		MainApplication.getInstance().setIsPlaying(false);
+		MainApplication.getInstance().getActivity().mIsPlaying = false;
 //        SoundEngine.sharedEngine().purgeSharedEngine();
 		Log.e("HudLayer", "gameEnding - gogo");
 		Config.getInstance().setDisableButton(true);

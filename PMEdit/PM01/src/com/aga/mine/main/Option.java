@@ -208,6 +208,20 @@ public class Option extends CCLayer {
 	
 	private void setElemental(int type) {
 		Log.e("tag", "selectButton : " + type);
+		switch(type) {
+			 case 1: //bgm on
+			 MainApplication.getInstance().setBGM(true);
+			 break;
+			 case 2: //bgm off
+			 MainApplication.getInstance().setBGM(false);
+			 break;
+			 case 11: //sound on
+			 MainApplication.getInstance().setSound(true);
+			 break;
+			 case 12: //sound off
+			 MainApplication.getInstance().setSound(false);
+			 break;
+		}
 	}
 	
 	

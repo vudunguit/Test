@@ -221,12 +221,12 @@ public class Game extends CCLayer {
 		CCDirector.sharedDirector().getOpenGLView().addTouchables(a);
 		
 		// 사운드 (로드)
-		for (int i = 0; i < 17; i++) {
-			SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.landopen_01 + i); // 이펙트 (효과음) // (타일)pickup	
-		}
-		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.pumpkin); // 이펙트 (효과음) // (호박)hit
-		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.mushroom); // 이펙트 (효과음) // (버섯)move
-		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.landopen_22); 
+//		for (int i = 0; i < 17; i++) {
+//			SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.landopen_01 + i); // 이펙트 (효과음) // (타일)pickup	
+//		}
+//		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.pumpkin); // 이펙트 (효과음) // (호박)hit
+//		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.mushroom); // 이펙트 (효과음) // (버섯)move
+//		SoundEngine.sharedEngine().preloadEffect(mContext, R.raw.landopen_22); 
 		
 		// 타일맵 로드
 		if (!GameData.share().isMultiGame)
@@ -563,7 +563,14 @@ public class Game extends CCLayer {
 		if (!GameData.share().isMultiGame) {
 			gameStart();
 		}
-		SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
+//		SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
+		
+		if(MainApplication.getInstance().getBGM()) {
+			 SoundEngine.sharedEngine().playSound(mContext, R.raw.bgm, true);
+		}
+			  		
+//		MainApplication.getInstance().setIsPlaying(true);
+		MainApplication.getInstance().getActivity().mIsPlaying = true;
 		
 		//게임 오버 체크
 		schedule("checkGame", 1.0f);
@@ -980,7 +987,12 @@ public class Game extends CCLayer {
 			// 오픈안된 셀에 버섯(깃발)꽂기
 			if (!mineCell.isOpened() && !mineCell.isCollidable() && CGPoint.equalToPoint(mineCell.getTileCoord(), coord)) {
 				// effect sound play
-				SoundEngine.sharedEngine().playEffect(mContext, R.raw.mushroom);
+//				SoundEngine.sharedEngine().playEffect(mContext, R.raw.mushroom);
+				if(MainApplication.getInstance().getSound()) {
+					 // effect sound play
+					 SoundEngine.sharedEngine().playEffect(mContext, R.raw.mushroom);
+				}
+				
 				// 버섯 설치음 대신 진동으로 변경입니다. (일단 둘다 열어둡니다.)
 				MainApplication.getInstance().getActivity().vibe();
 				

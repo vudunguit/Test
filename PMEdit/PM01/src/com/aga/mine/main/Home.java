@@ -107,6 +107,8 @@ public class Home extends CCLayer{
 		//display scroll view
 		MainApplication.getInstance().getActivity().mHandler.sendEmptyMessage(Constant.MSG_DISPLAY_RANKLIST);
 		GameData.share().isMultiGame = false;
+//		MainApplication.getInstance().setIsPlaying(false);
+		MainApplication.getInstance().getActivity().mIsPlaying = false;
 	}
 	
 //	private CGSize winsize() {

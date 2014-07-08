@@ -116,6 +116,9 @@ public class MainActivity extends Activity {
     private float matchListMarginRight = 100;
     private float matchListMarginBottom = 186;
     
+    //게임중인지 여부 
+    public boolean mIsPlaying;
+    
     public Handler mHandler = new Handler(Looper.getMainLooper()) {
 		@Override
 		public void handleMessage(Message msg) {
@@ -277,11 +280,15 @@ public class MainActivity extends Activity {
         CCDirector.sharedDirector().setDisplayFPS(false); // FPS 표시
         CCDirector.sharedDirector().setAnimationInterval(1.0f / 60);
 
-		SoundEngine.sharedEngine().preloadSound(this, R.raw.bgm); // 배경음악
-		SoundEngine.sharedEngine().preloadEffect(this, R.raw.click); // 클릭음
-		SoundEngine.sharedEngine().preloadEffect(this, R.raw.buy); // 구입음
+//		SoundEngine.sharedEngine().preloadSound(this, R.raw.bgm); // 배경음악
+//		SoundEngine.sharedEngine().preloadEffect(this, R.raw.click); // 클릭음
+//		SoundEngine.sharedEngine().preloadEffect(this, R.raw.buy); // 구입음
 //		SoundEngine.sharedEngine().preloadEffect(this, R.raw.mushroom); // 게임 효과음 (버섯)
 		mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+		
+		mSimpleFacebook = SimpleFacebook.getInstance(this);
+		
+		loadSound();
 		
         CCScene scene = Logo.scene();
         director.runWithScene(scene);
@@ -292,13 +299,21 @@ public class MainActivity extends Activity {
         super.onPause();
         Log.d(TAG, "onPause");
         CCDirector.sharedDirector().onPause();
+//        if(MainApplication.getInstance().getIsPlaying() && MainApplication.getInstance().getBGM()) {
+        if(mIsPlaying && MainApplication.getInstance().getBGM()){
+        	 SoundEngine.sharedEngine().pauseSound();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mSimpleFacebook = SimpleFacebook.getInstance(this);
+//        mSimpleFacebook = SimpleFacebook.getInstance(this);
         CCDirector.sharedDirector().onResume();
+//        if(MainApplication.getInstance().getIsPlaying() && MainApplication.getInstance().getBGM()) {
+        if(mIsPlaying && MainApplication.getInstance().getBGM()){
+        	 SoundEngine.sharedEngine().playSound(this, R.raw.bgm, true);
+        }
     }
 
     @Override
@@ -647,8 +662,24 @@ public class MainActivity extends Activity {
     		}
     	}
 	}
+    
+    public void loadSound() {
+    	 SoundEngine.sharedEngine().preloadSound(this, R.raw.bgm); // 배경음악
+    	 SoundEngine.sharedEngine().preloadEffect(this, R.raw.click); // 클릭음
+    	 SoundEngine.sharedEngine().preloadEffect(this, R.raw.buy); // 구입음
+    	 
+    	 for (int i = 0; i < 17; i++) {
+    		 SoundEngine.sharedEngine().preloadEffect(this, R.raw.landopen_01 + i); // 이펙트 (효과음) // (타일)pickup	
+    	 }
+    	 SoundEngine.sharedEngine().preloadEffect(this, R.raw.pumpkin); // 이펙트 (효과음) // (호박)hit
+    	 SoundEngine.sharedEngine().preloadEffect(this, R.raw.mushroom); // 이펙트 (효과음) // (버섯)move
+    	 SoundEngine.sharedEngine().preloadEffect(this, R.raw.landopen_22); 
+    }
 
     public void click() {
-		SoundEngine.sharedEngine().playEffect(this, R.raw.click); // buttonClick
+//		SoundEngine.sharedEngine().playEffect(this, R.raw.click); // buttonClick
+    	if(MainApplication.getInstance().getSound()) {
+    		 SoundEngine.sharedEngine().playEffect(this, R.raw.click); // buttonClick
+    	}
 	}
 }
